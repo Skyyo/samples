@@ -7,6 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.skyyo.composespacex.application.DogDetailsGraph
+import com.skyyo.composespacex.application.Screens
+import com.skyyo.composespacex.extensions.getNavigationResult
+import com.skyyo.composespacex.extensions.setNavigationResult
 import com.skyyo.composespacex.features.dog.DogContactsScreen
 import com.skyyo.composespacex.features.dog.DogDetailsScreen
 import com.skyyo.composespacex.features.dog.DogFeedScreen
@@ -14,7 +17,6 @@ import com.skyyo.composespacex.features.friends.FriendContactsScreen
 import com.skyyo.composespacex.features.friends.FriendsDetails
 import com.skyyo.composespacex.features.friends.FriendsList
 import com.skyyo.composespacex.features.profile.Profile
-import com.skyyo.composespacex.application.Screens
 
 fun NavGraphBuilder.addProfileTab(
     navController: NavHostController,
@@ -46,6 +48,8 @@ fun NavGraphBuilder.addFriendContacts(navController: NavController) =
 
 fun NavGraphBuilder.addDogFeedTab(navController: NavController) =
     composable(Screens.DogFeedScreen.route) {
+        //this is the result from DogContacts composable
+        val dogStatus = navController.getNavigationResult<String>("dogStatus")
         DogFeedScreen {
             navController.navigate(DogDetailsGraph.DogDetails.createRoute(dogId = "2222"))
         }
@@ -66,6 +70,11 @@ fun NavGraphBuilder.addDogDetailsGraph(navController: NavController) = navigatio
         val dogId = backStackEntry.arguments?.getString("dogId")
         requireNotNull(dogId) { "dog id can't be null" }
         DogContactsScreen(dogId) {
+            navController.setNavigationResult(
+                route = Screens.DogFeedScreen.route,
+                key = "dogStatus",
+                result = "adopted"
+            )
             navController.popBackStack(DogDetailsGraph.DogDetails.route, true)
         }
     }

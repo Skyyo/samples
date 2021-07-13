@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.skyyo.composespacex.application.Screens
+import com.skyyo.composespacex.extensions.log
 import com.skyyo.composespacex.theme.ComposeSpaceXTheme
 
 class MainActivity : ComponentActivity() {
