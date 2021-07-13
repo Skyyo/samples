@@ -1,4 +1,4 @@
-package com.skyyo.composespacex.ui.theme
+package com.skyyo.composespacex.theme
 
 import androidx.compose.ui.graphics.Color
 
