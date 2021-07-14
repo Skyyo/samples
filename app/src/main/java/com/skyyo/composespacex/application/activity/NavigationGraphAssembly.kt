@@ -10,6 +10,7 @@ import com.skyyo.composespacex.application.DogDetailsGraph
 import com.skyyo.composespacex.application.Screens
 import com.skyyo.composespacex.extensions.getNavigationResult
 import com.skyyo.composespacex.extensions.setNavigationResult
+import com.skyyo.composespacex.features.auth.AuthScreen
 import com.skyyo.composespacex.features.dog.DogContactsScreen
 import com.skyyo.composespacex.features.dog.DogDetailsScreen
 import com.skyyo.composespacex.features.dog.DogFeedScreen
@@ -43,6 +44,13 @@ fun NavGraphBuilder.addFriendContacts(navController: NavController) =
     composable(Screens.FriendContacts.route) {
         FriendContactsScreen {
             navController.popBackStack(Screens.FriendDetails.route, true)
+        }
+    }
+
+fun NavGraphBuilder.addAuthScreen(navController: NavController) =
+    composable(Screens.AuthScreen.route) {
+        AuthScreen {
+            navController.navigate(Screens.DogFeedScreen.route)
         }
     }
 

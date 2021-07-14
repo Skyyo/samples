@@ -19,18 +19,15 @@ class DataStoreManager @Inject constructor(@ApplicationContext context: Context)
 
     private val dataStore = context.getDataStore
 
-    suspend fun setTokens(accessToken: String, refreshToken: String) {
+    suspend fun setAccessToken(accessToken: String) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.ACCESS_TOKEN] = "Bearer $accessToken"
-            preferences[PreferencesKeys.REFRESH_TOKEN] = refreshToken
         }
     }
 
     suspend fun getAccessToken(): String? =
         dataStore.data.first()[PreferencesKeys.ACCESS_TOKEN]
 
-    suspend fun getRefreshToken(): String? =
-        dataStore.data.first()[PreferencesKeys.REFRESH_TOKEN]
 
     suspend fun clearData() {
         dataStore.edit { preferences -> preferences.clear() }
@@ -38,6 +35,5 @@ class DataStoreManager @Inject constructor(@ApplicationContext context: Context)
 
     private object PreferencesKeys {
         val ACCESS_TOKEN = stringPreferencesKey("accessToken")
-        val REFRESH_TOKEN = stringPreferencesKey("refreshToken")
     }
 }

@@ -6,6 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.skyyo.composespacex.application.DogDetailsGraph
+import com.skyyo.composespacex.application.Screens
+import com.skyyo.composespacex.extensions.getNavigationResult
+import com.skyyo.composespacex.features.dog.DogFeedScreen
 
 @Composable
 fun PopulatedNavHost(
@@ -20,6 +25,7 @@ fun PopulatedNavHost(
         startDestination = startDestination,
         modifier = Modifier.padding(innerPadding)
     ) {
+        addAuthScreen(navController)
         addDogFeedTab(navController)
         addProfileTab(navController) { onBackPressFromTabIntercepted() }
         addFriendsListTab(navController) { onBackPressFromTabIntercepted() }
