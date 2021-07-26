@@ -3,6 +3,7 @@ package com.skyyo.composespacex.features.friends
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun FriendsList(openFriendDetailsScreen: () -> Unit) {
@@ -13,8 +14,8 @@ fun FriendsList(openFriendDetailsScreen: () -> Unit) {
 }
 
 @Composable
-fun FriendsDetails(openFriendContactsScreen: () -> Unit) {
-    Button(onClick = openFriendContactsScreen) {
+fun FriendsDetails(viewModel: FriendsViewModel = hiltViewModel()) {
+    Button(onClick = viewModel::onGoFriendContactClick) {
         Text("FriendsDetails: go FriendContactsScreen!")
     }
 }

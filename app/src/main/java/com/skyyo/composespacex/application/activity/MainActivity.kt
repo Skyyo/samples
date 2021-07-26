@@ -7,16 +7,23 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.skyyo.composespacex.application.Screens
 import com.skyyo.composespacex.application.persistance.DataStoreManager
-import com.skyyo.composespacex.extensions.log
 import com.skyyo.composespacex.theme.ComposeSpaceXTheme
+import com.skyyo.composespacex.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -31,13 +38,16 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var dataStoreManager: DataStoreManager
 
+    @Inject
+    lateinit var navigationDispatcher: NavigationDispatcher
+
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeSpaceXTheme {
+                val navController = rememberNavController()
                 Surface(color = MaterialTheme.colors.background) {
-                    val navController = rememberNavController()
                     val isBottomBarVisible = rememberSaveable { mutableStateOf(false) }
                     val selectedTab = rememberSaveable { mutableStateOf(0) }
                     val bottomNavScreens = listOf(
@@ -50,7 +60,6 @@ class MainActivity : ComponentActivity() {
                         else -> bottomNavScreens.first().route
                     }
                     navController.addOnDestinationChangedListener { _, destination, args ->
-                        log("dest: ${destination.route}")
                         when (destination.route) {
                             Screens.AuthScreen.route -> isBottomBarVisible.value = false
                             else -> isBottomBarVisible.value = true
@@ -79,8 +88,28 @@ class MainActivity : ComponentActivity() {
                             )
                         })
                 }
+                val lifecycleOwner = LocalLifecycleOwner.current
+
+                //TODO might be risky to flow drop?
+                val lifecycleAwareNavigationCommandsFlow = remember(navigationDispatcher.navigationEmitter, lifecycleOwner) {
+                        navigationDispatcher.navigationEmitter.flowWithLifecycle(
+                            lifecycleOwner.lifecycle,
+                            Lifecycle.State.STARTED
+                        )
+                    }
+                LaunchedEffect(Unit) {
+                    launch {
+                        lifecycleAwareNavigationCommandsFlow.collect { command -> command(navController) }
+                    }
+                }
             }
         }
+        //TODO what's the RL difference?
+//        lifecycleScope.launchWhenResumed { observeNavigationCommands() }
+    }
+
+    private suspend fun observeNavigationCommands() {
+
     }
 
     private fun NavController.navigateToBottomNavDestination(route: String) {

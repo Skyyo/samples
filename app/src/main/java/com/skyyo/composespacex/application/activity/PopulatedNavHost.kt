@@ -18,18 +18,19 @@ fun PopulatedNavHost(
     innerPadding: PaddingValues,
     navController: NavHostController,
     onBackPressFromTabIntercepted: () -> Unit
-
 ) {
     return NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = Modifier.padding(innerPadding)
     ) {
-        addAuthScreen(navController)
-        addDogFeedTab(navController)
+        addAuthScreen()
+
+        addDogFeedTab()
         addProfileTab(navController) { onBackPressFromTabIntercepted() }
         addFriendsListTab(navController) { onBackPressFromTabIntercepted() }
-        addFriendDetails(navController)
+
+        addFriendDetails()
         addFriendContacts(navController)
         addDogDetailsGraph(navController)
     }

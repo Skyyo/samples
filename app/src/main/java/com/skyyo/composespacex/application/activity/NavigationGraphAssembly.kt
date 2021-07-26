@@ -8,9 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.skyyo.composespacex.application.DogDetailsGraph
 import com.skyyo.composespacex.application.Screens
-import com.skyyo.composespacex.extensions.getNavigationResult
 import com.skyyo.composespacex.extensions.setNavigationResult
-import com.skyyo.composespacex.features.auth.AuthScreen
+import com.skyyo.composespacex.features.auth.signIn.AuthScreen
 import com.skyyo.composespacex.features.dog.DogContactsScreen
 import com.skyyo.composespacex.features.dog.DogDetailsScreen
 import com.skyyo.composespacex.features.dog.DogFeedScreen
@@ -18,6 +17,13 @@ import com.skyyo.composespacex.features.friends.FriendContactsScreen
 import com.skyyo.composespacex.features.friends.FriendsDetails
 import com.skyyo.composespacex.features.friends.FriendsList
 import com.skyyo.composespacex.features.profile.Profile
+
+fun NavGraphBuilder.addAuthScreen() = composable(Screens.AuthScreen.route) { AuthScreen() }
+
+fun NavGraphBuilder.addFriendDetails() = composable(Screens.FriendDetails.route) { FriendsDetails() }
+
+fun NavGraphBuilder.addDogFeedTab() = composable(Screens.DogFeedScreen.route) { DogFeedScreen() }
+
 
 fun NavGraphBuilder.addProfileTab(
     navController: NavHostController,
@@ -35,10 +41,6 @@ fun NavGraphBuilder.addFriendsListTab(
     FriendsList(openFriendDetailsScreen = { navController.navigate(Screens.FriendDetails.route) })
 }
 
-fun NavGraphBuilder.addFriendDetails(navController: NavController) =
-    composable(Screens.FriendDetails.route) {
-        FriendsDetails { navController.navigate(Screens.FriendContacts.route) }
-    }
 
 fun NavGraphBuilder.addFriendContacts(navController: NavController) =
     composable(Screens.FriendContacts.route) {
@@ -47,21 +49,6 @@ fun NavGraphBuilder.addFriendContacts(navController: NavController) =
         }
     }
 
-fun NavGraphBuilder.addAuthScreen(navController: NavController) =
-    composable(Screens.AuthScreen.route) {
-        AuthScreen {
-            navController.navigate(Screens.DogFeedScreen.route)
-        }
-    }
-
-fun NavGraphBuilder.addDogFeedTab(navController: NavController) =
-    composable(Screens.DogFeedScreen.route) {
-        //this is the result from DogContacts composable
-        val dogStatus = navController.getNavigationResult<String>("dogStatus")
-        DogFeedScreen {
-            navController.navigate(DogDetailsGraph.DogDetails.createRoute(dogId = "2222"))
-        }
-    }
 
 fun NavGraphBuilder.addDogDetailsGraph(navController: NavController) = navigation(
     route = DogDetailsGraph.route,

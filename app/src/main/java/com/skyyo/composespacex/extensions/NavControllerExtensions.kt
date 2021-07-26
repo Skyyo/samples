@@ -1,5 +1,6 @@
 package com.skyyo.composespacex.extensions
 
+import androidx.lifecycle.asFlow
 import androidx.navigation.NavController
 
 
@@ -16,3 +17,6 @@ fun <T> NavController.getNavigationResult(key: String) =
 
 fun <T> NavController.getNavigationResultLiveData(key: String) =
     currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)
+
+fun <T> NavController.getNavigationResultFlow(key: String) =
+    currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.asFlow()
