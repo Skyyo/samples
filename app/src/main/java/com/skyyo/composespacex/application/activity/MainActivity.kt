@@ -45,25 +45,36 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeSpaceXTheme {
+                //TODO might be risky to drop flow ?
+                val lifecycleOwner = LocalLifecycleOwner.current
+                val lifecycleAwareNavigationCommandsFlow =
+                    remember(navigationDispatcher.navigationEmitter, lifecycleOwner) {
+                        navigationDispatcher.navigationEmitter.flowWithLifecycle(
+                            lifecycleOwner.lifecycle,
+                            Lifecycle.State.STARTED
+                        )
+                    }
+                val isBottomBarVisible = rememberSaveable { mutableStateOf(false) }
+                val bottomNavScreens = listOf(
+                    Screens.DogFeedScreen,
+                    Screens.Profile,
+                    Screens.FriendsList,
+                )
+                val startDestination = when {
+                    runBlocking { dataStoreManager.getAccessToken() } == null -> Screens.AuthScreen.route
+                    else -> Screens.DogFeedScreen.route
+                }
+                val selectedTab = rememberSaveable { mutableStateOf(0) }
                 val navController = rememberNavController()
+                navController.addOnDestinationChangedListener { _, destination, arguments ->
+                    val activeBottomTab = arguments?.getInt("activeBottomTab", -1) ?: -1
+                    if (activeBottomTab != -1) selectedTab.value = activeBottomTab
+                    when (destination.route) {
+                        Screens.AuthScreen.route -> isBottomBarVisible.value = false
+                        else -> isBottomBarVisible.value = true
+                    }
+                }
                 Surface(color = MaterialTheme.colors.background) {
-                    val isBottomBarVisible = rememberSaveable { mutableStateOf(false) }
-                    val selectedTab = rememberSaveable { mutableStateOf(0) }
-                    val bottomNavScreens = listOf(
-                        Screens.DogFeedScreen,
-                        Screens.Profile,
-                        Screens.FriendsList,
-                    )
-                    val startDestination = when {
-                        runBlocking { dataStoreManager.getAccessToken() } == null -> Screens.AuthScreen.route
-                        else -> Screens.DogFeedScreen.route
-                    }
-                    navController.addOnDestinationChangedListener { _, destination, args ->
-                        when (destination.route) {
-                            Screens.AuthScreen.route -> isBottomBarVisible.value = false
-                            else -> isBottomBarVisible.value = true
-                        }
-                    }
                     Scaffold(
                         bottomBar = {
                             AnimatedBottomBar(
@@ -87,16 +98,6 @@ class MainActivity : ComponentActivity() {
                             )
                         })
                 }
-
-                val lifecycleOwner = LocalLifecycleOwner.current
-                //TODO might be risky to drop flow ?
-                val lifecycleAwareNavigationCommandsFlow =
-                    remember(navigationDispatcher.navigationEmitter, lifecycleOwner) {
-                        navigationDispatcher.navigationEmitter.flowWithLifecycle(
-                            lifecycleOwner.lifecycle,
-                            Lifecycle.State.STARTED
-                        )
-                    }
                 LaunchedEffect(Unit) {
                     launch {
                         lifecycleAwareNavigationCommandsFlow.collect { command ->
@@ -106,7 +107,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
         //TODO what's the RL difference?
 //        lifecycleScope.launchWhenResumed { observeNavigationCommands() }
     }

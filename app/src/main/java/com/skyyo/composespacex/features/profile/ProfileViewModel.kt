@@ -13,4 +13,5 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
 
     val profileId = handle.get<String>("id")
+
 }

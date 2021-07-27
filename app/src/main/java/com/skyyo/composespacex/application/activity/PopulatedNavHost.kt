@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
 import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.skyyo.composespacex.application.DEEP_LINK_URI
@@ -50,7 +52,11 @@ fun PopulatedNavHost(
         // or open this link "https://www.example.com/profile?=test" from notes, messenger or appLink testing tool
         composable(
             Screens.Profile.route,
-            deepLinks = listOf(navDeepLink { uriPattern = "$DEEP_LINK_URI/profile?={id}" })
+            deepLinks = listOf(navDeepLink { uriPattern = "$DEEP_LINK_URI/profile?={id}" }),
+            arguments = listOf(navArgument("activeBottomTab") {
+                type = NavType.IntType
+                defaultValue = 1
+            })
         ) {
             BackHandler(onBack = onBackPressIntercepted)
             Profile()
