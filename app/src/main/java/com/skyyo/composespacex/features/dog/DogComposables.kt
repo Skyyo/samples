@@ -5,6 +5,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 
 
@@ -20,15 +21,18 @@ fun DogFeedScreen(viewModel: DogFeedViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun DogDetailsScreen(dogId: String, openContactsScreen: () -> Unit) {
-    Button(onClick = openContactsScreen) {
+fun DogDetailsScreen(viewModel: DogDetailsViewModel = hiltViewModel()) {
+    //TODO check if remember actually is usefull for non-changing VM stored fields
+    val dogId = remember { viewModel.dogId }
+    Button(onClick = viewModel::goContacts) {
         Text("Dog Details: $dogId  go contacts!")
     }
 }
 
 @Composable
-fun DogContactsScreen(dogId: String, navigateUp: () -> Unit) {
-    Button(onClick = navigateUp) {
+fun DogContactsScreen(viewModel: DogContactsViewModel = hiltViewModel()) {
+    val dogId = remember { viewModel.dogId }
+    Button(onClick = viewModel::popToDogFeed) {
         Text(text = "Dog contacts: $dogId go back")
     }
 }

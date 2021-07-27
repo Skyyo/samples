@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.composespacex.application.DogDetailsGraph
-import com.skyyo.composespacex.extensions.getNavigationResultFlow
+import com.skyyo.composespacex.extensions.observeNavigationResult
 import com.skyyo.composespacex.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -28,7 +28,7 @@ class DogFeedViewModel @Inject constructor(
     private fun observeDogStatusResult() {
         navigationDispatcher.emit {
             viewModelScope.launch {
-                it.getNavigationResultFlow<String>("dogStatus")?.collect { dogStatus.value = it }
+                it.observeNavigationResult<String>("dogStatus")?.collect { dogStatus.value = it }
             }
         }
     }

@@ -14,11 +14,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.skyyo.composespacex.application.Screens
 import com.skyyo.composespacex.application.persistance.DataStoreManager
+import com.skyyo.composespacex.extensions.navigateToBottomNavDestination
 import com.skyyo.composespacex.theme.ComposeSpaceXTheme
 import com.skyyo.composespacex.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +56,7 @@ class MainActivity : ComponentActivity() {
                     )
                     val startDestination = when {
                         runBlocking { dataStoreManager.getAccessToken() } == null -> Screens.AuthScreen.route
-                        else -> bottomNavScreens.first().route
+                        else -> Screens.DogFeedScreen.route
                     }
                     navController.addOnDestinationChangedListener { _, destination, args ->
                         when (destination.route) {
@@ -81,17 +80,18 @@ class MainActivity : ComponentActivity() {
                                 startDestination = startDestination,
                                 innerPadding = innerPadding,
                                 navController = navController,
-                                onBackPressFromTabIntercepted = {
+                                onBackPressIntercepted = {
                                     selectedTab.value = 0
-                                    navController.navigateToBottomNavDestination(bottomNavScreens.first().route)
+                                    navController.navigateToBottomNavDestination(Screens.DogFeedScreen.route)
                                 }
                             )
                         })
                 }
-                val lifecycleOwner = LocalLifecycleOwner.current
 
-                //TODO might be risky to flow drop?
-                val lifecycleAwareNavigationCommandsFlow = remember(navigationDispatcher.navigationEmitter, lifecycleOwner) {
+                val lifecycleOwner = LocalLifecycleOwner.current
+                //TODO might be risky to drop flow ?
+                val lifecycleAwareNavigationCommandsFlow =
+                    remember(navigationDispatcher.navigationEmitter, lifecycleOwner) {
                         navigationDispatcher.navigationEmitter.flowWithLifecycle(
                             lifecycleOwner.lifecycle,
                             Lifecycle.State.STARTED
@@ -99,33 +99,20 @@ class MainActivity : ComponentActivity() {
                     }
                 LaunchedEffect(Unit) {
                     launch {
-                        lifecycleAwareNavigationCommandsFlow.collect { command -> command(navController) }
+                        lifecycleAwareNavigationCommandsFlow.collect { command ->
+                            command(navController)
+                        }
                     }
                 }
             }
         }
+
         //TODO what's the RL difference?
 //        lifecycleScope.launchWhenResumed { observeNavigationCommands() }
     }
 
     private suspend fun observeNavigationCommands() {
 
-    }
-
-    private fun NavController.navigateToBottomNavDestination(route: String) {
-        navigate(route) {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            popUpTo(graph.findStartDestination().id) {
-                saveState = true
-            }
-            // Avoid multiple copies of the same destination when
-            // reselecting the same item
-            launchSingleTop = true
-            // Restore state when reselecting a previously selected item
-            restoreState = true
-        }
     }
 
 }
