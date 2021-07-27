@@ -8,7 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
+import com.skyyo.composespacex.application.DEEP_LINK_URI
 import com.skyyo.composespacex.application.DogDetailsGraph
 import com.skyyo.composespacex.application.Screens
 import com.skyyo.composespacex.features.auth.signIn.AuthScreen
@@ -43,7 +45,13 @@ fun PopulatedNavHost(
             composable(route = DogDetailsGraph.DogContacts.route) { DogContactsScreen() }
         }
 
-        composable(Screens.Profile.route) {
+        // to trigger deep link run this command
+        // adb shell am start -W -a android.intent.action.VIEW -d "https://www.example.com/profile?=test"
+        // or open this link "https://www.example.com/profile?=test" from notes, messenger or appLink testing tool
+        composable(
+            Screens.Profile.route,
+            deepLinks = listOf(navDeepLink { uriPattern = "$DEEP_LINK_URI/profile?={id}" })
+        ) {
             BackHandler(onBack = onBackPressIntercepted)
             Profile()
         }
