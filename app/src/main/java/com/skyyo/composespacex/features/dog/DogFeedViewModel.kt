@@ -5,9 +5,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.composespacex.application.DogDetailsGraph
-import com.skyyo.composespacex.extensions.getFirstFlowValueNavigationResult
+import com.skyyo.composespacex.extensions.observeNavigationResult
 import com.skyyo.composespacex.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +28,7 @@ class DogFeedViewModel @Inject constructor(
     private fun observeDogStatusResult() {
         navigationDispatcher.emit {
             viewModelScope.launch {
-                dogStatus.value = it.getFirstFlowValueNavigationResult<String>("dogStatus")
+                it.observeNavigationResult<String>("dogStatus")?.collect { dogStatus.value = it }
             }
         }
     }
