@@ -3,5 +3,7 @@
     <string name="auth">Auth</string>
     <string name="dog_feed">Dog feed</string>
     <string name="profile">Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="profile_confirmation">Profile Confirmation</string>
     <string name="friends_list">Friends list</string>
 </resources>

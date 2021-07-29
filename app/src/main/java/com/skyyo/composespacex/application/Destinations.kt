@@ -12,7 +12,7 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object FriendContacts : Screens("friendContacts")
 }
 
-sealed class DogDetailsGraph(val route: String = "dogDetailsGraph") {
+sealed class DogDetailsGraph(val route: String) {
     object DogDetails : DogDetailsGraph("dogDetails/{dogId}") {
         fun createRoute(dogId: String) = "dogDetails/$dogId"
     }
@@ -23,5 +23,16 @@ sealed class DogDetailsGraph(val route: String = "dogDetailsGraph") {
 
     companion object {
         const val route = "dogDetailsGraph"
+    }
+}
+
+sealed class EditProfileGraph(val route: String) {
+
+    object EditProfile : Screens("editProfile", R.string.edit_profile)
+    object EditProfileConfirmation : Screens("profileConfirmation", R.string.profile_confirmation)
+    object EditProfileConfirmation2 : Screens("profileConfirmation2", R.string.profile_confirmation)
+
+    companion object {
+        const val route = "profileGraph"
     }
 }
