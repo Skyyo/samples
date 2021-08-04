@@ -20,6 +20,7 @@ import com.skyyo.composespacex.features.dog.DogFeedScreen
 import com.skyyo.composespacex.features.friends.FriendContactsScreen
 import com.skyyo.composespacex.features.friends.FriendsDetails
 import com.skyyo.composespacex.features.friends.FriendsList
+import com.skyyo.composespacex.features.launches.LaunchesList
 import com.skyyo.composespacex.features.profile.*
 
 @Composable
@@ -48,18 +49,23 @@ fun PopulatedNavHost(
         BackHandler(onBack = onBackPressIntercepted)
         Profile()
     }
-
+    composable(Screens.UpcomingLaunches.route) {
+        BackHandler(onBack = onBackPressIntercepted)
+        LaunchesList()
+    }
     navigation(
         route = EditProfileGraph.route,
         startDestination = EditProfileGraph.EditProfile.route
     ) {
         composable(route = EditProfileGraph.EditProfile.route) { EditProfile() }
         composable(route = EditProfileGraph.EditProfileConfirmation.route) {
-            val navGraphViewModel: SharedProfileViewModel = hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
+            val navGraphViewModel: SharedProfileViewModel =
+                hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
             EditProfileConfirmation(navGraphViewModel)
         }
         composable(route = EditProfileGraph.EditProfileConfirmation2.route) {
-            val navGraphViewModel: SharedProfileViewModel = hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
+            val navGraphViewModel: SharedProfileViewModel =
+                hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
             EditProfileConfirmation2(navGraphViewModel)
         }
     }

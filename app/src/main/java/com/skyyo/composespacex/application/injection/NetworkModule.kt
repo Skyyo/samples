@@ -2,6 +2,7 @@ package com.skyyo.composespacex.application.injection
 
 import com.skyyo.composespacex.BuildConfig
 import com.skyyo.composespacex.application.network.calls.AuthCalls
+import com.skyyo.composespacex.application.network.calls.LaunchesCalls
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
@@ -45,4 +46,10 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideAuthCalls(retrofit: Retrofit): AuthCalls = retrofit.create(AuthCalls::class.java)
+
+    @Singleton
+    @Provides
+    fun provideLaunchesCalls(retrofit: Retrofit): LaunchesCalls =
+        retrofit.create(LaunchesCalls::class.java)
+
 }

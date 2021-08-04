@@ -1,9 +1,5 @@
 package com.skyyo.composespacex.application.network.calls
 
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
-
 interface AuthCalls {
 
 //    @POST("/api/Account/sign-up")

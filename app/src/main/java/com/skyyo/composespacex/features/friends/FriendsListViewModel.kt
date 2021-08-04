@@ -14,6 +14,7 @@ class FriendsListViewModel @Inject constructor(
     init {
         log("list vm $this")
     }
+
     fun goFriendDetails() {
         navigationDispatcher.emit { it.navigate(Screens.FriendDetails.route) }
     }

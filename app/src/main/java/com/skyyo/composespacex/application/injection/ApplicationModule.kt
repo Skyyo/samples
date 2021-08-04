@@ -9,9 +9,12 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object AppModule {
+object ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideUnauthorizedEventDispatcher(): UnauthorizedEventDispatcher = UnauthorizedEventDispatcher()
+    fun provideUnauthorizedEventDispatcher(): UnauthorizedEventDispatcher =
+        UnauthorizedEventDispatcher()
+
+
 }

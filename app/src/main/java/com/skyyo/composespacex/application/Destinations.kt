@@ -7,6 +7,9 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object AuthScreen : Screens("auth", R.string.auth)
     object DogFeedScreen : Screens("dogFeed", R.string.dog_feed)
     object Profile : Screens("profile", R.string.profile)
+
+    object UpcomingLaunches : Screens("upcomingLaunches", R.string.upcoming_launches)
+
     object FriendsList : Screens("friendslist", R.string.friends_list)
     object FriendDetails : Screens("friendDetails")
     object FriendContacts : Screens("friendContacts")

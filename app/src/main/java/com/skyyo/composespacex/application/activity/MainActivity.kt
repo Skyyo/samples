@@ -52,6 +52,7 @@ class MainActivity : ComponentActivity() {
                     val bottomNavScreens = listOf(
                         Screens.DogFeedScreen,
                         Screens.Profile,
+                        Screens.UpcomingLaunches,
                         Screens.FriendsList,
                     )
                     val startDestination = when {
@@ -106,7 +107,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
         //TODO what's the RL difference?
 //        lifecycleScope.launchWhenResumed { observeNavigationCommands() }
     }
