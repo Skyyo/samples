@@ -13,7 +13,7 @@ import androidx.navigation.navigation
 import com.skyyo.composespacex.application.DogDetailsGraph
 import com.skyyo.composespacex.application.EditProfileGraph
 import com.skyyo.composespacex.application.Screens
-import com.skyyo.composespacex.features.auth.signIn.AuthScreen
+import com.skyyo.composespacex.features.signIn.AuthScreen
 import com.skyyo.composespacex.features.dog.DogContactsScreen
 import com.skyyo.composespacex.features.dog.DogDetailsScreen
 import com.skyyo.composespacex.features.dog.DogFeedScreen

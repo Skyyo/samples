@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,6 +19,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.skyyo.composespacex.application.Screens
 import com.skyyo.composespacex.application.persistance.DataStoreManager
+import com.skyyo.composespacex.extensions.log
 import com.skyyo.composespacex.extensions.navigateToBottomNavDestination
 import com.skyyo.composespacex.theme.ComposeSpaceXTheme
 import com.skyyo.composespacex.utils.eventDispatchers.NavigationDispatcher
@@ -44,7 +47,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val isDarkModeOn = isSystemInDarkTheme()
+            log("is dark $isDarkModeOn")
             ComposeSpaceXTheme {
+
                 val navController = rememberNavController()
                 Surface(color = MaterialTheme.colors.background) {
                     val isBottomBarVisible = rememberSaveable { mutableStateOf(false) }

@@ -31,11 +31,12 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            buildConfigField "String", "BASE_URL", "\"https://api.igdb.com/v4\""
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             minifyEnabled false
-            buildConfigField "String", "BASE_URL", "\"https://api.spacexdata.com/v4/\""
+            buildConfigField "String", "BASE_URL", "\"https://api.igdb.com/v4/\""
         }
     }
     compileOptions {
