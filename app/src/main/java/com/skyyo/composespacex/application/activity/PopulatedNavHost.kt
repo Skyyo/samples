@@ -17,11 +17,9 @@ import com.skyyo.composespacex.features.signIn.AuthScreen
 import com.skyyo.composespacex.features.dog.DogContactsScreen
 import com.skyyo.composespacex.features.dog.DogDetailsScreen
 import com.skyyo.composespacex.features.dog.DogFeedScreen
-import com.skyyo.composespacex.features.friends.FriendContactsScreen
-import com.skyyo.composespacex.features.friends.FriendsDetails
-import com.skyyo.composespacex.features.friends.FriendsList
 import com.skyyo.composespacex.features.launches.LaunchesList
 import com.skyyo.composespacex.features.profile.*
+import com.skyyo.composespacex.features.samples.SamplesScreenList
 
 @Composable
 fun PopulatedNavHost(
@@ -70,11 +68,10 @@ fun PopulatedNavHost(
         }
     }
 
-    composable(Screens.FriendsList.route) {
+    composable(Screens.SamplesScreen.route) {
         BackHandler(onBack = onBackPressIntercepted)
-        FriendsList()
+        SamplesScreenList()
     }
-    composable(Screens.FriendDetails.route) { FriendsDetails() }
-    composable(Screens.FriendContacts.route) { FriendContactsScreen() }
+//    composable(Screens.FriendDetails.route) { FriendsDetails() }
 
 }

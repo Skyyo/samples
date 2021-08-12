@@ -1,4 +1,4 @@
-package com.skyyo.composespacex.application.activity
+package com.skyyo.composespacex.application.activity.cores.bottomBar
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -18,6 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.skyyo.composespacex.application.Screens
+import com.skyyo.composespacex.application.activity.COLLAPSE_ANIMATION_DURATION
+import com.skyyo.composespacex.application.activity.EXPAND_ANIMATION_DURATION
+import com.skyyo.composespacex.application.activity.FADE_IN_ANIMATION_DURATION
+import com.skyyo.composespacex.application.activity.FADE_OUT_ANIMATION_DURATION
 
 @ExperimentalAnimationApi
 @Composable
