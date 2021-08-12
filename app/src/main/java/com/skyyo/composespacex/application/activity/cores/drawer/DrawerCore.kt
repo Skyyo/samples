@@ -80,6 +80,7 @@ fun DrawerCore(
                         startDestination = startDestination,
                         innerPadding = innerPadding,
                         navController = navController,
+                        //TODO is this needed with drawer?
                         onBackPressIntercepted = {
                             selectedTab.value = 0
                             navController.navigateToBottomNavDestination(Screens.DogFeedScreen.route)
