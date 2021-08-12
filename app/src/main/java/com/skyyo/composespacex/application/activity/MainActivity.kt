@@ -29,8 +29,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BottomBarCore(navigationDispatcher, dataStoreManager)
-//            DrawerCore(navigationDispatcher, dataStoreManager)
+//            BottomBarCore(navigationDispatcher, dataStoreManager)
+            DrawerCore(navigationDispatcher, dataStoreManager)
         }
         //TODO what's the RL difference?
         // lifecycleScope.launchWhenResumed { observeNavigationCommands() }

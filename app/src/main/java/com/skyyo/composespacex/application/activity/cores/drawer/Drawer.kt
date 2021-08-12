@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.skyyo.composespacex.application.Screens
 
 @Composable
@@ -13,11 +14,11 @@ fun Drawer(
     onTabClick: (index: Int, route: String) -> Unit
 ) {
     Column {
-        Spacer(modifier = Modifier.weight(1f))
         screens.forEachIndexed { index, screen ->
-            DrawerItem(item = screen, selected = index == selectedTab) {
-                onTabClick(index, screen.route)
-            }
+            DrawerItem(
+                title = stringResource(screen.resourceId),
+                selected = index == selectedTab
+            ) { onTabClick(index, screen.route) }
         }
         Spacer(modifier = Modifier.weight(1f))
     }
