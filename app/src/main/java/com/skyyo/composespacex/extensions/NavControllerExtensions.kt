@@ -22,7 +22,7 @@ fun <T> NavController.observeNavigationResultLiveData(key: String) =
 fun <T> NavController.observeNavigationResult(key: String) =
     currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.asFlow()
 
-fun NavController.navigateToBottomNavDestination(route: String) {
+fun NavController.navigateToRootDestination(route: String) {
     if (route == currentDestination?.route) return
     //TODO add check for root destinations instead
     navigate(route) {
