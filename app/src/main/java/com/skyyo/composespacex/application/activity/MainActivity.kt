@@ -47,10 +47,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val isDarkModeOn = isSystemInDarkTheme()
-            log("is dark $isDarkModeOn")
             ComposeSpaceXTheme {
-
                 val navController = rememberNavController()
                 Surface(color = MaterialTheme.colors.background) {
                     val isBottomBarVisible = rememberSaveable { mutableStateOf(false) }
@@ -62,10 +59,12 @@ class MainActivity : ComponentActivity() {
                         Screens.FriendsList,
                     )
                     val startDestination = when {
+                        //TODO meausure with async + splash delegation
                         runBlocking { dataStoreManager.getAccessToken() } == null -> Screens.AuthScreen.route
                         else -> Screens.DogFeedScreen.route
                     }
                     navController.addOnDestinationChangedListener { _, destination, args ->
+                        log("${destination.route}")
                         when (destination.route) {
                             Screens.AuthScreen.route -> isBottomBarVisible.value = false
                             else -> isBottomBarVisible.value = true

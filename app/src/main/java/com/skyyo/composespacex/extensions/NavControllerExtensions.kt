@@ -23,6 +23,7 @@ fun <T> NavController.observeNavigationResult(key: String) =
     currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.asFlow()
 
 fun NavController.navigateToBottomNavDestination(route: String) {
+    if (route == this.currentDestination?.route) return
     navigate(route) {
         // Pop up to the start destination of the graph to
         // avoid building up a large stack of destinations
