@@ -43,16 +43,16 @@ class MainActivity : ComponentActivity() {
             else -> Screens.DogFeedScreen.route
         }
         setContent {
-            BottomBarCore(
-                navigationDispatcher,
-                drawerOrBottomBarScreens,
-                startDestination
-            )
-//            DrawerCore(
+//            BottomBarCore(
 //                navigationDispatcher,
 //                drawerOrBottomBarScreens,
 //                startDestination
 //            )
+            DrawerCore(
+                navigationDispatcher,
+                drawerOrBottomBarScreens,
+                startDestination
+            )
         }
         //TODO what's the RL difference?
         // lifecycleScope.launchWhenResumed { observeNavigationCommands() }

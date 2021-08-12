@@ -12,15 +12,12 @@ class SharedProfileViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
 ) : ViewModel() {
 
-    init {
-        log("shared vm $this")
-    }
 
     fun goProfileConfirmation() {
         navigationDispatcher.emit { it.navigate(EditProfileGraph.EditProfileConfirmation.route) }
     }
 
     fun goProfileConfirmation2() {
-        navigationDispatcher.emit { it.navigate(EditProfileGraph.EditProfileConfirmation.route) }
+        navigationDispatcher.emit { it.navigate(EditProfileGraph.EditProfileConfirmation2.route) }
     }
 }
