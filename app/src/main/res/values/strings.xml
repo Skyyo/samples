@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ComposeSpaceX</string>
+    <string name="app_name">IGDB-Browser</string>
     <string name="auth">Auth</string>
     <string name="dog_feed">Dog feed</string>
     <string name="profile">Profile</string>
