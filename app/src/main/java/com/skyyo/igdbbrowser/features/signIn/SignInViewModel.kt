@@ -78,7 +78,6 @@ class SignInViewModel @Inject constructor(
 //            popUpTo(Screens.AuthScreen.route) {
 //                inclusive = true
 //            }
-
         }
 
 
