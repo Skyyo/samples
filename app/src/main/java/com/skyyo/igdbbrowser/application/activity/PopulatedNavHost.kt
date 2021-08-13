@@ -18,7 +18,7 @@ import com.skyyo.igdbbrowser.features.dog.DogDetailsScreen
 import com.skyyo.igdbbrowser.features.dog.DogFeedScreen
 import com.skyyo.igdbbrowser.features.launches.LaunchesList
 import com.skyyo.igdbbrowser.features.profile.*
-import com.skyyo.igdbbrowser.features.signIn.AuthScreen
+import com.skyyo.igdbbrowser.features.signIn.SignInScreen
 
 @Composable
 fun PopulatedNavHost(
@@ -31,7 +31,7 @@ fun PopulatedNavHost(
     startDestination = startDestination,
     modifier = Modifier.padding(innerPadding)
 ) {
-    composable(Screens.AuthScreen.route) { AuthScreen() }
+    composable(Screens.AuthScreen.route) { SignInScreen() }
 
     composable(Screens.DogFeedScreen.route) { DogFeedScreen() }
     navigation(

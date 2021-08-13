@@ -7,6 +7,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.PopulatedNavHost
@@ -26,6 +27,7 @@ fun BottomBarCore(
     DisposableEffect(navController) {
         val callback = NavController.OnDestinationChangedListener { _, destination, args ->
             log("${destination.route}")
+            log("first destination:${navController.findDestination(navController.graph.findStartDestination().id)}")
             when (destination.route) {
                 Screens.AuthScreen.route -> isBottomBarVisible.value = false
                 else -> isBottomBarVisible.value = true

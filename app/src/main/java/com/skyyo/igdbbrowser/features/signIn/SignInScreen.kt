@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun AuthScreen(viewModel: SignInViewModel = hiltViewModel()) {
+fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 

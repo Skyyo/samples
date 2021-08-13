@@ -23,7 +23,7 @@ fun <T> NavController.observeNavigationResult(key: String) =
     currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.asFlow()
 
 fun NavController.navigateToRootDestination(route: String) {
-    if (route == currentDestination?.route) return
+//    if (route == currentDestination?.route) return
     //TODO add check for root destinations instead
     navigate(route) {
         // Pop up to the start destination of the graph to
