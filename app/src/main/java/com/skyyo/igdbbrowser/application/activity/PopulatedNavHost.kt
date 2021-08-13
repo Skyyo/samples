@@ -13,19 +13,19 @@ import androidx.navigation.navigation
 import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.features.signIn.AuthScreen
 import com.skyyo.igdbbrowser.features.dog.DogContactsScreen
 import com.skyyo.igdbbrowser.features.dog.DogDetailsScreen
 import com.skyyo.igdbbrowser.features.dog.DogFeedScreen
 import com.skyyo.igdbbrowser.features.launches.LaunchesList
 import com.skyyo.igdbbrowser.features.profile.*
+import com.skyyo.igdbbrowser.features.signIn.AuthScreen
 
 @Composable
 fun PopulatedNavHost(
     startDestination: String,
     innerPadding: PaddingValues,
     navController: NavHostController,
-    onBackPressIntercepted: () -> Unit
+    onBackPressIntercepted: (() -> Unit)? = null
 ) = NavHost(
     navController = navController,
     startDestination = startDestination,
@@ -43,11 +43,11 @@ fun PopulatedNavHost(
     }
 
     composable(Screens.Profile.route) {
-        BackHandler(onBack = onBackPressIntercepted)
+        onBackPressIntercepted?.let { BackHandler(onBack = it) }
         Profile()
     }
     composable(Screens.UpcomingLaunches.route) {
-        BackHandler(onBack = onBackPressIntercepted)
+        onBackPressIntercepted?.let { BackHandler(onBack = it) }
         LaunchesList()
     }
     navigation(

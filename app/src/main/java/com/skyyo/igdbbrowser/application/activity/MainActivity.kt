@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
 import com.skyyo.igdbbrowser.application.activity.cores.drawer.DrawerCore
+import com.skyyo.igdbbrowser.application.activity.cores.simple.SimpleCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
 import com.skyyo.igdbbrowser.theme.IgdbBrowserTheme
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
@@ -64,6 +65,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+//                    SimpleCore(
+//                        startDestination,
+//                        navController
+//                    )
                     BottomBarCore(
                         drawerOrBottomBarScreens,
                         startDestination,
