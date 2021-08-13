@@ -1,10 +1,7 @@
 package com.skyyo.composespacex.application.activity.cores.drawer
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -53,7 +50,15 @@ fun DrawerCore(
 
             Scaffold(
                 scaffoldState = scaffoldState,
-                drawerGesturesEnabled = isDrawerVisible.value,
+                //this allows to dismiss the drawer if its open, by tapping on dimmed area
+                drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+                floatingActionButton = {
+                    if (isDrawerVisible.value) {
+                        FloatingActionButton(onClick = { scope.launch { scaffoldState.drawerState.open() } }) {
+                            Text(text = "open drawer")
+                        }
+                    }
+                },
                 drawerContent = {
                     if (isDrawerVisible.value) {
                         Drawer(
