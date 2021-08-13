@@ -10,10 +10,10 @@ typealias NavigationCommand = (NavController) -> Unit
 
 @ActivityRetainedScoped
 class NavigationDispatcher @Inject constructor() {
-    private val _navigationEmitter = Channel<NavigationCommand>(Channel.UNLIMITED)
-    val navigationEmitter = _navigationEmitter.receiveAsFlow()
+    private val _emitter = Channel<NavigationCommand>(Channel.UNLIMITED)
+    val emitter = _emitter.receiveAsFlow()
 
-    fun emit(navigationCommand: NavigationCommand) = _navigationEmitter.trySend(navigationCommand)
+    fun emit(navigationCommand: NavigationCommand) = _emitter.trySend(navigationCommand)
 
 
 }
