@@ -19,7 +19,6 @@ import com.skyyo.composespacex.features.dog.DogDetailsScreen
 import com.skyyo.composespacex.features.dog.DogFeedScreen
 import com.skyyo.composespacex.features.launches.LaunchesList
 import com.skyyo.composespacex.features.profile.*
-import com.skyyo.composespacex.features.samples.SamplesScreenList
 
 @Composable
 fun PopulatedNavHost(
@@ -66,11 +65,6 @@ fun PopulatedNavHost(
                 hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
             EditProfileConfirmation2(navGraphViewModel)
         }
-    }
-
-    composable(Screens.SamplesScreen.route) {
-        BackHandler(onBack = onBackPressIntercepted)
-        SamplesScreenList()
     }
 //    composable(Screens.FriendDetails.route) { FriendsDetails() }
 

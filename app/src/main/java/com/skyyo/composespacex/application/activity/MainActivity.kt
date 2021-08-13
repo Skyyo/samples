@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
             Screens.DogFeedScreen,
             Screens.Profile,
             Screens.UpcomingLaunches,
-            Screens.SamplesScreen,
         )
         val startDestination = when {
             //TODO measure async + splash delegation profit
