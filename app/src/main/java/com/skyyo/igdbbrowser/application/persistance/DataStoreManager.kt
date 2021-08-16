@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.skyyo.igdbbrowser.features.signIn.THEME_AUTO
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -28,6 +29,13 @@ class DataStoreManager @Inject constructor(@ApplicationContext context: Context)
     suspend fun getAccessToken(): String? =
         dataStore.data.first()[PreferencesKeys.ACCESS_TOKEN]
 
+    suspend fun setAppTheme(appTheme: String) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.APP_THEME] = appTheme
+        }
+    }
+
+    suspend fun getAppTheme(): String = dataStore.data.first()[PreferencesKeys.APP_THEME]?: THEME_AUTO
 
     suspend fun clearData() {
         dataStore.edit { preferences -> preferences.clear() }
@@ -35,5 +43,6 @@ class DataStoreManager @Inject constructor(@ApplicationContext context: Context)
 
     private object PreferencesKeys {
         val ACCESS_TOKEN = stringPreferencesKey("accessToken")
+        val APP_THEME = stringPreferencesKey("appTheme")
     }
 }

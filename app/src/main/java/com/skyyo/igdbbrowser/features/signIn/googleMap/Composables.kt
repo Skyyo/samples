@@ -3,6 +3,9 @@ package com.skyyo.igdbbrowser.features.signIn.googleMap
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -25,6 +28,10 @@ import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.data.kml.KmlLayer
 import com.google.maps.android.ktx.awaitMap
 import com.skyyo.igdbbrowser.R
+import com.skyyo.igdbbrowser.application.activity.MainActivity
+import com.skyyo.igdbbrowser.features.signIn.THEME_AUTO
+import com.skyyo.igdbbrowser.features.signIn.THEME_DARK
+import com.skyyo.igdbbrowser.features.signIn.THEME_LIGHT
 import com.skyyo.igdbbrowser.theme.mapStyle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -96,6 +103,7 @@ fun MapScreen(viewModel: MapViewModel = hiltViewModel()) {
     }
 
     AndroidView({ mapView })
+
 }
 
 suspend fun observePoints(

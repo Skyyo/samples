@@ -5,12 +5,13 @@ import com.skyyo.igdbbrowser.R
 
 sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object AuthScreen : Screens("auth", R.string.auth)
-    object MapScreen : Screens("map", R.string.map)
 
     object DogFeedScreen : Screens("dogFeed", R.string.dog_feed)
     object Profile : Screens("profile", R.string.profile)
     object UpcomingLaunches : Screens("upcomingLaunches", R.string.upcoming_launches)
 
+    object MapScreen : Screens("map", R.string.map)
+    object ForceThemeScreen : Screens("forceTheme")
 
 }
 

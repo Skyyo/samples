@@ -1,5 +1,6 @@
 package com.skyyo.igdbbrowser.features.signIn
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -70,6 +71,10 @@ class SignInViewModel @Inject constructor(
 
     fun goMap() = navigationDispatcher.emit {
         it.navigate(Screens.MapScreen.route)
+    }
+
+    fun goForceTheme() = navigationDispatcher.emit {
+        it.navigate(Screens.ForceThemeScreen.route)
     }
 
     private fun goHome() = navigationDispatcher.emit {

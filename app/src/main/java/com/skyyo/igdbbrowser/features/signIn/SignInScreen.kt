@@ -58,14 +58,22 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = viewModel::goMap) { Text(text = "google map") }
         Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
+        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {}) {
-            Text(text = "view pager sample")
+            Text(text = "view pager ")
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {}) {
-            Text(text = "bottom sheets sample")
+            Text(text = "bottom sheets ")
         }
-
+        Button(onClick = {}) {
+            Text(text = "")
+        }
     }
 
 }
+
+const val THEME_LIGHT = "light"
+const val THEME_DARK = "dark"
+const val THEME_AUTO = "auto"

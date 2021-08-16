@@ -16,6 +16,7 @@ import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
 import com.skyyo.igdbbrowser.application.activity.cores.simple.SimpleCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
+import com.skyyo.igdbbrowser.features.signIn.THEME_AUTO
 import com.skyyo.igdbbrowser.theme.IgdbBrowserTheme
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,12 +54,17 @@ class MainActivity : ComponentActivity() {
             else -> Screens.DogFeedScreen.route
         }
 //        val startDestination =Screens.DogFeedScreen.route
-            setContent {
-            IgdbBrowserTheme {
+        //TODO can be optimized
+//        val savedTheme = runBlocking { dataStoreManager.getAppTheme() }
+        val savedTheme = THEME_AUTO
+
+        setContent {
+            IgdbBrowserTheme(savedTheme) {
                 Surface(color = MaterialTheme.colors.background) {
                     val navController = rememberNavController()
                     val lifecycleOwner = LocalLifecycleOwner.current
-                    val navigationCommands = remember(navigationDispatcher.emitter, lifecycleOwner) {
+                    val navigationCommands =
+                        remember(navigationDispatcher.emitter, lifecycleOwner) {
                             navigationDispatcher.emitter.flowWithLifecycle(
                                 lifecycleOwner.lifecycle,
                                 Lifecycle.State.STARTED
