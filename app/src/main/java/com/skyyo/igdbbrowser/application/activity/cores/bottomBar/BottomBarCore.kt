@@ -1,6 +1,7 @@
 package com.skyyo.igdbbrowser.application.activity.cores.bottomBar
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -9,11 +10,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.PopulatedNavHost
 import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.extensions.navigateToRootDestination
 
+@ExperimentalMaterialApi
+@ExperimentalMaterialNavigationApi
 @Composable
 @ExperimentalAnimationApi
 fun BottomBarCore(

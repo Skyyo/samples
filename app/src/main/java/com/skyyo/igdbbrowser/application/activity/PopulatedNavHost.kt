@@ -3,6 +3,7 @@ package com.skyyo.igdbbrowser.application.activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -10,6 +11,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.bottomSheet
 import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
@@ -19,9 +22,14 @@ import com.skyyo.igdbbrowser.features.dog.DogFeedScreen
 import com.skyyo.igdbbrowser.features.launches.LaunchesList
 import com.skyyo.igdbbrowser.features.profile.*
 import com.skyyo.igdbbrowser.features.signIn.SignInScreen
+import com.skyyo.igdbbrowser.features.signIn.bottomSheets.BottomSheetScaffoldScreen
+import com.skyyo.igdbbrowser.features.signIn.bottomSheets.BottomSheetScreen
+import com.skyyo.igdbbrowser.features.signIn.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.igdbbrowser.features.signIn.forceTheme.ForceThemeScreen
 import com.skyyo.igdbbrowser.features.signIn.googleMap.MapScreen
 
+@ExperimentalMaterialApi
+@ExperimentalMaterialNavigationApi
 @Composable
 fun PopulatedNavHost(
     startDestination: String,
@@ -72,6 +80,10 @@ fun PopulatedNavHost(
     composable(Screens.MapScreen.route) { MapScreen() }
     composable(Screens.ForceThemeScreen.route) { ForceThemeScreen() }
 
+
+    bottomSheet(Screens.BottomSheetScreen.route) { BottomSheetScreen() }
+    composable(Screens.ModalBottomSheetScreen.route) { ModalBottomSheetScreen() }
+    composable(Screens.BottomSheetScaffoldScreen.route) { BottomSheetScaffoldScreen() }
 //    composable(Screens.FriendDetails.route) { FriendsDetails() }
 
 }

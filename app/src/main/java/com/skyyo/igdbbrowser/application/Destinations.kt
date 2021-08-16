@@ -12,6 +12,9 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
 
     object MapScreen : Screens("map", R.string.map)
     object ForceThemeScreen : Screens("forceTheme")
+    object BottomSheetScreen : Screens("bottomSheet")
+    object ModalBottomSheetScreen : Screens("modalBottomSheetContainer")
+    object BottomSheetScaffoldScreen : Screens("bottomSheetScaffold")
 
 }
 

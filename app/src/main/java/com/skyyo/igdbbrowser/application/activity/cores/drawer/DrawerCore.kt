@@ -1,10 +1,7 @@
 package com.skyyo.igdbbrowser.application.activity.cores.drawer
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
@@ -12,12 +9,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.PopulatedNavHost
 import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.extensions.navigateToRootDestination
 import kotlinx.coroutines.launch
 
+@ExperimentalMaterialApi
+@ExperimentalMaterialNavigationApi
 @Composable
 @ExperimentalAnimationApi
 fun DrawerCore(

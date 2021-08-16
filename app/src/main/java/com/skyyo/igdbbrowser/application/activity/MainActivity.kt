@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.LaunchedEffect
@@ -12,8 +13,11 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.plusAssign
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
 import com.skyyo.igdbbrowser.application.activity.cores.simple.SimpleCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
 import com.skyyo.igdbbrowser.features.signIn.THEME_AUTO
@@ -39,6 +43,8 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var navigationDispatcher: NavigationDispatcher
 
+    @ExperimentalMaterialApi
+    @ExperimentalMaterialNavigationApi
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +67,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             IgdbBrowserTheme(savedTheme) {
                 Surface(color = MaterialTheme.colors.background) {
+
+                    val bottomSheetNavigator = rememberBottomSheetNavigator()
                     val navController = rememberNavController()
+                    navController.navigatorProvider += bottomSheetNavigator
+
                     val lifecycleOwner = LocalLifecycleOwner.current
                     val navigationCommands =
                         remember(navigationDispatcher.emitter, lifecycleOwner) {
@@ -71,10 +81,12 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                    SimpleCore(
-                        startDestination,
-                        navController
-                    )
+                    // used only for the bottom sheet destinations
+                    ModalBottomSheetLayout(bottomSheetNavigator) {
+                        SimpleCore(
+                            startDestination,
+                            navController
+                        )
 //                    BottomBarCore(
 //                        drawerOrBottomBarScreens,
 //                        startDestination,
@@ -85,7 +97,7 @@ class MainActivity : ComponentActivity() {
 //                        startDestination,
 //                        navController
 //                    )
-
+                    }
                     //TODO difference between this & disposable effect in this scenario
                     LaunchedEffect(Unit) {
                         launch {
@@ -96,10 +108,5 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    private suspend fun observeNavigationCommands() {
-
-    }
-
 }
 

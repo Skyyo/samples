@@ -53,19 +53,22 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
 
     Column {
         Text(text = "Auth Screen")
-        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = viewModel::onBtnSignInClick) { Text(text = "Sign In") }
         Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = viewModel::goMap) { Text(text = "google map") }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(text = "Bottom sheets")
+        Button(onClick = viewModel::goBottomSheetDestination) { Text(text = "destination (accompanist)") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goBottomSheetsContainer) { Text(text = "modal sheet (accompanist)") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goBottomSheetsScaffold) { Text(text = " modal & persistent (scaffold)") }
+        Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = {}) {
             Text(text = "view pager ")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {}) {
-            Text(text = "bottom sheets ")
         }
         Button(onClick = {}) {
             Text(text = "")
