@@ -10,6 +10,8 @@ Modal Drawer
 - can't change width, [issue](https://issuetracker.google.com/issues/190879368)
 - can't peek to reveal, [issue](https://issuetracker.google.com/issues/167408603)
 - drag & drop feature. Not even mentioned in the road map.
+
+Miscellaneous
 - field injections in composables - seems not possible, inconvenient.
 - [androidx.navigation:navigation-compose:2.4.0-alpha05](https://developer.android.com/jetpack/androidx/releases/navigation#2.4.0-alpha05) introduced non-modifiable crossfade animations, [issue](https://issuetracker.google.com/issues/172112072)
 
