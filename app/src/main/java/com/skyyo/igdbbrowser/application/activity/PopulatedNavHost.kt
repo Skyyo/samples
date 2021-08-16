@@ -17,18 +17,18 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScreen
-import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogDetailsScreen
-import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogFeedScreen
 import com.skyyo.igdbbrowser.features.launches.LaunchesList
 import com.skyyo.igdbbrowser.features.profile.*
-import com.skyyo.igdbbrowser.features.signIn.SignInScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.forceTheme.ForceThemeScreen
 import com.skyyo.igdbbrowser.features.samples.googleMap.MapScreen
+import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScreen
+import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogDetailsScreen
+import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogFeedScreen
 import com.skyyo.igdbbrowser.features.samples.viewPager.ViewPagerScreen
+import com.skyyo.igdbbrowser.features.signIn.SignInScreen
 
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
@@ -59,7 +59,7 @@ fun PopulatedNavHost(
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         Profile()
     }
-    composable(Screens.UpcomingLaunches.route) {
+    composable(Screens.GamesScreen.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         LaunchesList()
     }

@@ -12,14 +12,14 @@ import com.skyyo.igdbbrowser.application.models.remote.Launch
 @Composable
 fun LaunchesList(viewModel: LaunchesListViewModel = hiltViewModel()) {
 //    val latestLaunch = viewModel.latestLaunch.collectAsState()
-    val pastLaunches = viewModel.pastLaunches.collectAsState()
+    val pastLaunches = viewModel.games.collectAsState()
     LazyColumn {
 //        latestLaunch.value?.let { launch -> item { LatestLaunchItem(launch) } }
 //        itemsIndexed(upcomingLaunches.value){
 //
 //        }
 //        latestLaunch.value?.let { item { LatestLaunchItem(it) } }
-        itemsIndexed(pastLaunches.value) { index, launch -> PastLaunchItem(launch) }
+        itemsIndexed(pastLaunches.value) { index, launch ->  }
     }
 }
 

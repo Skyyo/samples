@@ -110,6 +110,9 @@ dependencies {
 //    implementation "com.google.accompanist:accompanist-pager:0.16.1"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.16.1"
 
+    debugImplementation "com.github.YarikSOffice.Venom:venom:0.4.1"
+    releaseImplementation "com.github.YarikSOffice.Venom:venom-no-op:0.4.1"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.2'

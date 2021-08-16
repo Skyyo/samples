@@ -1,8 +1,9 @@
-package com.skyyo.igdbbrowser.features.launches
+package com.skyyo.igdbbrowser.features.games
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.skyyo.igdbbrowser.application.repositories.games.LatestLaunchResult
 import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
 import com.skyyo.igdbbrowser.application.repositories.games.PastLaunchesResult
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -22,27 +24,27 @@ class LaunchesListViewModel @Inject constructor(
     private val gamesRepository: GamesRepository
 ) : ViewModel() {
 
-//    val latestLaunch = launchesRepository.observeLatestLaunch(LocalDateTime.now(), viewModelScope)
-    val games = gamesRepository.observePastLaunches(viewModelScope)
-    val events = Channel<PastLaunchesListEvent>(Channel.UNLIMITED)
+//    val latestLaunch = gamesRepository.observeLatestLaunch(LocalDateTime.now(), viewModelScope)
+    val pastLaunches = gamesRepository.observePastLaunches(viewModelScope)
+    val events = Channel<GamesListEvent>(Channel.UNLIMITED)
 
     var isFetchingAllowed = true
     private var itemOffset = 0
 
     init {
        // getLatestLaunch()
-        getGames()
+        getPastLaunches()
     }
 
-//    private fun getLatestLaunch() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            if (launchesRepository.getLatestLaunch() == LatestLaunchResult.NetworkError) {
-//                events.send(PastLaunchesListEvent.NetworkError)
+    private fun getLatestLaunch() {
+        viewModelScope.launch(Dispatchers.IO) {
+//            if (gamesRepository.getLatestLaunch() == LatestLaunchResult.NetworkError) {
+//                events.send(GamesListEvent.NetworkError)
 //            }
-//        }
-//    }
+        }
+    }
 
-    fun getGames(isFirstPage: Boolean = false) {
+    fun getPastLaunches(isFirstPage: Boolean = false) {
         isFetchingAllowed = false
         if (isFirstPage) itemOffset = 0
         viewModelScope.launch(Dispatchers.IO) {
@@ -50,7 +52,7 @@ class LaunchesListViewModel @Inject constructor(
                 PastLaunchesResult.NetworkError -> {
                     itemOffset = 0
                     isFetchingAllowed = true
-                    events.send(PastLaunchesListEvent.NetworkError)
+                    events.send(GamesListEvent.NetworkError)
                 }
                 PastLaunchesResult.Success -> {
                     itemOffset += PAGE_LIMIT
@@ -64,7 +66,7 @@ class LaunchesListViewModel @Inject constructor(
     }
 
     fun onSwipeToRefresh() {
-//        getLatestLaunch()
-        getGames(true)
+        getLatestLaunch()
+        getPastLaunches(true)
     }
 }

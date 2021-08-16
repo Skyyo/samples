@@ -23,5 +23,5 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideLaunchesDao(appDatabase: AppDatabase) = appDatabase.launchesDao()
+    fun provideGamesDao(appDatabase: AppDatabase) = appDatabase.gamesDao()
 }

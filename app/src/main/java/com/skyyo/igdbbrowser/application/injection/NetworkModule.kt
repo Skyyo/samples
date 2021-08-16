@@ -2,7 +2,7 @@ package com.skyyo.igdbbrowser.application.injection
 
 import com.skyyo.igdbbrowser.BuildConfig
 import com.skyyo.igdbbrowser.application.network.calls.AuthCalls
-import com.skyyo.igdbbrowser.application.network.calls.LaunchesCalls
+import com.skyyo.igdbbrowser.application.network.calls.GamesCalls
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
@@ -49,7 +49,6 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideLaunchesCalls(retrofit: Retrofit): LaunchesCalls =
-        retrofit.create(LaunchesCalls::class.java)
+    fun provideGamesCalls(retrofit: Retrofit): GamesCalls = retrofit.create(GamesCalls::class.java)
 
 }

@@ -7,10 +7,10 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-interface LaunchesCalls {
+interface GamesCalls {
 
-    @GET("launches/latest")
-    suspend fun getLatestLaunch(): Launch
+//    @GET("launches/latest")
+//    suspend fun getLatestLaunch(): Launch
 
 //    @GET("launches/past")
 //    suspend fun getPastLaunches(
@@ -19,5 +19,5 @@ interface LaunchesCalls {
 //    ): List<Launch>
 
     @POST("launches/query")
-    suspend fun getPastLaunches(@Body options: Array<String>): LaunchesWrapper
+    suspend fun getGames(@Body options: Array<String>): LaunchesWrapper
 }

@@ -1,7 +1,7 @@
 package com.skyyo.igdbbrowser.application.persistance.room
 
 import androidx.room.TypeConverter
-import com.skyyo.igdbbrowser.application.models.remote.Launch
+import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.application.models.remote.Rocket
 import com.squareup.moshi.*
 
@@ -27,12 +27,12 @@ object MoshiTypeConverters {
     @TypeConverter
     @JvmStatic
     @ToJson
-    fun fromLaunch(data: Launch): String = moshi.adapter(Launch::class.java).toJson(data)
+    fun fromGame(data: Game): String = moshi.adapter(Game::class.java).toJson(data)
 
     @TypeConverter
     @JvmStatic
     @ToJson
-    fun toLaunch(json: String): Launch? = moshi.adapter(Launch::class.java).fromJson(json)
+    fun toGame(json: String): Game? = moshi.adapter(Game::class.java).fromJson(json)
 
     @TypeConverter
     @JvmStatic

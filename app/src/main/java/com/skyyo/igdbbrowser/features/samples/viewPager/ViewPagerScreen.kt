@@ -35,7 +35,6 @@ fun ViewPagerScreen() {
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { page ->
             log("current page $page")
-            // Selected page has changed...
         }
     }
 

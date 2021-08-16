@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.application.repositories.launches
+package com.skyyo.igdbbrowser.application.repositories.games
 
 
 sealed class PastLaunchesResult {

@@ -19,7 +19,7 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.application.activity.cores.simple.SimpleCore
+import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
 import com.skyyo.igdbbrowser.features.signIn.THEME_AUTO
 import com.skyyo.igdbbrowser.theme.IgdbBrowserTheme
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
         val drawerOrBottomBarScreens = listOf(
             Screens.DogFeedScreen,
             Screens.Profile,
-            Screens.UpcomingLaunches,
+            Screens.GamesScreen,
         )
         val startDestination = when {
             //TODO measure async + splash delegation profit
@@ -85,15 +85,15 @@ class MainActivity : ComponentActivity() {
 
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {
-                        SimpleCore(
+//                        SimpleCore(
+//                            startDestination,
+//                            navController
+//                        )
+                        BottomBarCore(
+                            drawerOrBottomBarScreens,
                             startDestination,
                             navController
                         )
-//                    BottomBarCore(
-//                        drawerOrBottomBarScreens,
-//                        startDestination,
-//                        navController
-//                    )
 //                    DrawerCore(
 //                        drawerOrBottomBarScreens,
 //                        startDestination,
