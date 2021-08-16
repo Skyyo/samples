@@ -1,6 +1,7 @@
 package com.skyyo.igdbbrowser.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -27,6 +28,15 @@ private val LightColorPalette = lightColors(
     */
 )
 
+const val AUTO = 0
+const val LIGHT = 1
+const val DARK = 2
+const val DARK_MAP_STYLES = "d5afddd010938b78"
+const val LIGHT_MAP_STYLES = "8d74d6ad37a6ca97"
+
+var mapStyle: String = ""
+
+
 @Composable
 fun IgdbBrowserTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -37,7 +47,11 @@ fun IgdbBrowserTheme(
     } else {
         LightColorPalette
     }
-
+    mapStyle = when (darkTheme) {
+        true -> LIGHT_MAP_STYLES
+        false -> DARK_MAP_STYLES
+//        else -> if (isSystemDarkTheme) DARK_MAP_STYLES else LIGHT_MAP_STYLES
+    }
     MaterialTheme(
         colors = colors,
         typography = Typography,

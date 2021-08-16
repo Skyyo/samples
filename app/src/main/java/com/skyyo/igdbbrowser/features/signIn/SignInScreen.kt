@@ -56,6 +56,8 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = viewModel::onBtnSignInClick) { Text(text = "Sign In") }
         Spacer(modifier = Modifier.height(32.dp))
+        Button(onClick = viewModel::goMap) { Text(text = "google map") }
+        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {}) {
             Text(text = "view pager sample")
         }
@@ -63,6 +65,7 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Button(onClick = {}) {
             Text(text = "bottom sheets sample")
         }
+
     }
 
 }

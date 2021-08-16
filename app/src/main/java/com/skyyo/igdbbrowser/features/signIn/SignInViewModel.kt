@@ -68,6 +68,10 @@ class SignInViewModel @Inject constructor(
         }
     }
 
+    fun goMap() = navigationDispatcher.emit {
+        it.navigate(Screens.MapScreen.route)
+    }
+
     private fun goHome() = navigationDispatcher.emit {
 
 

@@ -19,6 +19,7 @@ import com.skyyo.igdbbrowser.features.dog.DogFeedScreen
 import com.skyyo.igdbbrowser.features.launches.LaunchesList
 import com.skyyo.igdbbrowser.features.profile.*
 import com.skyyo.igdbbrowser.features.signIn.SignInScreen
+import com.skyyo.igdbbrowser.features.signIn.googleMap.MapScreen
 
 @Composable
 fun PopulatedNavHost(
@@ -66,6 +67,9 @@ fun PopulatedNavHost(
             EditProfileConfirmation2(navGraphViewModel)
         }
     }
+
+    composable(Screens.MapScreen.route) { MapScreen() }
+
 //    composable(Screens.FriendDetails.route) { FriendsDetails() }
 
 }
