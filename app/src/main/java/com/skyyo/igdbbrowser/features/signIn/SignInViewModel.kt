@@ -92,6 +92,10 @@ class SignInViewModel @Inject constructor(
         it.navigate(Screens.ViewPagerScreen.route)
     }
 
+    fun goNavWithResultSample() = navigationDispatcher.emit {
+        it.navigate(Screens.DogFeedScreen.route)
+    }
+
     private fun goHome() = navigationDispatcher.emit {
 
 

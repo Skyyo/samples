@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.signIn.forceTheme
+package com.skyyo.igdbbrowser.features.samples.forceTheme
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel

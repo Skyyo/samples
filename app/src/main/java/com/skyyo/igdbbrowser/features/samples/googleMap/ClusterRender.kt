@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.signIn.googleMap
+package com.skyyo.igdbbrowser.features.samples.googleMap
 
 import android.content.Context
 import android.graphics.Bitmap

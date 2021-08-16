@@ -15,16 +15,18 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object BottomSheetScreen : Screens("bottomSheet")
     object ModalBottomSheetScreen : Screens("modalBottomSheetContainer")
     object BottomSheetScaffoldScreen : Screens("bottomSheetScaffold")
-    object ViewPagerScreen : Screens("vewPager")
+    object ViewPagerScreen : Screens("viewPager")
 
 }
 
 sealed class DogDetailsGraph(val route: String) {
-    object DogDetails : DogDetailsGraph("dogDetails/{dogId}") {
+    //    object DogDetails : DogDetailsGraph("dogDetails/{dogId}") {
+    object DogDetails : DogDetailsGraph("dogDetails") {
         fun createRoute(dogId: String) = "dogDetails/$dogId"
     }
 
-    object DogContacts : DogDetailsGraph("dogContacts/{dogId}") {
+    //    object DogContacts : DogDetailsGraph("dogContacts/{dogId}") {
+    object DogContacts : DogDetailsGraph("dogContacts") {
         fun createRoute(dogId: String) = "dogContacts/$dogId"
     }
 

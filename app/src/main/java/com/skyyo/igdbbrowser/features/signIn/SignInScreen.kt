@@ -70,9 +70,8 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Button(onClick = viewModel::goBottomSheetsScaffold) { Text(text = " modal & persistent (scaffold)") }
         Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = viewModel::goViewPager) { Text(text = "view pager (accompanist)") }
-        Button(onClick = {}) {
-            Text(text = "")
-        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goNavWithResultSample) { Text(text = "navigate to/back with results") }
     }
 
 }

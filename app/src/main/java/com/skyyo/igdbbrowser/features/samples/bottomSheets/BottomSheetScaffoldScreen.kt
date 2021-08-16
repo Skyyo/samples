@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.signIn.bottomSheets
+package com.skyyo.igdbbrowser.features.samples.bottomSheets
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

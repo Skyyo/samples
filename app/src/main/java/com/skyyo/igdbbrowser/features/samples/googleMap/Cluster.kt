@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.signIn.googleMap
+package com.skyyo.igdbbrowser.features.samples.googleMap
 
 import com.google.android.libraries.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterItem

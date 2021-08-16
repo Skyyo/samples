@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.signIn.viewPager
+package com.skyyo.igdbbrowser.features.samples.viewPager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
