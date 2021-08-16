@@ -16,3 +16,4 @@ Modal Drawer
 # Limitations & potential issues
 - There is no way to navigate from composable to fragment & share a navigation graph between them. ( not an issues )
 - Deep links might require lot of additional work if we need to open them in a specific bottom bar / drawer tab.
+- Navigating with parcelable object might be causing issues due it's [hacky logic](https://github.com/Skyyo/IGDB-Browser/blob/e4279d7cecb50aca32aacdc712f9ed2fdd11aade/app/src/main/java/com/skyyo/igdbbrowser/extensions/NavControllerExtensions.kt#L48-L57)
