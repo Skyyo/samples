@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
@@ -27,7 +28,9 @@ import com.skyyo.igdbbrowser.features.signIn.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.signIn.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.igdbbrowser.features.signIn.forceTheme.ForceThemeScreen
 import com.skyyo.igdbbrowser.features.signIn.googleMap.MapScreen
+import com.skyyo.igdbbrowser.features.signIn.viewPager.ViewPagerScreen
 
+@ExperimentalPagerApi
 @ExperimentalMaterialApi
 @ExperimentalMaterialNavigationApi
 @Composable
@@ -84,6 +87,7 @@ fun PopulatedNavHost(
     bottomSheet(Screens.BottomSheetScreen.route) { BottomSheetScreen() }
     composable(Screens.ModalBottomSheetScreen.route) { ModalBottomSheetScreen() }
     composable(Screens.BottomSheetScaffoldScreen.route) { BottomSheetScaffoldScreen() }
+    composable(Screens.ViewPagerScreen.route) { ViewPagerScreen() }
 //    composable(Screens.FriendDetails.route) { FriendsDetails() }
 
 }

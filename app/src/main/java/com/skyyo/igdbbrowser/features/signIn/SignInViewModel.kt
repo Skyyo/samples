@@ -88,6 +88,10 @@ class SignInViewModel @Inject constructor(
         it.navigate(Screens.BottomSheetScaffoldScreen.route)
     }
 
+    fun goViewPager() = navigationDispatcher.emit {
+        it.navigate(Screens.ViewPagerScreen.route)
+    }
+
     private fun goHome() = navigationDispatcher.emit {
 
 

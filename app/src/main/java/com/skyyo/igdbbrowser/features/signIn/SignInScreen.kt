@@ -3,6 +3,8 @@ package com.skyyo.igdbbrowser.features.signIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +53,7 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         }
     }
 
-    Column {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Text(text = "Auth Screen")
         Button(onClick = viewModel::onBtnSignInClick) { Text(text = "Sign In") }
         Spacer(modifier = Modifier.height(32.dp))
@@ -67,9 +69,7 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goBottomSheetsScaffold) { Text(text = " modal & persistent (scaffold)") }
         Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = {}) {
-            Text(text = "view pager ")
-        }
+        Button(onClick = viewModel::goViewPager) { Text(text = "view pager (accompanist)") }
         Button(onClick = {}) {
             Text(text = "")
         }

@@ -10,12 +10,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.PopulatedNavHost
 import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.extensions.navigateToRootDestination
 import kotlinx.coroutines.launch
 
+@ExperimentalPagerApi
 @ExperimentalMaterialApi
 @ExperimentalMaterialNavigationApi
 @Composable

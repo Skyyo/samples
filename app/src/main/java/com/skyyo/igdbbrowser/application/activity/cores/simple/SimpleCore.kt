@@ -8,10 +8,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.PopulatedNavHost
 import com.skyyo.igdbbrowser.extensions.log
 
+@ExperimentalPagerApi
 @ExperimentalMaterialApi
 @ExperimentalMaterialNavigationApi
 @Composable

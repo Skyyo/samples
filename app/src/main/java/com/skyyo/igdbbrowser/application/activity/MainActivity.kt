@@ -17,6 +17,7 @@ import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.cores.simple.SimpleCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
@@ -43,6 +44,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var navigationDispatcher: NavigationDispatcher
 
+    @ExperimentalPagerApi
     @ExperimentalMaterialApi
     @ExperimentalMaterialNavigationApi
     @ExperimentalAnimationApi

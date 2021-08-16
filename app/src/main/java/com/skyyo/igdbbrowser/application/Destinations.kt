@@ -15,6 +15,7 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object BottomSheetScreen : Screens("bottomSheet")
     object ModalBottomSheetScreen : Screens("modalBottomSheetContainer")
     object BottomSheetScaffoldScreen : Screens("bottomSheetScaffold")
+    object ViewPagerScreen : Screens("vewPager")
 
 }
 
