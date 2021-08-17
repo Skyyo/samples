@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,11 +30,11 @@ class GamesListViewModel @Inject constructor(
     private val _games = MutableStateFlow(mutableListOf<Game>())
     val games: StateFlow<List<Game>> = _games
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
     private val _events = Channel<GamesListEvent>(Channel.UNLIMITED)
     val events = _events.receiveAsFlow()
-
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
     var isFetchingAllowed = true
     private var itemOffset = 0
