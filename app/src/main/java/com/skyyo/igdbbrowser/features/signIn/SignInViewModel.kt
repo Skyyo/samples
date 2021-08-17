@@ -16,11 +16,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-private const val TWITCH_OAUTH_URL = "https://id.twitch.tv/oauth2/token"
-private const val TWITCH_CLIENT_ID = "s9miuod1ccn3x5vwf28n3k2up2mtxy"
-private const val TWITCH_CLIENT_SECRET = "uir0le1mwpw1wswqw5sd4mx5l6lm4c"
-private const val TWITCH_GRANT_TYPE = "client_credentials"
-
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
@@ -32,68 +27,17 @@ class SignInViewModel @Inject constructor(
     private val _events = Channel<SignInEvent>(Channel.UNLIMITED)
     val events = _events.receiveAsFlow()
 
-    //TODO move to fake sign up inputs handling sample
-//    var email = handle.get<String>("email")
-//        set(value) {
-//            field = value
-//            handle.set("email", field)
-//        }
-
-    fun onBtnSignInClick() {
-        // is valid etc
-        // signIn()
-        viewModelScope.launch {
-            //dataStoreManager.setAccessToken("awd")
+    fun signIn() = viewModelScope.launch(Dispatchers.IO) {
+        _events.send(SignInEvent.UpdateLoadingIndicator(isLoading = true))
+        val response = tryOrNull { authCalls.signIn() }
+        if (response == null) {
+            _events.send(SignInEvent.NetworkError)
+            _events.send(SignInEvent.UpdateLoadingIndicator(isLoading = false))
+        } else {
+            dataStoreManager.setAccessToken(response.accessToken)
+            //save access token in data store
             goHome()
         }
-    }
-
-    private fun signIn() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _events.send(SignInEvent.UpdateLoadingIndicator(isLoading = true))
-            val response = tryOrNull {
-                authCalls.signIn(
-                    TWITCH_OAUTH_URL, TWITCH_CLIENT_ID,
-                    TWITCH_CLIENT_SECRET,
-                    TWITCH_GRANT_TYPE
-                )
-            }
-            if (response == null) {
-                _events.send(SignInEvent.NetworkError)
-                _events.send(SignInEvent.UpdateLoadingIndicator(isLoading = false))
-            } else {
-                //save access token in data store
-                goHome()
-            }
-        }
-    }
-
-    fun goMap() = navigationDispatcher.emit {
-        it.navigate(Screens.MapScreen.route)
-    }
-
-    fun goForceTheme() = navigationDispatcher.emit {
-        it.navigate(Screens.ForceThemeScreen.route)
-    }
-
-    fun goBottomSheetDestination() = navigationDispatcher.emit {
-        it.navigate(Screens.BottomSheetScreen.route)
-    }
-
-    fun goBottomSheetsContainer() = navigationDispatcher.emit {
-        it.navigate(Screens.ModalBottomSheetScreen.route)
-    }
-
-    fun goBottomSheetsScaffold() = navigationDispatcher.emit {
-        it.navigate(Screens.BottomSheetScaffoldScreen.route)
-    }
-
-    fun goViewPager() = navigationDispatcher.emit {
-        it.navigate(Screens.ViewPagerScreen.route)
-    }
-
-    fun goNavWithResultSample() = navigationDispatcher.emit {
-        it.navigate(Screens.DogFeedScreen.route)
     }
 
     private fun goHome() = navigationDispatcher.emit {
@@ -124,5 +68,34 @@ class SignInViewModel @Inject constructor(
 //            restoreState = true
 //        }
     }
+
+    fun goMap() = navigationDispatcher.emit {
+        it.navigate(Screens.MapScreen.route)
+    }
+
+    fun goForceTheme() = navigationDispatcher.emit {
+        it.navigate(Screens.ForceThemeScreen.route)
+    }
+
+    fun goBottomSheetDestination() = navigationDispatcher.emit {
+        it.navigate(Screens.BottomSheetScreen.route)
+    }
+
+    fun goBottomSheetsContainer() = navigationDispatcher.emit {
+        it.navigate(Screens.ModalBottomSheetScreen.route)
+    }
+
+    fun goBottomSheetsScaffold() = navigationDispatcher.emit {
+        it.navigate(Screens.BottomSheetScaffoldScreen.route)
+    }
+
+    fun goViewPager() = navigationDispatcher.emit {
+        it.navigate(Screens.ViewPagerScreen.route)
+    }
+
+    fun goNavWithResultSample() = navigationDispatcher.emit {
+        it.navigate(Screens.DogFeedScreen.route)
+    }
+
 
 }

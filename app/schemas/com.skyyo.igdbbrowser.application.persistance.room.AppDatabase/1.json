@@ -2,15 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "235eefdd60cf02009b284a9b5ba50c6d",
+    "identityHash": "5a6ccc6e4cbbd2696e440aca07ee4c67",
     "entities": [
       {
         "tableName": "games_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`flightNumber` INTEGER NOT NULL, `name` TEXT NOT NULL, `upcoming` INTEGER NOT NULL, `launchDate` TEXT NOT NULL, PRIMARY KEY(`flightNumber`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
-            "fieldPath": "flightNumber",
-            "columnName": "flightNumber",
+            "fieldPath": "id",
+            "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -19,23 +19,11 @@
             "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "upcoming",
-            "columnName": "upcoming",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "launchDate",
-            "columnName": "launchDate",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "flightNumber"
+            "id"
           ],
           "autoGenerate": false
         },
@@ -46,7 +34,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '235eefdd60cf02009b284a9b5ba50c6d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5a6ccc6e4cbbd2696e440aca07ee4c67')"
     ]
   }
 }

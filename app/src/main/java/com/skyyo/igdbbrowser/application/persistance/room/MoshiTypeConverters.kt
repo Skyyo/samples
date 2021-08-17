@@ -2,11 +2,10 @@ package com.skyyo.igdbbrowser.application.persistance.room
 
 import androidx.room.TypeConverter
 import com.skyyo.igdbbrowser.application.models.remote.Game
-import com.skyyo.igdbbrowser.application.models.remote.Rocket
 import com.squareup.moshi.*
 
 object MoshiTypeConverters {
-    private val moshi = Moshi.Builder().build()
+    val moshi = Moshi.Builder().build()
 
     private val listOfIntAdapter: JsonAdapter<List<Int>> =
         moshi.adapter<List<Int>>(Types.newParameterizedType(List::class.java, Integer::class.java))
@@ -34,15 +33,20 @@ object MoshiTypeConverters {
     @ToJson
     fun toGame(json: String): Game? = moshi.adapter(Game::class.java).fromJson(json)
 
-    @TypeConverter
-    @JvmStatic
-    @ToJson
-    fun fromRocket(data: Rocket): String = moshi.adapter(Rocket::class.java).toJson(data)
 
     @TypeConverter
     @JvmStatic
-    @ToJson
-    fun toRocket(json: String): Rocket? = moshi.adapter(Rocket::class.java).fromJson(json)
+    @ExperimentalStdlibApi
+    inline fun <reified T> toJson(clazz: T): String {
+        return moshi.adapter<T>().toJson(clazz)
+    }
 
+
+    @TypeConverter
+    @JvmStatic
+    @ExperimentalStdlibApi
+    inline fun <reified T> fromJson(json: String): T? {
+        return moshi.adapter<T>().fromJson(json)
+    }
 
 }

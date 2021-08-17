@@ -3,62 +3,65 @@ package com.skyyo.igdbbrowser.features.games
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyyo.igdbbrowser.application.repositories.games.LatestLaunchResult
+import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
-import com.skyyo.igdbbrowser.application.repositories.games.PastLaunchesResult
+import com.skyyo.igdbbrowser.application.repositories.games.GamesResult
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 
 private const val PAGE_LIMIT = 20
 
 @HiltViewModel
-class LaunchesListViewModel @Inject constructor(
+class GamesListViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val handle: SavedStateHandle,
     private val gamesRepository: GamesRepository
 ) : ViewModel() {
 
-//    val latestLaunch = gamesRepository.observeLatestLaunch(LocalDateTime.now(), viewModelScope)
-    val pastLaunches = gamesRepository.observePastLaunches(viewModelScope)
-    val events = Channel<GamesListEvent>(Channel.UNLIMITED)
+    //        val games = gamesRepository.observeGames(viewModelScope)
+    private val _games = MutableStateFlow(mutableListOf<Game>())
+    val games: StateFlow<List<Game>> = _games
+
+    private val _events = Channel<GamesListEvent>(Channel.UNLIMITED)
+    val events = _events.receiveAsFlow()
 
     var isFetchingAllowed = true
     private var itemOffset = 0
 
     init {
-       // getLatestLaunch()
-        getPastLaunches()
+        getGames()
     }
 
-    private fun getLatestLaunch() {
-        viewModelScope.launch(Dispatchers.IO) {
-//            if (gamesRepository.getLatestLaunch() == LatestLaunchResult.NetworkError) {
-//                events.send(GamesListEvent.NetworkError)
-//            }
-        }
-    }
-
-    fun getPastLaunches(isFirstPage: Boolean = false) {
-        isFetchingAllowed = false
+    fun getGames(isFirstPage: Boolean = false) {
+        if (!isFetchingAllowed) return
         if (isFirstPage) itemOffset = 0
+        isFetchingAllowed = false
         viewModelScope.launch(Dispatchers.IO) {
-            when (gamesRepository.getPastLaunches(PAGE_LIMIT, itemOffset)) {
-                PastLaunchesResult.NetworkError -> {
+            when (val result = gamesRepository.getGames(PAGE_LIMIT, itemOffset)) {
+                is GamesResult.NetworkError -> {
                     itemOffset = 0
                     isFetchingAllowed = true
-                    events.send(GamesListEvent.NetworkError)
+                    _events.send(GamesListEvent.NetworkError)
                 }
-                PastLaunchesResult.Success -> {
+                is GamesResult.Success -> {
                     itemOffset += PAGE_LIMIT
                     isFetchingAllowed = true
                 }
-                PastLaunchesResult.LastPageReached -> {
+                is GamesResult.SuccessWithoutDatabase -> {
+                    itemOffset += PAGE_LIMIT
+                    isFetchingAllowed = true
+                    _games.value = (_games.value + result.games).toMutableList()
+//                    _games.value = Collections.unmodifiableList(_games.value + result.games)
+                }
+                is GamesResult.LastPageReached -> {
                     isFetchingAllowed = false
                 }
             }
@@ -66,7 +69,7 @@ class LaunchesListViewModel @Inject constructor(
     }
 
     fun onSwipeToRefresh() {
-        getLatestLaunch()
-        getPastLaunches(true)
+//        getLatestLaunch()
+        getGames(true)
     }
 }

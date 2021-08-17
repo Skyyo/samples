@@ -12,8 +12,8 @@ inline fun <T> tryOrNull(f: () -> T) =
         null
     }
 
-fun log(message: String, tag: String = "vovk") = run {
-    Log.v(tag, message)
+fun log(message: String, tag: String = "vovk") {
+    Log.d(tag, message)
 }
 
 fun Context.toast(message: String) {

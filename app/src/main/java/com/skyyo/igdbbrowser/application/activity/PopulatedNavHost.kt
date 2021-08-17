@@ -17,7 +17,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.features.launches.LaunchesList
+import com.skyyo.igdbbrowser.features.games.GamesScreen
 import com.skyyo.igdbbrowser.features.profile.*
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
@@ -61,7 +61,7 @@ fun PopulatedNavHost(
     }
     composable(Screens.GamesScreen.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        LaunchesList()
+        GamesScreen()
     }
     navigation(
         route = EditProfileGraph.route,

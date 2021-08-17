@@ -1,7 +1,6 @@
 package com.skyyo.igdbbrowser.application.repositories.games
 
 import com.skyyo.igdbbrowser.application.models.remote.Game
-import com.skyyo.igdbbrowser.application.models.remote.Launch
 import com.skyyo.igdbbrowser.application.network.calls.GamesCalls
 import com.skyyo.igdbbrowser.application.persistance.room.GamesDao
 import com.skyyo.igdbbrowser.extensions.tryOrNull
@@ -10,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import java.time.LocalDateTime
+import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 
@@ -23,10 +22,7 @@ class GamesRepository @Inject constructor(
 //    fun observeLatestLaunch(currentDate: LocalDateTime, scope: CoroutineScope): StateFlow<Launch?> =
 //        dao.observeLatestLaunch(currentDate.toString()).stateIn(scope, WhileSubscribed(4), null)
 
-    fun observePastLaunches(scope: CoroutineScope): StateFlow<List<Game>> =
-        dao.observeGames().stateIn(scope, WhileSubscribed(5), listOf())
-
-//    suspend fun getLatestLaunch(): LatestLaunchResult {
+    //    suspend fun getLatestLaunch(): LatestLaunchResult {
 //        return when (val response = tryOrNull { calls.getLatestLaunch() }) {
 //            null -> LatestLaunchResult.NetworkError
 //            else -> {
@@ -36,21 +32,19 @@ class GamesRepository @Inject constructor(
 //        }
 //    }
 
-    suspend fun getPastLaunches(limit: Int, offset: Int): PastLaunchesResult {
-        val requestBody = arrayOf("$limit", "$offset")
-        val response = tryOrNull { calls.getGames(requestBody) }
+    fun observeGames(scope: CoroutineScope): StateFlow<List<Game>> =
+        dao.observeGames().stateIn(scope, WhileSubscribed(5), listOf())
+
+    suspend fun getGames(limit: Int, offset: Int): GamesResult {
+        val rawBody = "limit $limit; offset $offset; fields name;"
+        val response = tryOrNull { calls.getGames(rawBody.toRequestBody()) }
         return when {
-            response == null -> PastLaunchesResult.NetworkError
-            response.launches.size == limit -> {
-             //   dao.insertGames(response.launches)
-                PastLaunchesResult.Success
+            response?.code() == 200 -> {
+                val games = response.body()!!
+                if (offset == 0) dao.deleteAndInsertGames(games) else dao.insertGames(games)
+                if (games.size == limit) GamesResult.SuccessWithoutDatabase(games) else GamesResult.LastPageReached
             }
-            else -> {
-            //    dao.insertGames(response.launches)
-                PastLaunchesResult.LastPageReached
-            }
+            else -> GamesResult.NetworkError
         }
     }
-
-
 }

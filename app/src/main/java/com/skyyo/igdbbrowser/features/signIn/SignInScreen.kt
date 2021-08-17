@@ -54,14 +54,13 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
     }
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        Text(text = "Auth Screen")
-        Button(onClick = viewModel::onBtnSignInClick) { Text(text = "Sign In") }
+        Text(text = "IGDB app")
+        Button(onClick = viewModel::signIn) { Text(text = "Sign In") }
         Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = viewModel::goMap) { Text(text = "google map") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
         Spacer(modifier = Modifier.height(8.dp))
-
         Text(text = "Bottom sheets")
         Button(onClick = viewModel::goBottomSheetDestination) { Text(text = "destination (accompanist)") }
         Spacer(modifier = Modifier.height(8.dp))

@@ -4,9 +4,6 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.skyyo.igdbbrowser.application.models.remote.Game
-import com.skyyo.igdbbrowser.application.models.remote.Launch
-import com.skyyo.igdbbrowser.application.models.remote.LaunchSite
-import com.skyyo.igdbbrowser.application.models.remote.Rocket
 
 @Database(
     version = 1,
