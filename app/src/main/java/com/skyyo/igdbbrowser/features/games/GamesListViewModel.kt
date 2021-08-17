@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,6 +34,9 @@ class GamesListViewModel @Inject constructor(
     private val _events = Channel<GamesListEvent>(Channel.UNLIMITED)
     val events = _events.receiveAsFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
     var isFetchingAllowed = true
     private var itemOffset = 0
 
@@ -45,6 +49,7 @@ class GamesListViewModel @Inject constructor(
         if (isFirstPage) itemOffset = 0
         isFetchingAllowed = false
         viewModelScope.launch(Dispatchers.IO) {
+            _isRefreshing.emit(true)
             when (val result = gamesRepository.getGames(PAGE_LIMIT, itemOffset)) {
                 is GamesResult.NetworkError -> {
                     itemOffset = 0
@@ -58,13 +63,14 @@ class GamesListViewModel @Inject constructor(
                 is GamesResult.SuccessWithoutDatabase -> {
                     itemOffset += PAGE_LIMIT
                     isFetchingAllowed = true
-                    _games.value = (_games.value + result.games).toMutableList()
+                    _games.emit((_games.value + result.games).toMutableList())
 //                    _games.value = Collections.unmodifiableList(_games.value + result.games)
                 }
                 is GamesResult.LastPageReached -> {
                     isFetchingAllowed = false
                 }
             }
+            _isRefreshing.emit(false)
         }
     }
 

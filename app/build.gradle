@@ -109,6 +109,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-navigation-material:0.16.1"
 //    implementation "com.google.accompanist:accompanist-pager:0.16.1"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.16.1"
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.16.1"
 
     debugImplementation "com.github.YarikSOffice.Venom:venom:0.4.1"
     releaseImplementation "com.github.YarikSOffice.Venom:venom-no-op:0.4.1"
