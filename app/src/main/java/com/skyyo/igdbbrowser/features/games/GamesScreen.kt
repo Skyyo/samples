@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.extensions.toast
@@ -50,11 +51,20 @@ fun GamesScreen(viewModel: GamesListViewModel = hiltViewModel()) {
     }
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
-        onRefresh = { viewModel.getGames(true) },
+        onRefresh = viewModel::onSwipeToRefresh,
+        indicator = { state, trigger ->
+            SwipeRefreshIndicator(
+                state = state,
+                refreshTriggerDistance = trigger,
+                scale = true,
+                backgroundColor = Color.Green,
+                contentColor = Color.Yellow
+            )
+        }
     ) {
         GamesColumn(
             games = games,
-            isFetchingAllowed = viewModel.isFetchingAllowed,
+            isLastPageReached = viewModel.isLastPageReached,
             onLastItemVisible = viewModel::getGames
         )
     }
@@ -64,7 +74,7 @@ fun GamesScreen(viewModel: GamesListViewModel = hiltViewModel()) {
 @Composable
 fun GamesColumn(
     games: List<Game>,
-    isFetchingAllowed: Boolean,
+    isLastPageReached: Boolean,
     onLastItemVisible: () -> Unit
 ) {
     LazyColumn(Modifier.fillMaxSize()) {
@@ -83,8 +93,9 @@ fun GamesColumn(
                 Text(game.name)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            if (index == games.lastIndex) {//TODO add last page reached check
+            if (!isLastPageReached && index == games.lastIndex) {
                 onLastItemVisible()
+//                SideEffect { onLastItemVisible() }
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier

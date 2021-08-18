@@ -36,11 +36,12 @@ class GamesListViewModel @Inject constructor(
     private val _events = Channel<GamesListEvent>(Channel.UNLIMITED)
     val events = _events.receiveAsFlow()
 
-    var isFetchingAllowed = true
+    private var isFetchingAllowed = true
     private var itemOffset = 0
+    var isLastPageReached = false
 
     init {
-        getGames()
+        getGames(true)
     }
 
     fun getGames(isFirstPage: Boolean = false) {
@@ -48,7 +49,7 @@ class GamesListViewModel @Inject constructor(
         if (isFirstPage) itemOffset = 0
         isFetchingAllowed = false
         viewModelScope.launch(Dispatchers.IO) {
-            _isRefreshing.emit(true)
+            if (isFirstPage) _isRefreshing.emit(true)
             when (val result = gamesRepository.getGames(PAGE_LIMIT, itemOffset)) {
                 is GamesResult.NetworkError -> {
                     itemOffset = 0
@@ -66,14 +67,17 @@ class GamesListViewModel @Inject constructor(
 //                    _games.value = Collections.unmodifiableList(_games.value + result.games)
                 }
                 is GamesResult.LastPageReached -> {
+                    isLastPageReached = true
                     isFetchingAllowed = false
                 }
             }
-            _isRefreshing.emit(false)
+            if (isFirstPage) _isRefreshing.emit(false)
         }
     }
 
     fun onSwipeToRefresh() {
+        isLastPageReached = false
+        itemOffset = 0
 //        getLatestLaunch()
         getGames(true)
     }
