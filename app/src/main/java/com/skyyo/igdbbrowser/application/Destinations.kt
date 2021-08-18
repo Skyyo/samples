@@ -15,6 +15,8 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object BottomSheetScaffoldScreen : Screens("bottomSheetScaffold")
     object ViewPagerScreen : Screens("viewPager")
     object DogFeedScreen : Screens("dogFeed", R.string.dog_feed)
+    object ListsScreen : Screens("lists")
+    object TestScreen : Screens("test")
 
 }
 

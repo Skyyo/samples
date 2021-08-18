@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.google.accompanist.insets.systemBarsPadding
 import com.skyyo.igdbbrowser.extensions.toast
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -53,7 +54,11 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         }
     }
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .systemBarsPadding()
+    ) {
         Text(text = "IGDB app")
         Button(onClick = viewModel::signIn) { Text(text = "Sign In") }
         Spacer(modifier = Modifier.height(32.dp))
@@ -71,6 +76,9 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Button(onClick = viewModel::goViewPager) { Text(text = "view pager (accompanist)") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goNavWithResultSample) { Text(text = "navigate to/back with results") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goStickyHeaders) { Text(text = "sticky headers") }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 
 }

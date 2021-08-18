@@ -1,5 +1,6 @@
 package com.skyyo.igdbbrowser.features.games
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -19,15 +20,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.extensions.toast
-import com.skyyo.igdbbrowser.theme.DarkGray
-import com.skyyo.igdbbrowser.theme.Purple500
-import com.skyyo.igdbbrowser.theme.Shapes
-import com.skyyo.igdbbrowser.theme.White
+import com.skyyo.igdbbrowser.theme.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -49,7 +48,7 @@ fun GamesScreen(viewModel: GamesListViewModel = hiltViewModel()) {
         launch {
             events.collect { event ->
                 when (event) {
-                    is GamesListEvent.NetworkError -> context.toast("network error")
+                    is GamesEvent.NetworkError -> context.toast("network error")
                 }
             }
         }
@@ -77,6 +76,7 @@ fun GamesScreen(viewModel: GamesListViewModel = hiltViewModel()) {
     ) {
         GamesColumn(
             games = games,
+            insetTop = insetTop,
             isLastPageReached = viewModel.isLastPageReached,
             onLastItemVisible = viewModel::getGames
         )
@@ -84,9 +84,11 @@ fun GamesScreen(viewModel: GamesListViewModel = hiltViewModel()) {
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GamesColumn(
     games: List<Game>,
+    insetTop: Dp,
     isLastPageReached: Boolean,
     onLastItemVisible: () -> Unit
 ) {
@@ -98,6 +100,27 @@ fun GamesColumn(
             applyBottom = false,
         )
     ) {
+        stickyHeader {
+            Card(backgroundColor = Teal200) {
+                Text(
+                    "sticky header 1", modifier = Modifier
+                        .statusBarsPadding()
+                )
+            }
+        }
+        items(10) {
+            Card(backgroundColor = DarkGray) {
+                Text(
+                    "sticky header 2", modifier = Modifier
+                        .statusBarsPadding()
+                )
+            }
+        }
+        stickyHeader {
+            Card(backgroundColor = Teal200) {
+                Text("sticky header at2")
+            }
+        }
         itemsIndexed(games) { index, game ->
             Card(
                 backgroundColor = Purple500,

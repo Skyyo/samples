@@ -79,7 +79,8 @@ class MainActivity : ComponentActivity() {
                         navController.navigatorProvider += bottomSheetNavigator
 
                         val lifecycleOwner = LocalLifecycleOwner.current
-                        val navigationCommands = remember(navigationDispatcher.emitter, lifecycleOwner) {
+                        val navigationCommands =
+                            remember(navigationDispatcher.emitter, lifecycleOwner) {
                                 navigationDispatcher.emitter.flowWithLifecycle(
                                     lifecycleOwner.lifecycle,
                                     Lifecycle.State.STARTED
@@ -118,13 +119,5 @@ class MainActivity : ComponentActivity() {
     private fun applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
-
-//    fun changeSystemBars(light: Boolean) =
-//        ViewCompat.getWindowInsetsController(this.v)?.let { controller ->
-//            if (controller.isAppearanceLightStatusBars != light) {
-//                controller.isAppearanceLightNavigationBars = light
-//                controller.isAppearanceLightStatusBars = light
-//            }
-//        }
 }
 

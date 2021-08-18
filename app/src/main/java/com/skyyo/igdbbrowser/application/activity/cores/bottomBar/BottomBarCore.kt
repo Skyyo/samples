@@ -65,6 +65,7 @@ fun BottomBarCore(
         content = { innerPadding ->
             PopulatedNavHost(
                 startDestination = startDestination,
+                // we can remove this padding to allow content draw like in a Box()
                 innerPadding = innerPadding,
                 navController = navController,
                 onBackPressIntercepted = {

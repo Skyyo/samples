@@ -33,7 +33,7 @@ class GamesListViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
 
-    private val _events = Channel<GamesListEvent>(Channel.UNLIMITED)
+    private val _events = Channel<GamesEvent>(Channel.UNLIMITED)
     val events = _events.receiveAsFlow()
 
     private var isFetchingAllowed = true
@@ -54,7 +54,7 @@ class GamesListViewModel @Inject constructor(
                 is GamesResult.NetworkError -> {
                     itemOffset = 0
                     isFetchingAllowed = true
-                    _events.send(GamesListEvent.NetworkError)
+                    _events.send(GamesEvent.NetworkError)
                 }
                 is GamesResult.Success -> {
                     itemOffset += PAGE_LIMIT

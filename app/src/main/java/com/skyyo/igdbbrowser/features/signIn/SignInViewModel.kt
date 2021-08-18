@@ -96,6 +96,8 @@ class SignInViewModel @Inject constructor(
     fun goNavWithResultSample() = navigationDispatcher.emit {
         it.navigate(Screens.DogFeedScreen.route)
     }
-
+    fun goStickyHeaders() = navigationDispatcher.emit {
+        it.navigate(Screens.ListsScreen.route)
+    }
 
 }

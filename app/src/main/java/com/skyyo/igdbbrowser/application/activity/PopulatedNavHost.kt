@@ -24,6 +24,7 @@ import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.forceTheme.ForceThemeScreen
 import com.skyyo.igdbbrowser.features.samples.googleMap.MapScreen
+import com.skyyo.igdbbrowser.features.samples.lists.ListsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogDetailsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogFeedScreen
@@ -88,6 +89,7 @@ fun PopulatedNavHost(
     composable(Screens.ModalBottomSheetScreen.route) { ModalBottomSheetScreen() }
     composable(Screens.BottomSheetScaffoldScreen.route) { BottomSheetScaffoldScreen() }
     composable(Screens.ViewPagerScreen.route) { ViewPagerScreen() }
-//    composable(Screens.FriendDetails.route) { FriendsDetails() }
+//    composable(Screens.ListsScreen.route) { ListsScreen() }
+//    composable(Screens.TestScreen.route) { ListsScreen() }
 
 }
