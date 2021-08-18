@@ -5,10 +5,6 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -23,13 +19,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.navigationBarsPadding
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.COLLAPSE_ANIMATION_DURATION
 import com.skyyo.igdbbrowser.application.activity.EXPAND_ANIMATION_DURATION
 import com.skyyo.igdbbrowser.application.activity.FADE_IN_ANIMATION_DURATION
 import com.skyyo.igdbbrowser.application.activity.FADE_OUT_ANIMATION_DURATION
 import com.skyyo.igdbbrowser.theme.DarkGray
-import com.skyyo.igdbbrowser.theme.Purple500
 
 @ExperimentalAnimationApi
 @Composable
@@ -71,25 +67,20 @@ fun AnimatedBottomBar(
         visible = isBottomBarVisible,
         enter = enterSlide + enterFadeIn,
         exit = exitSlide + exitFadeOut,
-//        modifier = Modifier.navigationBarsPadding()
     ) {
-        Column {
-            BottomNavigation(backgroundColor = DarkGray) {
-                items.forEachIndexed { index, screen ->
-                    BottomNavigationItem(
-                        icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
-                        label = { Text(stringResource(screen.resourceId)) },
-                        selected = index == selectedIndex,
-                        onClick = { onTabClick(index, screen.route) }
-                    )
-                }
+        BottomNavigation(
+            backgroundColor = DarkGray,
+            modifier = Modifier.navigationBarsHeight(56.dp)
+        ) {
+            items.forEachIndexed { index, screen ->
+                BottomNavigationItem(
+                    modifier = Modifier.navigationBarsPadding(),
+                    icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
+                    label = { Text(stringResource(screen.resourceId)) },
+                    selected = index == selectedIndex,
+                    onClick = { onTabClick(index, screen.route) }
+                )
             }
-            Spacer(
-                Modifier
-                    .background(DarkGray)
-                    .navigationBarsHeight()
-                    .fillMaxWidth()
-            )
         }
     }
 }
