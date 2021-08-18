@@ -8,13 +8,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.systemuicontroller.SystemUiController
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.PopulatedNavHost
-import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.extensions.navigateToRootDestination
 
 @ExperimentalPagerApi
@@ -25,18 +24,25 @@ import com.skyyo.igdbbrowser.extensions.navigateToRootDestination
 fun BottomBarCore(
     bottomBarScreens: List<Screens>,
     startDestination: String,
-    navController: NavHostController
+    navController: NavHostController,
+    systemUiController: SystemUiController
 ) {
     val isBottomBarVisible = rememberSaveable { mutableStateOf(false) }
     val selectedTab = rememberSaveable { mutableStateOf(0) }
-
     DisposableEffect(navController) {
         val callback = NavController.OnDestinationChangedListener { _, destination, args ->
-            log("${destination.route}")
-            log("first destination:${navController.findDestination(navController.graph.findStartDestination().id)}")
+//            log("${destination.route}")
+//            log("first destination:${navController.findDestination(navController.graph.findStartDestination().id)}")
+            //TODO make args based?
+            systemUiController.statusBarDarkContentEnabled = false
             when (destination.route) {
-                Screens.AuthScreen.route -> isBottomBarVisible.value = false
-                else -> isBottomBarVisible.value = true
+                Screens.AuthScreen.route -> isBottomBarVisible.value = true
+                Screens.Profile.route -> {
+                    isBottomBarVisible.value = true
+                }
+                else -> {
+                    isBottomBarVisible.value = true
+                }
             }
         }
         navController.addOnDestinationChangedListener(callback)
