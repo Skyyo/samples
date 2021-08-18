@@ -12,7 +12,6 @@ Modal Drawer
 - drag & drop feature. Not even mentioned in the road map.
 
 Miscellaneous
-- no drag & drop
 - [androidx.navigation:navigation-compose:2.4.0-alpha05](https://developer.android.com/jetpack/androidx/releases/navigation#2.4.0-alpha05) introduced non-modifiable crossfade animations, [issue](https://issuetracker.google.com/issues/172112072)
 
 # Limitations & potential issues
