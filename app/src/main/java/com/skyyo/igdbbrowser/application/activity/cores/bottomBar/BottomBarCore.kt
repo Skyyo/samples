@@ -36,13 +36,8 @@ fun BottomBarCore(
             //TODO make args based?
             systemUiController.statusBarDarkContentEnabled = false
             when (destination.route) {
-                Screens.AuthScreen.route -> isBottomBarVisible.value = true
-                Screens.Profile.route -> {
-                    isBottomBarVisible.value = true
-                }
-                else -> {
-                    isBottomBarVisible.value = true
-                }
+                Screens.AuthScreen.route -> isBottomBarVisible.value = false
+                else -> isBottomBarVisible.value = true
             }
         }
         navController.addOnDestinationChangedListener(callback)
