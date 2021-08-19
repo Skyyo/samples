@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -24,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -122,12 +125,16 @@ fun GamesColumn(
     onLastItemVisible: () -> Unit
 ) {
     LazyColumn(
+//        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         state = listState,
         modifier = Modifier.fillMaxSize(),
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
             applyTop = true,
             applyBottom = false,
+            additionalStart = 16.dp,
+            additionalEnd = 16.dp,
+            additionalBottom = 8.dp
         )
     ) {
         itemsIndexed(games) { index, game ->
@@ -135,13 +142,27 @@ fun GamesColumn(
                 backgroundColor = Purple500,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
                     .padding(8.dp),
                 shape = Shapes.large
             ) {
-                Text(game.name)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(minHeight = 56.dp)
+                ) {
+                    Image(painter = rememberImagePainter(
+                        data = "https://placekitten.com/g/200/300",
+                        builder = {
+                            transformations(CircleCropTransformation())
+                        }
+                    ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(56.dp)
+                            .padding(horizontal = 8.dp))
+                    Text(game.name, modifier = Modifier.align(Alignment.CenterVertically))
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
             if (!isLastPageReached && index == games.lastIndex) {
                 onLastItemVisible()
 //                SideEffect { onLastItemVisible() }

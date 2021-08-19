@@ -23,6 +23,7 @@ import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldSc
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.forceTheme.ForceThemeScreen
+import com.skyyo.igdbbrowser.features.samples.formValidation.FormValidationsScreen
 import com.skyyo.igdbbrowser.features.samples.googleMap.GoogleMapScreen
 import com.skyyo.igdbbrowser.features.samples.lists.ListsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScreen
@@ -87,6 +88,6 @@ fun PopulatedNavHost(
     composable(Screens.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
     composable(Screens.ViewPager.route) { ViewPagerScreen() }
     composable(Screens.Lists.route) { ListsScreen() }
-    composable(Screens.Test.route) { ListsScreen() }//workaround for IOOB 13 issue
+    composable(Screens.FormValidationScreen.route) { FormValidationsScreen() }
 
 }
