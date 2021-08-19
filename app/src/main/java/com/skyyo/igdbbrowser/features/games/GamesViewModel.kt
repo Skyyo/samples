@@ -11,7 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,13 +27,13 @@ class GamesListViewModel @Inject constructor(
 ) : ViewModel() {
 
     //        val games = gamesRepository.observeGames(viewModelScope)
-    private val _games = MutableStateFlow(mutableListOf<Game>())
-    val games: StateFlow<List<Game>> = _games
+    private val _games = MutableStateFlow(listOf<Game>())
+    val games = _games.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+    val isRefreshing = _isRefreshing.asStateFlow()
 
-    private val _events = Channel<GamesEvent>(Channel.UNLIMITED)
+    private val _events = Channel<GamesEvent>()
     val events = _events.receiveAsFlow()
 
     private var isFetchingAllowed = true
@@ -64,9 +64,9 @@ class GamesListViewModel @Inject constructor(
                     itemOffset += PAGE_LIMIT
                     isFetchingAllowed = true
                     if (isFirstPage) {
-                        _games.emit(result.games.toMutableList())
+                        _games.emit(result.games)
                     } else {
-                        _games.emit((_games.value + result.games).toMutableList())
+                        _games.emit((_games.value + result.games))
                     }
                 }
                 is GamesResult.LastPageReached -> {

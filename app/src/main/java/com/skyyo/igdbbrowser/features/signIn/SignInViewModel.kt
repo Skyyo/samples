@@ -24,7 +24,7 @@ class SignInViewModel @Inject constructor(
     private val handle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _events = Channel<SignInEvent>(Channel.UNLIMITED)
+    private val _events = Channel<SignInEvent>()
     val events = _events.receiveAsFlow()
 
     fun signIn() = viewModelScope.launch(Dispatchers.IO) {
@@ -35,38 +35,16 @@ class SignInViewModel @Inject constructor(
             _events.send(SignInEvent.UpdateLoadingIndicator(isLoading = false))
         } else {
             dataStoreManager.setAccessToken(response.accessToken)
-            //save access token in data store
             goHome()
         }
     }
 
     private fun goHome() = navigationDispatcher.emit {
-
-
-//        it.popBackStack(Screens.DogFeedScreen.route,false)
-
-//        it.graph.setStartDestination(Screens.DogFeedScreen.route)
         it.navigate(Screens.DogFeedScreen.route) {
-//            popUpTo(Screens.AuthScreen.route) {
-//                inclusive = true
-//            }
+            popUpTo(Screens.AuthScreen.route) {
+                inclusive = true
+            }
         }
-
-
-//        it.navigate(Screens.DogFeedScreen.route) {
-//            // Pop up to the start destination of the graph to
-//            // avoid building up a large stack of destinations
-//            // on the back stack as users select items
-//            popUpTo(it.graph.findStartDestination().id) {
-//                saveState = true
-//                inclusive = true
-//            }
-//            // Avoid multiple copies of the same destination when
-//            // reselecting the same item
-//            launchSingleTop = true
-//            // Restore state when reselecting a previously selected item
-//            restoreState = true
-//        }
     }
 
     fun goMap() = navigationDispatcher.emit {
@@ -96,6 +74,7 @@ class SignInViewModel @Inject constructor(
     fun goNavWithResultSample() = navigationDispatcher.emit {
         it.navigate(Screens.DogFeedScreen.route)
     }
+
     fun goStickyHeaders() = navigationDispatcher.emit {
         it.navigate(Screens.ListsScreen.route)
     }

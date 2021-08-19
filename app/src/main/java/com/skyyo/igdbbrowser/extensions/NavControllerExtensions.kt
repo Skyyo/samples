@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import com.skyyo.igdbbrowser.application.Screens
 
 //sets value to previous savedStateHandle unless route is specified
 fun <T> NavController.setNavigationResult(route: String? = null, key: String, result: T) {
@@ -25,21 +26,14 @@ fun <T> NavController.observeNavigationResultLiveData(key: String) =
 fun <T> NavController.observeNavigationResult(key: String) =
     currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.asFlow()
 
-fun NavController.navigateToRootDestination(route: String) {
-//    if (route == currentDestination?.route) return
-    //TODO add check for root destinations instead
+
+//popUpToRoute - should always be the start destination of the bottomBar, not app
+fun NavController.navigateToRootDestination(
+    route: String,
+    popUpToRoute: String = Screens.DogFeedScreen.route
+) {
     navigate(route) {
-        // Pop up to the start destination of the graph to
-        // avoid building up a large stack of destinations
-//        popUpTo(graph.startDestinationRoute!!) {
-//            saveState = true
-//        }
-        // on the back stack as users select items
-        popUpTo(graph.findStartDestination().id) {
-            saveState = true
-        }
-        // Avoid multiple copies of the same destination when
-        // reselecting the same item
+        popUpTo(popUpToRoute) { saveState = true }
         launchSingleTop = true
         restoreState = true
     }
