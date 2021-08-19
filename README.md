@@ -15,6 +15,7 @@ Miscellaneous
 - [androidx.navigation:navigation-compose:2.4.0-alpha05](https://developer.android.com/jetpack/androidx/releases/navigation#2.4.0-alpha05) introduced non-modifiable crossfade animations, [issue](https://issuetracker.google.com/issues/172112072)
 - drag & drop feature. Not even mentioned in the road map.
 - can't have exactly 13 destinations inside NavHost. [issue](https://issuetracker.google.com/issues/195752907)
+- there is no out of the box support for scroll bars as of August 19, 2021. [Sample for simple cases](https://stackoverflow.com/questions/66341823/jetpack-compose-scrollbars/68056586#68056586)
 
 # Limitations & potential issues
 - No field injections in composables - inconvenient.
