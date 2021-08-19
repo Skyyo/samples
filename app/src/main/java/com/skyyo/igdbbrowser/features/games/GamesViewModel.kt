@@ -63,8 +63,11 @@ class GamesListViewModel @Inject constructor(
                 is GamesResult.SuccessWithoutDatabase -> {
                     itemOffset += PAGE_LIMIT
                     isFetchingAllowed = true
-                    _games.emit((_games.value + result.games).toMutableList())
-//                    _games.value = Collections.unmodifiableList(_games.value + result.games)
+                    if (isFirstPage) {
+                        _games.emit(result.games.toMutableList())
+                    } else {
+                        _games.emit((_games.value + result.games).toMutableList())
+                    }
                 }
                 is GamesResult.LastPageReached -> {
                     isLastPageReached = true

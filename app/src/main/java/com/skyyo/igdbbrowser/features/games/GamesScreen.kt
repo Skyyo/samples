@@ -100,27 +100,6 @@ fun GamesColumn(
             applyBottom = false,
         )
     ) {
-        stickyHeader {
-            Card(backgroundColor = Teal200) {
-                Text(
-                    "sticky header 1", modifier = Modifier
-                        .statusBarsPadding()
-                )
-            }
-        }
-        items(10) {
-            Card(backgroundColor = DarkGray) {
-                Text(
-                    "sticky header 2", modifier = Modifier
-                        .statusBarsPadding()
-                )
-            }
-        }
-        stickyHeader {
-            Card(backgroundColor = Teal200) {
-                Text("sticky header at2")
-            }
-        }
         itemsIndexed(games) { index, game ->
             Card(
                 backgroundColor = Purple500,
