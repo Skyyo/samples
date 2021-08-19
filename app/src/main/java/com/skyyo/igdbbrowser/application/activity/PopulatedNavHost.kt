@@ -23,7 +23,7 @@ import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldSc
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.forceTheme.ForceThemeScreen
-import com.skyyo.igdbbrowser.features.samples.googleMap.MapScreen
+import com.skyyo.igdbbrowser.features.samples.googleMap.GoogleMapScreen
 import com.skyyo.igdbbrowser.features.samples.lists.ListsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogDetailsScreen
@@ -45,22 +45,12 @@ fun PopulatedNavHost(
     startDestination = startDestination,
     modifier = Modifier.padding(innerPadding)
 ) {
-    composable(Screens.AuthScreen.route) { SignInScreen() }
-
-    composable(Screens.DogFeedScreen.route) { DogFeedScreen() }
-    navigation(
-        route = DogDetailsGraph.route,
-        startDestination = DogDetailsGraph.DogDetails.route
-    ) {
-        composable(route = DogDetailsGraph.DogDetails.route) { DogDetailsScreen() }
-        composable(route = DogDetailsGraph.DogContacts.route) { DogContactsScreen() }
-    }
-
+    composable(Screens.SignIn.route) { SignInScreen() }
     composable(Screens.Profile.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        Profile()
+        ProfileScreen()
     }
-    composable(Screens.GamesScreen.route) {
+    composable(Screens.Games.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         GamesScreen()
     }
@@ -68,28 +58,35 @@ fun PopulatedNavHost(
         route = EditProfileGraph.route,
         startDestination = EditProfileGraph.EditProfile.route
     ) {
-        composable(route = EditProfileGraph.EditProfile.route) { EditProfile() }
+        composable(route = EditProfileGraph.EditProfile.route) { EditProfileScreen() }
         composable(route = EditProfileGraph.EditProfileConfirmation.route) {
-            val navGraphViewModel: SharedProfileViewModel =
+            val navGraphSharedViewModel: ProfileSharedViewModel =
                 hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
-            EditProfileConfirmation(navGraphViewModel)
+            EditProfileConfirmationScreen(navGraphSharedViewModel)
         }
         composable(route = EditProfileGraph.EditProfileConfirmation2.route) {
-            val navGraphViewModel: SharedProfileViewModel =
+            val navGraphSharedViewModel: ProfileSharedViewModel =
                 hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
-            EditProfileConfirmation2(navGraphViewModel)
+            EditProfileConfirmation2Screen(navGraphSharedViewModel)
         }
     }
 
-    composable(Screens.MapScreen.route) { MapScreen() }
-    composable(Screens.ForceThemeScreen.route) { ForceThemeScreen() }
 
-
-    bottomSheet(Screens.BottomSheetScreen.route) { BottomSheetScreen() }
-    composable(Screens.ModalBottomSheetScreen.route) { ModalBottomSheetScreen() }
-    composable(Screens.BottomSheetScaffoldScreen.route) { BottomSheetScaffoldScreen() }
-    composable(Screens.ViewPagerScreen.route) { ViewPagerScreen() }
-//    composable(Screens.ListsScreen.route) { ListsScreen() }
-//    composable(Screens.TestScreen.route) { ListsScreen() }
+    composable(Screens.DogFeed.route) { DogFeedScreen() }
+    navigation(
+        route = DogDetailsGraph.route,
+        startDestination = DogDetailsGraph.DogDetails.route
+    ) {
+        composable(route = DogDetailsGraph.DogDetails.route) { DogDetailsScreen() }
+        composable(route = DogDetailsGraph.DogContacts.route) { DogContactsScreen() }
+    }
+    composable(Screens.Map.route) { GoogleMapScreen() }
+    composable(Screens.ForceTheme.route) { ForceThemeScreen() }
+    bottomSheet(Screens.BottomSheet.route) { BottomSheetScreen() }
+    composable(Screens.ModalBottomSheet.route) { ModalBottomSheetScreen() }
+    composable(Screens.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
+    composable(Screens.ViewPager.route) { ViewPagerScreen() }
+    composable(Screens.Lists.route) { ListsScreen() }
+    composable(Screens.Test.route) { ListsScreen() }//workaround for IOOB 13 issue
 
 }

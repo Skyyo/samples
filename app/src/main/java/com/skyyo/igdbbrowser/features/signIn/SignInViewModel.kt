@@ -40,43 +40,43 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun goHome() = navigationDispatcher.emit {
-        it.navigate(Screens.DogFeedScreen.route) {
-            popUpTo(Screens.AuthScreen.route) {
+        it.navigate(Screens.DogFeed.route) {
+            popUpTo(Screens.SignIn.route) {
                 inclusive = true
             }
         }
     }
 
     fun goMap() = navigationDispatcher.emit {
-        it.navigate(Screens.MapScreen.route)
+        it.navigate(Screens.Map.route)
     }
 
     fun goForceTheme() = navigationDispatcher.emit {
-        it.navigate(Screens.ForceThemeScreen.route)
+        it.navigate(Screens.ForceTheme.route)
     }
 
     fun goBottomSheetDestination() = navigationDispatcher.emit {
-        it.navigate(Screens.BottomSheetScreen.route)
+        it.navigate(Screens.BottomSheet.route)
     }
 
     fun goBottomSheetsContainer() = navigationDispatcher.emit {
-        it.navigate(Screens.ModalBottomSheetScreen.route)
+        it.navigate(Screens.ModalBottomSheet.route)
     }
 
     fun goBottomSheetsScaffold() = navigationDispatcher.emit {
-        it.navigate(Screens.BottomSheetScaffoldScreen.route)
+        it.navigate(Screens.BottomSheetScaffold.route)
     }
 
     fun goViewPager() = navigationDispatcher.emit {
-        it.navigate(Screens.ViewPagerScreen.route)
+        it.navigate(Screens.ViewPager.route)
     }
 
     fun goNavWithResultSample() = navigationDispatcher.emit {
-        it.navigate(Screens.DogFeedScreen.route)
+        it.navigate(Screens.DogFeed.route)
     }
 
     fun goStickyHeaders() = navigationDispatcher.emit {
-        it.navigate(Screens.ListsScreen.route)
+        it.navigate(Screens.Lists.route)
     }
 
 }

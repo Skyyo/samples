@@ -16,11 +16,11 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class MapViewModel @Inject constructor() : ViewModel() {
+class GoogleMapViewModel @Inject constructor() : ViewModel() {
 
     private val _markers = MutableStateFlow<List<Cluster>?>(null)
     val markers = _markers.filterNotNull()
-    private val _events = Channel<MapEvent>(Channel.UNLIMITED)
+    private val _events = Channel<GoogleMapEvent>(Channel.UNLIMITED)
     val events = _events.receiveAsFlow()
 
     init {
@@ -30,7 +30,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
     }
 
     fun removePolyline() {
-        _events.trySend(MapEvent.RemovePolyline)
+        _events.trySend(GoogleMapEvent.RemovePolyline)
     }
 
     private fun getFakeLocations() = viewModelScope.launch(Dispatchers.Default) {
@@ -44,7 +44,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun showKMLData() = viewModelScope.launch {
-        _events.send(MapEvent.ShowKMLDraw)
+        _events.send(GoogleMapEvent.ShowKMLDraw)
     }
 
     private fun showPolyline() {
@@ -52,7 +52,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
             color(R.color.teal_200)
             addAll(mockedList)
         }
-        _events.trySend(MapEvent.ShowPolyline(polylineOptions))
+        _events.trySend(GoogleMapEvent.ShowPolyline(polylineOptions))
     }
 
     companion object {

@@ -6,12 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun EditProfile(
-    sharedProfileViewModel: SharedProfileViewModel = hiltViewModel()
+fun EditProfileScreen(
+    profileSharedViewModel: ProfileSharedViewModel = hiltViewModel()
 ) {
-    sharedProfileViewModel.toString()
+    profileSharedViewModel.toString()
     Text(text = "edit Profile")
-    Button(onClick = { sharedProfileViewModel.goProfileConfirmation() }) {
+    Button(onClick = { profileSharedViewModel.goProfileConfirmation() }) {
 
     }
 }

@@ -6,14 +6,14 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
-typealias NavigationCommand = (NavController) -> Unit
+typealias NavigationEvent = (NavController) -> Unit
 
 @ActivityRetainedScoped
 class NavigationDispatcher @Inject constructor() {
-    private val _emitter = Channel<NavigationCommand>(Channel.UNLIMITED)
+    private val _emitter = Channel<NavigationEvent>(Channel.UNLIMITED)
     val emitter = _emitter.receiveAsFlow()
 
-    fun emit(navigationCommand: NavigationCommand) = _emitter.trySend(navigationCommand)
+    fun emit(navigationEvent: NavigationEvent) = _emitter.trySend(navigationEvent)
 
 
 }

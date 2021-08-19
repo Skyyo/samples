@@ -4,19 +4,19 @@ import androidx.annotation.StringRes
 import com.skyyo.igdbbrowser.R
 
 sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
-    object AuthScreen : Screens("auth", R.string.auth)
-    object GamesScreen : Screens("games", R.string.games)
+    object SignIn : Screens("signIn")
+    object Games : Screens("games", R.string.games)
     object Profile : Screens("profile", R.string.profile)
 
-    object MapScreen : Screens("map", R.string.map)
-    object ForceThemeScreen : Screens("forceTheme")
-    object BottomSheetScreen : Screens("bottomSheet")
-    object ModalBottomSheetScreen : Screens("modalBottomSheetContainer")
-    object BottomSheetScaffoldScreen : Screens("bottomSheetScaffold")
-    object ViewPagerScreen : Screens("viewPager")
-    object DogFeedScreen : Screens("dogFeed", R.string.dog_feed)
-    object ListsScreen : Screens("lists")
-    object TestScreen : Screens("test")
+    object Map : Screens("map", R.string.map)
+    object ForceTheme : Screens("forceTheme")
+    object BottomSheet : Screens("bottomSheet")
+    object ModalBottomSheet : Screens("modalBottomSheetContainer")
+    object BottomSheetScaffold : Screens("bottomSheetScaffold")
+    object ViewPager : Screens("viewPager")
+    object DogFeed : Screens("dogFeed", R.string.dog_feed)
+    object Lists : Screens("lists")
+    object Test : Screens("test")
 
 }
 

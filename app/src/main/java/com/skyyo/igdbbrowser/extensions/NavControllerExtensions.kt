@@ -3,7 +3,6 @@ package com.skyyo.igdbbrowser.extensions
 import android.os.Bundle
 import androidx.lifecycle.asFlow
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import com.skyyo.igdbbrowser.application.Screens
@@ -30,7 +29,7 @@ fun <T> NavController.observeNavigationResult(key: String) =
 //popUpToRoute - should always be the start destination of the bottomBar, not app
 fun NavController.navigateToRootDestination(
     route: String,
-    popUpToRoute: String = Screens.DogFeedScreen.route
+    popUpToRoute: String = Screens.DogFeed.route
 ) {
     navigate(route) {
         popUpTo(popUpToRoute) { saveState = true }

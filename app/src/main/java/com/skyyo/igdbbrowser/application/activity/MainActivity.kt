@@ -24,19 +24,14 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
-import com.skyyo.igdbbrowser.features.signIn.THEME_AUTO
+import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
 import com.skyyo.igdbbrowser.theme.IgdbBrowserTheme
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
+import com.skyyo.igdbbrowser.utils.eventDispatchers.UnauthorizedEventDispatcher
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-
-const val EXPAND_ANIMATION_DURATION = 300
-const val COLLAPSE_ANIMATION_DURATION = 300
-const val FADE_IN_ANIMATION_DURATION = 350
-const val FADE_OUT_ANIMATION_DURATION = 300
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,6 +42,12 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var navigationDispatcher: NavigationDispatcher
 
+    @Inject
+    lateinit var unauthorizedEventDispatcher: UnauthorizedEventDispatcher
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
+
     @ExperimentalPagerApi
     @ExperimentalMaterialApi
     @ExperimentalMaterialNavigationApi
@@ -56,18 +57,16 @@ class MainActivity : ComponentActivity() {
         applyEdgeToEdge()
         //these boys won't be hoisted in the template
         val drawerOrBottomBarScreens = listOf(
-            Screens.DogFeedScreen,
+            Screens.DogFeed,
             Screens.Profile,
-            Screens.GamesScreen,
+            Screens.Games,
         )
         val startDestination = when {
             //TODO measure async + splash delegation profit
-            runBlocking { dataStoreManager.getAccessToken() } == null -> Screens.AuthScreen.route
-            else -> Screens.DogFeedScreen.route
+            runBlocking { dataStoreManager.getAccessToken() } == null -> Screens.SignIn.route
+            else -> Screens.DogFeed.route
         }
-        //TODO can be optimized
-//        val savedTheme = runBlocking { dataStoreManager.getAppTheme() }
-        val savedTheme = THEME_AUTO
+        val savedTheme = runBlocking { dataStoreManager.getAppTheme() } //TODO can be optimized
 
         setContent {
             IgdbBrowserTheme(savedTheme) {
@@ -79,17 +78,24 @@ class MainActivity : ComponentActivity() {
                         navController.navigatorProvider += bottomSheetNavigator
 
                         val lifecycleOwner = LocalLifecycleOwner.current
-                        val navigationCommands =
-                            remember(navigationDispatcher.emitter, lifecycleOwner) {
+                        val navigationEvents = remember(navigationDispatcher.emitter, lifecycleOwner) {
                                 navigationDispatcher.emitter.flowWithLifecycle(
                                     lifecycleOwner.lifecycle,
                                     Lifecycle.State.STARTED
                                 )
                             }
-
+                        val unauthorizedEvents = remember(unauthorizedEventDispatcher.emitter, lifecycleOwner) {
+                                unauthorizedEventDispatcher.emitter.flowWithLifecycle(
+                                    lifecycleOwner.lifecycle,
+                                    Lifecycle.State.STARTED
+                                )
+                            }
                         LaunchedEffect(Unit) {
                             launch {
-                                navigationCommands.collect { command -> command(navController) }
+                                navigationEvents.collect { event -> event(navController) }
+                            }
+                            launch {
+                                unauthorizedEvents.collect { onUnauthorizedEventReceived() }
                             }
                         }
                         // used only for the bottom sheet destinations
@@ -114,6 +120,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    @Suppress("GlobalCoroutineUsage")
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun onUnauthorizedEventReceived() {
+        if (isFinishing) return
+        GlobalScope.launch(Dispatchers.IO) {
+            appDatabase.clearAllTables()
+            dataStoreManager.clearData()
+        }
+        finish()
+        startActivity(intent)
     }
 
     private fun applyEdgeToEdge() {

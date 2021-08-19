@@ -21,11 +21,12 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.application.activity.COLLAPSE_ANIMATION_DURATION
-import com.skyyo.igdbbrowser.application.activity.EXPAND_ANIMATION_DURATION
-import com.skyyo.igdbbrowser.application.activity.FADE_IN_ANIMATION_DURATION
-import com.skyyo.igdbbrowser.application.activity.FADE_OUT_ANIMATION_DURATION
 import com.skyyo.igdbbrowser.theme.DarkGray
+
+private const val EXPAND_ANIMATION_DURATION = 300
+private const val COLLAPSE_ANIMATION_DURATION = 300
+private const val FADE_IN_ANIMATION_DURATION = 350
+private const val FADE_OUT_ANIMATION_DURATION = 300
 
 @ExperimentalAnimationApi
 @Composable

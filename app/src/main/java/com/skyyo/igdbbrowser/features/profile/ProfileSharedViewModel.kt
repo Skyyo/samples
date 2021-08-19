@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SharedProfileViewModel @Inject constructor(
+class ProfileSharedViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
 ) : ViewModel() {
 

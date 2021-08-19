@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun MapScreen(viewModel: MapViewModel = hiltViewModel()) {
+fun GoogleMapScreen(viewModelGoogle: GoogleMapViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycle = lifecycleOwner.lifecycle
@@ -44,11 +44,11 @@ fun MapScreen(viewModel: MapViewModel = hiltViewModel()) {
         }
     }
     var lastMapCameraPosition: CameraPosition? = remember { null }
-    val markers = remember(viewModel.markers, lifecycleOwner) {
-        viewModel.markers.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    val markers = remember(viewModelGoogle.markers, lifecycleOwner) {
+        viewModelGoogle.markers.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
     }
-    val events = remember(viewModel.events, lifecycleOwner) {
-        viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+    val events = remember(viewModelGoogle.events, lifecycleOwner) {
+        viewModelGoogle.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
     }
 
     LaunchedEffect(Unit) {
@@ -69,7 +69,7 @@ fun MapScreen(viewModel: MapViewModel = hiltViewModel()) {
                 }
             }
             setOnMapClickListener {
-                viewModel.removePolyline()
+                viewModelGoogle.removePolyline()
             }
         }
         launch { observePoints(markers, clusterManager) }
@@ -111,23 +111,23 @@ suspend fun observePoints(
 }
 
 suspend fun observeEvents(
-    lifecycleAwareEventsFlow: Flow<MapEvent>,
+    lifecycleAwareEventsFlow: Flow<GoogleMapEvent>,
     googleMap: GoogleMap,
     context: Context
 ) {
     var finalPolyline: Polyline? = null
     lifecycleAwareEventsFlow.collect { event ->
         when (event) {
-            is MapEvent.ShowKMLDraw -> {
+            is GoogleMapEvent.ShowKMLDraw -> {
                 val layer = withContext(Dispatchers.Default) {
                     KmlLayer(googleMap, R.raw.map_style, context)
                 }
                 layer.addLayerToMap()
             }
-            is MapEvent.ShowPolyline -> {
+            is GoogleMapEvent.ShowPolyline -> {
                 finalPolyline = googleMap.addPolyline(event.options)
             }
-            is MapEvent.RemovePolyline -> {
+            is GoogleMapEvent.RemovePolyline -> {
                 finalPolyline?.remove()
             }
         }

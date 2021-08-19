@@ -36,7 +36,7 @@ fun BottomBarCore(
             //TODO make args based?
             systemUiController.statusBarDarkContentEnabled = false
             when (destination.route) {
-                Screens.AuthScreen.route -> isBottomBarVisible.value = false
+                Screens.SignIn.route -> isBottomBarVisible.value = false
                 else -> isBottomBarVisible.value = true
             }
         }
@@ -65,7 +65,7 @@ fun BottomBarCore(
                 navController = navController,
                 onBackPressIntercepted = {
                     selectedTab.value = 0
-                    navController.navigateToRootDestination(Screens.DogFeedScreen.route)
+                    navController.navigateToRootDestination(Screens.DogFeed.route)
                 }
             )
         })

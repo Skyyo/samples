@@ -4,7 +4,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun EditProfileConfirmation2(sharedProfileViewModel: SharedProfileViewModel) {
-    sharedProfileViewModel.toString()
+fun EditProfileConfirmation2Screen(profileSharedViewModel: ProfileSharedViewModel) {
+    profileSharedViewModel.toString()
     Text(text = "EditProfileConfirmation")
 }

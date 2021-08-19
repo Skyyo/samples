@@ -21,7 +21,7 @@ class DogContactsViewModel @Inject constructor(
 
     fun popToDogFeed() = navigationDispatcher.emit {
         it.setNavigationResult(
-            route = Screens.DogFeedScreen.route,
+            route = Screens.DogFeed.route,
             key = "dog",
 //            result = "adopted"
             result = dog
