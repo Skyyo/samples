@@ -1,11 +1,17 @@
 package com.skyyo.igdbbrowser.features.games
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,27 +26,39 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.extensions.toast
-import com.skyyo.igdbbrowser.theme.*
+import com.skyyo.igdbbrowser.theme.DarkGray
+import com.skyyo.igdbbrowser.theme.Purple500
+import com.skyyo.igdbbrowser.theme.Shapes
+import com.skyyo.igdbbrowser.theme.White
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun GamesScreen(viewModel: GamesListViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val insets = LocalWindowInsets.current
+    val density = LocalDensity.current
 
+    val insetTop: Dp = remember {
+        with(density) { insets.statusBars.top.toDp() + 8.dp }
+    }
+    val listState = rememberLazyListState()
+    val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+    val coroutineScope = rememberCoroutineScope()
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(
             lifecycleOwner.lifecycle,
             Lifecycle.State.STARTED
         )
     }
+
     val games by viewModel.games.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
@@ -49,15 +67,13 @@ fun GamesScreen(viewModel: GamesListViewModel = hiltViewModel()) {
             events.collect { event ->
                 when (event) {
                     is GamesEvent.NetworkError -> context.toast("network error")
+                    is GamesEvent.ScrollToTop -> coroutineScope.launch {
+                        listState.animateScrollToItem(0)
+                    }
                 }
             }
         }
 
-    }
-    val insets = LocalWindowInsets.current
-    val density = LocalDensity.current
-    val insetTop: Dp = remember {
-        with(density) { insets.statusBars.top.toDp() + 8.dp }
     }
 
     SwipeRefresh(
@@ -74,25 +90,39 @@ fun GamesScreen(viewModel: GamesListViewModel = hiltViewModel()) {
             )
         }
     ) {
-        GamesColumn(
-            games = games,
-            insetTop = insetTop,
-            isLastPageReached = viewModel.isLastPageReached,
-            onLastItemVisible = viewModel::getGames
-        )
+        Box(Modifier.fillMaxSize()) {
+            GamesColumn(
+                listState = listState,
+                games = games,
+                isLastPageReached = viewModel.isLastPageReached,
+                onLastItemVisible = viewModel::getGames
+            )
+            AnimatedVisibility(
+                enter = fadeIn(),
+                exit = fadeOut(),
+                visible = isListScrolled,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+            ) {
+                FloatingActionButton(viewModel::onScrollToTopClick) {
+                    Text("scroll")
+                }
+            }
+        }
     }
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GamesColumn(
+    listState: LazyListState,
     games: List<Game>,
-    insetTop: Dp,
     isLastPageReached: Boolean,
     onLastItemVisible: () -> Unit
 ) {
     LazyColumn(
+        state = listState,
         modifier = Modifier.fillMaxSize(),
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,

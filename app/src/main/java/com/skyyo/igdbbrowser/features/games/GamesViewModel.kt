@@ -78,6 +78,12 @@ class GamesListViewModel @Inject constructor(
         }
     }
 
+    fun onScrollToTopClick() {
+        viewModelScope.launch(Dispatchers.Default) {
+            _events.send(GamesEvent.ScrollToTop)
+        }
+    }
+
     fun onSwipeToRefresh() {
         isLastPageReached = false
         itemOffset = 0
