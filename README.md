@@ -14,6 +14,7 @@ Modal Drawer
 Miscellaneous
 - [androidx.navigation:navigation-compose:2.4.0-alpha05](https://developer.android.com/jetpack/androidx/releases/navigation#2.4.0-alpha05) introduced non-modifiable crossfade animations, [issue](https://issuetracker.google.com/issues/172112072)
 - drag & drop feature. Not even mentioned in the road map.
+- can't have exactly 13 destinations inside NavHost. [issue](https://issuetracker.google.com/issues/195752907)
 
 # Limitations & potential issues
 - No field injections in composables - inconvenient.
