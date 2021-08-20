@@ -10,10 +10,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -108,8 +107,12 @@ fun GamesScreen(viewModel: GamesListViewModel = hiltViewModel()) {
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
             ) {
-                FloatingActionButton(viewModel::onScrollToTopClick) {
-                    Text("scroll")
+                FloatingActionButton(
+                    viewModel::onScrollToTopClick,
+                    modifier = Modifier.size(48.dp),
+                    backgroundColor = DarkGray
+                ) {
+                    Icon(Icons.Filled.ArrowUpward, contentDescription = null, tint = White)
                 }
             }
         }
@@ -125,7 +128,6 @@ fun GamesColumn(
     onLastItemVisible: () -> Unit
 ) {
     LazyColumn(
-//        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         state = listState,
         modifier = Modifier.fillMaxSize(),
         contentPadding = rememberInsetsPaddingValues(
