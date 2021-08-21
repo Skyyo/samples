@@ -8,4 +8,7 @@
     <string name="profile_confirmation">Profile Confirmation</string>
     <string name="samples">Samples</string>
     <string name="upcoming_launches">Upcoming launches</string>
+    <string name="validation_error">Validation Error</string>
+    <string name="success">Success</string>
+    <string name="credit_card_number">Credit Card Number</string>
 </resources>

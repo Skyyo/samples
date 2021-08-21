@@ -25,7 +25,6 @@ fun <T> NavController.observeNavigationResultLiveData(key: String) =
 fun <T> NavController.observeNavigationResult(key: String) =
     currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.asFlow()
 
-
 //popUpToRoute - should always be the start destination of the bottomBar, not app
 fun NavController.navigateToRootDestination(
     route: String,

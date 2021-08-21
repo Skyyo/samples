@@ -1,5 +1,6 @@
 package com.skyyo.igdbbrowser.features.games
 
+import android.graphics.drawable.shapes.Shape
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -144,7 +146,8 @@ fun GamesColumn(
                 backgroundColor = Purple500,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .clip(Shapes.medium)
+                    .padding(vertical = 8.dp),
                 shape = Shapes.large
             ) {
                 Row(

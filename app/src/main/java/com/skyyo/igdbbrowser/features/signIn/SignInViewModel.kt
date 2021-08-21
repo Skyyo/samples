@@ -78,5 +78,7 @@ class SignInViewModel @Inject constructor(
     fun goStickyHeaders() = navigationDispatcher.emit {
         it.navigate(Screens.Lists.route)
     }
-
+    fun goInputRealTimeValidation() = navigationDispatcher.emit {
+        it.navigate(Screens.FormValidationRealTimeScreen.route)
+    }
 }
