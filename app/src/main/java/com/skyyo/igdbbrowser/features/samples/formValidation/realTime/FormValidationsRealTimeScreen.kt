@@ -8,15 +8,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.extensions.toast
 import com.skyyo.igdbbrowser.features.samples.formValidation.CustomTextField
 import com.skyyo.igdbbrowser.features.samples.formValidation.NewTextField
@@ -32,7 +34,7 @@ fun FormValidationsRealTimeScreen(viewModel: FormValidationRealTimeViewModel = h
     val lifecycleOwner = LocalLifecycleOwner.current
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    log("awd")
+    val focusRequester = FocusRequester()
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(
             lifecycleOwner.lifecycle,
@@ -50,12 +52,10 @@ fun FormValidationsRealTimeScreen(viewModel: FormValidationRealTimeViewModel = h
     LaunchedEffect(Unit) {
         launch {
             events.collect { event ->
-                log("events")
                 when (event) {
                     is FormValidationsRealTimeEvent.ShowToast -> context.toast(event.messageId)
                     is FormValidationsRealTimeEvent.UpdateKeyboard -> {
-                        log("update keyboard")
-                        if (event.show) keyboardController?.show() else keyboardController?.hide()
+                        if (event.show) focusRequester.requestFocus() else keyboardController?.hide()
                     }
                 }
             }
@@ -71,6 +71,7 @@ fun FormValidationsRealTimeScreen(viewModel: FormValidationRealTimeViewModel = h
         Spacer(Modifier.height(16.dp))
         NewTextField(
             input = name,
+            focusRequester = focusRequester,
             onValueChange = viewModel::onNameEntered,
             onKeyActionNext = ::moveFocusDown
         )

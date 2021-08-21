@@ -6,12 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.skyyo.igdbbrowser.R
 import com.skyyo.igdbbrowser.application.models.local.Input
 import com.skyyo.igdbbrowser.extensions.getStateFlow
-import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.features.samples.formValidation.FormValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -38,16 +36,8 @@ class FormValidationRealTimeViewModel @Inject constructor(handle: SavedStateHand
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            delay(1000)
-            _events.send(FormValidationsRealTimeEvent.ShowToast(R.string.success))
             _events.send(FormValidationsRealTimeEvent.UpdateKeyboard(true))
-            repeat(1000){
-                delay(1000)
-                log("sendin")
-                _events.send(FormValidationsRealTimeEvent.ShowToast(R.string.success))
-            }
         }
-
     }
 
     fun onNameEntered(input: String) {

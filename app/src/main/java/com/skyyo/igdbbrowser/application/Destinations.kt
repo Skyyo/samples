@@ -17,7 +17,7 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object DogFeed : Screens("dogFeed", R.string.dog_feed)
     object Lists : Screens("lists")
     object FormValidationRealTimeScreen : Screens("formValidationsRealTime")
-    object FormValidationManualScreen : Screens("formValidationsRealTime")
+    object FormValidationManualScreen : Screens("formValidationsManual")
 
 }
 

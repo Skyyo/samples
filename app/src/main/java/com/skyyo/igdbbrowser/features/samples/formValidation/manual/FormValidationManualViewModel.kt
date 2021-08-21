@@ -11,52 +11,60 @@ import com.skyyo.igdbbrowser.features.samples.formValidation.realTime.FormValida
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+private class InputErrors(
+    val nameErrorId: Int?,
+    val cardErrorId: Int?,
+    val passwordErrorId: Int?
+)
+
 @HiltViewModel
-class FormValidationViewModel @Inject constructor(handle: SavedStateHandle) : ViewModel() {
+class FormValidationManualViewModel @Inject constructor(handle: SavedStateHandle) : ViewModel() {
 
     val name = handle.getStateFlow(viewModelScope, "name", Input())
     val creditCardNumber = handle.getStateFlow(viewModelScope, "ccNumber", Input())
     val password = handle.getStateFlow(viewModelScope, "password", Input())
-    val areInputsValid = combine(name, creditCardNumber, password) { name, cardNumber, password ->
-        val nameErrorId = FormValidation.getNameErrorIdOrNull(name.value)
-        val cardErrorId = FormValidation.getCardNumberErrorIdOrNull(cardNumber.value)
-        val passwordErrorId = FormValidation.getCardNumberErrorIdOrNull(cardNumber.value)
-        nameErrorId == null && cardErrorId == null && passwordErrorId == null
-    }.stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     private val _events = Channel<FormValidationsRealTimeEvent>()
     val events = _events.receiveAsFlow()
 
     fun onNameEntered(input: String) {
-        val errorId = FormValidation.getNameErrorIdOrNull(input)
-        name.tryEmit(name.value.copy(value = input, errorId = errorId))
+        name.tryEmit(name.value.copy(value = input, errorId = null))
     }
 
     fun onCardNumberEntered(input: String) {
-        val errorId = if (input.isEmpty()) R.string.validation_error else null
-        creditCardNumber.tryEmit(creditCardNumber.value.copy(value = input, errorId = errorId))
+        creditCardNumber.tryEmit(creditCardNumber.value.copy(value = input, errorId = null))
     }
 
     fun onPasswordEntered(input: String) {
-        val errorId = if (input.length < 8) R.string.validation_error else null
-        password.tryEmit(password.value.copy(value = input, errorId = errorId))
+        password.tryEmit(password.value.copy(value = input, errorId = null))
+    }
+
+    private fun getInputErrors(): InputErrors? {
+        val nameErrorId = FormValidation.getNameErrorIdOrNull(name.value.value)
+        val cardErrorId = FormValidation.getCardNumberErrorIdOrNull(creditCardNumber.value.value)
+        val passwordErrorId = FormValidation.getPasswordErrorIdOrNull(password.value.value)
+        return if (nameErrorId == null && cardErrorId == null && passwordErrorId == null) {
+            null
+        } else {
+            InputErrors(nameErrorId, cardErrorId, passwordErrorId)
+        }
     }
 
     fun onSignUpClick() {
         viewModelScope.launch(Dispatchers.Default) {
-            val stringId = when (name.value.errorId) {
-                null -> R.string.success
-                else -> R.string.validation_error
+            val inputErrors = getInputErrors()
+            if (inputErrors == null) {
+                _events.send(FormValidationsRealTimeEvent.ShowToast(R.string.success))
+            } else {
+                name.emit(name.value.copy(errorId = inputErrors.nameErrorId))
+                creditCardNumber.emit(creditCardNumber.value.copy(errorId = inputErrors.cardErrorId))
+                password.emit(password.value.copy(errorId = inputErrors.passwordErrorId))
             }
-            _events.send(FormValidationsRealTimeEvent.ShowToast(stringId))
         }
     }
 }

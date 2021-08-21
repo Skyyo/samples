@@ -25,6 +25,7 @@ import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
 import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
+import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.theme.IgdbBrowserTheme
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import com.skyyo.igdbbrowser.utils.eventDispatchers.UnauthorizedEventDispatcher
