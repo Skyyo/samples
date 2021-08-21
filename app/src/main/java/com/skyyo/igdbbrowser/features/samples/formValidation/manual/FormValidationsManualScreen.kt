@@ -9,6 +9,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -33,7 +34,7 @@ fun FormValidationsManualScreen(viewModel: FormValidationManualViewModel = hiltV
     val lifecycleOwner = LocalLifecycleOwner.current
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = FocusRequester()
+    val focusRequester = remember { FocusRequester() }
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(
             lifecycleOwner.lifecycle,
@@ -68,8 +69,8 @@ fun FormValidationsManualScreen(viewModel: FormValidationManualViewModel = hiltV
         TextValidationScreensTitle()
         Spacer(Modifier.height(16.dp))
         NewTextField(
+            modifier = Modifier.focusRequester(focusRequester),
             input = name,
-            focusRequester = focusRequester,
             onValueChange = viewModel::onNameEntered,
             onKeyActionNext = ::moveFocusDown
         )

@@ -41,8 +41,8 @@ import com.skyyo.igdbbrowser.utils.creditCardFilter
 
 @Composable
 fun NewTextField(
+    modifier: Modifier=Modifier,
     input: Input,
-    focusRequester: FocusRequester,
     onValueChange: OnValueChange,
     onKeyActionNext: OnKeyActionNext
 ) {
@@ -51,7 +51,7 @@ fun NewTextField(
         mutableStateOf(TextFieldValue(input.value, TextRange(input.value.length)))
     }
     TextField(
-        modifier = Modifier.focusRequester(focusRequester),
+        modifier = modifier,
         value = textState.value,
         onValueChange = {
             textState.value = it
