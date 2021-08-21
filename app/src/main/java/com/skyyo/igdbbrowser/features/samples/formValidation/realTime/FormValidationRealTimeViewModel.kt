@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.skyyo.igdbbrowser.R
 import com.skyyo.igdbbrowser.application.models.local.Input
 import com.skyyo.igdbbrowser.extensions.getStateFlow
+import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.features.samples.formValidation.FormValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,7 +21,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class FormValidationViewModel @Inject constructor(handle: SavedStateHandle) : ViewModel() {
+class FormValidationRealTimeViewModel @Inject constructor(handle: SavedStateHandle) : ViewModel() {
 
     val name = handle.getStateFlow(viewModelScope, "name", Input())
     val creditCardNumber = handle.getStateFlow(viewModelScope, "ccNumber", Input())
@@ -33,6 +35,20 @@ class FormValidationViewModel @Inject constructor(handle: SavedStateHandle) : Vi
 
     private val _events = Channel<FormValidationsRealTimeEvent>()
     val events = _events.receiveAsFlow()
+
+    init {
+        viewModelScope.launch(Dispatchers.Default) {
+            delay(1000)
+            _events.send(FormValidationsRealTimeEvent.ShowToast(R.string.success))
+            _events.send(FormValidationsRealTimeEvent.UpdateKeyboard(true))
+            repeat(1000){
+                delay(1000)
+                log("sendin")
+                _events.send(FormValidationsRealTimeEvent.ShowToast(R.string.success))
+            }
+        }
+
+    }
 
     fun onNameEntered(input: String) {
         val errorId = FormValidation.getNameErrorIdOrNull(input)
@@ -51,8 +67,13 @@ class FormValidationViewModel @Inject constructor(handle: SavedStateHandle) : Vi
 
     fun onSignUpClick() {
         viewModelScope.launch(Dispatchers.Default) {
-            //this is for IME action trigger scenario
-            val stringId = if (areInputsValid.value) R.string.success else R.string.validation_error
+            //this is for keyboard action scenario
+            val stringId = if (areInputsValid.value) {
+                _events.send(FormValidationsRealTimeEvent.UpdateKeyboard(false))
+                R.string.success
+            } else {
+                R.string.validation_error
+            }
             _events.send(FormValidationsRealTimeEvent.ShowToast(stringId))
         }
     }

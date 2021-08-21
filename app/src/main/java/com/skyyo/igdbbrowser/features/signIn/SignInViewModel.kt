@@ -1,6 +1,5 @@
 package com.skyyo.igdbbrowser.features.signIn
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.igdbbrowser.application.Screens
@@ -21,7 +20,6 @@ class SignInViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val authCalls: AuthCalls,
     private val dataStoreManager: DataStoreManager,
-    private val handle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _events = Channel<SignInEvent>()
@@ -78,7 +76,12 @@ class SignInViewModel @Inject constructor(
     fun goStickyHeaders() = navigationDispatcher.emit {
         it.navigate(Screens.Lists.route)
     }
+
     fun goInputRealTimeValidation() = navigationDispatcher.emit {
         it.navigate(Screens.FormValidationRealTimeScreen.route)
+    }
+
+    fun goInputManualValidation() = navigationDispatcher.emit {
+        it.navigate(Screens.FormValidationManualScreen.route)
     }
 }

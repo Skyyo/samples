@@ -82,7 +82,7 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Text(text = "Form validation")
         Button(onClick = viewModel::goInputRealTimeValidation) { Text(text = "real time validation") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goInputRealTimeValidation) { Text(text = "manual validation") }
+        Button(onClick = viewModel::goInputManualValidation) { Text(text = "manual validation") }
         Spacer(modifier = Modifier.height(8.dp))
     }
 

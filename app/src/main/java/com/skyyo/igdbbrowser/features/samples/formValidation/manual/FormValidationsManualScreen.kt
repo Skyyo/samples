@@ -40,44 +40,41 @@ fun FormValidationsManualScreen(viewModel: FormValidationViewModel = hiltViewMod
     val areInputsValid by viewModel.areInputsValid.collectAsState()
     val focusManager = LocalFocusManager.current
 
+    fun moveFocusDown() = focusManager.moveFocus(FocusDirection.Down)
+
+    fun showToast(messageId: Int) = context.toast(context.getString(messageId))
+
     LaunchedEffect(Unit) {
         launch {
             events.collect { event ->
                 when (event) {
-                    is FormValidationsRealTimeEvent.ShowToast -> context.toast(
-                        context.getString(
-                            event.messageId
-                        )
-                    )
+                    is FormValidationsRealTimeEvent.ShowToast -> showToast(event.messageId)
                 }
             }
         }
     }
 
     Column(
-        Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextValidationScreensTitle()
         Spacer(Modifier.height(16.dp))
-        NewTextField(input = name,
+        NewTextField(
+            input = name,
             onValueChange = viewModel::onNameEntered,
-            onKeyActionNext = {
-                focusManager.moveFocus(FocusDirection.Down)
-            })
+            onKeyActionNext = ::moveFocusDown
+        )
         Spacer(Modifier.height(16.dp))
         CustomTextField(
             input = password,
             onValueChange = viewModel::onPasswordEntered,
-            onKeyActionNext = {
-                focusManager.moveFocus(FocusDirection.Down)
-            }
+            onKeyActionNext = ::moveFocusDown
         )
         Spacer(Modifier.height(16.dp))
         OldSchoolTextField(
-            input = creditCardNumber,
-            onValueChange = viewModel::onCardNumberEntered,
+            input = creditCardNumber, onValueChange = viewModel::onCardNumberEntered,
             onKeyActionDone = {
                 focusManager.clearFocus()
                 viewModel.onSignUpClick()

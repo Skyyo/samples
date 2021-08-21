@@ -23,6 +23,7 @@ import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldSc
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.forceTheme.ForceThemeScreen
+import com.skyyo.igdbbrowser.features.samples.formValidation.manual.FormValidationsManualScreen
 import com.skyyo.igdbbrowser.features.samples.formValidation.realTime.FormValidationsRealTimeScreen
 import com.skyyo.igdbbrowser.features.samples.googleMap.GoogleMapScreen
 import com.skyyo.igdbbrowser.features.samples.lists.ListsScreen
@@ -89,5 +90,6 @@ fun PopulatedNavHost(
     composable(Screens.ViewPager.route) { ViewPagerScreen() }
     composable(Screens.Lists.route) { ListsScreen() }
     composable(Screens.FormValidationRealTimeScreen.route) { FormValidationsRealTimeScreen() }
+    composable(Screens.FormValidationManualScreen.route) { FormValidationsManualScreen() }
 
 }
