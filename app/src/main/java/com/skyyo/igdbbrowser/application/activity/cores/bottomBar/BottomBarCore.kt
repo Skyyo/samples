@@ -53,6 +53,8 @@ fun BottomBarCore(
                 selectedTab.value,
                 isBottomBarVisible.value
             ) { index, route ->
+                //this means we're already on the selected tab
+                if (index == selectedTab.value) return@AnimatedBottomBar
                 selectedTab.value = index
                 navController.navigateToRootDestination(route)
             }

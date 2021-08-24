@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             IgdbBrowserTheme(savedTheme) {
                 val systemUiController = rememberSystemUiController()
-                ProvideWindowInsets {
+                ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     Surface(color = MaterialTheme.colors.background) {
                         val bottomSheetNavigator = rememberBottomSheetNavigator()
                         val navController = rememberNavController()
