@@ -40,7 +40,7 @@ class GoogleMapViewModel @Inject constructor() : ViewModel() {
             val lng = it * 0.4
             pointsList.add(Cluster(lat, lng))
         }
-        _markers.tryEmit(pointsList)
+        _markers.value = pointsList
     }
 
     private fun showKMLData() = viewModelScope.launch {

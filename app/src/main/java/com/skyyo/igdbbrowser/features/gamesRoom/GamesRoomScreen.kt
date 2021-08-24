@@ -1,5 +1,6 @@
-package com.skyyo.igdbbrowser.features.games
+package com.skyyo.igdbbrowser.features.gamesRoom
 
+import android.graphics.drawable.shapes.Shape
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
@@ -34,6 +35,7 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.extensions.toast
+import com.skyyo.igdbbrowser.features.games.GamesEvent
 import com.skyyo.igdbbrowser.theme.DarkGray
 import com.skyyo.igdbbrowser.theme.Purple500
 import com.skyyo.igdbbrowser.theme.Shapes
@@ -43,7 +45,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GamesScreen(viewModel: GamesViewModel = hiltViewModel()) {
+fun GamesRoomScreen(viewModel: GamesRoomViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val insets = LocalWindowInsets.current

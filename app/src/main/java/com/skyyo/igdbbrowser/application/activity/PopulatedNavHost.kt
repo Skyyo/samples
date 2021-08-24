@@ -22,6 +22,7 @@ import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.features.games.GamesScreen
+import com.skyyo.igdbbrowser.features.gamesRoom.GamesRoomScreen
 import com.skyyo.igdbbrowser.features.profile.*
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
@@ -63,6 +64,10 @@ fun PopulatedNavHost(
     composable(Screens.Games.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         GamesScreen()
+    }
+    composable(Screens.GamesRoom.route) {
+        onBackPressIntercepted?.let { BackHandler(onBack = it) }
+        GamesRoomScreen()
     }
     navigation(
         route = EditProfileGraph.route,

@@ -1,18 +1,16 @@
-package com.skyyo.igdbbrowser.features.games
+package com.skyyo.igdbbrowser.features.gamesRoom
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
-import com.skyyo.igdbbrowser.application.repositories.games.GamesResult
+import com.skyyo.igdbbrowser.application.repositories.games.GamesRoomResult
+import com.skyyo.igdbbrowser.features.games.GamesEvent
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,14 +18,14 @@ import javax.inject.Inject
 private const val PAGE_LIMIT = 20
 
 @HiltViewModel
-class GamesViewModel @Inject constructor(
+class GamesRoomViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val handle: SavedStateHandle,
     private val gamesRepository: GamesRepository
 ) : ViewModel() {
 
-    private val _games = MutableStateFlow(listOf<Game>())
-    val games = _games.asStateFlow()
+    val games = gamesRepository.observeGames()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5), listOf())
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -49,22 +47,17 @@ class GamesViewModel @Inject constructor(
         isFetchingAllowed = false
         viewModelScope.launch(Dispatchers.IO) {
             if (isFirstPage) _isRefreshing.value = true
-            when (val result = gamesRepository.getGames(PAGE_LIMIT, itemOffset)) {
-                is GamesResult.NetworkError -> {
+            when (gamesRepository.getGamesRoom(PAGE_LIMIT, itemOffset)) {
+                is GamesRoomResult.NetworkError -> {
                     itemOffset = 0
                     isFetchingAllowed = true
                     _events.send(GamesEvent.NetworkError)
                 }
-                is GamesResult.Success -> {
+                is GamesRoomResult.Success -> {
                     itemOffset += PAGE_LIMIT
                     isFetchingAllowed = true
-                    if (isFirstPage) {
-                        _games.value = result.games
-                    } else {
-                        _games.value = (_games.value + result.games)
-                    }
                 }
-                is GamesResult.LastPageReached -> {
+                is GamesRoomResult.LastPageReached -> {
                     isLastPageReached = true
                     isFetchingAllowed = false
                 }

@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.plusAssign
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -24,7 +23,6 @@ import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
 import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
-import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.theme.IgdbBrowserTheme
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import com.skyyo.igdbbrowser.utils.eventDispatchers.UnauthorizedEventDispatcher
@@ -60,13 +58,15 @@ class MainActivity : ComponentActivity() {
             Screens.DogFeed,
             Screens.Profile,
             Screens.Games,
+            Screens.GamesRoom,
         )
         val startDestination = when {
             //TODO measure async + splash delegation profit
             runBlocking { dataStoreManager.getAccessToken() } == null -> Screens.SignIn.route
             else -> Screens.DogFeed.route
         }
-        val savedTheme = runBlocking { dataStoreManager.getAppTheme() } //TODO can be optimized
+        val savedTheme =
+            runBlocking { dataStoreManager.getAppTheme() } //TODO can be optimized. Shouldn't be used if we don't allow for manual theme switching, unless we force light theme
 
         setContent {
             val lifecycleOwner = LocalLifecycleOwner.current

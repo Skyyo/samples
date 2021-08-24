@@ -47,12 +47,12 @@ class InputValidationAutoViewModel @Inject constructor(
 
     fun onNameEntered(input: String) {
         val errorId = InputValidator.getNameErrorIdOrNull(input)
-        name.tryEmit(name.value.copy(value = input, errorId = errorId))
+        name.value = name.value.copy(value = input, errorId = errorId)
     }
 
     fun onCardNumberEntered(input: String) {
         val errorId = InputValidator.getCardNumberErrorIdOrNull(input)
-        creditCardNumber.tryEmit(creditCardNumber.value.copy(value = input, errorId = errorId))
+        creditCardNumber.value = creditCardNumber.value.copy(value = input, errorId = errorId)
     }
 
     fun onTextFieldFocusChanged(key: FocusedTextFieldKey, isFocused: Boolean) {

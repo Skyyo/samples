@@ -4,8 +4,7 @@ import com.skyyo.igdbbrowser.application.models.remote.Game
 
 
 sealed class GamesResult {
+    class Success(val games: List<Game>) : GamesResult()
     object NetworkError : GamesResult()
-    object Success : GamesResult()
-    class SuccessWithoutDatabase(val games: List<Game>) : GamesResult()
     object LastPageReached : GamesResult()
 }

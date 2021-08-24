@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">IGDB-Browser</string>
     <string name="games">Games</string>
+    <string name="games_room">Games Room</string>
     <string name="map">Map</string>
     <string name="dog_feed">Dog feed</string>
     <string name="profile">Profile</string>
