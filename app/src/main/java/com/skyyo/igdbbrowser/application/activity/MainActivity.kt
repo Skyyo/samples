@@ -5,8 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -23,7 +21,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
-import com.skyyo.igdbbrowser.application.activity.cores.drawer.DrawerCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
 import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
 import com.skyyo.igdbbrowser.extensions.log
@@ -71,53 +68,52 @@ class MainActivity : ComponentActivity() {
         val savedTheme = runBlocking { dataStoreManager.getAppTheme() } //TODO can be optimized
 
         setContent {
-            IgdbBrowserTheme(savedTheme) {
-                val systemUiController = rememberSystemUiController()
-                ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
-                    Surface(color = MaterialTheme.colors.background) {
-                        val bottomSheetNavigator = rememberBottomSheetNavigator()
-                        val navController = rememberNavController()
-                        navController.navigatorProvider += bottomSheetNavigator
+            val lifecycleOwner = LocalLifecycleOwner.current
+            val systemUiController = rememberSystemUiController()
+            val bottomSheetNavigator = rememberBottomSheetNavigator()
+            val navController = rememberNavController()
+            navController.navigatorProvider += bottomSheetNavigator
 
-                        val lifecycleOwner = LocalLifecycleOwner.current
-                        val navigationEvents = remember(navigationDispatcher.emitter, lifecycleOwner) {
-                                navigationDispatcher.emitter.flowWithLifecycle(
-                                    lifecycleOwner.lifecycle,
-                                    Lifecycle.State.STARTED
-                                )
-                            }
-                        val unauthorizedEvents = remember(unauthorizedEventDispatcher.emitter, lifecycleOwner) {
-                                unauthorizedEventDispatcher.emitter.flowWithLifecycle(
-                                    lifecycleOwner.lifecycle,
-                                    Lifecycle.State.STARTED
-                                )
-                            }
-                        LaunchedEffect(Unit) {
-                            launch {
-                                navigationEvents.collect { event -> event(navController) }
-                            }
-                            launch {
-                                unauthorizedEvents.collect { onUnauthorizedEventReceived() }
-                            }
-                        }
-                        // used only for the bottom sheet destinations
-                        ModalBottomSheetLayout(bottomSheetNavigator) {
+            val navigationEvents = remember(navigationDispatcher.emitter, lifecycleOwner) {
+                navigationDispatcher.emitter.flowWithLifecycle(
+                    lifecycleOwner.lifecycle,
+                    Lifecycle.State.STARTED
+                )
+            }
+            val unauthorizedEvents = remember(unauthorizedEventDispatcher.emitter, lifecycleOwner) {
+                unauthorizedEventDispatcher.emitter.flowWithLifecycle(
+                    lifecycleOwner.lifecycle,
+                    Lifecycle.State.STARTED
+                )
+            }
+            LaunchedEffect(Unit) {
+                launch {
+                    navigationEvents.collect { event -> event(navController) }
+                }
+                launch {
+                    unauthorizedEvents.collect { onUnauthorizedEventReceived() }
+                }
+            }
+
+            IgdbBrowserTheme(savedTheme) {
+                ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
+                    // used only for the bottom sheet destinations
+                    ModalBottomSheetLayout(bottomSheetNavigator) {
 //                        SimpleCore(
 //                            startDestination,
 //                            navController
 //                        )
-//                            BottomBarCore(
-//                                drawerOrBottomBarScreens,
-//                                startDestination,
-//                                navController,
-//                                systemUiController
-//                            )
-                    DrawerCore(
-                        drawerOrBottomBarScreens,
-                        startDestination,
-                        navController
-                    )
-                        }
+                        BottomBarCore(
+                            drawerOrBottomBarScreens,
+                            startDestination,
+                            navController,
+                            systemUiController,
+                        )
+//                    DrawerCore(
+//                        drawerOrBottomBarScreens,
+//                        startDestination,
+//                        navController
+//                    )
                     }
                 }
             }
