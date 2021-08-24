@@ -1,6 +1,10 @@
 package com.skyyo.igdbbrowser.application.activity
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
@@ -8,9 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -34,16 +38,19 @@ import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogFeedScreen
 import com.skyyo.igdbbrowser.features.samples.viewPager.ViewPagerScreen
 import com.skyyo.igdbbrowser.features.signIn.SignInScreen
 
-@ExperimentalPagerApi
-@ExperimentalMaterialApi
-@ExperimentalMaterialNavigationApi
+@OptIn(
+    ExperimentalAnimationApi::class,
+    ExperimentalMaterialNavigationApi::class,
+    ExperimentalMaterialApi::class,
+    ExperimentalPagerApi::class
+)
 @Composable
 fun PopulatedNavHost(
     startDestination: String,
     innerPadding: PaddingValues,
     navController: NavHostController,
     onBackPressIntercepted: (() -> Unit)? = null
-) = NavHost(
+) = AnimatedNavHost(
     navController = navController,
     startDestination = startDestination,
     modifier = Modifier.padding(innerPadding)
@@ -90,7 +97,20 @@ fun PopulatedNavHost(
     composable(Screens.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
     composable(Screens.ViewPager.route) { ViewPagerScreen() }
     composable(Screens.Lists.route) { ListsScreen() }
-    composable(Screens.InputValidationManual.route) { InputValidationManualScreen() }
+    composable(Screens.InputValidationManual.route, enterTransition = { _, _ ->
+        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(400))
+//                fadeIn(animationSpec = tween(2000))
+    },
+        exitTransition = { _, _ ->
+            slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(400))
+        },
+        popEnterTransition = { _, _ ->
+            slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(400))
+
+        },
+        popExitTransition = { _, _ ->
+            slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(400))
+        }) { InputValidationManualScreen() }
     composable(Screens.InputValidationAuto.route) { InputValidationAutoScreen() }
     composable(Screens.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
 

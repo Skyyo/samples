@@ -14,6 +14,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.plusAssign
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
@@ -70,8 +71,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             val lifecycleOwner = LocalLifecycleOwner.current
             val systemUiController = rememberSystemUiController()
+            val navController = rememberAnimatedNavController()
+
             val bottomSheetNavigator = rememberBottomSheetNavigator()
-            val navController = rememberNavController()
             navController.navigatorProvider += bottomSheetNavigator
 
             val navigationEvents = remember(navigationDispatcher.emitter, lifecycleOwner) {

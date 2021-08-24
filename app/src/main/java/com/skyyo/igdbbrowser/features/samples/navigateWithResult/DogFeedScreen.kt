@@ -1,6 +1,7 @@
 package com.skyyo.igdbbrowser.features.samples.navigateWithResult
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +15,7 @@ import com.skyyo.igdbbrowser.application.models.local.Dog
 @Composable
 fun DogFeedScreen(viewModel: DogFeedViewModel = hiltViewModel()) {
     val dog = viewModel.dog.observeAsState()
-    Column {
+    Column(Modifier.fillMaxSize()) {
         Button(
             onClick = {
 //            viewModel.goDogAdopt("2211")

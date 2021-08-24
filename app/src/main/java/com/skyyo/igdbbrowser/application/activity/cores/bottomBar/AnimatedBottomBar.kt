@@ -28,7 +28,7 @@ private const val COLLAPSE_ANIMATION_DURATION = 300
 private const val FADE_IN_ANIMATION_DURATION = 350
 private const val FADE_OUT_ANIMATION_DURATION = 300
 
-@ExperimentalAnimationApi
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedBottomBar(
     items: List<Screens>,
