@@ -11,4 +11,7 @@
     <string name="validation_error">Validation Error</string>
     <string name="success">Success</string>
     <string name="credit_card_number">Credit Card Number</string>
+    <string name="name">name</string>
+    <string name="name_too_short">name too short</string>
+    <string name="card_number_too_short">card number too short</string>
 </resources>

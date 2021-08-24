@@ -23,9 +23,10 @@ import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldSc
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.forceTheme.ForceThemeScreen
-import com.skyyo.igdbbrowser.features.samples.formValidation.manual.FormValidationsManualScreen
-import com.skyyo.igdbbrowser.features.samples.formValidation.realTime.FormValidationsRealTimeScreen
 import com.skyyo.igdbbrowser.features.samples.googleMap.GoogleMapScreen
+import com.skyyo.igdbbrowser.features.samples.inputValidations.auto.InputValidationAutoScreen
+import com.skyyo.igdbbrowser.features.samples.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
+import com.skyyo.igdbbrowser.features.samples.inputValidations.manual.InputValidationManualScreen
 import com.skyyo.igdbbrowser.features.samples.lists.ListsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogDetailsScreen
@@ -89,7 +90,8 @@ fun PopulatedNavHost(
     composable(Screens.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
     composable(Screens.ViewPager.route) { ViewPagerScreen() }
     composable(Screens.Lists.route) { ListsScreen() }
-    composable(Screens.FormValidationRealTimeScreen.route) { FormValidationsRealTimeScreen() }
-    composable(Screens.FormValidationManualScreen.route) { FormValidationsManualScreen() }
+    composable(Screens.InputValidationManual.route) { InputValidationManualScreen() }
+    composable(Screens.InputValidationAuto.route) { InputValidationAutoScreen() }
+    composable(Screens.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
 
 }

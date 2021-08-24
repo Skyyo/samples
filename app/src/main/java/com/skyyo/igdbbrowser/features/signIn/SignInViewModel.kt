@@ -77,11 +77,13 @@ class SignInViewModel @Inject constructor(
         it.navigate(Screens.Lists.route)
     }
 
-    fun goInputRealTimeValidation() = navigationDispatcher.emit {
-        it.navigate(Screens.FormValidationRealTimeScreen.route)
+    fun goInputAutoValidation() = navigationDispatcher.emit {
+        it.navigate(Screens.InputValidationAuto.route)
     }
-
+    fun goInputDebounceValidation() = navigationDispatcher.emit {
+        it.navigate(Screens.InputValidationDebounce.route)
+    }
     fun goInputManualValidation() = navigationDispatcher.emit {
-        it.navigate(Screens.FormValidationManualScreen.route)
+        it.navigate(Screens.InputValidationManual.route)
     }
 }
