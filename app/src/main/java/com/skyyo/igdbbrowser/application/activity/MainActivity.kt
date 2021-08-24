@@ -23,6 +23,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
+import com.skyyo.igdbbrowser.application.activity.cores.drawer.DrawerCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
 import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
 import com.skyyo.igdbbrowser.extensions.log
@@ -105,17 +106,17 @@ class MainActivity : ComponentActivity() {
 //                            startDestination,
 //                            navController
 //                        )
-                            BottomBarCore(
-                                drawerOrBottomBarScreens,
-                                startDestination,
-                                navController,
-                                systemUiController
-                            )
-//                    DrawerCore(
-//                        drawerOrBottomBarScreens,
-//                        startDestination,
-//                        navController
-//                    )
+//                            BottomBarCore(
+//                                drawerOrBottomBarScreens,
+//                                startDestination,
+//                                navController,
+//                                systemUiController
+//                            )
+                    DrawerCore(
+                        drawerOrBottomBarScreens,
+                        startDestination,
+                        navController
+                    )
                         }
                     }
                 }

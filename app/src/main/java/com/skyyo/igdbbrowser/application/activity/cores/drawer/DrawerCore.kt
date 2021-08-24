@@ -63,8 +63,11 @@ fun DrawerCore(
                     screens = drawerScreens,
                     selectedTab = selectedTab.value
                 ) { index, route ->
-                    selectedTab.value = index
-                    navController.navigateToRootDestination(route)
+                    //this means we're already on the selected tab
+                    if (index != selectedTab.value) {
+                        selectedTab.value = index
+                        navController.navigateToRootDestination(route)
+                    }
                     scope.launch { scaffoldState.drawerState.close() }
                 }
             }
