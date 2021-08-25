@@ -20,7 +20,7 @@ class GamesRepository @Inject constructor(
     fun observeGames(): Flow<List<Game>> = dao.observeGames()
 
     suspend fun getGames(limit: Int, offset: Int): GamesResult {
-        val rawBody = "limit $limit; offset $offset; fields name;"
+        val rawBody = "limit $limit; offset $offset;sort id; fields name,first_release_date;"
         val response = tryOrNull { calls.getGames(rawBody.toRequestBody()) }
         return when {
             response?.code() == 200 -> {
@@ -32,7 +32,7 @@ class GamesRepository @Inject constructor(
     }
 
     suspend fun getGamesRoom(limit: Int, offset: Int): GamesRoomResult {
-        val rawBody = "limit $limit; offset $offset; fields name;"
+        val rawBody = "limit $limit; offset $offset;sort id; fields name,first_release_date;"
         val response = tryOrNull { calls.getGames(rawBody.toRequestBody()) }
         return when {
             response?.code() == 200 -> {
