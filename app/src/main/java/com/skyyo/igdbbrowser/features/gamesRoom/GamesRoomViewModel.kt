@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
 import com.skyyo.igdbbrowser.application.repositories.games.GamesRoomResult
-import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.features.games.GamesEvent
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,9 +25,6 @@ class GamesRoomViewModel @Inject constructor(
 ) : ViewModel() {
 
     val games = gamesRepository.observeGames()
-        .onEach {
-            log("$it")
-        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5), listOf())
 
     private val _isRefreshing = MutableStateFlow(false)
