@@ -10,7 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.runtime.*
@@ -33,6 +36,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
+import com.skyyo.igdbbrowser.common.composables.CircularProgressIndicatorRow
 import com.skyyo.igdbbrowser.extensions.toast
 import com.skyyo.igdbbrowser.theme.DarkGray
 import com.skyyo.igdbbrowser.theme.Purple500
@@ -170,13 +174,7 @@ fun GamesColumn(
             if (!isLastPageReached && index == games.lastIndex) {
                 onLastItemVisible()
 //                SideEffect { onLastItemVisible() }
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    content = { CircularProgressIndicator(color = Purple500) }
-                )
+                CircularProgressIndicatorRow()
             }
         }
     }

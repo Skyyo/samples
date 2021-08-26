@@ -7,6 +7,7 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object SignIn : Screens("signIn")
     object Games : Screens("games", R.string.games)
     object GamesRoom : Screens("gamesRoom", R.string.games_room)
+    object GamesPaging : Screens("gamesRoom", R.string.games_room)
     object Profile : Screens("profile", R.string.profile)
 
     object Map : Screens("map", R.string.map)

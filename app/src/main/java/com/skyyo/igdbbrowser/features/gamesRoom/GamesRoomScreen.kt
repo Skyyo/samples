@@ -34,6 +34,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
+import com.skyyo.igdbbrowser.common.composables.CircularProgressIndicatorRow
 import com.skyyo.igdbbrowser.extensions.toast
 import com.skyyo.igdbbrowser.features.games.GamesEvent
 import com.skyyo.igdbbrowser.theme.DarkGray
@@ -172,13 +173,7 @@ fun GamesColumn(
             if (!isLastPageReached && index == games.lastIndex) {
                 onLastItemVisible()
 //                SideEffect { onLastItemVisible() }
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    content = { CircularProgressIndicator(color = Purple500) }
-                )
+                CircularProgressIndicatorRow()
             }
         }
     }
