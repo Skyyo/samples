@@ -2,8 +2,8 @@ package com.skyyo.igdbbrowser.features.samples.googleMap
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.libraries.maps.model.LatLng
-import com.google.android.libraries.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
 import com.skyyo.igdbbrowser.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

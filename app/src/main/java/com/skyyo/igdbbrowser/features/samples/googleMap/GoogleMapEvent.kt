@@ -1,6 +1,6 @@
 package com.skyyo.igdbbrowser.features.samples.googleMap
 
-import com.google.android.libraries.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.PolylineOptions
 
 sealed class GoogleMapEvent {
     object ShowKMLDraw : GoogleMapEvent()

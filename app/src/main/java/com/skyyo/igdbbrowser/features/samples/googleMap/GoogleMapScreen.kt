@@ -15,13 +15,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.flowWithLifecycle
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.GoogleMapOptions
-import com.google.android.libraries.maps.MapView
-import com.google.android.libraries.maps.model.CameraPosition
-import com.google.android.libraries.maps.model.Polyline
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMapOptions
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Polyline
 import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.collections.GroundOverlayManager
+import com.google.maps.android.collections.MarkerManager
+import com.google.maps.android.collections.PolygonManager
+import com.google.maps.android.collections.PolylineManager
 import com.google.maps.android.data.kml.KmlLayer
 import com.google.maps.android.ktx.awaitMap
 import com.skyyo.igdbbrowser.R
@@ -39,11 +45,10 @@ fun GoogleMapScreen(viewModelGoogle: GoogleMapViewModel = hiltViewModel()) {
     val lifecycle = lifecycleOwner.lifecycle
     val mapBundle = rememberSaveable(key = "mapBundle") { Bundle() }
     val mapView = remember {
-        MapView(context, GoogleMapOptions().mapId(mapStyle)).apply {
+        MapView(context, GoogleMapOptions()).apply { // TODO .mapId(mapStyle) cloud based styles is missing in this version api
             id = View.generateViewId()
         }
     }
-    var lastMapCameraPosition: CameraPosition? = remember { null }
     val markers = remember(viewModelGoogle.markers, lifecycleOwner) {
         viewModelGoogle.markers.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
     }
@@ -53,8 +58,21 @@ fun GoogleMapScreen(viewModelGoogle: GoogleMapViewModel = hiltViewModel()) {
 
     LaunchedEffect(Unit) {
         val googleMap = mapView.awaitMap()
-        val clusterManager = ClusterManager<ClusterItem>(context, googleMap).apply {
+        mapStyle?.let { googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, it)) }
+        val markerManager = MarkerManager(googleMap)
+        val clusterManager = ClusterManager<ClusterItem>(context, googleMap, markerManager).apply {
             renderer = ClusterRender(context, googleMap, this)
+            setOnClusterClickListener { cluster ->
+                val positionBuilder = CameraPosition.Builder().apply {
+                    target(cluster.position)
+                    zoom(googleMap.cameraPosition.zoom + 1)
+                    bearing(googleMap.cameraPosition.bearing)
+                }.build()
+                googleMap.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(positionBuilder), 300, null
+                )
+                true
+            }
         }
         googleMap.apply {
             uiSettings.apply {
@@ -62,18 +80,13 @@ fun GoogleMapScreen(viewModelGoogle: GoogleMapViewModel = hiltViewModel()) {
                 isMapToolbarEnabled = false
                 isCompassEnabled = false
             }
-            setOnCameraMoveListener {
-                if (lastMapCameraPosition == null || lastMapCameraPosition?.zoom != googleMap.cameraPosition.zoom) {
-                    clusterManager.cluster()
-                    lastMapCameraPosition = googleMap.cameraPosition
-                }
-            }
+            setOnCameraIdleListener(clusterManager)
             setOnMapClickListener {
                 viewModelGoogle.removePolyline()
             }
         }
         launch { observePoints(markers, clusterManager) }
-        launch { observeEvents(events, googleMap, context) }
+        launch { observeEvents(events, googleMap, context, markerManager) }
     }
 
     DisposableEffect(Unit) {
@@ -113,14 +126,24 @@ suspend fun observePoints(
 suspend fun observeEvents(
     lifecycleAwareEventsFlow: Flow<GoogleMapEvent>,
     googleMap: GoogleMap,
-    context: Context
+    context: Context,
+    markerManager: MarkerManager
 ) {
     var finalPolyline: Polyline? = null
     lifecycleAwareEventsFlow.collect { event ->
         when (event) {
             is GoogleMapEvent.ShowKMLDraw -> {
                 val layer = withContext(Dispatchers.Default) {
-                    KmlLayer(googleMap, R.raw.map_style, context)
+                    KmlLayer(
+                        googleMap,
+                        R.raw.map_layer,
+                        context,
+                        markerManager,
+                        PolygonManager(googleMap),
+                        PolylineManager(googleMap),
+                        GroundOverlayManager(googleMap),
+                        null
+                    )
                 }
                 layer.addLayerToMap()
             }
