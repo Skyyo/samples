@@ -172,8 +172,7 @@ fun GamesColumn(
                 }
             }
             if (!isLastPageReached && index == games.lastIndex) {
-                onLastItemVisible()
-//                SideEffect { onLastItemVisible() }
+                SideEffect { onLastItemVisible() }
                 CircularProgressIndicatorRow()
             }
         }
