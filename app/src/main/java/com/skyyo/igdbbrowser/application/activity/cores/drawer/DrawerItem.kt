@@ -1,12 +1,13 @@
 package com.skyyo.igdbbrowser.application.activity.cores.drawer
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
@@ -19,20 +20,15 @@ fun DrawerItem(title: String, selected: Boolean, onClick: () -> Unit) {
         selected -> android.R.color.holo_blue_light
         else -> android.R.color.transparent
     }
-
-    Button(
-        shape = RoundedCornerShape(bottomEndPercent = 50, topEndPercent = 50),
-        onClick = onClick,
-        elevation = null,
-        colors = buttonColors(backgroundColor = colorResource(id = backgroundColourId)),
-        contentPadding = PaddingValues(),
-    ) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
-            text = title,
-            fontSize = 18.sp,
-            color = Color.Black)
-    }
+    Text(
+        modifier = Modifier
+            .fillMaxWidth(0.9f)
+            .clip(RoundedCornerShape(topEndPercent = 50, bottomEndPercent = 50))
+            .clickable(onClick = { onClick() })
+            .background(colorResource(id = backgroundColourId))
+            .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
+        text = title,
+        fontSize = 18.sp,
+        color = Color.Black
+    )
 }
