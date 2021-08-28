@@ -40,6 +40,7 @@ fun ViewPagerScreen() {
 
     Column {
         ScrollableTabRow(
+            edgePadding = 0.dp,
             selectedTabIndex = pagerState.currentPage,
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
