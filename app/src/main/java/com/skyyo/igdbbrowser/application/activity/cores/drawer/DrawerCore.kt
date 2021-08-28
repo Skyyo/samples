@@ -29,7 +29,7 @@ fun DrawerCore(
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
-    DisposableEffect(navController) {
+    DisposableEffect(Unit) {
         val callback = NavController.OnDestinationChangedListener { _, destination, args ->
             log("${destination.route}")
             when (destination.route) {

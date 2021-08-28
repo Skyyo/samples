@@ -23,7 +23,7 @@ fun BottomBarCore(
     val isBottomBarVisible = rememberSaveable { mutableStateOf(false) }
     val selectedTab = rememberSaveable { mutableStateOf(0) }
 //    val backgroundColour = remember { mutableStateOf(Color.Black) }
-    DisposableEffect(navController) {
+    DisposableEffect(Unit) {
         val callback = NavController.OnDestinationChangedListener { _, destination, args ->
 //            log("${destination.route}")
 //            log("first destination:${navController.findDestination(navController.graph.findStartDestination().id)}")
