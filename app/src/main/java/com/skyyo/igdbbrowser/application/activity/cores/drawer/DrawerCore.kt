@@ -21,7 +21,6 @@ fun DrawerCore(
     navController: NavHostController
 ) {
     val isDrawerVisible = rememberSaveable { mutableStateOf(false) }
-    val isDrawerHiding = remember { mutableStateOf(false) }
     val selectedTab = rememberSaveable { mutableStateOf(0) }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -41,20 +40,10 @@ fun DrawerCore(
         }
     }
 
-    if (isDrawerHiding.value) {
-        LaunchedEffect(Unit) {
-            launch {
-                scaffoldState.drawerState.animateTo(DrawerValue.Closed, animationSpec)
-                isDrawerHiding.value = false
-            }
-        }
-    }
-
     Scaffold(
         scaffoldState = scaffoldState,
         //this allows to dismiss the drawer if its open by tapping on dimmed area
-        //first flag used to disable interaction with drawer if it hides
-        drawerGesturesEnabled = !isDrawerHiding.value && scaffoldState.drawerState.isOpen,
+        drawerGesturesEnabled = scaffoldState.drawerState.let { it.isOpen && !it.isAnimationRunning },
         floatingActionButton = {
             if (isDrawerVisible.value) {
                 FloatingActionButton(onClick = { scope.launch { scaffoldState.drawerState.animateTo(DrawerValue.Open, animationSpec) } }) {
@@ -75,7 +64,7 @@ fun DrawerCore(
                     }
                     //Skip closing drawer if it's not opened completely
                     if (scaffoldState.drawerState.let { it.isClosed && it.isAnimationRunning }) return@Drawer
-                    isDrawerHiding.value = true
+                    scope.launch { scaffoldState.drawerState.animateTo(DrawerValue.Closed, animationSpec) }
                 }
             }
         },
