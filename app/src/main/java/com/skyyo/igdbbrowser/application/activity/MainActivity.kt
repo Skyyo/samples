@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
             Screens.DogFeed,
             Screens.Profile,
             Screens.Games,
-            Screens.GamesRoom,
+//            Screens.GamesRoom,
             Screens.GamesPaging,
         )
         val startDestination = when {

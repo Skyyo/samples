@@ -38,13 +38,13 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.common.composables.CircularProgressIndicatorRow
-import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.extensions.toast
 import com.skyyo.igdbbrowser.features.games.GamesEvent
 import com.skyyo.igdbbrowser.theme.DarkGray
 import com.skyyo.igdbbrowser.theme.Purple500
 import com.skyyo.igdbbrowser.theme.Shapes
 import com.skyyo.igdbbrowser.theme.White
+import com.skyyo.igdbbrowser.utils.OnClick
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -62,15 +62,16 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
     val listState = rememberLazyListState()
     val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
     val coroutineScope = rememberCoroutineScope()
+
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(
-                lifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
+            lifecycleOwner.lifecycle,
+            Lifecycle.State.STARTED
         )
     }
 
     val games: LazyPagingItems<Game> = viewModel.games.collectAsLazyPagingItems()
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val isRefreshing by remember { derivedStateOf { games.loadState.refresh is LoadState.Loading } }
 
     LaunchedEffect(Unit) {
         launch {
@@ -80,47 +81,35 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
                     is GamesEvent.ScrollToTop -> coroutineScope.launch {
                         listState.animateScrollToItem(0)
                     }
+                    GamesEvent.RefreshList -> games.refresh()
                 }
             }
         }
-
     }
 
     SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing),
-            onRefresh = {
-                viewModel.onSwipeToRefresh()
-                games.refresh()
-            },
-            indicator = { state, trigger ->
-                SwipeRefreshIndicator(
-                        state = state,
-                        refreshingOffset = insetTop,
-                        refreshTriggerDistance = trigger,
-                        scale = true,
-                        backgroundColor = DarkGray,
-                        contentColor = White
-                )
-            }
+        state = rememberSwipeRefreshState(isRefreshing),
+        onRefresh = viewModel::onSwipeToRefresh,
+        indicator = { state, trigger ->
+            SwipeRefreshIndicator(
+                state = state,
+                refreshingOffset = insetTop,
+                refreshTriggerDistance = trigger,
+                scale = true,
+                backgroundColor = DarkGray,
+                contentColor = White
+            )
+        }
     ) {
         Box(Modifier.fillMaxSize()) {
             GamesColumn(listState = listState, games = games)
-            AnimatedVisibility(
-                    enter = fadeIn(),
-                    exit = fadeOut(),
-                    visible = isListScrolled,
-                    modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(16.dp)
-            ) {
-                FloatingActionButton(
-                        viewModel::onScrollToTopClick,
-                        modifier = Modifier.size(48.dp),
-                        backgroundColor = DarkGray
-                ) {
-                    Icon(Icons.Filled.ArrowUpward, contentDescription = null, tint = White)
-                }
-            }
+            FadingFab(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp),
+                isListScrolled = isListScrolled,
+                onclick = viewModel::onScrollToTopClick
+            )
         }
     }
 
@@ -128,78 +117,108 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
 
 @Composable
 fun GamesColumn(
-        listState: LazyListState,
-        games: LazyPagingItems<Game>
+    listState: LazyListState,
+    games: LazyPagingItems<Game>
 ) {
     LazyColumn(
-            state = listState,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = rememberInsetsPaddingValues(
-                    insets = LocalWindowInsets.current.systemBars,
-                    applyTop = true,
-                    applyBottom = false,
-                    additionalStart = 16.dp,
-                    additionalEnd = 16.dp,
-                    additionalBottom = 8.dp
-            )
+        state = listState,
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.systemBars,
+            applyTop = true,
+            applyBottom = false,
+            additionalStart = 16.dp,
+            additionalEnd = 16.dp,
+            additionalBottom = 8.dp
+        )
     ) {
+        //refreshing on page 0
         if (games.loadState.refresh is LoadState.Loading) {
             item {
                 Text(
-                        text = "Waiting for items to load from the backend",
-                        modifier = Modifier
-                                .fillMaxSize()
-                                .wrapContentWidth(Alignment.CenterHorizontally)
+                    text = "refreshing on page 0",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentWidth(Alignment.CenterHorizontally)
                 )
             }
         }
         items(games) { game ->
             if (game == null) return@items
             Card(
-                    backgroundColor = Purple500,
-                    modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(Shapes.medium)
-                            .padding(vertical = 8.dp),
-                    shape = Shapes.large
+                backgroundColor = Purple500,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(Shapes.medium)
+                    .padding(vertical = 8.dp),
+                shape = Shapes.large
             ) {
                 Row(
-                        modifier = Modifier
-                                .fillMaxWidth()
-                                .defaultMinSize(minHeight = 56.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(minHeight = 56.dp)
                 ) {
                     Image(painter = rememberImagePainter(
-                            data = "https://placekitten.com/g/200/300",
-                            builder = {
-                                transformations(CircleCropTransformation())
-                            }
+                        data = "https://placekitten.com/g/200/300",
+                        builder = {
+                            transformations(CircleCropTransformation())
+                        }
                     ),
-                            contentDescription = null,
-                            modifier = Modifier
-                                    .size(56.dp)
-                                    .padding(horizontal = 8.dp))
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(56.dp)
+                            .padding(horizontal = 8.dp))
                     Text(game.name, modifier = Modifier.align(Alignment.CenterVertically))
                 }
             }
         }
         if (games.loadState.append is LoadState.Loading) {
-
             item { CircularProgressIndicatorRow() }
         }
         if (games.loadState.refresh is LoadState.Error) {
             val e = games.loadState.refresh as LoadState.Error
             item {
-                Text(text = e.error.localizedMessage!!, modifier = Modifier.clickable(onClick = games::retry))
+                Text(
+                    text = e.error.localizedMessage!!,
+                    modifier = Modifier.clickable(onClick = games::retry)
+                )
                 Text(text = "retry refresh!")
             }
         }
         if (games.loadState.append is LoadState.Error) {
             val e = games.loadState.append as LoadState.Error
             item {
-                Text(text = e.error.localizedMessage!!, modifier = Modifier.clickable(onClick = games::retry))
+                Text(
+                    text = e.error.localizedMessage!!,
+                    modifier = Modifier.clickable(onClick = games::retry)
+                )
                 Text(text = "retry append!")
             }
         }
 
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun FadingFab(
+    modifier: Modifier = Modifier,
+    isListScrolled: Boolean,
+    onclick: OnClick
+) {
+    AnimatedVisibility(
+        enter = fadeIn(),
+        exit = fadeOut(),
+        visible = isListScrolled,
+        modifier = modifier
+
+    ) {
+        FloatingActionButton(
+            onClick = onclick,
+            modifier = Modifier.size(48.dp),
+            backgroundColor = DarkGray
+        ) {
+            Icon(Icons.Filled.ArrowUpward, contentDescription = null, tint = White)
+        }
     }
 }

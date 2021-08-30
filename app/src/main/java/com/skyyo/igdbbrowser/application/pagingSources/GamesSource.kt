@@ -11,10 +11,21 @@ class GamesSource(private val repository: GamesRepository) : PagingSource<Int, G
 
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Game> {
-        log("page from params ${params.key}")
-        val nextPage = if (params.key == null || params.key == 0) 1 else params.key!!
         val limit = params.loadSize
-        val offset = nextPage * limit
+        val nextPage: Int
+        val offset: Int
+        when (params.key) {
+            null, 0 -> {
+                nextPage = 1
+                offset = 0
+            }
+            else -> {
+                nextPage = params.key!!
+                offset = nextPage * limit
+            }
+        }
+        log("load page $nextPage")
+
         return when (val result = repository.getGamesPaging(limit, offset)) {
             is GamesResult.Success -> {
                 LoadResult.Page(
@@ -23,15 +34,24 @@ class GamesSource(private val repository: GamesRepository) : PagingSource<Int, G
                     nextKey = nextPage.plus(1)
                 )
             }
-            is GamesResult.NetworkError -> LoadResult.Error(Exception("network error occured"))
-            is GamesResult.LastPageReached -> LoadResult.Error(Exception("last page reached"))
+            is GamesResult.NetworkError -> LoadResult.Error(Exception("network error occurred"))
+            is GamesResult.LastPageReached -> {
+                log("LastPageReached")
+                LoadResult.Page(
+                    data = emptyList(),
+                    prevKey = if (nextPage == 1) null else nextPage - 1,
+//                    prevKey = null,
+                    nextKey = null
+                )
+            }
         }
     }
 
     override fun getRefreshKey(state: PagingState<Int, Game>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            state.closestItemToPosition(anchorPosition)?.id
-        }
+        return 0
+//        return state.anchorPosition?.let { anchorPosition ->
+//            state.closestItemToPosition(anchorPosition)?.id
+//        }
 //        return state.anchorPosition
     }
 }
