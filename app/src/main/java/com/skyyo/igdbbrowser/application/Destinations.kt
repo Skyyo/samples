@@ -21,6 +21,7 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object InputValidationManual : Screens("manual")
     object InputValidationAuto : Screens("auto")
     object InputValidationDebounce : Screens("debounce")
+    object Animations: Screens("animation")
 
 }
 
