@@ -68,6 +68,8 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
         Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goCameraX) { Text(text = "camera x") }
+        Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Bottom sheets")
         Button(onClick = viewModel::goBottomSheetDestination) { Text(text = "as destination") }
         Spacer(modifier = Modifier.height(8.dp))

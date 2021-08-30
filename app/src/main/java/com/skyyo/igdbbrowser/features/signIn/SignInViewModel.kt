@@ -53,6 +53,10 @@ class SignInViewModel @Inject constructor(
         it.navigate(Screens.ForceTheme.route)
     }
 
+    fun goCameraX() = navigationDispatcher.emit {
+        it.navigate(Screens.CameraX.route)
+    }
+
     fun goBottomSheetDestination() = navigationDispatcher.emit {
         it.navigate(Screens.BottomSheet.route)
     }

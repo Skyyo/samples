@@ -3,6 +3,7 @@
     package="com.skyyo.igdbbrowser">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:name=".application.Application"

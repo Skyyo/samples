@@ -18,6 +18,7 @@ import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
@@ -28,6 +29,7 @@ import com.skyyo.igdbbrowser.features.profile.*
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
+import com.skyyo.igdbbrowser.features.samples.cameraX.CameraXScreen
 import com.skyyo.igdbbrowser.features.samples.forceTheme.ForceThemeScreen
 import com.skyyo.igdbbrowser.features.samples.googleMap.GoogleMapScreen
 import com.skyyo.igdbbrowser.features.samples.inputValidations.auto.InputValidationAutoScreen
@@ -37,6 +39,7 @@ import com.skyyo.igdbbrowser.features.samples.lists.ListsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogDetailsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogFeedScreen
+import com.skyyo.igdbbrowser.features.samples.photoViewer.PhotoScreen
 import com.skyyo.igdbbrowser.features.samples.viewPager.ViewPagerScreen
 import com.skyyo.igdbbrowser.features.signIn.SignInScreen
 
@@ -44,7 +47,8 @@ import com.skyyo.igdbbrowser.features.signIn.SignInScreen
     ExperimentalAnimationApi::class,
     ExperimentalMaterialNavigationApi::class,
     ExperimentalMaterialApi::class,
-    ExperimentalPagerApi::class
+    ExperimentalPagerApi::class,
+    ExperimentalPermissionsApi::class
 )
 @Composable
 fun PopulatedNavHost(
@@ -102,6 +106,8 @@ fun PopulatedNavHost(
     }
     composable(Screens.Map.route) { GoogleMapScreen() }
     composable(Screens.ForceTheme.route) { ForceThemeScreen() }
+    composable(Screens.CameraX.route) { CameraXScreen() }
+    composable(Screens.PhotoViewer.route) { PhotoScreen() }
     bottomSheet(Screens.BottomSheet.route) { BottomSheetScreen() }
     composable(Screens.ModalBottomSheet.route) { ModalBottomSheetScreen() }
     composable(Screens.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
