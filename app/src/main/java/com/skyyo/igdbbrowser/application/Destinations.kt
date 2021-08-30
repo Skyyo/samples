@@ -22,6 +22,7 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object InputValidationAuto : Screens("auto")
     object InputValidationDebounce : Screens("debounce")
     object Animations: Screens("animation")
+
 }
 
 sealed class DogDetailsGraph(val route: String) {

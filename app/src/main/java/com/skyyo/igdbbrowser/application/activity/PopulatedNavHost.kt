@@ -125,4 +125,5 @@ fun PopulatedNavHost(
     composable(Screens.InputValidationAuto.route) { InputValidationAutoScreen() }
     composable(Screens.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
     composable(Screens.Animations.route) { AnimationsScreen() }
+
 }
