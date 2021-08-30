@@ -88,6 +88,8 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goInputManualValidation) { Text(text = "manual") }
         Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goAnimations) { Text(text = "go animations") }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 
 }

@@ -86,4 +86,8 @@ class SignInViewModel @Inject constructor(
     fun goInputManualValidation() = navigationDispatcher.emit {
         it.navigate(Screens.InputValidationManual.route)
     }
+
+    fun goAnimations() = navigationDispatcher.emit {
+        it.navigate(Screens.Animations.route)
+    }
 }

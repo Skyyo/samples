@@ -25,6 +25,7 @@ import com.skyyo.igdbbrowser.features.games.GamesScreen
 import com.skyyo.igdbbrowser.features.gamesPaging.GamesPagingScreen
 import com.skyyo.igdbbrowser.features.gamesRoom.GamesRoomScreen
 import com.skyyo.igdbbrowser.features.profile.*
+import com.skyyo.igdbbrowser.features.samples.animations.AnimationsScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
@@ -123,5 +124,6 @@ fun PopulatedNavHost(
         }) { InputValidationManualScreen() }
     composable(Screens.InputValidationAuto.route) { InputValidationAutoScreen() }
     composable(Screens.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
+    composable(Screens.Animations.route) { AnimationsScreen() }
 
 }
