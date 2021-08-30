@@ -1,6 +1,6 @@
 package com.skyyo.igdbbrowser.application.activity.cores.drawer
 
-import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,7 +24,7 @@ fun DrawerCore(
     val selectedTab = rememberSaveable { mutableStateOf(0) }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    val animationSpec = remember { TweenSpec<Float>(500) }
+    val animationSpec = remember { tween<Float>(500) }
 
     DisposableEffect(Unit) {
         val callback = NavController.OnDestinationChangedListener { _, destination, args ->
