@@ -60,6 +60,7 @@ class MainActivity : ComponentActivity() {
             Screens.Games,
 //            Screens.GamesRoom,
             Screens.GamesPaging,
+            Screens.GamesPagingRoom,
         )
         val startDestination = when {
             //TODO measure async + splash delegation profit

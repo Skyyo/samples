@@ -30,7 +30,8 @@ class GamesSource(private val repository: GamesRepository) : PagingSource<Int, G
             is GamesResult.Success -> {
                 LoadResult.Page(
                     data = result.games,
-                    prevKey = if (nextPage == 1) null else nextPage - 1,
+//                    prevKey = if (nextPage == 1) null else nextPage - 1,
+                    prevKey = null,
                     nextKey = nextPage.plus(1)
                 )
             }
@@ -39,8 +40,7 @@ class GamesSource(private val repository: GamesRepository) : PagingSource<Int, G
                 log("LastPageReached")
                 LoadResult.Page(
                     data = emptyList(),
-                    prevKey = if (nextPage == 1) null else nextPage - 1,
-//                    prevKey = null,
+                    prevKey = null,
                     nextKey = null
                 )
             }
@@ -48,10 +48,15 @@ class GamesSource(private val repository: GamesRepository) : PagingSource<Int, G
     }
 
     override fun getRefreshKey(state: PagingState<Int, Game>): Int? {
-        return 0
+//        return 0
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(2)
+        }
 //        return state.anchorPosition?.let { anchorPosition ->
 //            state.closestItemToPosition(anchorPosition)?.id
 //        }
 //        return state.anchorPosition
     }
+
 }
