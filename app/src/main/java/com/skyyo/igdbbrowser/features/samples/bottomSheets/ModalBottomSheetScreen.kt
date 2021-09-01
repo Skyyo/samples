@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
 
@@ -22,7 +23,7 @@ fun ModalBottomSheetScreen() {
     repeat(200) { list += it }
     ModalBottomSheetLayout(
         sheetContent = {
-            LazyColumn {
+            LazyColumn(Modifier.statusBarsPadding()) {
                 itemsIndexed(list) { index, launch ->
                     Text(text = "Bottom Sheet Content")
                     Spacer(modifier = Modifier.height(8.dp))
@@ -31,12 +32,11 @@ fun ModalBottomSheetScreen() {
         },
         sheetState = modalSheetState,
     ) {
-
-    }
-    Column {
-        Text(text = "modal bottom sheet screen")
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { coroutineScope.launch { modalSheetState.show() } }) { Text(text = "Modal sheet ") }
+        Column(Modifier.statusBarsPadding()) {
+            Text(text = "modal bottom sheet screen")
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = { coroutineScope.launch { modalSheetState.show() } }) { Text(text = "Modal sheet ") }
+        }
     }
 }
 

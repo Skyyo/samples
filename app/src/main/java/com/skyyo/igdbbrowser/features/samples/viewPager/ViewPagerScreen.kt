@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.*
 import com.skyyo.igdbbrowser.extensions.log
 import kotlinx.coroutines.flow.collect
@@ -51,6 +52,7 @@ fun ViewPagerScreen() {
             // Add tabs for all of our pages
             pages.forEachIndexed { index, title ->
                 Tab(
+                    modifier = Modifier.statusBarsPadding(),
                     text = { Text("$title") },
                     selected = pagerState.currentPage == index,
                     onClick = {

@@ -8,13 +8,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.systemBarsPadding
 
 @Composable
 fun BottomSheetScreen() {
     val list = arrayListOf<Int>()
     repeat(200) { list += it }
 
-    LazyColumn {
+    LazyColumn(Modifier.systemBarsPadding()) {
         itemsIndexed(list) { index, launch ->
             Text(text = "Bottom Sheet Screen")
             Spacer(modifier = Modifier.height(8.dp))
