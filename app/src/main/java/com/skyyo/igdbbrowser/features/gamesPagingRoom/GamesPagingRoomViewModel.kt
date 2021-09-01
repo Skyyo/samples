@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.gamesPaging
+package com.skyyo.igdbbrowser.features.gamesPagingRoom
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -24,19 +24,14 @@ import javax.inject.Inject
 private const val PAGE_LIMIT = 30
 
 @HiltViewModel
-class GamesPagingViewModel @Inject constructor(
+class GamesPagingRoomViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val handle: SavedStateHandle,
     private val gamesRepository: GamesRepository
 ) : ViewModel() {
 
 
-    val games: Flow<PagingData<Game>> = Pager(
-        PagingConfig(
-            pageSize = PAGE_LIMIT,
-//            maxSize = PAGE_LIMIT * 3
-        )
-    ) {
+    val games: Flow<PagingData<Game>> = Pager(PagingConfig(pageSize = PAGE_LIMIT,maxSize = PAGE_LIMIT*3)) {
         GamesSource(gamesRepository)
     }.flow.cachedIn(viewModelScope)
 

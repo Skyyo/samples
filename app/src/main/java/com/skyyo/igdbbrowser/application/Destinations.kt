@@ -7,7 +7,8 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object SignIn : Screens("signIn")
     object Games : Screens("games", R.string.games)
     object GamesRoom : Screens("gamesRoom", R.string.games_room)
-    object GamesPaging : Screens("gamesRoom", R.string.games_paging)
+    object GamesPaging : Screens("gamesPaging", R.string.games_paging)
+    object GamesPagingRoom : Screens("gamesPagingRoom", R.string.games_paging_r)
     object Profile : Screens("profile", R.string.profile)
 
     object Map : Screens("map", R.string.map)
@@ -21,6 +22,7 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object InputValidationManual : Screens("manual")
     object InputValidationAuto : Screens("auto")
     object InputValidationDebounce : Screens("debounce")
+    object Animations: Screens("animation")
     object NestedHorizontalLists : Screens("nestedHorizontalLists")
 }
 

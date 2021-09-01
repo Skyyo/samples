@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.gamesPaging
+package com.skyyo.igdbbrowser.features.gamesPagingRoom
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
+fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val insets = LocalWindowInsets.current
