@@ -2,10 +2,11 @@ package com.skyyo.igdbbrowser.features.samples.nestedHorizontalList
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -30,7 +31,7 @@ fun AppBarElevation() {
             elevation = elevation,
             backgroundColor = Color.White,
         ) {
-            Text(text = "TestAppBarElavation")
+            Text(text = "TestAppBarElevation")
         }
         LazyColumnLazyRow(items, scrollState)
     }
@@ -52,16 +53,6 @@ private fun LazyRowItems(row: Int, items: List<Int>) {
             TestItem(row = row, column = item)
         }
     })
-}
-
-@Composable
-private fun RowItems(row: Int, items: List<Int>) {
-    val scrollState = rememberScrollState()
-    Row(Modifier.horizontalScroll(scrollState)) {
-        for (i in items) {
-            TestItem(row = row, column = i)
-        }
-    }
 }
 
 @Composable
