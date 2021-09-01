@@ -20,6 +20,7 @@ Miscellaneous
 - bottomSheet destination is not preserved by default when navigating to new destination and coming back. [Workaround](https://medium.com/@theapache64/saving-bottomsheets-state-%EF%B8%8F-d9426cafbcbb)
 - google maps related [issue](https://github.com/googlemaps/android-maps-utils/issues/949)
 - google maps related [issue](https://issuetracker.google.com/issues/197880217)
+- no way to create nested sticky headers. Workaround imo is changing design or making one lvl of the headers as a composable that animates text changes.
 
 # Limitations & potential issues
 - No field injections in composables - inconvenient.
