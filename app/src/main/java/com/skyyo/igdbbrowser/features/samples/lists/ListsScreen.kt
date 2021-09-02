@@ -38,8 +38,7 @@ fun ListsScreen() {
         state = listState,
         modifier = Modifier
             .fillMaxSize()
-            .addVerticalScrollbar(listState)
-            .statusBarsPadding(),
+            .addVerticalScrollbar(listState),
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
             applyTop = true,
