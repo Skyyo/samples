@@ -4,6 +4,7 @@ import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.application.network.calls.GamesCalls
 import com.skyyo.igdbbrowser.application.persistance.room.GamesDao
 import com.skyyo.igdbbrowser.extensions.tryOrNull
+import com.skyyo.igdbbrowser.features.gamesPagingRoom.GamesPagingResult
 import kotlinx.coroutines.flow.Flow
 import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
@@ -18,8 +19,20 @@ class GamesRepository @Inject constructor(
 ) {
 
     fun observeGames(): Flow<List<Game>> = dao.observeGames()
-    var counter = 0
 
+    suspend fun getGamesPagingRoom(limit: Int, offset: Int): GamesPagingResult {
+        val rawBody = "limit $limit; offset $offset;sort id; fields name,first_release_date;"
+        val response = tryOrNull { calls.getGames(rawBody.toRequestBody()) }
+        return when {
+            response?.code() == 200 -> {
+                val games = response.body()!!
+                GamesPagingResult.Success(games, games.size < limit)
+            }
+            else -> GamesPagingResult.NetworkError
+        }
+    }
+
+    var counter = 0
     suspend fun getGamesPaging(limit: Int, offset: Int): GamesResult {
         val rawBody = "limit $limit; offset $offset;sort id; fields name,first_release_date;"
         val response = tryOrNull { calls.getGames(rawBody.toRequestBody()) }

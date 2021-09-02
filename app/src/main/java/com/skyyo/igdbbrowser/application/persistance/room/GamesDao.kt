@@ -20,6 +20,9 @@ interface GamesDao {
     @Query("SELECT * from games_table")
     fun observeGames(): Flow<List<Game>>
 
+    @Query("SELECT * FROM games_table")
+    fun pagingSource(): PagingSource<Int, Game>
+
     @Query("DELETE from games_table")
     suspend fun deleteGames()
 
