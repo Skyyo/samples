@@ -39,6 +39,7 @@ import com.skyyo.igdbbrowser.features.samples.lists.ListsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogDetailsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogFeedScreen
+import com.skyyo.igdbbrowser.features.samples.nestedHorizontalList.AppBarElevation
 import com.skyyo.igdbbrowser.features.samples.viewPager.ViewPagerScreen
 import com.skyyo.igdbbrowser.features.signIn.SignInScreen
 
@@ -130,5 +131,5 @@ fun PopulatedNavHost(
     composable(Screens.InputValidationAuto.route) { InputValidationAutoScreen() }
     composable(Screens.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
     composable(Screens.Animations.route) { AnimationsScreen() }
-
+    composable(Screens.NestedHorizontalLists.route) { AppBarElevation() }
 }

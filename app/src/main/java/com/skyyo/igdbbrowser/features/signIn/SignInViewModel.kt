@@ -90,4 +90,8 @@ class SignInViewModel @Inject constructor(
     fun goAnimations() = navigationDispatcher.emit {
         it.navigate(Screens.Animations.route)
     }
+
+    fun goNestedHorizontalLists() = navigationDispatcher.emit {
+        it.navigate(Screens.NestedHorizontalLists.route)
+    }
 }

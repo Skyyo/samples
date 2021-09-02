@@ -67,6 +67,8 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Button(onClick = viewModel::goMap) { Text(text = "google map") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
+        Spacer(modifier = Modifier.height(32.dp))
+        Button(onClick = viewModel::goNestedHorizontalLists) { Text(text = "app bar auto-elevation animation") }
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Bottom sheets")
         Button(onClick = viewModel::goBottomSheetDestination) { Text(text = "as destination") }
