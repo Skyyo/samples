@@ -9,14 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.systemBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     Column {
-        Text(text = "Profile", modifier = Modifier.systemBarsPadding())
+        Text(text = "Profile", modifier = Modifier.statusBarsPadding())
         Button(onClick = viewModel::onBtnClick) {
             Text("go edit profile")
         }
