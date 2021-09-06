@@ -1,19 +1,14 @@
 package com.skyyo.igdbbrowser.features.samples.viewPager
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.google.accompanist.insets.statusBarsPadding
@@ -98,7 +93,7 @@ fun ViewPagerScreen() {
                         text = "Page: $page",
                         modifier = Modifier
                             .fillMaxWidth(0.5f)
-                            .fillMaxHeight(0.5f)
+                            .height(100.dp)
                             .background(Color.Cyan)
                     )
                 }
@@ -110,5 +105,62 @@ fun ViewPagerScreen() {
                 .align(Alignment.CenterHorizontally)
                 .padding(16.dp),
         )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        HorizontalPagerWithOffset(itemWidth = 150.dp, offset = 20.dp)
+    }
+}
+
+@Composable
+@ExperimentalPagerApi
+fun HorizontalPagerWithOffset(
+    offset: Dp,
+    itemWidth: Dp,
+) {
+    BoxWithConstraints {
+        val pagerState = rememberPagerState(
+            pageCount = 10,
+            initialOffscreenLimit = (maxWidth / itemWidth).toInt() + 1
+        )
+
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
+        ) { page ->
+            Card(Modifier.graphicsLayer {
+                // Calculate the absolute offset for the current page from the
+                // scroll position. We use the absolute value which allows us to mirror
+                // any effects for both directions
+                val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
+
+                lerp(
+                    start = 0.85f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                ).also { scale ->
+                    scaleX = scale
+                    scaleY = scale
+                }
+
+                // We animate the alpha, between 50% and 100%
+                alpha = lerp(
+                    start = 0.5f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                )
+
+                //offset for snapping
+                translationX = offset.toPx()
+            }) {
+                Text(
+                    text = "Page: $page",
+                    modifier = Modifier
+                        .width(itemWidth)
+                        .height(100.dp)
+                        .background(Color.Cyan)
+                )
+            }
+        }
     }
 }
