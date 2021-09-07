@@ -6,13 +6,10 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
+import com.skyyo.igdbbrowser.application.repositories.games.GamesPagingResult
 import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
 import com.skyyo.igdbbrowser.extensions.log
 
-sealed class GamesPagingResult {
-    class Success(val games: List<Game>, val lastPageReached: Boolean = false) : GamesPagingResult()
-    object NetworkError : GamesPagingResult()
-}
 
 @OptIn(ExperimentalPagingApi::class)
 class GamesRemoteMediator(

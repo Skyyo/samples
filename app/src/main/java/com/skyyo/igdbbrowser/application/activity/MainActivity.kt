@@ -46,8 +46,6 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var appDatabase: AppDatabase
 
-    @ExperimentalPagerApi
-    @ExperimentalMaterialApi
     @ExperimentalMaterialNavigationApi
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +57,8 @@ class MainActivity : ComponentActivity() {
             Screens.Profile,
 //            Screens.Games,
 //            Screens.GamesRoom,
-            Screens.GamesPaging,
-//            Screens.GamesPagingRoom,
+//            Screens.GamesPaging,
+            Screens.GamesPagingRoom,
         )
         val startDestination = when {
             //TODO measure async + splash delegation profit
