@@ -36,13 +36,6 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         )
     }
 
-    //TODO try the old way + remember the channel?
-//    val events2 = remember(viewModel.events, lifecycleOwner) {
-//        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//
-//        }
-//    }
-
     LaunchedEffect(Unit) {
         launch {
             events.collect { event ->
@@ -63,12 +56,6 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
     ) {
         Text(text = "IGDB app")
         Button(onClick = viewModel::signIn) { Text(text = "Sign In") }
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = viewModel::goMap) { Text(text = "google map") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = viewModel::goNestedHorizontalLists) { Text(text = "app bar auto-elevation animation") }
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Bottom sheets")
         Button(onClick = viewModel::goBottomSheetDestination) { Text(text = "as destination") }
@@ -76,21 +63,29 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Button(onClick = viewModel::goBottomSheetsContainer) { Text(text = "modal ") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goBottomSheetsScaffold) { Text(text = "persistent") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Input validations")
+        Button(onClick = viewModel::goInputAutoValidation) { Text(text = "auto") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goInputDebounceValidation) { Text(text = "debounce") }
         Spacer(modifier = Modifier.height(32.dp))
+        Button(onClick = viewModel::goMap) { Text(text = "google map") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goNestedHorizontalLists) { Text(text = "app bar auto-elevation animation") }
+        Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goViewPager) { Text(text = "view pager") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goNavWithResultSample) { Text(text = "navigate to/back with results") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goStickyHeaders) { Text(text = "sticky headers") }
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Input validation")
-        Button(onClick = viewModel::goInputAutoValidation) { Text(text = "auto") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goInputDebounceValidation) { Text(text = "debounce") }
-        Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goInputManualValidation) { Text(text = "manual") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goAnimations) { Text(text = "go animations") }
+        Button(onClick = viewModel::goAnimations) { Text(text = "animations") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goOtp) { Text(text = "otp view") }
         Spacer(modifier = Modifier.height(8.dp))
     }
 

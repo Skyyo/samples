@@ -80,15 +80,21 @@ class SignInViewModel @Inject constructor(
     fun goInputAutoValidation() = navigationDispatcher.emit {
         it.navigate(Screens.InputValidationAuto.route)
     }
+
     fun goInputDebounceValidation() = navigationDispatcher.emit {
         it.navigate(Screens.InputValidationDebounce.route)
     }
+
     fun goInputManualValidation() = navigationDispatcher.emit {
         it.navigate(Screens.InputValidationManual.route)
     }
 
     fun goAnimations() = navigationDispatcher.emit {
         it.navigate(Screens.Animations.route)
+    }
+
+    fun goOtp() = navigationDispatcher.emit {
+        it.navigate(Screens.Otp.route)
     }
 
     fun goNestedHorizontalLists() = navigationDispatcher.emit {
