@@ -21,10 +21,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.features.games.GamesScreen
-import com.skyyo.igdbbrowser.features.gamesPaging.GamesPagingScreen
-import com.skyyo.igdbbrowser.features.gamesPagingRoom.GamesPagingRoomScreen
-import com.skyyo.igdbbrowser.features.gamesRoom.GamesRoomScreen
+import com.skyyo.igdbbrowser.features.pagination.games.GamesScreen
+import com.skyyo.igdbbrowser.features.pagination.gamesPaging.GamesPagingScreen
+import com.skyyo.igdbbrowser.features.pagination.gamesPagingRoom.GamesPagingRoomScreen
+import com.skyyo.igdbbrowser.features.pagination.gamesRoom.GamesRoomScreen
 import com.skyyo.igdbbrowser.features.profile.*
 import com.skyyo.igdbbrowser.features.samples.animations.AnimationsScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldScreen

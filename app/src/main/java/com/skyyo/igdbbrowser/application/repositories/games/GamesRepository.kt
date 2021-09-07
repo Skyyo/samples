@@ -4,7 +4,7 @@ import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.application.network.calls.GamesCalls
 import com.skyyo.igdbbrowser.application.persistance.room.GamesDao
 import com.skyyo.igdbbrowser.extensions.tryOrNull
-import com.skyyo.igdbbrowser.features.gamesPagingRoom.GamesPagingResult
+import com.skyyo.igdbbrowser.features.pagination.gamesPagingRoom.GamesPagingResult
 import kotlinx.coroutines.flow.Flow
 import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject

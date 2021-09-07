@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.games
+package com.skyyo.igdbbrowser.features.pagination.games
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
 import com.skyyo.igdbbrowser.application.repositories.games.GamesResult
+import com.skyyo.igdbbrowser.features.pagination.GamesEvent
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -58,10 +59,9 @@ class GamesViewModel @Inject constructor(
                 is GamesResult.Success -> {
                     itemOffset += PAGE_LIMIT
                     isFetchingAllowed = true
-                    if (isFirstPage) {
-                        _games.value = result.games
-                    } else {
-                        _games.value = (_games.value + result.games)
+                    _games.value = when {
+                        isFirstPage -> result.games
+                        else -> _games.value + result.games
                     }
                 }
                 is GamesResult.LastPageReached -> {

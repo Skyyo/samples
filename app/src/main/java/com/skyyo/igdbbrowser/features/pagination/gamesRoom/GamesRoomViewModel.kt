@@ -1,11 +1,11 @@
-package com.skyyo.igdbbrowser.features.gamesRoom
+package com.skyyo.igdbbrowser.features.pagination.gamesRoom
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
 import com.skyyo.igdbbrowser.application.repositories.games.GamesRoomResult
-import com.skyyo.igdbbrowser.features.games.GamesEvent
+import com.skyyo.igdbbrowser.features.pagination.GamesEvent
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

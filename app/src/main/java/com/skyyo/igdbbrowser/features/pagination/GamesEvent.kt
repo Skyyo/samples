@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.games
+package com.skyyo.igdbbrowser.features.pagination
 
 sealed class GamesEvent {
     object NetworkError : GamesEvent()

@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.gamesPagingRoom
+package com.skyyo.igdbbrowser.features.pagination.gamesPagingRoom
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
