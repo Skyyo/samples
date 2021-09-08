@@ -24,6 +24,7 @@ Miscellaneous
 - Surface composable has [issue](https://issuetracker.google.com/issues/198313901) with elevation overlapping. Workaround - use [Modifier.shadow](https://developer.android.com/reference/kotlin/androidx/compose/ui/draw/package-summary#(androidx.compose.ui.Modifier).shadow(androidx.compose.ui.unit.Dp,androidx.compose.ui.graphics.Shape,kotlin.Boolean)) on any composable.
 
 # Limitations & potential issues
+- We're forced to use [ProvideWindowInsets](https://google.github.io/accompanist/insets/#usage) composable as a wrapper for all composables in fragments
 - No field injections in composables - inconvenient.
 - There is no way to navigate from composable to fragment & share a navigation graph between them. ( not an issues )
 - Deep links might require lot of additional work if we need to open them in a specific bottom bar / drawer tab.
