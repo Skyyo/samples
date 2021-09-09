@@ -1,12 +1,10 @@
-package com.skyyo.igdbbrowser.features.pagination.games
+package com.skyyo.igdbbrowser.features.pagination.simple
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.igdbbrowser.application.models.remote.Game
-import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
-import com.skyyo.igdbbrowser.application.repositories.games.GamesResult
-import com.skyyo.igdbbrowser.features.pagination.GamesEvent
+import com.skyyo.igdbbrowser.features.pagination.common.GamesEvent
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +22,9 @@ private const val PAGE_LIMIT = 30
 class GamesViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val handle: SavedStateHandle,
-    private val gamesRepository: GamesRepository
-) : ViewModel() {
+    private val gamesRepository: GamesRepositorySimple
+) :
+    ViewModel() {
 
     private val _games = MutableStateFlow(listOf<Game>())
     val games = _games.asStateFlow()
@@ -46,27 +45,22 @@ class GamesViewModel @Inject constructor(
 
     fun getGames(isFirstPage: Boolean = false) {
         if (!isFetchingAllowed) return
-        if (isFirstPage) itemOffset = 0
         isFetchingAllowed = false
         viewModelScope.launch(Dispatchers.IO) {
             if (isFirstPage) _isRefreshing.value = true
             when (val result = gamesRepository.getGames(PAGE_LIMIT, itemOffset)) {
                 is GamesResult.NetworkError -> {
-                    itemOffset = 0
                     isFetchingAllowed = true
                     _events.send(GamesEvent.NetworkError)
                 }
                 is GamesResult.Success -> {
                     itemOffset += PAGE_LIMIT
-                    isFetchingAllowed = true
+                    isFetchingAllowed = !result.lastPageReached
+                    isLastPageReached = result.lastPageReached
                     _games.value = when {
                         isFirstPage -> result.games
                         else -> _games.value + result.games
                     }
-                }
-                is GamesResult.LastPageReached -> {
-                    isLastPageReached = true
-                    isFetchingAllowed = false
                 }
             }
             if (isFirstPage) _isRefreshing.value = false

@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
             Screens.Profile,
 //            Screens.Games,
 //            Screens.GamesRoom,
-//            Screens.GamesPaging,
+            Screens.GamesPaging,
             Screens.GamesPagingRoom,
         )
         val startDestination = when {

@@ -1,12 +1,13 @@
-package com.skyyo.igdbbrowser.features.pagination.gamesPagingRoom
+package com.skyyo.igdbbrowser.features.pagination.simpleWithDatabase
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,10 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -32,7 +29,7 @@ import com.skyyo.igdbbrowser.common.composables.CircularProgressIndicatorRow
 import com.skyyo.igdbbrowser.extensions.toast
 import com.skyyo.igdbbrowser.features.pagination.CustomCard
 import com.skyyo.igdbbrowser.features.pagination.FadingFab
-import com.skyyo.igdbbrowser.features.pagination.GamesEvent
+import com.skyyo.igdbbrowser.features.pagination.common.GamesEvent
 import com.skyyo.igdbbrowser.theme.DarkGray
 import com.skyyo.igdbbrowser.theme.White
 import kotlinx.coroutines.flow.collect
@@ -40,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel()) {
+fun GamesRoomScreen(viewModel: GamesRoomViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val insets = LocalWindowInsets.current
@@ -52,7 +49,6 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
     val listState = rememberLazyListState()
     val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
     val coroutineScope = rememberCoroutineScope()
-
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(
             lifecycleOwner.lifecycle,
@@ -60,8 +56,8 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
         )
     }
 
-    val games: LazyPagingItems<Game> = viewModel.games.collectAsLazyPagingItems()
-    val isRefreshing by remember { derivedStateOf { games.loadState.refresh is LoadState.Loading } }
+    val games by viewModel.games.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     LaunchedEffect(Unit) {
         launch {
@@ -71,10 +67,10 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
                     is GamesEvent.ScrollToTop -> coroutineScope.launch {
                         listState.animateScrollToItem(0)
                     }
-                    GamesEvent.RefreshList -> games.refresh()
                 }
             }
         }
+
     }
 
     SwipeRefresh(
@@ -92,7 +88,12 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
         }
     ) {
         Box(Modifier.fillMaxSize()) {
-            GamesColumn(listState = listState, games = games)
+            GamesColumn(
+                listState = listState,
+                games = games,
+                isLastPageReached = viewModel.isLastPageReached,
+                onLastItemVisible = viewModel::getGames
+            )
             FadingFab(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -108,7 +109,9 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
 @Composable
 fun GamesColumn(
     listState: LazyListState,
-    games: LazyPagingItems<Game>
+    games: List<Game>,
+    isLastPageReached: Boolean,
+    onLastItemVisible: () -> Unit
 ) {
     LazyColumn(
         state = listState,
@@ -122,46 +125,12 @@ fun GamesColumn(
             additionalBottom = 8.dp
         )
     ) {
-        //refreshing on page 0
-        if (games.loadState.refresh is LoadState.Loading) {
-            item {
-                Text(
-                    text = "refreshing on page 0",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
+        itemsIndexed(games) { index, game ->
+            CustomCard(gameName = game.name)
+            if (!isLastPageReached && index == games.lastIndex) {
+                SideEffect { onLastItemVisible() }
+                CircularProgressIndicatorRow()
             }
         }
-
-        items(games) { game -> if (game != null) CustomCard(gameName = game.name) }
-
-        if (games.loadState.append is LoadState.Loading) {
-            item { CircularProgressIndicatorRow() }
-        }
-
-        if (games.loadState.refresh is LoadState.Error) {
-            val e = games.loadState.refresh as LoadState.Error
-            item {
-                Text(
-                    text = e.error.localizedMessage!!,
-                    modifier = Modifier.clickable(onClick = games::retry)
-                )
-                Text(text = "retry refresh!")
-            }
-        }
-
-        if (games.loadState.append is LoadState.Error) {
-            val e = games.loadState.append as LoadState.Error
-            item {
-                Text(
-                    text = e.error.localizedMessage!!,
-                    modifier = Modifier.clickable(onClick = games::retry)
-                )
-                Text(text = "retry append!")
-            }
-        }
-
     }
 }
-

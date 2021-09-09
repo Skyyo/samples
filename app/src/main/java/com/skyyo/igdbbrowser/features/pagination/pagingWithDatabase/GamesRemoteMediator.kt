@@ -1,23 +1,19 @@
-package com.skyyo.igdbbrowser.features.pagination.gamesPagingRoom
+package com.skyyo.igdbbrowser.features.pagination.pagingWithDatabase
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import com.skyyo.igdbbrowser.R
 import com.skyyo.igdbbrowser.application.models.remote.Game
-import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
-import com.skyyo.igdbbrowser.application.repositories.games.GamesPagingResult
-import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
 import com.skyyo.igdbbrowser.extensions.log
+import com.skyyo.igdbbrowser.features.pagination.simple.GamesResult
 
 
 @OptIn(ExperimentalPagingApi::class)
-class GamesRemoteMediator(
-    private val database: AppDatabase,
-    private val repository: GamesRepository
-) : RemoteMediator<Int, Game>() {
+class GamesRemoteMediator(private val repository: GamesRepositoryPagingWithDatabase) :
+    RemoteMediator<Int, Game>() {
 
-    val gamesDao = database.gamesDao()
 
     override suspend fun initialize(): InitializeAction {
         return InitializeAction.LAUNCH_INITIAL_REFRESH
@@ -45,15 +41,15 @@ class GamesRemoteMediator(
 
         log("load page $nextPage")
 
-        return when (val result = repository.getGamesPagingRoom(limit, offset)) {
-            is GamesPagingResult.Success -> {
+        return when (val result = repository.getGames(limit, offset)) {
+            is GamesResult.Success -> {
                 when (loadType) {
-                    LoadType.REFRESH -> gamesDao.deleteAndInsertGames(result.games)
-                    else -> gamesDao.insertGames(result.games)
+                    LoadType.REFRESH -> repository.deleteAndInsertGames(result.games)
+                    else -> repository.insertGames(result.games)
                 }
                 MediatorResult.Success(endOfPaginationReached = result.lastPageReached)
             }
-            is GamesPagingResult.NetworkError -> MediatorResult.Error(Exception("network error occurred"))
+            is GamesResult.NetworkError -> MediatorResult.Error(Throwable(R.string.network_error.toString()))
         }
     }
 }

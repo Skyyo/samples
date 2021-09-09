@@ -1,11 +1,9 @@
-package com.skyyo.igdbbrowser.features.pagination.gamesRoom
+package com.skyyo.igdbbrowser.features.pagination.simpleWithDatabase
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyyo.igdbbrowser.application.repositories.games.GamesRepository
-import com.skyyo.igdbbrowser.application.repositories.games.GamesRoomResult
-import com.skyyo.igdbbrowser.features.pagination.GamesEvent
+import com.skyyo.igdbbrowser.features.pagination.common.GamesEvent
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +19,7 @@ private const val PAGE_LIMIT = 20
 class GamesRoomViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val handle: SavedStateHandle,
-    private val gamesRepository: GamesRepository
+    private val gamesRepository: GamesRepositoryWithDatabase
 ) : ViewModel() {
 
     val games = gamesRepository.observeGames()
@@ -43,23 +41,18 @@ class GamesRoomViewModel @Inject constructor(
 
     fun getGames(isFirstPage: Boolean = false) {
         if (!isFetchingAllowed) return
-        if (isFirstPage) itemOffset = 0
         isFetchingAllowed = false
         viewModelScope.launch(Dispatchers.IO) {
             if (isFirstPage) _isRefreshing.value = true
-            when (gamesRepository.getGamesRoom(PAGE_LIMIT, itemOffset)) {
+            when (val result = gamesRepository.getGames(PAGE_LIMIT, itemOffset)) {
                 is GamesRoomResult.NetworkError -> {
-                    itemOffset = 0
                     isFetchingAllowed = true
                     _events.send(GamesEvent.NetworkError)
                 }
                 is GamesRoomResult.Success -> {
                     itemOffset += PAGE_LIMIT
-                    isFetchingAllowed = true
-                }
-                is GamesRoomResult.LastPageReached -> {
-                    isLastPageReached = true
-                    isFetchingAllowed = false
+                    isFetchingAllowed = !result.lastPageReached
+                    isLastPageReached = result.lastPageReached
                 }
             }
             if (isFirstPage) _isRefreshing.value = false
