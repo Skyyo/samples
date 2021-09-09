@@ -164,9 +164,7 @@ fun GamesColumn(
             }
         }
 
-        items(games) { game ->
-            if (game != null) CustomCard(gameName = game.name)
-        }
+        items(games, Game::id) { game -> if (game != null) CustomCard(gameName = game.name) }
 
         // we know that we're refreshing X page
         if (games.loadState.append is LoadState.Loading) {

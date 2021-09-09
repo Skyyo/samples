@@ -12,7 +12,6 @@ import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
 import com.skyyo.igdbbrowser.application.persistance.room.games.GamesDao
 import com.skyyo.igdbbrowser.application.persistance.room.games.GamesRemoteKeys
 import com.skyyo.igdbbrowser.application.persistance.room.games.GamesRemoteKeysDao
-import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.extensions.tryOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -44,7 +43,6 @@ class GamesRemoteMediator(
                 }
             }
             LoadType.PREPEND -> {
-                log("PREPEND")
                 return MediatorResult.Success(endOfPaginationReached = true)
 //                val remoteKeys = getRemoteKeyForFirstItem(state)
 //                // If remoteKeys is null, that means the refresh result is not in the database yet.

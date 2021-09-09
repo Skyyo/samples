@@ -152,7 +152,7 @@ fun GamesColumn(
             }
         }
 
-        items(games) { game -> if (game != null) CustomCard(gameName = game.name) }
+        items(games, Game::id) { game -> if (game != null) CustomCard(gameName = game.name) }
 
         if (games.loadState.append is LoadState.Loading) {
             item { CircularProgressIndicatorRow() }
