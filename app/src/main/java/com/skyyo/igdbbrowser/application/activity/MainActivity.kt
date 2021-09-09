@@ -55,9 +55,9 @@ class MainActivity : ComponentActivity() {
         val drawerOrBottomBarScreens = listOf(
             Screens.DogFeed,
             Screens.Profile,
-//            Screens.Games,
+            Screens.Games,
 //            Screens.GamesRoom,
-            Screens.GamesPaging,
+//            Screens.GamesPaging,
             Screens.GamesPagingRoom,
         )
         val startDestination = when {
