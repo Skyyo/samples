@@ -1,42 +1,32 @@
 package com.skyyo.igdbbrowser.features.pagination.pagingWithDatabase
 
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.skyyo.igdbbrowser.application.network.calls.GamesCalls
-import com.skyyo.igdbbrowser.extensions.tryOrNull
-import com.skyyo.igdbbrowser.features.pagination.simple.GamesResult
+import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
+import com.skyyo.igdbbrowser.application.persistance.room.games.GamesDao
+import com.skyyo.igdbbrowser.application.persistance.room.games.GamesRemoteKeysDao
 import dagger.hilt.android.scopes.ViewModelScoped
-import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
+
+private const val PAGE_LIMIT = 30
 
 @ViewModelScoped
 class GamesRepositoryPagingWithDatabase @Inject constructor(
-    private val calls: GamesCalls,
-//    private val gamesDao: GamesDao,
-//    private val gamesKeysDao: GamesRemoteKeysDao,
+    private val gameCalls: GamesCalls,
+    //TODO need this only for transactions for unrelated DAO's. If needed - use single DAO
+    // with @Transaction annotations inside to reduce 3 arguments to 1
+    private val db: AppDatabase,
+    private val gamesDao: GamesDao,
+    private val gamesKeysDao: GamesRemoteKeysDao,
 ) {
 
-    private var counter = 0
-
-    suspend fun getGames(limit: Int, offset: Int): GamesResult {
-        if (limit == 30) counter = 0
-        val rawBody = "limit $limit; offset $offset;sort id; fields name,first_release_date;"
-        val response = tryOrNull { calls.getGames(rawBody.toRequestBody()) }
-        return when {
-            response?.code() == 200 -> {
-                counter++
-                val games = response.body()!!
-//                GamesResult.Success(games, games.size != limit)
-                GamesResult.Success(games, counter >= 6)
-            }
-            else -> GamesResult.NetworkError
-        }
-    }
-
-//    suspend fun deleteAndInsertGames(games: List<Game>) = gamesDao.deleteAndInsertGames(games)
-
-//    suspend fun deleteGames() = gamesDao.deleteGames()
-
-//    suspend fun insertGames(games: List<Game>) = gamesDao.insertGames(games)
-
-//    suspend fun getGameKeyById(gameId: Int) = gamesKeysDao.remoteKeysGameId(gameId)
+    @OptIn(ExperimentalPagingApi::class)
+    fun getGamesPaging(query: String) = Pager(
+        config = PagingConfig(pageSize = PAGE_LIMIT, enablePlaceholders = false),
+        remoteMediator = GamesRemoteMediator(db, gameCalls, gamesDao, gamesKeysDao, query),
+        pagingSourceFactory = gamesDao::pagingSource
+    ).flow
 
 }
