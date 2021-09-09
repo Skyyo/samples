@@ -108,7 +108,11 @@ fun InputValidationAutoDebounceScreen(viewModel: InputValidationAutoDebounceView
                 },
             labelResId = R.string.credit_card_number,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
+                //TODO adjust pan bug.
+                //For some combinations of previous + current keyboard types keyboard pop content up, for some not.
+                //If those are same, then keyboard don't pop up.
+                //Email + password -> not pop up, text + password -> pop up.
+                keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
             visualTransformation = ::creditCardFilter,

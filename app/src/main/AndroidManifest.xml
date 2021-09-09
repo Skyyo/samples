@@ -17,7 +17,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.IgdbBrowserTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
