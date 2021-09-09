@@ -125,7 +125,7 @@ fun GamesColumn(
             additionalBottom = 8.dp
         )
     ) {
-        itemsIndexed(games) { index, game ->
+        itemsIndexed(games, { _, game -> game.id }) { index, game ->
             CustomCard(gameName = game.name)
             if (!isLastPageReached && index == games.lastIndex) {
                 SideEffect { onLastItemVisible() }
