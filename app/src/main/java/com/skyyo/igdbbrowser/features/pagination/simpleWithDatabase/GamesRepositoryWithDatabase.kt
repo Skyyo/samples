@@ -2,7 +2,7 @@ package com.skyyo.igdbbrowser.features.pagination.simpleWithDatabase
 
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.application.network.calls.GamesCalls
-import com.skyyo.igdbbrowser.application.persistance.room.GamesDao
+import com.skyyo.igdbbrowser.application.persistance.room.games.GamesDao
 import com.skyyo.igdbbrowser.extensions.tryOrNull
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow

@@ -72,12 +72,12 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
     SideEffect {
         if (isErrorOnFirstPage) {
             val errorState = games.loadState.refresh as LoadState.Error
-            viewModel.onError(errorState.error.message!!.toInt())
+            viewModel.onGamesLoadingError(errorState.error.message!!.toInt())
             return@SideEffect // Just to prevent 2x toasts
         }
         if (isError) {
             val errorState = games.loadState.append as LoadState.Error
-            viewModel.onError(errorState.error.message!!.toInt())
+            viewModel.onGamesLoadingError(errorState.error.message!!.toInt())
         }
     }
 

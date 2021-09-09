@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.application.persistance.room
+package com.skyyo.igdbbrowser.application.persistance.room.games
 
 import androidx.paging.PagingSource
 import androidx.room.*
@@ -19,6 +19,9 @@ interface GamesDao {
 
     @Query("SELECT * from games_table")
     fun observeGames(): Flow<List<Game>>
+
+    @Query("SELECT * from games_table")
+    fun observeGamesPaging(): PagingSource<Int, Game>
 
     @Query("SELECT * FROM games_table")
     fun pagingSource(): PagingSource<Int, Game>
