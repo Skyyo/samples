@@ -11,7 +11,7 @@ Modal Drawer
 - can't peek to reveal, [issue](https://issuetracker.google.com/issues/167408603)
 
 Keyboard
-- [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress
+- [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress ( affecting OTP sample )
 
 Miscellaneous
 - drag & drop feature. Not even mentioned in the road map. [possible workaround](https://stackoverflow.com/questions/64913067/reorder-lazycolumn-items-with-drag-drop)
