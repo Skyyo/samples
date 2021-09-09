@@ -101,6 +101,12 @@ class InputValidationAutoDebounceViewModel @Inject constructor(
 
     fun onTextFieldFocusChanged(key: FocusedTextFieldKey, isFocused: Boolean) {
         focusedTextField = if (isFocused) key else FocusedTextFieldKey.NONE
+
+        //TODO Fix for InputValidationAutoDebounceScreen, 111 issue
+        if (isFocused) viewModelScope.launch(Dispatchers.Default) {
+            _events.send(ScreenEvent.UpdateKeyboard(false))
+            _events.send(ScreenEvent.RequestFocus(focusedTextField))
+        }
     }
 
     fun onNameImeActionClick() {
