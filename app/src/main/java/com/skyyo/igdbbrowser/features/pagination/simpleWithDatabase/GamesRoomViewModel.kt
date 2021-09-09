@@ -3,7 +3,8 @@ package com.skyyo.igdbbrowser.features.pagination.simpleWithDatabase
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyyo.igdbbrowser.features.pagination.common.GamesEvent
+import com.skyyo.igdbbrowser.R
+import com.skyyo.igdbbrowser.features.pagination.common.GamesScreenEvent
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,7 @@ class GamesRoomViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
-    private val _events = Channel<GamesEvent>()
+    private val _events = Channel<GamesScreenEvent>()
     val events = _events.receiveAsFlow()
 
     private var isFetchingAllowed = true
@@ -47,7 +48,7 @@ class GamesRoomViewModel @Inject constructor(
             when (val result = gamesRepository.getGames(PAGE_LIMIT, itemOffset)) {
                 is GamesRoomResult.NetworkError -> {
                     isFetchingAllowed = true
-                    _events.send(GamesEvent.NetworkError)
+                    _events.send(GamesScreenEvent.ShowToast(R.string.network_error))
                 }
                 is GamesRoomResult.Success -> {
                     itemOffset += PAGE_LIMIT
@@ -61,7 +62,7 @@ class GamesRoomViewModel @Inject constructor(
 
     fun onScrollToTopClick() {
         viewModelScope.launch(Dispatchers.Default) {
-            _events.send(GamesEvent.ScrollToTop)
+            _events.send(GamesScreenEvent.ScrollToTop)
         }
     }
 

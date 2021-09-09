@@ -34,9 +34,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.common.composables.CircularProgressIndicatorRow
 import com.skyyo.igdbbrowser.extensions.toast
-import com.skyyo.igdbbrowser.features.pagination.CustomCard
-import com.skyyo.igdbbrowser.features.pagination.FadingFab
-import com.skyyo.igdbbrowser.features.pagination.common.GamesEvent
+import com.skyyo.igdbbrowser.features.pagination.common.CustomCard
+import com.skyyo.igdbbrowser.features.pagination.common.FadingFab
+import com.skyyo.igdbbrowser.features.pagination.common.GamesScreenEvent
 import com.skyyo.igdbbrowser.theme.DarkGray
 import com.skyyo.igdbbrowser.theme.White
 import kotlinx.coroutines.flow.collect
@@ -66,17 +66,30 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
 
     val games: LazyPagingItems<Game> = viewModel.games.collectAsLazyPagingItems()
     val isRefreshing by remember { derivedStateOf { games.loadState.refresh is LoadState.Loading } }
+    val isErrorOnFirstPage by remember { derivedStateOf { games.loadState.refresh is LoadState.Error } }
+    val isError by remember { derivedStateOf { games.loadState.append is LoadState.Error } }
+
+    SideEffect {
+        if (isErrorOnFirstPage) {
+            val errorState = games.loadState.refresh as LoadState.Error
+            viewModel.onError(errorState.error.message!!.toInt())
+            return@SideEffect // Just to prevent 2x toasts
+        }
+        if (isError) {
+            val errorState = games.loadState.append as LoadState.Error
+            viewModel.onError(errorState.error.message!!.toInt())
+        }
+    }
 
     LaunchedEffect(Unit) {
         launch {
             events.collect { event ->
                 when (event) {
-//                    is GamesEvent.NetworkError -> context.toast("network error")
-                    is GamesEvent.ShowToast -> context.toast(event.stringId)
-                    is GamesEvent.ScrollToTop -> coroutineScope.launch {
+                    is GamesScreenEvent.ShowToast -> context.toast(event.messageId)
+                    is GamesScreenEvent.ScrollToTop -> coroutineScope.launch {
                         listState.animateScrollToItem(0)
                     }
-                    GamesEvent.RefreshList -> games.refresh()
+                    GamesScreenEvent.RefreshList -> games.refresh()
                 }
             }
         }
@@ -139,15 +152,7 @@ fun GamesColumn(
             }
         }
 
-        items(games) { game ->
-            if (game != null) CustomCard(gameName = game.name)
-        }
-
-        if (games.loadState.append is LoadState.Loading) {
-            item { CircularProgressIndicatorRow() }
-        }
-
-        // invoked when we have no data on initial load
+        // invoked when we error on initial load
         if (games.loadState.refresh is LoadState.Error) {
             val errorState = games.loadState.refresh as LoadState.Error
             item {
@@ -159,7 +164,16 @@ fun GamesColumn(
             }
         }
 
-        // invoked when we have no data on page 2,3 etc.
+        items(games) { game ->
+            if (game != null) CustomCard(gameName = game.name)
+        }
+
+        // we know that we're refreshing X page
+        if (games.loadState.append is LoadState.Loading) {
+            item { CircularProgressIndicatorRow() }
+        }
+
+        // invoked when we have no error on X page
         if (games.loadState.append is LoadState.Error) {
             val errorState = games.loadState.append as LoadState.Error
             item {

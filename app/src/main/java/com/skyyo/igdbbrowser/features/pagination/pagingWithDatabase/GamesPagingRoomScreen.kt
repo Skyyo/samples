@@ -2,11 +2,14 @@ package com.skyyo.igdbbrowser.features.pagination.pagingWithDatabase
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,9 +34,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.common.composables.CircularProgressIndicatorRow
 import com.skyyo.igdbbrowser.extensions.toast
-import com.skyyo.igdbbrowser.features.pagination.CustomCard
-import com.skyyo.igdbbrowser.features.pagination.FadingFab
-import com.skyyo.igdbbrowser.features.pagination.common.GamesEvent
+import com.skyyo.igdbbrowser.features.pagination.common.CustomCard
+import com.skyyo.igdbbrowser.features.pagination.common.FadingFab
+import com.skyyo.igdbbrowser.features.pagination.common.GamesScreenEvent
 import com.skyyo.igdbbrowser.theme.DarkGray
 import com.skyyo.igdbbrowser.theme.White
 import kotlinx.coroutines.flow.collect
@@ -63,16 +66,30 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
 
     val games: LazyPagingItems<Game> = viewModel.games.collectAsLazyPagingItems()
     val isRefreshing by remember { derivedStateOf { games.loadState.refresh is LoadState.Loading } }
+    val isErrorOnFirstPage by remember { derivedStateOf { games.loadState.refresh is LoadState.Error } }
+    val isError by remember { derivedStateOf { games.loadState.append is LoadState.Error } }
+
+    SideEffect {
+        if (isErrorOnFirstPage) {
+            val errorState = games.loadState.refresh as LoadState.Error
+            viewModel.onError(errorState.error.message!!.toInt())
+            return@SideEffect // Just to prevent 2x toasts
+        }
+        if (isError) {
+            val errorState = games.loadState.append as LoadState.Error
+            viewModel.onError(errorState.error.message!!.toInt())
+        }
+    }
 
     LaunchedEffect(Unit) {
         launch {
             events.collect { event ->
                 when (event) {
-                    is GamesEvent.NetworkError -> context.toast("network error")
-                    is GamesEvent.ScrollToTop -> coroutineScope.launch {
+                    is GamesScreenEvent.ShowToast -> context.toast(event.messageId)
+                    is GamesScreenEvent.ScrollToTop -> coroutineScope.launch {
                         listState.animateScrollToItem(0)
                     }
-                    GamesEvent.RefreshList -> games.refresh()
+                    GamesScreenEvent.RefreshList -> games.refresh()
                 }
             }
         }

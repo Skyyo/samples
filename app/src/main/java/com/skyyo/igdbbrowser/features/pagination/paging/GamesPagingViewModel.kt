@@ -9,11 +9,10 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.extensions.getStateFlow
-import com.skyyo.igdbbrowser.features.pagination.common.GamesEvent
+import com.skyyo.igdbbrowser.features.pagination.common.GamesScreenEvent
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -45,18 +44,24 @@ class GamesPagingViewModel @Inject constructor(
         ).flow
     }.cachedIn(viewModelScope)
 
-    private val _events = Channel<GamesEvent>()
+    private val _events = Channel<GamesScreenEvent>()
     val events = _events.receiveAsFlow()
 
     fun onScrollToTopClick() {
         viewModelScope.launch(Dispatchers.Default) {
-            _events.send(GamesEvent.ScrollToTop)
+            _events.send(GamesScreenEvent.ScrollToTop)
         }
     }
 
     fun onSwipeToRefresh() {
         viewModelScope.launch(Dispatchers.Default) {
-            _events.send(GamesEvent.RefreshList)
+            _events.send(GamesScreenEvent.RefreshList)
+        }
+    }
+
+    fun onError(messageId: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            _events.send(GamesScreenEvent.ShowToast(messageId))
         }
     }
 }

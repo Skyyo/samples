@@ -27,9 +27,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.igdbbrowser.application.models.remote.Game
 import com.skyyo.igdbbrowser.common.composables.CircularProgressIndicatorRow
 import com.skyyo.igdbbrowser.extensions.toast
-import com.skyyo.igdbbrowser.features.pagination.CustomCard
-import com.skyyo.igdbbrowser.features.pagination.FadingFab
-import com.skyyo.igdbbrowser.features.pagination.common.GamesEvent
+import com.skyyo.igdbbrowser.features.pagination.common.CustomCard
+import com.skyyo.igdbbrowser.features.pagination.common.FadingFab
+import com.skyyo.igdbbrowser.features.pagination.common.GamesScreenEvent
 import com.skyyo.igdbbrowser.theme.DarkGray
 import com.skyyo.igdbbrowser.theme.White
 import kotlinx.coroutines.flow.collect
@@ -63,8 +63,8 @@ fun GamesRoomScreen(viewModel: GamesRoomViewModel = hiltViewModel()) {
         launch {
             events.collect { event ->
                 when (event) {
-                    is GamesEvent.NetworkError -> context.toast("network error")
-                    is GamesEvent.ScrollToTop -> coroutineScope.launch {
+                    is GamesScreenEvent.ShowToast -> context.toast(event.messageId)
+                    is GamesScreenEvent.ScrollToTop -> coroutineScope.launch {
                         listState.animateScrollToItem(0)
                     }
                 }

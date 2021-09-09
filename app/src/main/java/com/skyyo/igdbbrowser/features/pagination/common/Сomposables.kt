@@ -1,4 +1,4 @@
-package com.skyyo.igdbbrowser.features.pagination
+package com.skyyo.igdbbrowser.features.pagination.common
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
