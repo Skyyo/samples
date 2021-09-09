@@ -4,15 +4,14 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.skyyo.igdbbrowser.R
 import com.skyyo.igdbbrowser.application.models.remote.Game
-import com.skyyo.igdbbrowser.features.pagination.simple.GamesResult
+import com.skyyo.igdbbrowser.application.network.calls.GamesCalls
+import com.skyyo.igdbbrowser.extensions.tryOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 private const val START_PAGE = 0
 
-//TODO kinda makes sense to skip GamesResult and do make the API call here directly. Though
-// viewModel will most likely have repository in constructor anyways, so for now we won't separate
-// it. Basically GamesSource == UseCase, so it would play well if we use UseCases instead repo one day
 class GamesSource(
-    private val repository: GamesRepositoryPaging,
+    private val gamesCalls: GamesCalls,
     private val query: String
 ) : PagingSource<Int, Game>() {
 
@@ -31,13 +30,19 @@ class GamesSource(
             }
         }
 
-        return when (val result = repository.getGames(limit, offset)) {
-            is GamesResult.Success -> LoadResult.Page(
-                data = result.games,
-                prevKey = null,
-                nextKey = if (result.lastPageReached) null else page.plus(1)
-            )
-            is GamesResult.NetworkError -> LoadResult.Error(Throwable(R.string.network_error.toString()))
+        val rawBody = "limit $limit; offset $offset;sort id; fields name,first_release_date;"
+        val response = tryOrNull { gamesCalls.getGames(rawBody.toRequestBody()) }
+        return when {
+            response?.code() == 200 -> {
+                val games = response.body()!!
+                val isLastPageReached = games.size != limit
+                LoadResult.Page(
+                    data = games,
+                    prevKey = null,
+                    nextKey = if (isLastPageReached) null else page.plus(1)
+                )
+            }
+            else -> LoadResult.Error(Throwable(R.string.network_error.toString()))
         }
     }
 
