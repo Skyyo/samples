@@ -75,7 +75,7 @@ fun InputValidationAutoDebounceScreen(viewModel: InputValidationAutoDebounceView
 
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CustomTextField(
