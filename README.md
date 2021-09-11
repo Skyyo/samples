@@ -12,6 +12,7 @@ Modal Drawer
 
 Keyboard
 - [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress ( affecting OTP sample )
+- [issue](https://issuetracker.google.com/issues/199297778) with adjustPin mode not pinning to the focused textField
 
 Miscellaneous
 - drag & drop feature. [possible workaround](https://stackoverflow.com/questions/64913067/reorder-lazycolumn-items-with-drag-drop)
