@@ -8,8 +8,8 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import com.skyyo.igdbbrowser.R
-import com.skyyo.igdbbrowser.features.signIn.THEME_DARK
-import com.skyyo.igdbbrowser.features.signIn.THEME_LIGHT
+import com.skyyo.igdbbrowser.features.sampleContainer.THEME_DARK
+import com.skyyo.igdbbrowser.features.sampleContainer.THEME_LIGHT
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,

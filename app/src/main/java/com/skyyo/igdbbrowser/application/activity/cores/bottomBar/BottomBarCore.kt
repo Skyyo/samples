@@ -10,7 +10,6 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.skyyo.igdbbrowser.application.Screens
 import com.skyyo.igdbbrowser.application.activity.PopulatedNavHost
-import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.extensions.navigateToRootDestination
 
 @Composable
@@ -30,7 +29,7 @@ fun BottomBarCore(
             //TODO make args based?
             systemUiController.statusBarDarkContentEnabled = false
             when (destination.route) {
-                Screens.SignIn.route -> isBottomBarVisible.value = false
+                Screens.SampleContainer.route -> isBottomBarVisible.value = false
 //                Screens.Profile.route -> backgroundColour.value = Color.Green
                 else -> {
                     isBottomBarVisible.value = true

@@ -30,7 +30,7 @@ fun DrawerCore(
         val callback = NavController.OnDestinationChangedListener { _, destination, args ->
             log("${destination.route}")
             when (destination.route) {
-                Screens.SignIn.route -> isDrawerVisible.value = false
+                Screens.SampleContainer.route -> isDrawerVisible.value = false
                 else -> isDrawerVisible.value = true
             }
         }

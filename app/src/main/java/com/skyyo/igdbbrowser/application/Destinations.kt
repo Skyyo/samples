@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import com.skyyo.igdbbrowser.R
 
 sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
-    object SignIn : Screens("signIn")
+    object SampleContainer : Screens("signIn")
     object Games : Screens("games", R.string.games)
     object GamesRoom : Screens("gamesRoom", R.string.games_room)
     object GamesPaging : Screens("gamesPaging", R.string.games_paging)

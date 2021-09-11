@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -17,10 +16,9 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.application.activity.cores.bottomBar.BottomBarCore
+import com.skyyo.igdbbrowser.application.activity.cores.simple.SimpleCore
 import com.skyyo.igdbbrowser.application.persistance.DataStoreManager
 import com.skyyo.igdbbrowser.application.persistance.room.AppDatabase
 import com.skyyo.igdbbrowser.theme.IgdbBrowserTheme
@@ -62,11 +60,12 @@ class MainActivity : ComponentActivity() {
         )
         val startDestination = when {
             //TODO measure async + splash delegation profit
-            runBlocking { dataStoreManager.getAccessToken() } == null -> Screens.SignIn.route
+            runBlocking { dataStoreManager.getAccessToken() } == null -> Screens.SampleContainer.route
             else -> Screens.DogFeed.route
         }
-        val savedTheme =
-            runBlocking { dataStoreManager.getAppTheme() } //TODO can be optimized. Shouldn't be used if we don't allow for manual theme switching, unless we force light theme
+        //TODO can be optimized. Shouldn't be used if we don't allow for manual theme switching,
+        // unless we force light theme
+        val savedTheme = runBlocking { dataStoreManager.getAppTheme() }
 
         setContent {
             val lifecycleOwner = LocalLifecycleOwner.current
@@ -101,16 +100,16 @@ class MainActivity : ComponentActivity() {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {
-//                        SimpleCore(
-//                            startDestination,
-//                            navController
-//                        )
-                        BottomBarCore(
-                            drawerOrBottomBarScreens,
+                        SimpleCore(
                             startDestination,
-                            navController,
-                            systemUiController,
+                            navController
                         )
+//                        BottomBarCore(
+//                            drawerOrBottomBarScreens,
+//                            startDestination,
+//                            navController,
+//                            systemUiController,
+//                        )
 //                    DrawerCore(
 //                        drawerOrBottomBarScreens,
 //                        startDestination,

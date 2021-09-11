@@ -18,7 +18,7 @@ fun SimpleCore(
         val callback = NavController.OnDestinationChangedListener { _, destination, args ->
             log("${destination.route}")
             when (destination.route) {
-                Screens.SignIn.route -> {
+                Screens.SampleContainer.route -> {
                 }
                 else -> {
                 }

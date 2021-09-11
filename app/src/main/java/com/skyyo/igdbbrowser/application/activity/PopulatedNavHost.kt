@@ -28,23 +28,23 @@ import com.skyyo.igdbbrowser.features.pagination.pagingWithDatabase.GamesPagingR
 import com.skyyo.igdbbrowser.features.pagination.simple.GamesScreen
 import com.skyyo.igdbbrowser.features.pagination.simpleWithDatabase.GamesRoomScreen
 import com.skyyo.igdbbrowser.features.profile.*
-import com.skyyo.igdbbrowser.features.samples.animations.AnimationsScreen
-import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldScreen
-import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
-import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
-import com.skyyo.igdbbrowser.features.samples.cameraX.CameraXScreen
-import com.skyyo.igdbbrowser.features.samples.forceTheme.ForceThemeScreen
-import com.skyyo.igdbbrowser.features.samples.googleMap.GoogleMapScreen
-import com.skyyo.igdbbrowser.features.samples.inputValidations.auto.InputValidationAutoScreen
-import com.skyyo.igdbbrowser.features.samples.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
-import com.skyyo.igdbbrowser.features.samples.inputValidations.manual.InputValidationManualScreen
-import com.skyyo.igdbbrowser.features.samples.lists.ListsScreen
-import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScreen
-import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogDetailsScreen
-import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogFeedScreen
-import com.skyyo.igdbbrowser.features.samples.nestedHorizontalList.AppBarElevation
-import com.skyyo.igdbbrowser.features.samples.viewPager.ViewPagerScreen
-import com.skyyo.igdbbrowser.features.signIn.SignInScreen
+import com.skyyo.igdbbrowser.features.animations.AnimationsScreen
+import com.skyyo.igdbbrowser.features.bottomSheets.BottomSheetScaffoldScreen
+import com.skyyo.igdbbrowser.features.bottomSheets.BottomSheetScreen
+import com.skyyo.igdbbrowser.features.bottomSheets.ModalBottomSheetScreen
+import com.skyyo.igdbbrowser.features.cameraX.CameraXScreen
+import com.skyyo.igdbbrowser.features.forceTheme.ForceThemeScreen
+import com.skyyo.igdbbrowser.features.googleMap.GoogleMapScreen
+import com.skyyo.igdbbrowser.features.inputValidations.auto.InputValidationAutoScreen
+import com.skyyo.igdbbrowser.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
+import com.skyyo.igdbbrowser.features.inputValidations.manual.InputValidationManualScreen
+import com.skyyo.igdbbrowser.features.lists.ListsScreen
+import com.skyyo.igdbbrowser.features.navigateWithResult.DogContactsScreen
+import com.skyyo.igdbbrowser.features.navigateWithResult.DogDetailsScreen
+import com.skyyo.igdbbrowser.features.navigateWithResult.DogFeedScreen
+import com.skyyo.igdbbrowser.features.nestedHorizontalList.AppBarElevation
+import com.skyyo.igdbbrowser.features.viewPager.ViewPagerScreen
+import com.skyyo.igdbbrowser.features.sampleContainer.SampleContainerScreen
 
 @OptIn(
     ExperimentalAnimationApi::class,
@@ -63,7 +63,7 @@ fun PopulatedNavHost(
     startDestination = startDestination,
     modifier = Modifier.padding(innerPadding)
 ) {
-    composable(Screens.SignIn.route) { SignInScreen() }
+    composable(Screens.SampleContainer.route) { SampleContainerScreen() }
     composable(Screens.Profile.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         ProfileScreen()
