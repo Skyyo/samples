@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.skyyo.igdbbrowser">
+    package="com.skyyo.samples">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
-        android:name=".application.Application"
+        android:name="com.skyyo.samples.application.Application"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.IgdbBrowserTheme">
+        android:theme="@style/Theme.SamplesTheme">
         <activity
-            android:name=".application.activity.MainActivity"
+            android:name="com.skyyo.samples.application.activity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.IgdbBrowserTheme.NoActionBar"
+            android:theme="@style/Theme.SamplesTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

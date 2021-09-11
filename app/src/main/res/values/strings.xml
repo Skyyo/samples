@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IGDB-Browser</string>
+    <string name="app_name">Samples</string>
     <string name="games">Games</string>
     <string name="games_room">Games Room</string>
     <string name="games_paging">Games Paging</string>
