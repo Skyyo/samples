@@ -21,10 +21,11 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
+import com.skyyo.igdbbrowser.features.autoscroll.AutoScrollScreen
 import com.skyyo.igdbbrowser.features.otp.OtpScreen
-import com.skyyo.igdbbrowser.features.pagination.simple.GamesScreen
 import com.skyyo.igdbbrowser.features.pagination.paging.GamesPagingScreen
 import com.skyyo.igdbbrowser.features.pagination.pagingWithDatabase.GamesPagingRoomScreen
+import com.skyyo.igdbbrowser.features.pagination.simple.GamesScreen
 import com.skyyo.igdbbrowser.features.pagination.simpleWithDatabase.GamesRoomScreen
 import com.skyyo.igdbbrowser.features.profile.*
 import com.skyyo.igdbbrowser.features.samples.animations.AnimationsScreen
@@ -134,4 +135,5 @@ fun PopulatedNavHost(
     composable(Screens.Animations.route) { AnimationsScreen() }
     composable(Screens.NestedHorizontalLists.route) { AppBarElevation() }
     composable(Screens.Otp.route) { OtpScreen() }
+    composable(Screens.AutoScroll.route) { AutoScrollScreen() }
 }

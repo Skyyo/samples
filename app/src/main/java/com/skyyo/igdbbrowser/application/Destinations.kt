@@ -25,6 +25,7 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object Animations: Screens("animation")
     object Otp: Screens("otp")
     object NestedHorizontalLists : Screens("nestedHorizontalLists")
+    object AutoScroll : Screens("autoScroll")
 }
 
 sealed class DogDetailsGraph(val route: String) {
