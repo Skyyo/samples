@@ -3,7 +3,10 @@ package com.skyyo.samples.features.viewPager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,13 +24,10 @@ import kotlin.math.absoluteValue
 @ExperimentalPagerApi
 @Composable
 fun ViewPagerScreen() {
-    val pagerState = rememberPagerState(pageCount = 10)
+    val pagerState = rememberPagerState(pageCount = 10, initialOffscreenLimit = 2)
     val scope = rememberCoroutineScope()
     val pages = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-//    val pagerState = rememberPagerState(
-//        pageCount = 10, // all others will be killed & recreated
-//        initialOffscreenLimit = 2, // to preload more items
-//    )
+
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { page ->
             log("current page $page")
