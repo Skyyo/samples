@@ -14,7 +14,7 @@ Keyboard
 - [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress ( affecting OTP sample )
 
 Miscellaneous
-- drag & drop feature. Not even mentioned in the road map. [possible workaround](https://stackoverflow.com/questions/64913067/reorder-lazycolumn-items-with-drag-drop)
+- drag & drop feature. [possible workaround](https://stackoverflow.com/questions/64913067/reorder-lazycolumn-items-with-drag-drop)
 - can't have exactly 13 destinations inside NavHost. [issue](https://issuetracker.google.com/issues/195752907)
 - there is no out of the box support for scroll bars as of August 19, 2021. [Sample for simple cases](https://stackoverflow.com/questions/66341823/jetpack-compose-scrollbars/68056586#68056586)
 - bottomSheet destination is not preserved by default when navigating to new destination and coming back. [Workaround](https://medium.com/@theapache64/saving-bottomsheets-state-%EF%B8%8F-d9426cafbcbb)
@@ -25,7 +25,6 @@ Miscellaneous
 
 # Limitations & potential issues
 - We're forced to use [ProvideWindowInsets](https://google.github.io/accompanist/insets/#usage) composable as a wrapper for all composables in fragments
-- No field injections in composables - inconvenient.
-- There is no way to navigate from composable to fragment & share a navigation graph between them. ( not an issues )
+- There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)
 - Deep links might require lot of additional work if we need to open them in a specific bottom bar / drawer tab.
 - Navigating with parcelable object might be causing issues due it's [hacky logic](https://github.com/Skyyo/IGDB-Browser/blob/e4279d7cecb50aca32aacdc712f9ed2fdd11aade/app/src/main/java/com/skyyo/igdbbrowser/extensions/NavControllerExtensions.kt#L48-L57)
