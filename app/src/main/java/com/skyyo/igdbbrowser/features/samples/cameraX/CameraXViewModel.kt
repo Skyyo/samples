@@ -1,11 +1,9 @@
 package com.skyyo.igdbbrowser.features.samples.cameraX
 
 import android.net.Uri
-import androidx.core.os.bundleOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.extensions.navigateWithObject
+import com.skyyo.igdbbrowser.extensions.log
 import com.skyyo.igdbbrowser.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,7 +14,13 @@ class CameraXViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher
 ) : ViewModel() {
 
-    fun goPhoto(uri: Uri) = navigationDispatcher.emit {
-        it.navigateWithObject(Screens.PhotoViewer.route, arguments = bundleOf("uri" to uri))
+    val latestTakenPictureUri = handle.getLiveData<Uri>("latestTakenPictureUri")
+
+    fun onPictureTaken(uri: Uri) {
+        log("new uri $uri")
+        latestTakenPictureUri.postValue(uri)
     }
 }
+//navigationDispatcher.emit {
+//    it.navigateWithObject(Screens.PhotoViewer.route, arguments = bundleOf("uri" to uri))
+//}

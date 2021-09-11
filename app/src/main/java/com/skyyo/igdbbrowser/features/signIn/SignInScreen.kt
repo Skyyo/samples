@@ -57,8 +57,6 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Text(text = "IGDB app")
         Button(onClick = viewModel::signIn) { Text(text = "Sign In") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goCameraX) { Text(text = "camera x") }
-        Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Bottom sheets")
         Button(onClick = viewModel::goBottomSheetDestination) { Text(text = "as destination") }
         Spacer(modifier = Modifier.height(8.dp))
@@ -90,6 +88,8 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Button(onClick = viewModel::goOtp) { Text(text = "otp view") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goAutoScroll) { Text(text = "auto scroll") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goCameraX) { Text(text = "camera x") }
         Spacer(modifier = Modifier.height(8.dp))
     }
 

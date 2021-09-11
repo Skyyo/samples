@@ -123,17 +123,14 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:3.0.1"
     implementation "androidx.paging:paging-compose:1.0.0-alpha12"
 
-    debugImplementation "com.github.YarikSOffice.Venom:venom:0.4.1"
-    releaseImplementation "com.github.YarikSOffice.Venom:venom-no-op:0.4.1"
-
-    // Camera X
     implementation "androidx.camera:camera-core:1.0.1"
     implementation "androidx.camera:camera-camera2:1.0.1"
     implementation "androidx.camera:camera-lifecycle:1.0.1"
     implementation 'androidx.camera:camera-view:1.0.0-alpha28'
 
+    debugImplementation "com.github.YarikSOffice.Venom:venom:0.4.1"
+    releaseImplementation "com.github.YarikSOffice.Venom:venom-no-op:0.4.1"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-//    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
