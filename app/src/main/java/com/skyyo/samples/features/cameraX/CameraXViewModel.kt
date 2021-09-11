@@ -3,7 +3,6 @@ package com.skyyo.samples.features.cameraX
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.skyyo.samples.extensions.log
 import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -17,10 +16,6 @@ class CameraXViewModel @Inject constructor(
     val latestTakenPictureUri = handle.getLiveData<Uri>("latestTakenPictureUri")
 
     fun onPictureTaken(uri: Uri) {
-        log("new uri $uri")
         latestTakenPictureUri.postValue(uri)
     }
 }
-//navigationDispatcher.emit {
-//    it.navigateWithObject(Screens.PhotoViewer.route, arguments = bundleOf("uri" to uri))
-//}
