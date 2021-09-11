@@ -1,8 +1,5 @@
-# Jetpack Compose samples project
-
-1) shows a an application that interacts with [IGDB API](https://api-docs.igdb.com/#about).
-2) shows a bunch of samples that are being stress tested for real world scenario. eg: google maps, bottom sheets, input validations.
-
+# Project containing Jetpack Compose samples 
+For pagination related samples it uses [IGDB API](https://api-docs.igdb.com/#about).
 
 # Known issues
 
