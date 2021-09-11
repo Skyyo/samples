@@ -18,14 +18,17 @@ import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.skyyo.igdbbrowser.application.DogDetailsGraph
 import com.skyyo.igdbbrowser.application.EditProfileGraph
 import com.skyyo.igdbbrowser.application.Screens
-import com.skyyo.igdbbrowser.features.games.GamesScreen
-import com.skyyo.igdbbrowser.features.gamesPaging.GamesPagingScreen
-import com.skyyo.igdbbrowser.features.gamesRoom.GamesRoomScreen
+import com.skyyo.igdbbrowser.features.autoscroll.AutoScrollScreen
+import com.skyyo.igdbbrowser.features.otp.OtpScreen
+import com.skyyo.igdbbrowser.features.pagination.paging.GamesPagingScreen
+import com.skyyo.igdbbrowser.features.pagination.pagingWithDatabase.GamesPagingRoomScreen
+import com.skyyo.igdbbrowser.features.pagination.simple.GamesScreen
+import com.skyyo.igdbbrowser.features.pagination.simpleWithDatabase.GamesRoomScreen
 import com.skyyo.igdbbrowser.features.profile.*
+import com.skyyo.igdbbrowser.features.samples.animations.AnimationsScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.BottomSheetScreen
 import com.skyyo.igdbbrowser.features.samples.bottomSheets.ModalBottomSheetScreen
@@ -40,6 +43,7 @@ import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogContactsScre
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogDetailsScreen
 import com.skyyo.igdbbrowser.features.samples.navigateWithResult.DogFeedScreen
 import com.skyyo.igdbbrowser.features.samples.photoViewer.PhotoScreen
+import com.skyyo.igdbbrowser.features.samples.nestedHorizontalList.AppBarElevation
 import com.skyyo.igdbbrowser.features.samples.viewPager.ViewPagerScreen
 import com.skyyo.igdbbrowser.features.signIn.SignInScreen
 
@@ -47,8 +51,7 @@ import com.skyyo.igdbbrowser.features.signIn.SignInScreen
     ExperimentalAnimationApi::class,
     ExperimentalMaterialNavigationApi::class,
     ExperimentalMaterialApi::class,
-    ExperimentalPagerApi::class,
-    ExperimentalPermissionsApi::class
+    ExperimentalPagerApi::class
 )
 @Composable
 fun PopulatedNavHost(
@@ -77,6 +80,10 @@ fun PopulatedNavHost(
     composable(Screens.GamesPaging.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         GamesPagingScreen()
+    }
+    composable(Screens.GamesPagingRoom.route) {
+        onBackPressIntercepted?.let { BackHandler(onBack = it) }
+        GamesPagingRoomScreen()
     }
     navigation(
         route = EditProfileGraph.route,
@@ -129,5 +136,8 @@ fun PopulatedNavHost(
         }) { InputValidationManualScreen() }
     composable(Screens.InputValidationAuto.route) { InputValidationAutoScreen() }
     composable(Screens.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
-
+    composable(Screens.Animations.route) { AnimationsScreen() }
+    composable(Screens.NestedHorizontalLists.route) { AppBarElevation() }
+    composable(Screens.Otp.route) { OtpScreen() }
+    composable(Screens.AutoScroll.route) { AutoScrollScreen() }
 }

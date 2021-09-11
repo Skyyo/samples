@@ -1,9 +1,6 @@
 package com.skyyo.igdbbrowser.features.signIn
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -11,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -36,13 +34,6 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         )
     }
 
-    //TODO try the old way + remember the channel?
-//    val events2 = remember(viewModel.events, lifecycleOwner) {
-//        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//
-//        }
-//    }
-
     LaunchedEffect(Unit) {
         launch {
             events.collect { event ->
@@ -59,14 +50,12 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .systemBarsPadding()
+            .systemBarsPadding(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "IGDB app")
         Button(onClick = viewModel::signIn) { Text(text = "Sign In") }
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = viewModel::goMap) { Text(text = "google map") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goCameraX) { Text(text = "camera x") }
         Spacer(modifier = Modifier.height(8.dp))
@@ -76,19 +65,31 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel()) {
         Button(onClick = viewModel::goBottomSheetsContainer) { Text(text = "modal ") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goBottomSheetsScaffold) { Text(text = "persistent") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Input validations")
+        Button(onClick = viewModel::goInputAutoValidation) { Text(text = "auto") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goInputDebounceValidation) { Text(text = "debounce") }
         Spacer(modifier = Modifier.height(32.dp))
+        Button(onClick = viewModel::goMap) { Text(text = "google map") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goNestedHorizontalLists) { Text(text = "app bar auto-elevation animation") }
+        Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goViewPager) { Text(text = "view pager") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goNavWithResultSample) { Text(text = "navigate to/back with results") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goStickyHeaders) { Text(text = "sticky headers") }
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Input validation")
-        Button(onClick = viewModel::goInputAutoValidation) { Text(text = "auto") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goInputDebounceValidation) { Text(text = "debounce") }
-        Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goInputManualValidation) { Text(text = "manual") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goAnimations) { Text(text = "animations") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goOtp) { Text(text = "otp view") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = viewModel::goAutoScroll) { Text(text = "auto scroll") }
         Spacer(modifier = Modifier.height(8.dp))
     }
 

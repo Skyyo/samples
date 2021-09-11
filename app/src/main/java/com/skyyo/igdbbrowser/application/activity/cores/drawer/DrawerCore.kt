@@ -1,13 +1,8 @@
 package com.skyyo.igdbbrowser.application.activity.cores.drawer
 
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.animation.core.tween
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -18,6 +13,7 @@ import com.skyyo.igdbbrowser.extensions.navigateToRootDestination
 import kotlinx.coroutines.launch
 
 
+@ExperimentalMaterialApi
 @Composable
 fun DrawerCore(
     drawerScreens: List<Screens>,
@@ -28,8 +24,9 @@ fun DrawerCore(
     val selectedTab = rememberSaveable { mutableStateOf(0) }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    val animationSpec = remember { tween<Float>(500) }
 
-    DisposableEffect(navController) {
+    DisposableEffect(Unit) {
         val callback = NavController.OnDestinationChangedListener { _, destination, args ->
             log("${destination.route}")
             when (destination.route) {
@@ -46,10 +43,10 @@ fun DrawerCore(
     Scaffold(
         scaffoldState = scaffoldState,
         //this allows to dismiss the drawer if its open by tapping on dimmed area
-        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+        drawerGesturesEnabled = scaffoldState.drawerState.let { it.isOpen && !it.isAnimationRunning },
         floatingActionButton = {
             if (isDrawerVisible.value) {
-                FloatingActionButton(onClick = { scope.launch { scaffoldState.drawerState.open() } }) {
+                FloatingActionButton(onClick = { scope.launch { scaffoldState.drawerState.animateTo(DrawerValue.Open, animationSpec) } }) {
                     Text(text = "open drawer")
                 }
             }
@@ -65,7 +62,9 @@ fun DrawerCore(
                         selectedTab.value = index
                         navController.navigateToRootDestination(route)
                     }
-                    scope.launch { scaffoldState.drawerState.close() }
+                    //Skip closing drawer if it's not opened completely
+                    if (scaffoldState.drawerState.let { it.isClosed && it.isAnimationRunning }) return@Drawer
+                    scope.launch { scaffoldState.drawerState.animateTo(DrawerValue.Closed, animationSpec) }
                 }
             }
         },

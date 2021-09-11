@@ -3,6 +3,7 @@
     <string name="games">Games</string>
     <string name="games_room">Games Room</string>
     <string name="games_paging">Games Paging</string>
+    <string name="games_paging_r">Games Paging Room</string>
     <string name="map">Map</string>
     <string name="dog_feed">Dog feed</string>
     <string name="profile">Profile</string>
@@ -11,6 +12,7 @@
     <string name="samples">Samples</string>
     <string name="upcoming_launches">Upcoming launches</string>
     <string name="validation_error">Validation Error</string>
+    <string name="network_error">Network Error</string>
     <string name="success">Success</string>
     <string name="credit_card_number">Credit Card Number</string>
     <string name="name">name</string>
