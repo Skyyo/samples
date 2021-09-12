@@ -10,6 +10,7 @@ Modal Drawer
 Keyboard
 - [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress ( affecting OTP sample )
 - [issue](https://issuetracker.google.com/issues/199297778) with adjustPan mode not pinning to the focused textField
+- [issue](https://issuetracker.google.com/issues/199561561) with keyboard being hidden when focus is shared between composables & views
 
 Miscellaneous
 - drag & drop feature. [possible workaround](https://stackoverflow.com/questions/64913067/reorder-lazycolumn-items-with-drag-drop)
