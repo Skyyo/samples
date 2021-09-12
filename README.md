@@ -10,6 +10,7 @@ Modal Drawer
 Keyboard
 - [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress ( affecting OTP sample )
 - [issue](https://issuetracker.google.com/issues/199297778) with adjustPan mode not pinning to the focused textField
+- [issue](https://issuetracker.google.com/issues/199561561) with keyboard being hidden when focus is shared between composables & views
 
 Miscellaneous
 - drag & drop feature. [possible workaround](https://stackoverflow.com/questions/64913067/reorder-lazycolumn-items-with-drag-drop)
@@ -19,6 +20,7 @@ Miscellaneous
 - google maps related [issue](https://issuetracker.google.com/issues/197880217)
 - no way to create nested sticky headers. Workaround imo is changing design or making one lvl of the headers as a composable that animates text changes.
 - Surface composable has [issue](https://issuetracker.google.com/issues/198313901) with elevation overlapping. Workaround - use [Modifier.shadow](https://developer.android.com/reference/kotlin/androidx/compose/ui/draw/package-summary#(androidx.compose.ui.Modifier).shadow(androidx.compose.ui.unit.Dp,androidx.compose.ui.graphics.Shape,kotlin.Boolean)) on any composable.
+- LazyVerticalGrid seems to be really imperformant and [not adviced](https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyVerticalGrid(androidx.compose.foundation.lazy.GridCells,androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.foundation.layout.Arrangement.Horizontal,kotlin.Function1)) to use. Instead use combinations of Column + Rows
 
 # Limitations & potential issues
 - We're forced to use [ProvideWindowInsets](https://google.github.io/accompanist/insets/#usage) composable as a wrapper for all composables in fragments
