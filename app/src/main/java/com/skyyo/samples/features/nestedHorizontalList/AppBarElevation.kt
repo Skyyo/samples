@@ -21,11 +21,13 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppBarElevation() {
     val scrollState = rememberLazyListState()
-    val items = remember { mutableListOf<Int>().apply { repeat(100) { add(it) } } }
+    val items = remember { (0..200).map { it } }
     val transition = updateTransition(targetState = scrollState, label = "elevation")
     val elevation by transition.animateDp(label = "elevation") { state ->
         if (state.firstVisibleItemScrollOffset != 0) 16.dp else 0.dp
     }
+    // for now LazyVerticalGrid isn't advised,
+    // https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyVerticalGrid(androidx.compose.foundation.lazy.GridCells,androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.foundation.layout.Arrangement.Horizontal,kotlin.Function1)
     Column {
         TopAppBar(
             elevation = elevation,

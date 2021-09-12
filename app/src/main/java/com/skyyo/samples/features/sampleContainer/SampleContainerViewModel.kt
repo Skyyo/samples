@@ -104,7 +104,12 @@ class SampleContainerViewModel @Inject constructor(
     fun goNestedHorizontalLists() = navigationDispatcher.emit {
         it.navigate(Screens.NestedHorizontalLists.route)
     }
+
     fun goAutoScroll() = navigationDispatcher.emit {
         it.navigate(Screens.AutoScroll.route)
+    }
+
+    fun goTable() = navigationDispatcher.emit {
+        it.navigate(Screens.Table.route)
     }
 }

@@ -92,7 +92,8 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = viewModel::goAutoScroll) { Text(text = "auto scroll") }
         Spacer(modifier = Modifier.height(8.dp))
-
+        Button(onClick = viewModel::goTable) { Text(text = "table ") }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 
 }

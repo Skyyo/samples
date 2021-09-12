@@ -45,6 +45,7 @@ import com.skyyo.samples.features.navigateWithResult.DogFeedScreen
 import com.skyyo.samples.features.nestedHorizontalList.AppBarElevation
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
+import com.skyyo.samples.features.table.TableScreen
 
 @OptIn(
     ExperimentalAnimationApi::class,
@@ -138,4 +139,5 @@ fun PopulatedNavHost(
     composable(Screens.NestedHorizontalLists.route) { AppBarElevation() }
     composable(Screens.Otp.route) { OtpScreen() }
     composable(Screens.AutoScroll.route) { AutoScrollScreen() }
+    composable(Screens.Table.route) { TableScreen() }
 }
