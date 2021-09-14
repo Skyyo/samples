@@ -2,11 +2,11 @@ package com.skyyo.samples.features.pagination.paging
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.skyyo.samples.application.models.remote.Game
-import com.skyyo.samples.extensions.getStateFlow
 import com.skyyo.samples.features.pagination.common.GamesScreenEvent
 import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,8 +31,8 @@ class GamesPagingViewModel @Inject constructor(
     //TODO add sample of passing lambda to the GamesSource to listen to events from ViewModel layer?
     // bad Paging library api design forces us to emit events from view layer, or I've missed something.
 
-    val query = handle.getStateFlow(viewModelScope, "query", "")
-    val games: Flow<PagingData<Game>> = query
+    val query = handle.getLiveData("query", "")
+    val games: Flow<PagingData<Game>> = query.asFlow()
         .flatMapLatest { gamesRepository.getGamesPaging(it) }
         .cachedIn(viewModelScope)
 

@@ -18,6 +18,7 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skyyo.samples.application.Screens
+import com.skyyo.samples.application.activity.cores.bottomBar.BottomBarCore
 import com.skyyo.samples.application.activity.cores.simple.SimpleCore
 import com.skyyo.samples.application.persistance.DataStoreManager
 import com.skyyo.samples.application.persistance.room.AppDatabase
@@ -53,9 +54,9 @@ class MainActivity : ComponentActivity() {
         val drawerOrBottomBarScreens = listOf(
             Screens.DogFeed,
             Screens.Profile,
-            Screens.Games,
+//            Screens.Games,
 //            Screens.GamesRoom,
-//            Screens.GamesPaging,
+            Screens.GamesPaging,
             Screens.GamesPagingRoom,
         )
         val startDestination = when {
@@ -100,16 +101,16 @@ class MainActivity : ComponentActivity() {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {
-                        SimpleCore(
-                            startDestination,
-                            navController
-                        )
-//                        BottomBarCore(
-//                            drawerOrBottomBarScreens,
+//                        SimpleCore(
 //                            startDestination,
-//                            navController,
-//                            systemUiController,
+//                            navController
 //                        )
+                        BottomBarCore(
+                            drawerOrBottomBarScreens,
+                            startDestination,
+                            navController,
+                            systemUiController,
+                        )
 //                    DrawerCore(
 //                        drawerOrBottomBarScreens,
 //                        startDestination,
