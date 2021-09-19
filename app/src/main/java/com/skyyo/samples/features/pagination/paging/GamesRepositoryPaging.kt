@@ -12,7 +12,11 @@ private const val PAGE_LIMIT = 30
 class GamesRepositoryPaging @Inject constructor(private val calls: GamesCalls) {
 
     fun getGamesPaging(query: String) = Pager(
-        config = PagingConfig(pageSize = PAGE_LIMIT, enablePlaceholders = false),
+        config = PagingConfig(
+            pageSize = PAGE_LIMIT,
+            initialLoadSize = PAGE_LIMIT,
+            enablePlaceholders = false
+        ),
         pagingSourceFactory = { GamesSource(calls, query) }
     ).flow
 }

@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.skyyo.samples.R
 import com.skyyo.samples.application.models.remote.Game
 import com.skyyo.samples.application.network.calls.GamesCalls
+import com.skyyo.samples.extensions.log
 import com.skyyo.samples.extensions.tryOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -31,6 +32,7 @@ class GamesSource(
         }
 
         val rawBody = "limit $limit; offset $offset;sort id; fields name,first_release_date;"
+        log(rawBody)
         val response = tryOrNull { gamesCalls.getGames(rawBody.toRequestBody()) }
         return when {
             response?.code() == 200 -> {

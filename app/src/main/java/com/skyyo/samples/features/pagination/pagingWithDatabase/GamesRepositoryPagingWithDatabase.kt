@@ -24,7 +24,11 @@ class GamesRepositoryPagingWithDatabase @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     fun getGamesPaging(query: String) = Pager(
-        config = PagingConfig(pageSize = PAGE_LIMIT, enablePlaceholders = false),
+        config = PagingConfig(
+            pageSize = PAGE_LIMIT,
+            initialLoadSize = PAGE_LIMIT,
+            enablePlaceholders = false
+        ),
         remoteMediator = GamesRemoteMediator(db, gameCalls, gamesDao, gamesKeysDao, query),
         pagingSourceFactory = gamesDao::pagingSource
     ).flow
