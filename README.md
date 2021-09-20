@@ -4,7 +4,6 @@ For pagination related samples it uses [IGDB API](https://api-docs.igdb.com/#abo
 # Known issues
 
 Paging
-- Can't return an INT type in ```LoadResult.Error```, [issue](https://issuetracker.google.com/issues/200575901)
 - Can't declare state listeners on the Flow<PagingData<Value>> or Pager or similar. We're forced to propagated important events from bottom to top instead of top to bottom. [issue](https://issuetracker.google.com/issues/200577793)
 
 Modal Drawer
