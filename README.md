@@ -3,6 +3,9 @@ For pagination related samples it uses [IGDB API](https://api-docs.igdb.com/#abo
 
 # Known issues
 
+Paging
+- Can't return an INT type in ```LoadResult.Error```, [issue](https://issuetracker.google.com/issues/200575901)
+
 Modal Drawer
 - can't change width, [issue](https://issuetracker.google.com/issues/190879368)
 - can't peek to reveal, [issue](https://issuetracker.google.com/issues/167408603)
