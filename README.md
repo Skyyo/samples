@@ -34,3 +34,12 @@ Miscellaneous
 - Deep links might require lot of additional work if we need to open them in a specific bottom bar / drawer tab.
 - Navigating with parcelable object might be causing issues due it's [hacky logic](https://github.com/Skyyo/IGDB-Browser/blob/e4279d7cecb50aca32aacdc712f9ed2fdd11aade/app/src/main/java/com/skyyo/igdbbrowser/extensions/NavControllerExtensions.kt#L48-L57)
 - We need to use [setViewCompositionStrategy](https://developer.android.com/jetpack/compose/interop/interop-apis) when working with fragments
+  
+# To explore & possibly add to samples
+
+Paging ( all cases should be tested with both PagingSource & RemoteMediator versions ).
+- add sample of how to use maxSize 
+- scroll to top feature with maxSize (page dropping) enabled.
+- paging with Grids
+- allow modifying lists using selectedIds array, to ensure any modification behaviour is working well & can be properlly restored across PD ( eg. selection, checkboxes )
+- immitate socket updates ( eg. stock price updates or smth )
