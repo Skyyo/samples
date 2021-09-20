@@ -2,11 +2,11 @@ package com.skyyo.samples.features.pagination.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.skyyo.samples.R
 import com.skyyo.samples.application.models.remote.Game
 import com.skyyo.samples.application.network.calls.GamesCalls
 import com.skyyo.samples.extensions.log
 import com.skyyo.samples.extensions.tryOrNull
+import com.skyyo.samples.features.pagination.common.PagingException
 import okhttp3.RequestBody.Companion.toRequestBody
 
 private const val START_PAGE = 0
@@ -44,7 +44,7 @@ class GamesSource(
                     nextKey = if (isLastPageReached) null else page.plus(1)
                 )
             }
-            else -> LoadResult.Error(Throwable(R.string.network_error.toString()))
+            else -> LoadResult.Error(PagingException.NetworkError)
         }
     }
 

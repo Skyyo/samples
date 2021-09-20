@@ -13,6 +13,7 @@ import com.skyyo.samples.application.persistance.room.games.GamesDao
 import com.skyyo.samples.application.persistance.room.games.GamesRemoteKeys
 import com.skyyo.samples.application.persistance.room.games.GamesRemoteKeysDao
 import com.skyyo.samples.extensions.tryOrNull
+import com.skyyo.samples.features.pagination.common.PagingException
 import okhttp3.RequestBody.Companion.toRequestBody
 
 private const val START_PAGE = 0
@@ -83,7 +84,7 @@ class GamesRemoteMediator(
                 }
                 MediatorResult.Success(endOfPaginationReached = isLastPageReached)
             }
-            else -> MediatorResult.Error(Throwable(R.string.network_error.toString()))
+            else -> MediatorResult.Error(PagingException.NetworkError)
         }
     }
 

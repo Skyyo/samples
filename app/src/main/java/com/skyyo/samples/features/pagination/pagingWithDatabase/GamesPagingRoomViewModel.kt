@@ -9,6 +9,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.skyyo.samples.application.models.remote.Game
 import com.skyyo.samples.features.pagination.common.GamesScreenEvent
+import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -49,9 +50,9 @@ class GamesPagingRoomViewModel @Inject constructor(
         }
     }
 
-    fun onGamesLoadingError(messageId: Int) {
+    fun onGamesLoadingError(exception: PagingException) {
         viewModelScope.launch(Dispatchers.Default) {
-            _events.send(GamesScreenEvent.ShowToast(messageId))
+            _events.send(GamesScreenEvent.ShowToast(exception.stringRes))
         }
     }
 }

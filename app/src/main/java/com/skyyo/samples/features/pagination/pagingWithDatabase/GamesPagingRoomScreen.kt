@@ -37,6 +37,7 @@ import com.skyyo.samples.extensions.toast
 import com.skyyo.samples.features.pagination.common.CustomCard
 import com.skyyo.samples.features.pagination.common.FadingFab
 import com.skyyo.samples.features.pagination.common.GamesScreenEvent
+import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
 import kotlinx.coroutines.flow.collect
@@ -72,12 +73,12 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
     SideEffect {
         if (isErrorOnFirstPage) {
             val errorState = games.loadState.refresh as LoadState.Error
-            viewModel.onGamesLoadingError(errorState.error.message!!.toInt())
+            viewModel.onGamesLoadingError(errorState.error as PagingException)
             return@SideEffect // Just to prevent 2x toasts
         }
         if (isError) {
             val errorState = games.loadState.append as LoadState.Error
-            viewModel.onGamesLoadingError(errorState.error.message!!.toInt())
+            viewModel.onGamesLoadingError(errorState.error as PagingException)
         }
     }
 
@@ -161,9 +162,10 @@ fun GamesColumn(
         // invoked when we have no data on initial load
         if (games.loadState.refresh is LoadState.Error) {
             val errorState = games.loadState.refresh as LoadState.Error
+            val stringRes = (errorState.error as PagingException).stringRes
             item {
                 Text(
-                    text = stringResource(errorState.error.message!!.toInt()),
+                    text = stringResource(stringRes),
                     modifier = Modifier.clickable(onClick = games::retry)
                 )
                 Text(text = "retry refresh!")
@@ -173,9 +175,10 @@ fun GamesColumn(
         // invoked when we have no data on page 2,3 etc.
         if (games.loadState.append is LoadState.Error) {
             val errorState = games.loadState.append as LoadState.Error
+            val stringRes = (errorState.error as PagingException).stringRes
             item {
                 Text(
-                    text = stringResource(errorState.error.message!!.toInt()),
+                    text = stringResource(stringRes),
                     modifier = Modifier.clickable(onClick = games::retry)
                 )
                 Text(text = "retry append!")
