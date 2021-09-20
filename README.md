@@ -3,6 +3,9 @@ For pagination related samples it uses [IGDB API](https://api-docs.igdb.com/#abo
 
 # Known issues
 
+Paging
+- Can't declare state listeners on the Flow<PagingData<Value>> or Pager or similar. We're forced to propagate important events from bottom to top instead of top to bottom. [issue](https://issuetracker.google.com/issues/200577793)
+
 Modal Drawer
 - can't change width, [issue](https://issuetracker.google.com/issues/190879368)
 - can't peek to reveal, [issue](https://issuetracker.google.com/issues/167408603)
@@ -22,6 +25,7 @@ Miscellaneous
 - no way to create nested sticky headers. Workaround imo is changing design or making one lvl of the headers as a composable that animates text changes.
 - Surface composable has [issue](https://issuetracker.google.com/issues/198313901) with elevation overlapping. Workaround - use [Modifier.shadow](https://developer.android.com/reference/kotlin/androidx/compose/ui/draw/package-summary#(androidx.compose.ui.Modifier).shadow(androidx.compose.ui.unit.Dp,androidx.compose.ui.graphics.Shape,kotlin.Boolean)) on any composable.
 - LazyVerticalGrid seems to be really imperformant and [not adviced](https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyVerticalGrid(androidx.compose.foundation.lazy.GridCells,androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.foundation.layout.Arrangement.Horizontal,kotlin.Function1)) to use. Instead use combinations of Column + Rows
+- Fling breaks on skipped frames. [issue](https://issuetracker.google.com/issues/190788866)
 
 # Limitations & potential issues
 - We're forced to use [ProvideWindowInsets](https://google.github.io/accompanist/insets/#usage) composable as a wrapper for all composables in fragments
@@ -29,3 +33,12 @@ Miscellaneous
 - Deep links might require lot of additional work if we need to open them in a specific bottom bar / drawer tab.
 - Navigating with parcelable object might be causing issues due it's [hacky logic](https://github.com/Skyyo/IGDB-Browser/blob/e4279d7cecb50aca32aacdc712f9ed2fdd11aade/app/src/main/java/com/skyyo/igdbbrowser/extensions/NavControllerExtensions.kt#L48-L57)
 - We need to use [setViewCompositionStrategy](https://developer.android.com/jetpack/compose/interop/interop-apis) when working with fragments
+  
+# To explore & possibly add to samples
+
+Paging ( all cases should be tested with both PagingSource & RemoteMediator versions ).
+- add sample of how to use maxSize 
+- scroll to top feature with maxSize (page dropping) enabled.
+- paging with Grids
+- allow modifying lists using selectedIds array, to ensure any modification behaviour is working well & can be properlly restored across PD ( eg. selection, checkboxes )
+- immitate socket updates ( eg. stock price updates or smth )
