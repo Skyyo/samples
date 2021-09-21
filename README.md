@@ -50,6 +50,7 @@ Paging ( all cases should be tested with both PagingSource & RemoteMediator vers
 - immitate socket updates ( eg. stock price updates or smth )
 - example with initial size default. This requires handling the initial offset being x3.
 
+Uncategorized
 - spinners with a lot of items like country flags etc.
 - Container transformations. eg. small circle from bottom end of the screen floats to the center of the screen and changes it's size. Both back& forward animations should be flawless and tested across PD.
 - Hide bottomBar on scroll
