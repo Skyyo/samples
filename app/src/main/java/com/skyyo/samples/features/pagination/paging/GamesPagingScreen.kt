@@ -186,5 +186,18 @@ fun GamesColumn(
             }
         }
 
+//        val errorId = when {
+//            games.loadState.refresh is LoadState.Error -> {
+//                val errorState = transactions.loadState.refresh as LoadState.Error
+//                (errorState.error as PagingException).stringRes
+//            }
+//            games.loadState.append is LoadState.Error -> {
+//                val errorState = games.loadState.append as LoadState.Error
+//                (errorState.error as PagingException).stringRes
+//            }
+//            else -> null
+//        }
+        // use this if we don't care if the error happened on 1 or X load
+
     }
 }
