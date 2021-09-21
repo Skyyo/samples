@@ -34,7 +34,13 @@ Miscellaneous
 - We need to use [setViewCompositionStrategy](https://developer.android.com/jetpack/compose/interop/interop-apis) when working with fragments
 - Surface composable has [issue](https://issuetracker.google.com/issues/198313901) with elevation overlapping. This is considered a proper behaviour and one of the workarounds would be using Scaffold.
   
-# To explore & possibly add to samples
+# TODO
+  
+Navigation
+- Issue with fast tapping on destination. When we tap from A to C fast, multiple times C gets bugged. Related: pagination samples: scroll to top button not triggered because of this issue, need to ensure this is navigation only issue, which has side effect for the button.
+  
+CameraX
+- investigate crashe on orientation change
 
 Paging ( all cases should be tested with both PagingSource & RemoteMediator versions ).
 - add sample of how to use maxSize 
@@ -42,3 +48,19 @@ Paging ( all cases should be tested with both PagingSource & RemoteMediator vers
 - paging with Grids
 - allow modifying lists using selectedIds array, to ensure any modification behaviour is working well & can be properlly restored across PD ( eg. selection, checkboxes )
 - immitate socket updates ( eg. stock price updates or smth )
+- example with initial size default. This requires handling the initial offset being x3.
+
+- spinners with a lot of items like country flags etc.
+- Container transformations. eg. small circle from bottom end of the screen floats to the center of the screen and changes it's size. Both back& forward animations should be flawless and tested across PD.
+- Hide bottomBar on scroll
+- Animations typical for iOS. can be found in [olx](https://play.google.com/store/apps/details?id=ua.slando&hl=en&gl=US), [monobank](https://play.google.com/store/apps/details?id=com.ftband.mono&hl=en&gl=US). When we scroll something, toolbar changes content relatively to some text/icon being scrolled behind the toolbar
+- Draw / hide something using coordinates.
+- How to do custom shapes ripples
+- Complex motion layout example ( currently it supports only 2 states so might be left for later )
+- Staggered grid example
+- circular reveal upon changing theme
+- cool transformation animations in google owl sample
+- dynamic gradient on scroll
+- dominant colour for background in the google jetcaster sample
+- https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
+- compose with ad mob
