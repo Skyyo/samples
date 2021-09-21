@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.nestedHorizontalList
+package com.skyyo.samples.features.appBarElevation
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition

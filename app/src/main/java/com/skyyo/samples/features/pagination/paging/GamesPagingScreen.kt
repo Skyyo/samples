@@ -56,7 +56,6 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
     }
     val listState = rememberLazyListState()
     val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
-    val coroutineScope = rememberCoroutineScope()
 
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(
@@ -87,10 +86,8 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
             events.collect { event ->
                 when (event) {
                     is GamesScreenEvent.ShowToast -> context.toast(event.messageId)
-                    is GamesScreenEvent.ScrollToTop -> coroutineScope.launch {
-                        listState.animateScrollToItem(0)
-                    }
-                    GamesScreenEvent.RefreshList -> games.refresh()
+                    is GamesScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
+                    is GamesScreenEvent.RefreshList -> games.refresh()
                 }
             }
         }

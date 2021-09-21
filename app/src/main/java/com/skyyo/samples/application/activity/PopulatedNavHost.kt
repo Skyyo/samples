@@ -38,11 +38,11 @@ import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
-import com.skyyo.samples.features.lists.ListsScreen
+import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.navigateWithResult.DogContactsScreen
 import com.skyyo.samples.features.navigateWithResult.DogDetailsScreen
 import com.skyyo.samples.features.navigateWithResult.DogFeedScreen
-import com.skyyo.samples.features.nestedHorizontalList.AppBarElevation
+import com.skyyo.samples.features.appBarElevation.AppBarElevation
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
 import com.skyyo.samples.features.table.TableScreen
@@ -118,7 +118,7 @@ fun PopulatedNavHost(
     composable(Screens.ModalBottomSheet.route) { ModalBottomSheetScreen() }
     composable(Screens.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
     composable(Screens.ViewPager.route) { ViewPagerScreen() }
-    composable(Screens.Lists.route) { ListsScreen() }
+    composable(Screens.StickyHeader.route) { ListsScreen() }
     composable(Screens.InputValidationManual.route, enterTransition = { _, _ ->
         slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(400))
 //                fadeIn(animationSpec = tween(2000))
@@ -136,7 +136,7 @@ fun PopulatedNavHost(
     composable(Screens.InputValidationAuto.route) { InputValidationAutoScreen() }
     composable(Screens.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
     composable(Screens.Animations.route) { AnimationsScreen() }
-    composable(Screens.NestedHorizontalLists.route) { AppBarElevation() }
+    composable(Screens.AppBarElevation.route) { AppBarElevation() }
     composable(Screens.Otp.route) { OtpScreen() }
     composable(Screens.AutoScroll.route) { AutoScrollScreen() }
     composable(Screens.Table.route) { TableScreen() }

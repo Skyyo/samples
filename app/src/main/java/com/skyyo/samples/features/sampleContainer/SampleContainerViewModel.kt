@@ -78,7 +78,7 @@ class SampleContainerViewModel @Inject constructor(
     }
 
     fun goStickyHeaders() = navigationDispatcher.emit {
-        it.navigate(Screens.Lists.route)
+        it.navigate(Screens.StickyHeader.route)
     }
 
     fun goInputAutoValidation() = navigationDispatcher.emit {
@@ -102,7 +102,7 @@ class SampleContainerViewModel @Inject constructor(
     }
 
     fun goNestedHorizontalLists() = navigationDispatcher.emit {
-        it.navigate(Screens.NestedHorizontalLists.route)
+        it.navigate(Screens.AppBarElevation.route)
     }
 
     fun goAutoScroll() = navigationDispatcher.emit {

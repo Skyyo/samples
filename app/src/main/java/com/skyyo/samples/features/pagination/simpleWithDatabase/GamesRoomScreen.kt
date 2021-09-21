@@ -48,7 +48,6 @@ fun GamesRoomScreen(viewModel: GamesRoomViewModel = hiltViewModel()) {
     }
     val listState = rememberLazyListState()
     val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
-    val coroutineScope = rememberCoroutineScope()
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(
             lifecycleOwner.lifecycle,
@@ -64,9 +63,7 @@ fun GamesRoomScreen(viewModel: GamesRoomViewModel = hiltViewModel()) {
             events.collect { event ->
                 when (event) {
                     is GamesScreenEvent.ShowToast -> context.toast(event.messageId)
-                    is GamesScreenEvent.ScrollToTop -> coroutineScope.launch {
-                        listState.animateScrollToItem(0)
-                    }
+                    is GamesScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
                 }
             }
         }

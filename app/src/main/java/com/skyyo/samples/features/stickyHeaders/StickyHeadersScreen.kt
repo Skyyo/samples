@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.lists
+package com.skyyo.samples.features.stickyHeaders
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -22,17 +22,10 @@ import com.skyyo.samples.extensions.addVerticalScrollbar
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.Teal200
 
-const val EXPAND_ANIMATION_DURATION = 300 * 2
-const val COLLAPSE_ANIMATION_DURATION = 300 * 2
-const val FADE_IN_ANIMATION_DURATION = 350
-const val FADE_OUT_ANIMATION_DURATION = 300
-
-
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun ListsScreen() {
     val listState = rememberLazyListState()
-
 
     LazyColumn(
         state = listState,
