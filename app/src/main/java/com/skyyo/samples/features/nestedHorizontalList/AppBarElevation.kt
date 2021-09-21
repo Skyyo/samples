@@ -2,11 +2,12 @@ package com.skyyo.samples.features.nestedHorizontalList
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material.Card
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -28,15 +29,31 @@ fun AppBarElevation() {
     }
     // for now LazyVerticalGrid isn't advised,
     // https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyVerticalGrid(androidx.compose.foundation.lazy.GridCells,androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.foundation.layout.Arrangement.Horizontal,kotlin.Function1)
-    Column {
-        TopAppBar(
-            elevation = elevation,
-            backgroundColor = Color.White,
-        ) {
-            Text(text = "TestAppBarElevation")
+
+    // we need Scaffold only because we're using cards with elevation. For some reason not
+    // following the elevation priority is considered intended behaviour as described in this issue
+    // https://issuetracker.google.com/issues/198313901
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                elevation = elevation,
+                backgroundColor = Color.White,
+            ) {
+                Text(text = "TestAppBarElevation")
+            }
         }
+    ) {
         LazyColumnLazyRow(items, scrollState)
     }
+//    Column {
+//        TopAppBar(
+//            elevation = elevation,
+//            backgroundColor = Color.White,
+//        ) {
+//            Text(text = "TestAppBarElevation")
+//        }
+//        LazyColumnLazyRow(items, scrollState)
+//    }
 }
 
 @Composable
@@ -59,13 +76,16 @@ private fun LazyRowItems(row: Int, items: List<Int>) {
 
 @Composable
 private fun TestItem(row: Int, column: Int) {
-    Text(
-        text = "row $row column $column",
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-            .width(150.dp)
-            .height(150.dp)
-            .padding(10.dp)
-            .shadow(1.dp),
-    )
+    Card {
+        Text(
+            text = "row $row column $column",
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .width(150.dp)
+                .height(150.dp)
+                .padding(10.dp)
+                .shadow(1.dp),
+        )
+    }
+
 }
