@@ -1,4 +1,4 @@
-package com.skyyo.samples.application.models.local
+package com.skyyo.samples.application.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

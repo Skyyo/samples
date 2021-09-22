@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.statusBarsPadding
 import java.lang.Math.round
 import kotlin.math.roundToInt
 
@@ -21,7 +22,7 @@ import kotlin.math.roundToInt
 fun CustomViewScreen() {
     val sliderValue by remember { mutableStateOf(0.5f) }
 
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().statusBarsPadding()) {
         Triangle(sliderValue)
         CustomProgressCircle(sliderValue)
         CustomProgressCircle2(sliderValue)

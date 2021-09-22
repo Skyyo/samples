@@ -27,86 +27,15 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "pagination")
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goPaginationSimple
-        ) { Text(text = "simple") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goPaginationRoom
-        ) { Text(text = "room") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goPaginationPaging
-        ) { Text(text = "paging") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goPaginationPagingRoom
-        ) { Text(text = "paging with room") }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Bottom sheets")
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goBottomSheetDestination
-        ) { Text(text = "as destination") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goBottomSheetsContainer
-        ) { Text(text = "modal ") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goBottomSheetsScaffold
-        ) { Text(text = "persistent") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Input validations")
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goInputManualValidation
-        ) { Text(text = "manual") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goInputAutoValidation
-        ) { Text(text = "auto") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goInputDebounceValidation
-        ) { Text(text = "debounce") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Integrations")
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goMap
-        ) { Text(text = "google map") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goCameraX
-        ) { Text(text = "camera x") }
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goForceTheme
-        ) { Text(text = "force theme") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goNestedHorizontalLists
-        ) { Text(text = "app bar auto-elevation animation") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goViewPager
-        ) { Text(text = "view pager") }
-        Spacer(modifier = Modifier.height(8.dp))
+        Pagination(viewModel)
+        BottomSheets(viewModel)
+        InputValidations(viewModel)
+        PopularAndroidIntegrations(viewModel)
+        ThemeAndLocalization(viewModel)
+        ScrollBasedAnimations(viewModel)
+        UIelements(viewModel)
+
+        Spacer(modifier = Modifier.height(28.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = viewModel::goNavWithResultSample
@@ -114,49 +43,151 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goStickyHeaders
-        ) { Text(text = "sticky headers") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goAnimations
-        ) { Text(text = "animations") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goOtp
-        ) { Text(text = "otp view") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
             onClick = viewModel::goAutoScroll
         ) { Text(text = "auto scroll") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goTable
-        ) { Text(text = "table ") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goParallaxEffect) {
-            Text(text = "parallax effect ")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCustomView) {
-            Text(
-                text = "custom view", style = LocalTextStyle.current.copy(
-                    shadow = Shadow(
-                        color = Color.Red,
-                        offset = Offset(4f, 4f),
-                        blurRadius = 8f
-                    )
-                )
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
     }
+
 
 }
 
-const val THEME_LIGHT = "light"
-const val THEME_DARK = "dark"
-const val THEME_AUTO = "auto"
+@Composable
+fun UIelements(viewModel: SampleContainerViewModel) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "ui elements")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goOtp
+    ) { Text(text = "otp view") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goViewPager
+    ) { Text(text = "view pager") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goStickyHeaders
+    ) { Text(text = "sticky headers") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goTable
+    ) { Text(text = "table") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCustomView) {
+        Text(
+            text = "custom view", style = LocalTextStyle.current.copy(
+                shadow = Shadow(
+                    color = Color.Red,
+                    offset = Offset(4f, 4f),
+                    blurRadius = 8f
+                )
+            )
+        )
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "scroll based animations")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goNestedHorizontalLists
+    ) { Text(text = "app bar auto-elevation animation") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goParallaxEffect) {
+        Text(text = "parallax effect ")
+    }
+}
+
+@Composable
+fun ThemeAndLocalization(viewModel: SampleContainerViewModel) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "theme & localization")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goForceTheme
+    ) { Text(text = "force theme") }
+}
+
+@Composable
+fun PopularAndroidIntegrations(viewModel: SampleContainerViewModel) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "popular android integrations")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goMap
+    ) { Text(text = "google map") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goCameraX
+    ) { Text(text = "camera x") }
+}
+
+@Composable
+fun InputValidations(viewModel: SampleContainerViewModel) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "Input validations")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goInputManualValidation
+    ) { Text(text = "manual") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goInputAutoValidation
+    ) { Text(text = "auto") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goInputDebounceValidation
+    ) { Text(text = "debounce") }
+}
+
+@Composable
+fun BottomSheets(viewModel: SampleContainerViewModel) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "Bottom sheets")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goBottomSheetDestination
+    ) { Text(text = "as destination") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goBottomSheetsContainer
+    ) { Text(text = "modal ") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goBottomSheetsScaffold
+    ) { Text(text = "persistent") }
+}
+
+@Composable
+fun Pagination(viewModel: SampleContainerViewModel) {
+    Text(text = "pagination")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goPaginationSimple
+    ) { Text(text = "simple") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goPaginationRoom
+    ) { Text(text = "room") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goPaginationPaging
+    ) { Text(text = "paging") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goPaginationPagingRoom
+    ) { Text(text = "paging with room") }
+}

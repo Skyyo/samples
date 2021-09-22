@@ -6,10 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.application.DogDetailsGraph
-import com.skyyo.samples.application.models.local.Dog
+import com.skyyo.samples.application.models.Dog
 import com.skyyo.samples.extensions.navigateWithObject
 import com.skyyo.samples.extensions.observeNavigationResult
-import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
+import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

@@ -1,12 +1,11 @@
-package com.skyyo.samples.application.activity.cores.simple
+package com.skyyo.samples.application.activity
 
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.skyyo.samples.application.Screens
-import com.skyyo.samples.application.activity.PopulatedNavHost
+import com.skyyo.samples.application.Destination
 import com.skyyo.samples.extensions.log
 
 @Composable
@@ -18,7 +17,7 @@ fun SimpleCore(
         val callback = NavController.OnDestinationChangedListener { _, destination, args ->
             log("${destination.route}")
             when (destination.route) {
-                Screens.SampleContainer.route -> {
+                Destination.SampleContainer.route -> {
                 }
                 else -> {
                 }

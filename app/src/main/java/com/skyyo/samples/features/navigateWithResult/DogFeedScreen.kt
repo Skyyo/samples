@@ -9,7 +9,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.statusBarsPadding
-import com.skyyo.samples.application.models.local.Dog
+import com.skyyo.samples.application.models.Dog
 
 
 @Composable

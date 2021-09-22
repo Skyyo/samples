@@ -1,6 +1,6 @@
 package com.skyyo.samples.features.pagination.simpleWithDatabase
 
-import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.application.network.calls.CatCalls
 import com.skyyo.samples.application.persistance.room.cats.CatsDao
 import com.skyyo.samples.extensions.tryOrNull

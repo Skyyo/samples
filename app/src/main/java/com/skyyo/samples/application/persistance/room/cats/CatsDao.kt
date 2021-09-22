@@ -2,7 +2,7 @@ package com.skyyo.samples.application.persistance.room.cats
 
 import androidx.paging.PagingSource
 import androidx.room.*
-import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.models.Cat
 import kotlinx.coroutines.flow.Flow
 
 @Dao

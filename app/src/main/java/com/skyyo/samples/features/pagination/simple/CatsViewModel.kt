@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.R
-import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.features.pagination.common.CatsScreenEvent
-import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
+import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel

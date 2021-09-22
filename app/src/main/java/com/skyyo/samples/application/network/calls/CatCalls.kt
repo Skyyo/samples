@@ -1,7 +1,6 @@
 package com.skyyo.samples.application.network.calls
 
-import com.skyyo.samples.application.models.remote.Cat
-import retrofit2.http.POST
+import com.skyyo.samples.application.models.Cat
 import retrofit2.http.Query
 import retrofit2.Response
 import retrofit2.http.GET

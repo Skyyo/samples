@@ -1,4 +1,4 @@
-package com.skyyo.samples.utils.eventDispatchers
+package com.skyyo.samples.utils
 
 import androidx.navigation.NavController
 import dagger.hilt.android.scopes.ActivityRetainedScoped

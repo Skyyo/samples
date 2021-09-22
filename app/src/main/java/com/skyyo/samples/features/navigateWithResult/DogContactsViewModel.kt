@@ -3,10 +3,10 @@ package com.skyyo.samples.features.navigateWithResult
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.skyyo.samples.application.DogDetailsGraph
-import com.skyyo.samples.application.Screens
-import com.skyyo.samples.application.models.local.Dog
+import com.skyyo.samples.application.Destination
+import com.skyyo.samples.application.models.Dog
 import com.skyyo.samples.extensions.setNavigationResult
-import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
+import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class DogContactsViewModel @Inject constructor(
 
     fun popToDogFeed() = navigationDispatcher.emit {
         it.setNavigationResult(
-            route = Screens.DogFeed.route,
+            route = Destination.DogFeed.route,
             key = "dog",
 //            result = "adopted"
             result = dog

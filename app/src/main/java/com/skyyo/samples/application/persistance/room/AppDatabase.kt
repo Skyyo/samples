@@ -3,7 +3,7 @@ package com.skyyo.samples.application.persistance.room
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.application.persistance.room.cats.CatsDao
 import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeys
 import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeysDao

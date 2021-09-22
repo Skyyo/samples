@@ -34,7 +34,7 @@ fun ViewPagerScreen() {
         }
     }
 
-    Column {
+    Column(Modifier.fillMaxSize()) {
         ScrollableTabRow(
             edgePadding = 0.dp,
             selectedTabIndex = pagerState.currentPage,

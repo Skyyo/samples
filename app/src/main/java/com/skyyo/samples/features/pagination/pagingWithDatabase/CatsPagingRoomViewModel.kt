@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.features.pagination.common.PagingException
-import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
+import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

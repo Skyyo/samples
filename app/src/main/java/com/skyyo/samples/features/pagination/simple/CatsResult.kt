@@ -1,6 +1,6 @@
 package com.skyyo.samples.features.pagination.simple
 
-import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.models.Cat
 
 
 sealed class CatsResult {

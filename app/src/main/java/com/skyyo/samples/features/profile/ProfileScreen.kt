@@ -21,8 +21,5 @@ fun ProfileScreen(
             Text("go edit profile")
         }
         Spacer(Modifier.height(16.dp))
-        Button(onClick = viewModel::onSignOut) {
-            Text("sign out")
-        }
     }
 }

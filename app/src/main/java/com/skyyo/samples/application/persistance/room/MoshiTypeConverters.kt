@@ -1,7 +1,7 @@
 package com.skyyo.samples.application.persistance.room
 
 import androidx.room.TypeConverter
-import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.models.Cat
 import com.squareup.moshi.*
 
 object MoshiTypeConverters {

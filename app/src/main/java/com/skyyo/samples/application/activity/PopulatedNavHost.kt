@@ -20,8 +20,7 @@ import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.samples.application.DogDetailsGraph
 import com.skyyo.samples.application.EditProfileGraph
-import com.skyyo.samples.application.Screens
-import com.skyyo.samples.features.animations.AnimationsScreen
+import com.skyyo.samples.application.Destination
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
 import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
@@ -66,24 +65,24 @@ fun PopulatedNavHost(
     startDestination = startDestination,
     modifier = Modifier.padding(innerPadding)
 ) {
-    composable(Screens.SampleContainer.route) { SampleContainerScreen() }
-    composable(Screens.Profile.route) {
+    composable(Destination.SampleContainer.route) { SampleContainerScreen() }
+    composable(Destination.Profile.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         ProfileScreen()
     }
-    composable(Screens.Cats.route) {
+    composable(Destination.Cats.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         CatsScreen()
     }
-    composable(Screens.CatsRoom.route) {
+    composable(Destination.CatsRoom.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         CatsRoomScreen()
     }
-    composable(Screens.CatsPaging.route) {
+    composable(Destination.CatsPaging.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         CatsPagingScreen()
     }
-    composable(Screens.CatsPagingRoom.route) {
+    composable(Destination.CatsPagingRoom.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         CatsPagingRoomScreen()
     }
@@ -104,7 +103,7 @@ fun PopulatedNavHost(
     }
 
 
-    composable(Screens.DogFeed.route) { DogFeedScreen() }
+    composable(Destination.DogFeed.route) { DogFeedScreen() }
     navigation(
         route = DogDetailsGraph.route,
         startDestination = DogDetailsGraph.DogDetails.route
@@ -112,15 +111,15 @@ fun PopulatedNavHost(
         composable(route = DogDetailsGraph.DogDetails.route) { DogDetailsScreen() }
         composable(route = DogDetailsGraph.DogContacts.route) { DogContactsScreen() }
     }
-    composable(Screens.Map.route) { GoogleMapScreen() }
-    composable(Screens.ForceTheme.route) { ForceThemeScreen() }
-    composable(Screens.CameraX.route) { CameraXScreen() }
-    bottomSheet(Screens.BottomSheet.route) { BottomSheetScreen() }
-    composable(Screens.ModalBottomSheet.route) { ModalBottomSheetScreen() }
-    composable(Screens.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
-    composable(Screens.ViewPager.route) { ViewPagerScreen() }
-    composable(Screens.StickyHeader.route) { ListsScreen() }
-    composable(Screens.InputValidationManual.route, enterTransition = { _, _ ->
+    composable(Destination.Map.route) { GoogleMapScreen() }
+    composable(Destination.ForceTheme.route) { ForceThemeScreen() }
+    composable(Destination.CameraX.route) { CameraXScreen() }
+    bottomSheet(Destination.BottomSheet.route) { BottomSheetScreen() }
+    composable(Destination.ModalBottomSheet.route) { ModalBottomSheetScreen() }
+    composable(Destination.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
+    composable(Destination.ViewPager.route) { ViewPagerScreen() }
+    composable(Destination.StickyHeader.route) { ListsScreen() }
+    composable(Destination.InputValidationManual.route, enterTransition = { _, _ ->
         slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(400))
 //                fadeIn(animationSpec = tween(2000))
     },
@@ -134,13 +133,12 @@ fun PopulatedNavHost(
         popExitTransition = { _, _ ->
             slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(400))
         }) { InputValidationManualScreen() }
-    composable(Screens.InputValidationAuto.route) { InputValidationAutoScreen() }
-    composable(Screens.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
-    composable(Screens.Animations.route) { AnimationsScreen() }
-    composable(Screens.AppBarElevation.route) { AppBarElevation() }
-    composable(Screens.Otp.route) { OtpScreen() }
-    composable(Screens.AutoScroll.route) { AutoScrollScreen() }
-    composable(Screens.Table.route) { TableScreen() }
-    composable(Screens.ParallaxEffect.route) { ParallaxEffectScreen() }
-    composable(Screens.CustomView.route) { CustomViewScreen() }
+    composable(Destination.InputValidationAuto.route) { InputValidationAutoScreen() }
+    composable(Destination.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
+    composable(Destination.AppBarElevation.route) { AppBarElevation() }
+    composable(Destination.Otp.route) { OtpScreen() }
+    composable(Destination.AutoScroll.route) { AutoScrollScreen() }
+    composable(Destination.Table.route) { TableScreen() }
+    composable(Destination.ParallaxEffect.route) { ParallaxEffectScreen() }
+    composable(Destination.CustomView.route) { CustomViewScreen() }
 }

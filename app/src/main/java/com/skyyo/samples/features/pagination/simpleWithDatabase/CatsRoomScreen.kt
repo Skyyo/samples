@@ -24,7 +24,7 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.common.composables.CircularProgressIndicatorRow
 import com.skyyo.samples.extensions.toast
 import com.skyyo.samples.features.pagination.common.CatsScreenEvent
