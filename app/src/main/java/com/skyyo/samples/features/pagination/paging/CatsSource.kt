@@ -2,21 +2,19 @@ package com.skyyo.samples.features.pagination.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.skyyo.samples.application.models.remote.Game
-import com.skyyo.samples.application.network.calls.GamesCalls
-import com.skyyo.samples.extensions.log
+import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.network.calls.CatCalls
 import com.skyyo.samples.extensions.tryOrNull
 import com.skyyo.samples.features.pagination.common.PagingException
-import okhttp3.RequestBody.Companion.toRequestBody
 
 private const val START_PAGE = 0
 
-class GamesSource(
-    private val gamesCalls: GamesCalls,
+class CatsSource(
+    private val catCalls: CatCalls,
     private val query: String
-) : PagingSource<Int, Game>() {
+) : PagingSource<Int, Cat>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Game> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Cat> {
         val limit = params.loadSize
         val page: Int
         val offset: Int
@@ -31,15 +29,13 @@ class GamesSource(
             }
         }
 
-        val rawBody = "limit $limit; offset $offset;sort id; fields name,first_release_date;"
-        log(rawBody)
-        val response = tryOrNull { gamesCalls.getGames(rawBody.toRequestBody()) }
+        val response = tryOrNull { catCalls.getCats(offset, limit) }
         return when {
             response?.code() == 200 -> {
-                val games = response.body()!!
-                val isLastPageReached = games.size != limit
+                val cats = response.body()!!
+                val isLastPageReached = cats.size != limit
                 LoadResult.Page(
-                    data = games,
+                    data = cats,
                     prevKey = null,
                     nextKey = if (isLastPageReached) null else page.plus(1)
                 )
@@ -48,7 +44,7 @@ class GamesSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Game>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Cat>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)

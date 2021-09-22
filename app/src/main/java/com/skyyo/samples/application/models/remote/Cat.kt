@@ -5,12 +5,10 @@ import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@Entity(tableName = "games_table")
+@Entity(tableName = "cats_table")
 @JsonClass(generateAdapter = true)
-data class Game(
+data class Cat(
     @PrimaryKey
     @Json(name = "id")
-    val id: Int,
-    @Json(name = "name")
-    val name: String,
+    val id: String
 )

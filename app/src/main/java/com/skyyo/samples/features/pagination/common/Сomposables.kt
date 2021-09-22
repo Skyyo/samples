@@ -26,7 +26,7 @@ import com.skyyo.samples.theme.White
 import com.skyyo.samples.utils.OnClick
 
 @Composable
-fun CustomCard(gameName: String) {
+fun CustomCard(catId: String) {
     Card(
         backgroundColor = Purple500,
         modifier = Modifier
@@ -50,7 +50,7 @@ fun CustomCard(gameName: String) {
                 modifier = Modifier
                     .size(56.dp)
                     .padding(horizontal = 8.dp))
-            Text(gameName, modifier = Modifier.align(Alignment.CenterVertically))
+            Text(catId, modifier = Modifier.align(Alignment.CenterVertically))
         }
     }
 }

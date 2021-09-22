@@ -5,52 +5,20 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.insets.systemBarsPadding
-import com.skyyo.samples.extensions.toast
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 
 @Composable
 fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel()) {
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    val events = remember(viewModel.events, lifecycleOwner) {
-        viewModel.events.flowWithLifecycle(
-            lifecycleOwner.lifecycle,
-            Lifecycle.State.STARTED
-        )
-    }
-
-    LaunchedEffect(Unit) {
-        launch {
-            events.collect { event ->
-                when (event) {
-                    is SampleContainerScreenEvent.NetworkError -> context.toast("network error")
-                    is SampleContainerScreenEvent.UpdateLoadingIndicator -> {
-                    }
-                }
-            }
-        }
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,12 +27,28 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "sign in to use IGDB apis")
+        Text(text = "pagination")
+        Spacer(modifier = Modifier.height(16.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::signIn
-        ) { Text(text = "Sign In") }
+            onClick = viewModel::goPaginationSimple
+        ) { Text(text = "simple") }
         Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goPaginationRoom
+        ) { Text(text = "room") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goPaginationPaging
+        ) { Text(text = "paging") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goPaginationPagingRoom
+        ) { Text(text = "paging with room") }
+        Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Bottom sheets")
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -154,7 +138,7 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         ) { Text(text = "table ") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goParallaxEffect) {
-            Text(text = "parralax effect ")
+            Text(text = "parallax effect ")
         }
         Spacer(modifier = Modifier.height(8.dp))
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCustomView) {

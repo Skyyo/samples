@@ -5,10 +5,12 @@ import com.skyyo.samples.R
 
 sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object SampleContainer : Screens("signIn")
-    object Games : Screens("games", R.string.games)
-    object GamesRoom : Screens("gamesRoom", R.string.games_room)
-    object GamesPaging : Screens("gamesPaging", R.string.games_paging)
-    object GamesPagingRoom : Screens("gamesPagingRoom", R.string.games_paging_r)
+
+    object Cats : Screens("cats")
+    object CatsRoom : Screens("catsRoom")
+    object CatsPaging : Screens("catsPaging")
+    object CatsPagingRoom : Screens("catsPagingRoom")
+
     object Profile : Screens("profile", R.string.profile)
 
     object Map : Screens("map", R.string.map)

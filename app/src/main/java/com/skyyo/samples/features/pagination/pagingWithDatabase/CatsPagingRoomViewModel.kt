@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.skyyo.samples.application.models.remote.Game
-import com.skyyo.samples.features.pagination.common.GamesScreenEvent
+import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,35 +24,35 @@ import javax.inject.Inject
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalPagingApi::class)
-class GamesPagingRoomViewModel @Inject constructor(
+class CatsPagingRoomViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val handle: SavedStateHandle,
-    private val gamesRepository: GamesRepositoryPagingWithDatabase
+    private val catsRepository: CatsRepositoryPagingWithDatabase
 ) : ViewModel() {
 
     val query = handle.getLiveData("query", "")
-    val games: Flow<PagingData<Game>> = query.asFlow()
-        .flatMapLatest { gamesRepository.getGamesPaging(it) }
+    val cats: Flow<PagingData<Cat>> = query.asFlow()
+        .flatMapLatest { catsRepository.getCatsPaging(it) }
         .cachedIn(viewModelScope)
 
-    private val _events = Channel<GamesScreenEvent>()
+    private val _events = Channel<CatsScreenEvent>()
     val events = _events.receiveAsFlow()
 
     fun onScrollToTopClick() {
         viewModelScope.launch(Dispatchers.Default) {
-            _events.send(GamesScreenEvent.ScrollToTop)
+            _events.send(CatsScreenEvent.ScrollToTop)
         }
     }
 
     fun onSwipeToRefresh() {
         viewModelScope.launch(Dispatchers.Default) {
-            _events.send(GamesScreenEvent.RefreshList)
+            _events.send(CatsScreenEvent.RefreshList)
         }
     }
 
-    fun onGamesLoadingError(exception: PagingException) {
+    fun onCatsLoadingError(exception: PagingException) {
         viewModelScope.launch(Dispatchers.Default) {
-            _events.send(GamesScreenEvent.ShowToast(exception.stringRes))
+            _events.send(CatsScreenEvent.ShowToast(exception.stringRes))
         }
     }
 }

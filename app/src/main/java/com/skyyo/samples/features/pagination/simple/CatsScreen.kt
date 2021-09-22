@@ -1,43 +1,35 @@
-package com.skyyo.samples.features.pagination.pagingWithDatabase
+package com.skyyo.samples.features.pagination.simple
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.skyyo.samples.application.models.remote.Game
+import com.skyyo.samples.application.models.remote.Cat
 import com.skyyo.samples.common.composables.CircularProgressIndicatorRow
 import com.skyyo.samples.extensions.toast
 import com.skyyo.samples.features.pagination.common.CustomCard
 import com.skyyo.samples.features.pagination.common.FadingFab
-import com.skyyo.samples.features.pagination.common.GamesScreenEvent
-import com.skyyo.samples.features.pagination.common.PagingException
+import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
 import kotlinx.coroutines.flow.collect
@@ -45,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel()) {
+fun CatsScreen(viewModel: CatsViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val insets = LocalWindowInsets.current
@@ -56,7 +48,6 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
     }
     val listState = rememberLazyListState()
     val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
-
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(
             lifecycleOwner.lifecycle,
@@ -64,33 +55,19 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
         )
     }
 
-    val games: LazyPagingItems<Game> = viewModel.games.collectAsLazyPagingItems()
-    val isRefreshing by remember { derivedStateOf { games.loadState.refresh is LoadState.Loading } }
-    val isErrorOnFirstPage by remember { derivedStateOf { games.loadState.refresh is LoadState.Error } }
-    val isError by remember { derivedStateOf { games.loadState.append is LoadState.Error } }
-
-    SideEffect {
-        if (isErrorOnFirstPage) {
-            val errorState = games.loadState.refresh as LoadState.Error
-            viewModel.onGamesLoadingError(errorState.error as PagingException)
-            return@SideEffect // Just to prevent 2x toasts
-        }
-        if (isError) {
-            val errorState = games.loadState.append as LoadState.Error
-            viewModel.onGamesLoadingError(errorState.error as PagingException)
-        }
-    }
+    val cats by viewModel.cats.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     LaunchedEffect(Unit) {
         launch {
             events.collect { event ->
                 when (event) {
-                    is GamesScreenEvent.ShowToast -> context.toast(event.messageId)
-                    is GamesScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
-                    GamesScreenEvent.RefreshList -> games.refresh()
+                    is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
+                    is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
                 }
             }
         }
+
     }
 
     SwipeRefresh(
@@ -108,7 +85,12 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
         }
     ) {
         Box(Modifier.fillMaxSize()) {
-            GamesColumn(listState = listState, games = games)
+            CatsColumn(
+                listState = listState,
+                cats = cats,
+                isLastPageReached = viewModel.isLastPageReached,
+                onLastItemVisible = viewModel::getCats
+            )
             FadingFab(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -122,9 +104,11 @@ fun GamesPagingRoomScreen(viewModel: GamesPagingRoomViewModel = hiltViewModel())
 }
 
 @Composable
-fun GamesColumn(
+fun CatsColumn(
     listState: LazyListState,
-    games: LazyPagingItems<Game>
+    cats: List<Cat>,
+    isLastPageReached: Boolean,
+    onLastItemVisible: () -> Unit
 ) {
     LazyColumn(
         state = listState,
@@ -138,50 +122,12 @@ fun GamesColumn(
             additionalBottom = 8.dp
         )
     ) {
-        //refreshing on page 0
-        if (games.loadState.refresh is LoadState.Loading) {
-            item {
-                Text(
-                    text = "refreshing on page 0",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
+        itemsIndexed(cats, { _, cat -> cat.id }) { index, cat ->
+            CustomCard(catId = cat.id)
+            if (!isLastPageReached && index == cats.lastIndex) {
+                SideEffect { onLastItemVisible() }
+                CircularProgressIndicatorRow()
             }
         }
-
-        items(games, Game::id) { game -> if (game != null) CustomCard(gameName = game.name) }
-
-        if (games.loadState.append is LoadState.Loading) {
-            item { CircularProgressIndicatorRow() }
-        }
-
-        // invoked when we have no data on initial load
-        if (games.loadState.refresh is LoadState.Error) {
-            val errorState = games.loadState.refresh as LoadState.Error
-            val stringRes = (errorState.error as PagingException).stringRes
-            item {
-                Text(
-                    text = stringResource(stringRes),
-                    modifier = Modifier.clickable(onClick = games::retry)
-                )
-                Text(text = "retry refresh!")
-            }
-        }
-
-        // invoked when we have no data on page 2,3 etc.
-        if (games.loadState.append is LoadState.Error) {
-            val errorState = games.loadState.append as LoadState.Error
-            val stringRes = (errorState.error as PagingException).stringRes
-            item {
-                Text(
-                    text = stringResource(stringRes),
-                    modifier = Modifier.clickable(onClick = games::retry)
-                )
-                Text(text = "retry append!")
-            }
-        }
-
     }
 }
-

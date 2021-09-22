@@ -19,7 +19,6 @@ import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skyyo.samples.application.Screens
 import com.skyyo.samples.application.activity.cores.bottomBar.BottomBarCore
-import com.skyyo.samples.application.activity.cores.simple.SimpleCore
 import com.skyyo.samples.application.persistance.DataStoreManager
 import com.skyyo.samples.application.persistance.room.AppDatabase
 import com.skyyo.samples.theme.IgdbBrowserTheme
@@ -54,10 +53,6 @@ class MainActivity : ComponentActivity() {
         val drawerOrBottomBarScreens = listOf(
             Screens.DogFeed,
             Screens.Profile,
-//            Screens.Games,
-//            Screens.GamesRoom,
-            Screens.GamesPaging,
-            Screens.GamesPagingRoom,
         )
         val startDestination = when {
             //TODO measure async + splash delegation profit

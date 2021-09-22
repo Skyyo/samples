@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.R
-import com.skyyo.samples.features.pagination.common.GamesScreenEvent
+import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,19 +17,19 @@ import javax.inject.Inject
 private const val PAGE_LIMIT = 20
 
 @HiltViewModel
-class GamesRoomViewModel @Inject constructor(
+class CatsRoomViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val handle: SavedStateHandle,
-    private val gamesRepository: GamesRepositoryWithDatabase
+    private val catsRepository: CatsRepositoryWithDatabase
 ) : ViewModel() {
 
-    val games = gamesRepository.observeGames()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5), listOf())
+    val cats = catsRepository.observeCats()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), listOf())
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
-    private val _events = Channel<GamesScreenEvent>()
+    private val _events = Channel<CatsScreenEvent>()
     val events = _events.receiveAsFlow()
 
     private var isFetchingAllowed = true
@@ -37,20 +37,20 @@ class GamesRoomViewModel @Inject constructor(
     var isLastPageReached = false
 
     init {
-        getGames(true)
+        getCats(true)
     }
 
-    fun getGames(isFirstPage: Boolean = false) {
+    fun getCats(isFirstPage: Boolean = false) {
         if (!isFetchingAllowed) return
         isFetchingAllowed = false
         viewModelScope.launch(Dispatchers.IO) {
             if (isFirstPage) _isRefreshing.value = true
-            when (val result = gamesRepository.getGames(PAGE_LIMIT, itemOffset)) {
-                is GamesRoomResult.NetworkError -> {
+            when (val result = catsRepository.getCats(PAGE_LIMIT, itemOffset)) {
+                is CatsRoomResult.NetworkError -> {
                     isFetchingAllowed = true
-                    _events.send(GamesScreenEvent.ShowToast(R.string.network_error))
+                    _events.send(CatsScreenEvent.ShowToast(R.string.network_error))
                 }
-                is GamesRoomResult.Success -> {
+                is CatsRoomResult.Success -> {
                     itemOffset += PAGE_LIMIT
                     isFetchingAllowed = !result.lastPageReached
                     isLastPageReached = result.lastPageReached
@@ -62,13 +62,13 @@ class GamesRoomViewModel @Inject constructor(
 
     fun onScrollToTopClick() {
         viewModelScope.launch(Dispatchers.Default) {
-            _events.send(GamesScreenEvent.ScrollToTop)
+            _events.send(CatsScreenEvent.ScrollToTop)
         }
     }
 
     fun onSwipeToRefresh() {
         isLastPageReached = false
         itemOffset = 0
-        getGames(true)
+        getCats(true)
     }
 }

@@ -21,33 +21,33 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.samples.application.DogDetailsGraph
 import com.skyyo.samples.application.EditProfileGraph
 import com.skyyo.samples.application.Screens
-import com.skyyo.samples.features.autoscroll.AutoScrollScreen
-import com.skyyo.samples.features.otp.OtpScreen
-import com.skyyo.samples.features.pagination.paging.GamesPagingScreen
-import com.skyyo.samples.features.pagination.pagingWithDatabase.GamesPagingRoomScreen
-import com.skyyo.samples.features.pagination.simple.GamesScreen
-import com.skyyo.samples.features.pagination.simpleWithDatabase.GamesRoomScreen
-import com.skyyo.samples.features.profile.*
 import com.skyyo.samples.features.animations.AnimationsScreen
+import com.skyyo.samples.features.appBarElevation.AppBarElevation
+import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScreen
 import com.skyyo.samples.features.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.samples.features.cameraX.CameraXScreen
+import com.skyyo.samples.features.customView.CustomViewScreen
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
-import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.navigateWithResult.DogContactsScreen
 import com.skyyo.samples.features.navigateWithResult.DogDetailsScreen
 import com.skyyo.samples.features.navigateWithResult.DogFeedScreen
-import com.skyyo.samples.features.appBarElevation.AppBarElevation
-import com.skyyo.samples.features.customView.CustomViewScreen
+import com.skyyo.samples.features.otp.OtpScreen
+import com.skyyo.samples.features.pagination.paging.CatsPagingScreen
+import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomScreen
+import com.skyyo.samples.features.pagination.simple.CatsScreen
+import com.skyyo.samples.features.pagination.simpleWithDatabase.CatsRoomScreen
 import com.skyyo.samples.features.parallaxEffect.ParallaxEffectScreen
-import com.skyyo.samples.features.viewPager.ViewPagerScreen
+import com.skyyo.samples.features.profile.*
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
+import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
+import com.skyyo.samples.features.viewPager.ViewPagerScreen
 
 @OptIn(
     ExperimentalAnimationApi::class,
@@ -71,21 +71,21 @@ fun PopulatedNavHost(
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         ProfileScreen()
     }
-    composable(Screens.Games.route) {
+    composable(Screens.Cats.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        GamesScreen()
+        CatsScreen()
     }
-    composable(Screens.GamesRoom.route) {
+    composable(Screens.CatsRoom.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        GamesRoomScreen()
+        CatsRoomScreen()
     }
-    composable(Screens.GamesPaging.route) {
+    composable(Screens.CatsPaging.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        GamesPagingScreen()
+        CatsPagingScreen()
     }
-    composable(Screens.GamesPagingRoom.route) {
+    composable(Screens.CatsPagingRoom.route) {
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        GamesPagingRoomScreen()
+        CatsPagingRoomScreen()
     }
     navigation(
         route = EditProfileGraph.route,
@@ -93,8 +93,7 @@ fun PopulatedNavHost(
     ) {
         composable(route = EditProfileGraph.EditProfile.route) { EditProfileScreen() }
         composable(route = EditProfileGraph.EditProfileConfirmation.route) {
-            val navGraphSharedViewModel: ProfileSharedViewModel =
-                hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
+            val navGraphSharedViewModel: ProfileSharedViewModel = hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
             EditProfileConfirmationScreen(navGraphSharedViewModel)
         }
         composable(route = EditProfileGraph.EditProfileConfirmation2.route) {

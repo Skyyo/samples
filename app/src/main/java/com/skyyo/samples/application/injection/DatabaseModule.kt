@@ -23,9 +23,9 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideGamesDao(appDatabase: AppDatabase) = appDatabase.gamesDao()
+    fun provideCatsDao(appDatabase: AppDatabase) = appDatabase.catsDao()
 
     @Singleton
     @Provides
-    fun provideGamesRemoteKeysDao(appDatabase: AppDatabase) = appDatabase.gamesRemoteKeysDao()
+    fun provideCatsRemoteKeysDao(appDatabase: AppDatabase) = appDatabase.catsRemoteKeysDao()
 }

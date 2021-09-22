@@ -24,12 +24,12 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.skyyo.samples.application.models.remote.Game
+import com.skyyo.samples.application.models.remote.Cat
 import com.skyyo.samples.common.composables.CircularProgressIndicatorRow
 import com.skyyo.samples.extensions.toast
+import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.features.pagination.common.CustomCard
 import com.skyyo.samples.features.pagination.common.FadingFab
-import com.skyyo.samples.features.pagination.common.GamesScreenEvent
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
 import kotlinx.coroutines.flow.collect
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GamesRoomScreen(viewModel: GamesRoomViewModel = hiltViewModel()) {
+fun CatsRoomScreen(viewModel: CatsRoomViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val insets = LocalWindowInsets.current
@@ -55,15 +55,15 @@ fun GamesRoomScreen(viewModel: GamesRoomViewModel = hiltViewModel()) {
         )
     }
 
-    val games by viewModel.games.collectAsState()
+    val cats by viewModel.cats.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     LaunchedEffect(Unit) {
         launch {
             events.collect { event ->
                 when (event) {
-                    is GamesScreenEvent.ShowToast -> context.toast(event.messageId)
-                    is GamesScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
+                    is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
+                    is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
                 }
             }
         }
@@ -85,11 +85,11 @@ fun GamesRoomScreen(viewModel: GamesRoomViewModel = hiltViewModel()) {
         }
     ) {
         Box(Modifier.fillMaxSize()) {
-            GamesColumn(
+            CatsColumn(
                 listState = listState,
-                games = games,
+                cats = cats,
                 isLastPageReached = viewModel.isLastPageReached,
-                onLastItemVisible = viewModel::getGames
+                onLastItemVisible = viewModel::getCats
             )
             FadingFab(
                 modifier = Modifier
@@ -104,9 +104,9 @@ fun GamesRoomScreen(viewModel: GamesRoomViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun GamesColumn(
+fun CatsColumn(
     listState: LazyListState,
-    games: List<Game>,
+    cats: List<Cat>,
     isLastPageReached: Boolean,
     onLastItemVisible: () -> Unit
 ) {
@@ -122,9 +122,9 @@ fun GamesColumn(
             additionalBottom = 8.dp
         )
     ) {
-        itemsIndexed(games, { _, game -> game.id }) { index, game ->
-            CustomCard(gameName = game.name)
-            if (!isLastPageReached && index == games.lastIndex) {
+        itemsIndexed(cats, { _, cat -> cat.id }) { index, cat ->
+            CustomCard(catId = cat.id)
+            if (!isLastPageReached && index == cats.lastIndex) {
                 SideEffect { onLastItemVisible() }
                 CircularProgressIndicatorRow()
             }

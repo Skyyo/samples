@@ -31,12 +31,12 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.skyyo.samples.application.models.remote.Game
+import com.skyyo.samples.application.models.remote.Cat
 import com.skyyo.samples.common.composables.CircularProgressIndicatorRow
 import com.skyyo.samples.extensions.toast
 import com.skyyo.samples.features.pagination.common.CustomCard
 import com.skyyo.samples.features.pagination.common.FadingFab
-import com.skyyo.samples.features.pagination.common.GamesScreenEvent
+import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
+fun CatsPagingScreen(viewModel: CatsPagingViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val insets = LocalWindowInsets.current
@@ -64,20 +64,20 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
         )
     }
 
-    val games: LazyPagingItems<Game> = viewModel.games.collectAsLazyPagingItems()
-    val isRefreshing by remember { derivedStateOf { games.loadState.refresh is LoadState.Loading } }
-    val isErrorOnFirstPage by remember { derivedStateOf { games.loadState.refresh is LoadState.Error } }
-    val isError by remember { derivedStateOf { games.loadState.append is LoadState.Error } }
+    val cats: LazyPagingItems<Cat> = viewModel.cats.collectAsLazyPagingItems()
+    val isRefreshing by remember { derivedStateOf { cats.loadState.refresh is LoadState.Loading } }
+    val isErrorOnFirstPage by remember { derivedStateOf { cats.loadState.refresh is LoadState.Error } }
+    val isError by remember { derivedStateOf { cats.loadState.append is LoadState.Error } }
 
     SideEffect {
         if (isErrorOnFirstPage) {
-            val errorState = games.loadState.refresh as LoadState.Error
-            viewModel.onGamesLoadingError(errorState.error as PagingException)
+            val errorState = cats.loadState.refresh as LoadState.Error
+            viewModel.onCatsLoadingError(errorState.error as PagingException)
             return@SideEffect // Just to prevent 2x toasts
         }
         if (isError) {
-            val errorState = games.loadState.append as LoadState.Error
-            viewModel.onGamesLoadingError(errorState.error as PagingException)
+            val errorState = cats.loadState.append as LoadState.Error
+            viewModel.onCatsLoadingError(errorState.error as PagingException)
         }
     }
 
@@ -85,9 +85,9 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
         launch {
             events.collect { event ->
                 when (event) {
-                    is GamesScreenEvent.ShowToast -> context.toast(event.messageId)
-                    is GamesScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
-                    is GamesScreenEvent.RefreshList -> games.refresh()
+                    is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
+                    is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
+                    is CatsScreenEvent.RefreshList -> cats.refresh()
                 }
             }
         }
@@ -108,7 +108,7 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
         }
     ) {
         Box(Modifier.fillMaxSize()) {
-            GamesColumn(listState = listState, games = games)
+            CatsColumn(listState = listState, cats = cats)
             FadingFab(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -122,9 +122,9 @@ fun GamesPagingScreen(viewModel: GamesPagingViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun GamesColumn(
+fun CatsColumn(
     listState: LazyListState,
-    games: LazyPagingItems<Game>
+    cats: LazyPagingItems<Cat>
 ) {
     LazyColumn(
         state = listState,
@@ -139,7 +139,7 @@ fun GamesColumn(
         )
     ) {
         // we know that we're refreshing first page
-        if (games.loadState.refresh is LoadState.Loading) {
+        if (cats.loadState.refresh is LoadState.Loading) {
             item {
                 Text(
                     text = "refreshing on page 0",
@@ -151,33 +151,33 @@ fun GamesColumn(
         }
 
         // invoked when we error on initial load
-        if (games.loadState.refresh is LoadState.Error) {
-            val errorState = games.loadState.refresh as LoadState.Error
+        if (cats.loadState.refresh is LoadState.Error) {
+            val errorState = cats.loadState.refresh as LoadState.Error
             val stringRes = (errorState.error as PagingException).stringRes
             item {
                 Text(
                     text = stringResource(stringRes),
-                    modifier = Modifier.clickable(onClick = games::retry)
+                    modifier = Modifier.clickable(onClick = cats::retry)
                 )
                 Text(text = "retry refresh!")
             }
         }
 
-        items(games, Game::id) { game -> if (game != null) CustomCard(gameName = game.name) }
+        items(cats, Cat::id) { cat -> if (cat != null) CustomCard(catId = cat.id) }
 
         // we know that we're refreshing X page
-        if (games.loadState.append is LoadState.Loading) {
+        if (cats.loadState.append is LoadState.Loading) {
             item { CircularProgressIndicatorRow() }
         }
 
         // invoked when we have no error on X page
-        if (games.loadState.append is LoadState.Error) {
-            val errorState = games.loadState.append as LoadState.Error
+        if (cats.loadState.append is LoadState.Error) {
+            val errorState = cats.loadState.append as LoadState.Error
             val stringRes = (errorState.error as PagingException).stringRes
             item {
                 Text(
                     text = stringResource(stringRes),
-                    modifier = Modifier.clickable(onClick = games::retry)
+                    modifier = Modifier.clickable(onClick = cats::retry)
                 )
                 Text(text = "retry append!")
             }

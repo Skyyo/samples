@@ -5,31 +5,29 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.skyyo.samples.R
-import com.skyyo.samples.application.models.remote.Game
-import com.skyyo.samples.application.network.calls.GamesCalls
+import com.skyyo.samples.application.models.remote.Cat
+import com.skyyo.samples.application.network.calls.CatCalls
 import com.skyyo.samples.application.persistance.room.AppDatabase
-import com.skyyo.samples.application.persistance.room.games.GamesDao
-import com.skyyo.samples.application.persistance.room.games.GamesRemoteKeys
-import com.skyyo.samples.application.persistance.room.games.GamesRemoteKeysDao
+import com.skyyo.samples.application.persistance.room.cats.CatsDao
+import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeys
+import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeysDao
 import com.skyyo.samples.extensions.tryOrNull
 import com.skyyo.samples.features.pagination.common.PagingException
-import okhttp3.RequestBody.Companion.toRequestBody
 
 private const val START_PAGE = 0
 
 @OptIn(ExperimentalPagingApi::class)
-class GamesRemoteMediator(
+class CatsRemoteMediator(
     private val appDatabase: AppDatabase,
-    private val gamesCalls: GamesCalls,
-    private val gamesDao: GamesDao,
-    private val gamesKeysDao: GamesRemoteKeysDao,
+    private val catCalls: CatCalls,
+    private val catsDao: CatsDao,
+    private val catsKeysDao: CatsRemoteKeysDao,
     private val searchQuery: String
-) : RemoteMediator<Int, Game>() {
+) : RemoteMediator<Int, Cat>() {
 
     override suspend fun initialize(): InitializeAction = InitializeAction.LAUNCH_INITIAL_REFRESH
 
-    override suspend fun load(loadType: LoadType, state: PagingState<Int, Game>): MediatorResult {
+    override suspend fun load(loadType: LoadType, state: PagingState<Int, Cat>): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
                 0
@@ -60,27 +58,26 @@ class GamesRemoteMediator(
         val limit = state.config.pageSize
         val offset = if (page == START_PAGE) 0 else page * limit
 
-        val rawBody = "limit $limit; offset $offset;sort id; fields name,first_release_date;"
-        val response = tryOrNull { gamesCalls.getGames(rawBody.toRequestBody()) }
+        val response = tryOrNull { catCalls.getCats(offset, limit) }
 
         return when {
             response?.code() == 200 -> {
-                val games = response.body()!!
-                val isLastPageReached = games.size != limit
+                val cats = response.body()!!
+                val isLastPageReached = cats.size != limit
                 appDatabase.withTransaction {
                     if (loadType == LoadType.REFRESH) {
-                        gamesKeysDao.deleteRemoteKeys()
-                        gamesDao.deleteGames()
+                        catsKeysDao.deleteRemoteKeys()
+                        catsDao.deleteCats()
                     }
 
                     val prevKey = if (page == START_PAGE) null else page - 1
                     val nextKey = if (isLastPageReached) null else page + 1
 
-                    val keys = games.map {
-                        GamesRemoteKeys(gameId = it.id, prevKey = prevKey, nextKey = nextKey)
+                    val keys = cats.map {
+                        CatsRemoteKeys(catId = it.id.hashCode(), prevKey = prevKey, nextKey = nextKey)
                     }
-                    gamesKeysDao.insertAll(keys)
-                    gamesDao.insertAll(games)
+                    catsKeysDao.insertAll(keys)
+                    catsDao.insertAll(cats)
                 }
                 MediatorResult.Success(endOfPaginationReached = isLastPageReached)
             }
@@ -90,34 +87,34 @@ class GamesRemoteMediator(
 
     //LoadType.REFRESH
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, Game>
-    ): GamesRemoteKeys? {
+        state: PagingState<Int, Cat>
+    ): CatsRemoteKeys? {
         // The paging library is trying to load data after the anchor position
         // Get the item closest to the anchor position
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { repoId ->
-                gamesKeysDao.remoteKeysGameId(repoId)
+                catsKeysDao.remoteKeysCatId(repoId.hashCode())
             }
         }
     }
 
     //LoadType.APPEND
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Game>): GamesRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Cat>): CatsRemoteKeys? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { game ->
             // Get the remote keys of the last item retrieved
-            gamesKeysDao.remoteKeysGameId(game.id)
+            catsKeysDao.remoteKeysCatId(game.id.hashCode())
         }
     }
 
     //LoadType.PREPEND
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Game>): GamesRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Cat>): CatsRemoteKeys? {
         // Get the first page that was retrieved, that contained items.
         // From that first page, get the first item
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { game ->
             // Get the remote keys of the first items retrieved
-            gamesKeysDao.remoteKeysGameId(game.id)
+            catsKeysDao.remoteKeysCatId(game.id.hashCode())
         }
     }
 }

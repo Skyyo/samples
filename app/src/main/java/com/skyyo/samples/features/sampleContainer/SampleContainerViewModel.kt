@@ -1,48 +1,44 @@
 package com.skyyo.samples.features.sampleContainer
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.application.Screens
-import com.skyyo.samples.application.network.calls.AuthCalls
-import com.skyyo.samples.application.persistance.DataStoreManager
-import com.skyyo.samples.extensions.tryOrNull
 import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class SampleContainerViewModel @Inject constructor(
-    private val navigationDispatcher: NavigationDispatcher,
-    private val authCalls: AuthCalls,
-    private val dataStoreManager: DataStoreManager,
-) : ViewModel() {
+    private val navigationDispatcher: NavigationDispatcher
+) :
+    ViewModel() {
 
     private val _events = Channel<SampleContainerScreenEvent>()
     val events = _events.receiveAsFlow()
 
-    fun signIn() = viewModelScope.launch(Dispatchers.IO) {
-        _events.send(SampleContainerScreenEvent.UpdateLoadingIndicator(isLoading = true))
-        val response = tryOrNull { authCalls.signIn() }
-        if (response == null) {
-            _events.send(SampleContainerScreenEvent.NetworkError)
-            _events.send(SampleContainerScreenEvent.UpdateLoadingIndicator(isLoading = false))
-        } else {
-            dataStoreManager.setAccessToken(response.accessToken)
-            goHome()
-        }
+    //    fun goHome() = navigationDispatcher.emit {
+//        it.navigate(Screens.DogFeed.route) {
+//            popUpTo(Screens.SampleContainer.route) {
+//                inclusive = true
+//            }
+//        }
+//    }
+    fun goPaginationSimple() = navigationDispatcher.emit {
+        it.navigate(Screens.Cats.route)
     }
 
-    private fun goHome() = navigationDispatcher.emit {
-        it.navigate(Screens.DogFeed.route) {
-            popUpTo(Screens.SampleContainer.route) {
-                inclusive = true
-            }
-        }
+    fun goPaginationRoom() = navigationDispatcher.emit {
+        it.navigate(Screens.CatsRoom.route)
+    }
+
+    fun goPaginationPaging() = navigationDispatcher.emit {
+        it.navigate(Screens.CatsPaging.route)
+    }
+
+    fun goPaginationPagingRoom() = navigationDispatcher.emit {
+        it.navigate(Screens.CatsPagingRoom.route)
     }
 
     fun goMap() = navigationDispatcher.emit {
