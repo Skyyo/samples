@@ -43,6 +43,7 @@ import com.skyyo.samples.features.navigateWithResult.DogContactsScreen
 import com.skyyo.samples.features.navigateWithResult.DogDetailsScreen
 import com.skyyo.samples.features.navigateWithResult.DogFeedScreen
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
+import com.skyyo.samples.features.parallaxEffect.ParallaxEffectScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
 import com.skyyo.samples.features.table.TableScreen
@@ -140,4 +141,5 @@ fun PopulatedNavHost(
     composable(Screens.Otp.route) { OtpScreen() }
     composable(Screens.AutoScroll.route) { AutoScrollScreen() }
     composable(Screens.Table.route) { TableScreen() }
+    composable(Screens.ParallaxEffect.route) { ParallaxEffectScreen() }
 }

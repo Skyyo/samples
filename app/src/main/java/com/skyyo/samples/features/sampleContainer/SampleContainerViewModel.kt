@@ -112,4 +112,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goTable() = navigationDispatcher.emit {
         it.navigate(Screens.Table.route)
     }
+
+    fun goParallaxEffect() = navigationDispatcher.emit {
+        it.navigate(Screens.ParallaxEffect.route)
+    }
 }

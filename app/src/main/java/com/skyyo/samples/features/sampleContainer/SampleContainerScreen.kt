@@ -55,44 +55,102 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "sign in to use IGDB apis")
-        Button(onClick = viewModel::signIn) { Text(text = "Sign In") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::signIn
+        ) { Text(text = "Sign In") }
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Bottom sheets")
-        Button(onClick = viewModel::goBottomSheetDestination) { Text(text = "as destination") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goBottomSheetDestination
+        ) { Text(text = "as destination") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goBottomSheetsContainer) { Text(text = "modal ") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goBottomSheetsContainer
+        ) { Text(text = "modal ") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goBottomSheetsScaffold) { Text(text = "persistent") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goBottomSheetsScaffold
+        ) { Text(text = "persistent") }
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Input validations")
-        Button(onClick = viewModel::goInputManualValidation) { Text(text = "manual") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goInputManualValidation
+        ) { Text(text = "manual") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goInputAutoValidation) { Text(text = "auto") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goInputAutoValidation
+        ) { Text(text = "auto") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goInputDebounceValidation) { Text(text = "debounce") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goInputDebounceValidation
+        ) { Text(text = "debounce") }
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Integrations")
-        Button(onClick = viewModel::goMap) { Text(text = "google map") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goMap
+        ) { Text(text = "google map") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goCameraX) { Text(text = "camera x") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goCameraX
+        ) { Text(text = "camera x") }
         Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = viewModel::goForceTheme) { Text(text = "force theme") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goForceTheme
+        ) { Text(text = "force theme") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goNestedHorizontalLists) { Text(text = "app bar auto-elevation animation") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goNestedHorizontalLists
+        ) { Text(text = "app bar auto-elevation animation") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goViewPager) { Text(text = "view pager") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goViewPager
+        ) { Text(text = "view pager") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goNavWithResultSample) { Text(text = "navigate to/back with results") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goNavWithResultSample
+        ) { Text(text = "navigate to/back with results") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goStickyHeaders) { Text(text = "sticky headers") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goStickyHeaders
+        ) { Text(text = "sticky headers") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goAnimations) { Text(text = "animations") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goAnimations
+        ) { Text(text = "animations") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goOtp) { Text(text = "otp view") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goOtp
+        ) { Text(text = "otp view") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goAutoScroll) { Text(text = "auto scroll") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goAutoScroll
+        ) { Text(text = "auto scroll") }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = viewModel::goTable) { Text(text = "table ") }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goTable
+        ) { Text(text = "table ") }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goParallaxEffect) {
+            Text(text = "parralax effect ")
+        }
         Spacer(modifier = Modifier.height(8.dp))
     }
 
