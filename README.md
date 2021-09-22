@@ -65,7 +65,7 @@ Uncategorized
 - dominant colour for background in the google jetcaster sample
 - https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
 - compose with ad mob
-
+- enhance parallax sample, show how to add snapping behaviour
   
   # License
 ```
