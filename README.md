@@ -1,5 +1,5 @@
 # Project containing Jetpack Compose samples 
-For pagination related samples it uses [IGDB API](https://api-docs.igdb.com/#about).
+For pagination & network images it uses [CATAAS](https://cataas.com/#/).
 
 # Known issues
 
@@ -27,7 +27,7 @@ Miscellaneous
 - Fling breaks on skipped frames. [issue](https://issuetracker.google.com/issues/190788866)
 
 # Limitations & potential issues
-- We're forced to use [ProvideWindowInsets](https://google.github.io/accompanist/insets/#usage) composable as a wrapper for all composables in fragments
+- We're forced to use [ProvideWindowInsets](https://google.github.io/accompanist/insets/#usage) composable as a wrapper for composables in fragment based projects
 - There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)
 - Deep links might require lot of additional work if we need to open them in a specific bottom bar / drawer tab.
 - Navigating with parcelable object might be causing issues due it's [hacky logic](https://github.com/Skyyo/IGDB-Browser/blob/e4279d7cecb50aca32aacdc712f9ed2fdd11aade/app/src/main/java/com/skyyo/igdbbrowser/extensions/NavControllerExtensions.kt#L48-L57)
