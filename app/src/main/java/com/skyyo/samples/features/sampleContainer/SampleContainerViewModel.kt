@@ -116,4 +116,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goParallaxEffect() = navigationDispatcher.emit {
         it.navigate(Screens.ParallaxEffect.route)
     }
+
+    fun goCustomView() = navigationDispatcher.emit {
+        it.navigate(Screens.CustomView.route)
+    }
 }

@@ -29,6 +29,7 @@ sealed class Screens(val route: String, @StringRes val resourceId: Int = 0) {
     object AutoScroll : Screens("autoScroll")
     object Table : Screens("table")
     object ParallaxEffect : Screens("parallaxEffect")
+    object CustomView : Screens("customViewScreen")
 }
 
 sealed class DogDetailsGraph(val route: String) {

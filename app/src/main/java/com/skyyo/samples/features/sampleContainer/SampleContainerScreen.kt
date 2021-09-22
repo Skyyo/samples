@@ -4,12 +4,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.LocalTextStyle
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -150,6 +155,18 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Spacer(modifier = Modifier.height(8.dp))
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goParallaxEffect) {
             Text(text = "parralax effect ")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCustomView) {
+            Text(
+                text = "custom view", style = LocalTextStyle.current.copy(
+                    shadow = Shadow(
+                        color = Color.Red,
+                        offset = Offset(4f, 4f),
+                        blurRadius = 8f
+                    )
+                )
+            )
         }
         Spacer(modifier = Modifier.height(8.dp))
     }
