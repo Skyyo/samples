@@ -66,6 +66,7 @@ Uncategorized
 - https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
 - compose with ad mob
 - enhance parallax sample, show how to add snapping behaviour
+- add more animate on scroll effects
   
   # License
 ```
