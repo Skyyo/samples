@@ -2,6 +2,7 @@ package com.skyyo.samples.features.sampleContainer
 
 import androidx.lifecycle.ViewModel
 import com.skyyo.samples.application.Destination
+import com.skyyo.samples.application.ProfileGraph
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -102,5 +103,8 @@ class SampleContainerViewModel @Inject constructor(
 
     fun goCustomView() = navigationDispatcher.emit {
         it.navigate(Destination.CustomView.route)
+    }
+    fun goHiltComposeSharedViewModel() = navigationDispatcher.emit {
+        it.navigate(ProfileGraph.Profile.route)
     }
 }

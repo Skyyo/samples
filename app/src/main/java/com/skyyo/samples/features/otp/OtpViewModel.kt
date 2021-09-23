@@ -1,7 +1,7 @@
 package com.skyyo.samples.features.otp
 
 import androidx.lifecycle.ViewModel
-import com.skyyo.samples.application.EditProfileGraph
+import com.skyyo.samples.application.ProfileGraph
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -12,7 +12,7 @@ class OtpViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun onBtnClick() {
-        navigationDispatcher.emit { it.navigate(EditProfileGraph.route) }
+        navigationDispatcher.emit { it.navigate(ProfileGraph.route) }
     }
 
 }

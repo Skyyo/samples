@@ -41,6 +41,11 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
             onClick = viewModel::goAutoScroll
         ) { Text(text = "auto scroll") }
         Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::goHiltComposeSharedViewModel
+        ) { Text(text = "hilt+compose shared viewModel") }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
@@ -94,7 +99,6 @@ fun UIelements(viewModel: SampleContainerViewModel) {
             )
         )
     }
-    Spacer(modifier = Modifier.height(8.dp))
 }
 
 @Composable

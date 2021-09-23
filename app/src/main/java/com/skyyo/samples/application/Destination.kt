@@ -24,7 +24,6 @@ sealed class Destination(val route: String) {
     object Otp : Destination("otp")
     object Table : Destination("table")
     object CustomView : Destination("customViewScreen")
-
     object DogFeed : Destination("dogFeed")
     object DogDetails : Destination("dogDetails/{dogId}") {
         fun createRoute(dogId: String) = "dogDetails/$dogId"
@@ -36,16 +35,14 @@ sealed class Destination(val route: String) {
     object CatDetails : Destination("catDetails")
     object CatContacts : Destination("catContacts")
 
-
-    object Profile : Destination("profile")
 }
 
 
-sealed class EditProfileGraph(val route: String) {
+sealed class ProfileGraph(val route: String) {
 
+    object Profile : Destination("profile")
     object EditProfile : Destination("editProfile")
-    object EditProfileConfirmation : Destination("profileConfirmation")
-    object EditProfileConfirmation2 : Destination("profileConfirmation2")
+    object ConfirmProfile : Destination("profileConfirmation")
 
     companion object {
         const val route = "profileGraph"

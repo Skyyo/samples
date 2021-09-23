@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -18,7 +19,7 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.samples.application.Destination
-import com.skyyo.samples.application.EditProfileGraph
+import com.skyyo.samples.application.ProfileGraph
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
 import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
@@ -43,8 +44,11 @@ import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomSc
 import com.skyyo.samples.features.pagination.simple.CatsScreen
 import com.skyyo.samples.features.pagination.simpleWithDatabase.CatsRoomScreen
 import com.skyyo.samples.features.parallaxEffect.ParallaxEffectScreen
-import com.skyyo.samples.features.profile.*
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
+import com.skyyo.samples.features.sharedViewModel.ProfileSharedViewModel
+import com.skyyo.samples.features.sharedViewModel.confirmProfile.EditProfileConfirmationScreen
+import com.skyyo.samples.features.sharedViewModel.editProfile.EditProfileScreen
+import com.skyyo.samples.features.sharedViewModel.profile.ProfileScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
@@ -87,14 +91,12 @@ fun PopulatedNavHost(
     composable(Destination.InputValidationManual.route,
         enterTransition = { _, _ ->
             slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(400))
-//                fadeIn(animationSpec = tween(2000))
         },
         exitTransition = { _, _ ->
             slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(400))
         },
         popEnterTransition = { _, _ ->
             slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(400))
-
         },
         popExitTransition = { _, _ ->
             slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(400))
@@ -107,23 +109,24 @@ fun PopulatedNavHost(
     composable(Destination.Table.route) { TableScreen() }
     composable(Destination.ParallaxEffect.route) { ParallaxEffectScreen() }
     composable(Destination.CustomView.route) { CustomViewScreen() }
-
-    composable(Destination.Profile.route) { ProfileScreen() }
-
     navigation(
-        route = EditProfileGraph.route,
-        startDestination = EditProfileGraph.EditProfile.route
+        route = ProfileGraph.route,
+        startDestination = ProfileGraph.Profile.route
     ) {
-        composable(route = EditProfileGraph.EditProfile.route) { EditProfileScreen() }
-        composable(route = EditProfileGraph.EditProfileConfirmation.route) {
-            val navGraphSharedViewModel: ProfileSharedViewModel =
-                hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
-            EditProfileConfirmationScreen(navGraphSharedViewModel)
+        composable(ProfileGraph.Profile.route) { ProfileScreen() }
+        composable(ProfileGraph.EditProfile.route) {
+            val rootGraphBackStackEntry = remember {
+                navController.getBackStackEntry(ProfileGraph.Profile.route)
+            }
+            val navGraphViewModel: ProfileSharedViewModel = hiltViewModel(rootGraphBackStackEntry)
+            EditProfileScreen(navGraphViewModel)
         }
-        composable(route = EditProfileGraph.EditProfileConfirmation2.route) {
-            val navGraphSharedViewModel: ProfileSharedViewModel =
-                hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
-            EditProfileConfirmation2Screen(navGraphSharedViewModel)
+        composable(ProfileGraph.ConfirmProfile.route) {
+            val rootGraphBackStackEntry = remember {
+                navController.getBackStackEntry(ProfileGraph.Profile.route)
+            }
+            val navGraphViewModel: ProfileSharedViewModel = hiltViewModel(rootGraphBackStackEntry)
+            EditProfileConfirmationScreen(navGraphViewModel)
         }
     }
 }

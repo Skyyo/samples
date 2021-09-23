@@ -4,12 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.plusAssign
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -35,8 +38,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var navigationDispatcher: NavigationDispatcher
 
-    @ExperimentalMaterialNavigationApi
-    @ExperimentalAnimationApi
+    @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyEdgeToEdge()
@@ -58,6 +60,20 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
+            DisposableEffect(navController) {
+                val callback = NavController.OnDestinationChangedListener { _, destination, args ->
+                    when (destination.route) {
+                        Destination.SampleContainer.route -> {
+                        }
+                        else -> {
+                        }
+                    }
+                }
+                navController.addOnDestinationChangedListener(callback)
+                onDispose {
+                    navController.removeOnDestinationChangedListener(callback)
+                }
+            }
             LaunchedEffect(Unit) {
                 launch {
                     navigationEvents.collect { event -> event(navController) }
@@ -65,13 +81,17 @@ class MainActivity : ComponentActivity() {
             }
 
             IgdbBrowserTheme(savedTheme) {
-                ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
+                ProvideWindowInsets() {
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {
-                        SimpleCore(
-                            Destination.SampleContainer.route,
-                            navController
-                        )
+                        Scaffold(
+                            content = { innerPadding ->
+                                PopulatedNavHost(
+                                    startDestination = Destination.SampleContainer.route,
+                                    innerPadding = innerPadding,
+                                    navController = navController
+                                )
+                            })
                     }
                 }
             }
