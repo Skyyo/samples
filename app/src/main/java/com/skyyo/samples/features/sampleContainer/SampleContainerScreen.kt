@@ -138,6 +138,11 @@ fun PopularAndroidIntegrations(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goCameraX
     ) { Text(text = "camera x") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goQrScanning
+    ) { Text(text = "scan qr code with ML kit") }
 }
 
 @Composable

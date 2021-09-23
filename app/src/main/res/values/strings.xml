@@ -14,4 +14,7 @@
     <string name="name">name</string>
     <string name="name_too_short">name too short</string>
     <string name="card_number_too_short">card number too short</string>
+    <string name="please_grant_camera_permission_qr">Please\ngrant camera permission to scan\nQR code and preview glasses</string>
+    <string name="please_grant_camera_permission_from_settings">Please grant camera permission from application settings</string>
+
 </resources>

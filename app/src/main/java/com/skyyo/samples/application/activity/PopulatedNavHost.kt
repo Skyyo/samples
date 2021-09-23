@@ -45,6 +45,7 @@ import com.skyyo.samples.features.pagination.simple.CatsScreen
 import com.skyyo.samples.features.pagination.simpleWithDatabase.CatsRoomScreen
 import com.skyyo.samples.features.parallaxEffect.ParallaxEffectScreen
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
+import com.skyyo.samples.features.scanQR.QrScreen
 import com.skyyo.samples.features.sharedViewModel.ProfileSharedViewModel
 import com.skyyo.samples.features.sharedViewModel.confirmProfile.EditProfileConfirmationScreen
 import com.skyyo.samples.features.sharedViewModel.editProfile.EditProfileScreen
@@ -129,4 +130,5 @@ fun PopulatedNavHost(
             EditProfileConfirmationScreen(navGraphViewModel)
         }
     }
+    composable(Destination.QrCodeScanning.route) { QrScreen() }
 }

@@ -104,7 +104,12 @@ class SampleContainerViewModel @Inject constructor(
     fun goCustomView() = navigationDispatcher.emit {
         it.navigate(Destination.CustomView.route)
     }
+
     fun goHiltComposeSharedViewModel() = navigationDispatcher.emit {
         it.navigate(ProfileGraph.Profile.route)
+    }
+
+    fun goQrScanning() = navigationDispatcher.emit {
+        it.navigate(Destination.QrCodeScanning.route)
     }
 }

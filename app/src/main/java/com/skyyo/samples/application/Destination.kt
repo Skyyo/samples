@@ -34,9 +34,9 @@ sealed class Destination(val route: String) {
     object CatFeed : Destination("catFeed")
     object CatDetails : Destination("catDetails")
     object CatContacts : Destination("catContacts")
+    object QrCodeScanning : Destination("qrCodeScanning")
 
 }
-
 
 sealed class ProfileGraph(val route: String) {
 
