@@ -4,7 +4,7 @@ For pagination & network images it uses [CATAAS](https://cataas.com/#/).
 # Known issues
 
 Navigation-Hilt-Compose
-- [Issue](https://github.com/Skyyo/compose-hilt-navigation-issue/tree/master/app/src/main/java/com/skyyo/navigationissue) with fast tapping on destination
+- [Issue](https://issuetracker.google.com/issues/200817333) with fast tapping on destination
 
 Paging
 - Can't declare state listeners on the Flow<PagingData<Value>> or Pager or similar. We're forced to propagate important events from bottom to top instead of top to bottom. [issue](https://issuetracker.google.com/issues/200577793)
