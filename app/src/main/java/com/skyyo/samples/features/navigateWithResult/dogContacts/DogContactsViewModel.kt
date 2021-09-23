@@ -1,8 +1,7 @@
-package com.skyyo.samples.features.navigateWithResult
+package com.skyyo.samples.features.navigateWithResult.dogContacts
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.skyyo.samples.application.DogDetailsGraph
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.models.Dog
 import com.skyyo.samples.extensions.setNavigationResult
@@ -26,7 +25,7 @@ class DogContactsViewModel @Inject constructor(
 //            result = "adopted"
             result = dog
         )
-        it.popBackStack(DogDetailsGraph.DogDetails.route, true)
+        it.popBackStack(Destination.DogDetails.route, true)
     }
 
 }

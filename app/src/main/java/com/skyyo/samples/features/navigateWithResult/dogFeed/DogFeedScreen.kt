@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.navigateWithResult
+package com.skyyo.samples.features.navigateWithResult.dogFeed
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

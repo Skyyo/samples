@@ -18,7 +18,6 @@ import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.skyyo.samples.application.DogDetailsGraph
 import com.skyyo.samples.application.EditProfileGraph
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
@@ -33,9 +32,9 @@ import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
-import com.skyyo.samples.features.navigateWithResult.DogContactsScreen
-import com.skyyo.samples.features.navigateWithResult.DogDetailsScreen
-import com.skyyo.samples.features.navigateWithResult.DogFeedScreen
+import com.skyyo.samples.features.navigateWithResult.dogContacts.DogContactsScreen
+import com.skyyo.samples.features.navigateWithResult.dogDetails.DogDetailsScreen
+import com.skyyo.samples.features.navigateWithResult.dogFeed.DogFeedScreen
 import com.skyyo.samples.features.otp.OtpScreen
 import com.skyyo.samples.features.pagination.paging.CatsPagingScreen
 import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomScreen
@@ -86,6 +85,12 @@ fun PopulatedNavHost(
         onBackPressIntercepted?.let { BackHandler(onBack = it) }
         CatsPagingRoomScreen()
     }
+
+    composable(Destination.DogFeed.route) { DogFeedScreen() }
+    composable(Destination.DogDetails.route) { DogDetailsScreen() }
+    composable(Destination.DogContacts.route) { DogContactsScreen() }
+
+
     navigation(
         route = EditProfileGraph.route,
         startDestination = EditProfileGraph.EditProfile.route
@@ -96,21 +101,14 @@ fun PopulatedNavHost(
             EditProfileConfirmationScreen(navGraphSharedViewModel)
         }
         composable(route = EditProfileGraph.EditProfileConfirmation2.route) {
-            val navGraphSharedViewModel: ProfileSharedViewModel =
-                hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
+            val navGraphSharedViewModel: ProfileSharedViewModel = hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
             EditProfileConfirmation2Screen(navGraphSharedViewModel)
         }
     }
 
 
-    composable(Destination.DogFeed.route) { DogFeedScreen() }
-    navigation(
-        route = DogDetailsGraph.route,
-        startDestination = DogDetailsGraph.DogDetails.route
-    ) {
-        composable(route = DogDetailsGraph.DogDetails.route) { DogDetailsScreen() }
-        composable(route = DogDetailsGraph.DogContacts.route) { DogContactsScreen() }
-    }
+
+
     composable(Destination.Map.route) { GoogleMapScreen() }
     composable(Destination.ForceTheme.route) { ForceThemeScreen() }
     composable(Destination.CameraX.route) { CameraXScreen() }

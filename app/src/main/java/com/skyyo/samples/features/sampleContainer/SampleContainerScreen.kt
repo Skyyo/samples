@@ -34,12 +34,11 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         ThemeAndLocalization(viewModel)
         ScrollBasedAnimations(viewModel)
         UIelements(viewModel)
-
         Spacer(modifier = Modifier.height(28.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = viewModel::goNavWithResultSample
-        ) { Text(text = "navigate to/back with results") }
+        ) { Text(text = "navigate forward/back with values") }
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),

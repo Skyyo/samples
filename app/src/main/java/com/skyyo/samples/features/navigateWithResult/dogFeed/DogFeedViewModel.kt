@@ -1,11 +1,11 @@
-package com.skyyo.samples.features.navigateWithResult
+package com.skyyo.samples.features.navigateWithResult.dogFeed
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyyo.samples.application.DogDetailsGraph
+import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.models.Dog
 import com.skyyo.samples.extensions.navigateWithObject
 import com.skyyo.samples.extensions.observeNavigationResult
@@ -43,12 +43,12 @@ class DogFeedViewModel @Inject constructor(
     }
 
     fun goDogAdopt(dogId: String) = navigationDispatcher.emit {
-        it.navigate(DogDetailsGraph.DogDetails.createRoute(dogId))
+        it.navigate(Destination.DogDetails.createRoute(dogId))
     }
 
     fun goDogAdoptWithObject(dog: Dog) = navigationDispatcher.emit {
         it.navigateWithObject(
-            route = DogDetailsGraph.DogDetails.route,
+            route = Destination.DogDetails.route,
             arguments = bundleOf("dog" to dog)
         )
     }
