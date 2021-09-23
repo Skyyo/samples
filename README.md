@@ -3,6 +3,9 @@ For pagination & network images it uses [CATAAS](https://cataas.com/#/).
 
 # Known issues
 
+Navigation-Hilt-Compose
+- [Issue](https://github.com/Skyyo/compose-hilt-navigation-issue/tree/master/app/src/main/java/com/skyyo/navigationissue) with fast tapping on destination
+
 Paging
 - Can't declare state listeners on the Flow<PagingData<Value>> or Pager or similar. We're forced to propagate important events from bottom to top instead of top to bottom. [issue](https://issuetracker.google.com/issues/200577793)
 
@@ -35,9 +38,6 @@ Miscellaneous
 - Surface composable has [issue](https://issuetracker.google.com/issues/198313901) with elevation overlapping. This is considered a proper behaviour and one of the workarounds would be using Scaffold.
   
 # TODO
-  
-Navigation
-- Issue with fast tapping on destination. When we tap from A to C fast, multiple times C gets bugged. Related: pagination samples: scroll to top button not triggered because of this issue, need to ensure this is navigation only issue, which has side effect for the button.
   
 CameraX
 - investigate crashe on orientation change
