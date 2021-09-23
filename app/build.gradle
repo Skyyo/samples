@@ -11,7 +11,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId 'com.skyyo.igdbbrowser'
+        applicationId 'com.skyyo.samples'
         minSdk 23
         targetSdk 30
         versionCode 1

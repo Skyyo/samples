@@ -34,20 +34,29 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         ThemeAndLocalization(viewModel)
         ScrollBasedAnimations(viewModel)
         UIelements(viewModel)
+        NavigateWithResults(viewModel)
         Spacer(modifier = Modifier.height(28.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goNavWithResultSample
-        ) { Text(text = "navigate forward/back with values") }
-        Spacer(modifier = Modifier.height(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = viewModel::goAutoScroll
         ) { Text(text = "auto scroll") }
         Spacer(modifier = Modifier.height(8.dp))
     }
+}
 
-
+@Composable
+fun NavigateWithResults(viewModel: SampleContainerViewModel) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "navigate to/back with results")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goNavigationWithValuesSimple
+    ) { Text(text = "navigate forward/back simple") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goNavigationWithValuesObject
+    ) { Text(text = "navigate forward/back with object") }
 }
 
 @Composable

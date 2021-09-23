@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.navigateWithResult.dogFeed
+package com.skyyo.samples.features.navigateWithResult.simple.dogFeed
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,22 +9,17 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.statusBarsPadding
-import com.skyyo.samples.application.models.Dog
 
 
 @Composable
 fun DogFeedScreen(viewModel: DogFeedViewModel = hiltViewModel()) {
-    val dog = viewModel.dog.observeAsState()
+    val dog = viewModel.dogStatus.observeAsState()
+
     Column(Modifier.fillMaxSize()) {
-        Button(
-            onClick = {
-//            viewModel.goDogAdopt("2211")
-                viewModel.goDogAdoptWithObject(Dog(99, "Huskar"))
-            }, modifier = Modifier.statusBarsPadding()
-        ) {
+        Button(viewModel::goDogDetails, Modifier.statusBarsPadding()) {
             Text(text = "Dog Feed: go adopt!")
         }
-        Text(text = "dog status: ${dog.value?.name}")
+        Text(text = "dog status: ${dog.value}")
     }
 }
 

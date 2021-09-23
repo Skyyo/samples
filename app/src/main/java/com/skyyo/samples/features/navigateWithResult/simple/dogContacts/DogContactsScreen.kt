@@ -1,5 +1,6 @@
-package com.skyyo.samples.features.navigateWithResult.dogContacts
+package com.skyyo.samples.features.navigateWithResult.simple.dogContacts
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -10,7 +11,10 @@ import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun DogContactsScreen(viewModel: DogContactsViewModel = hiltViewModel()) {
-    Button(viewModel::popToDogFeed, Modifier.fillMaxSize().statusBarsPadding()) {
-        Text(text = "Dog contacts: ${viewModel.dog.name} go back")
+    Box(Modifier.fillMaxSize()) {
+        Button(viewModel::popToDogFeed, Modifier.statusBarsPadding()) {
+            Text(text = "Dog contacts: ${viewModel.dogId} go back")
+        }
     }
+
 }

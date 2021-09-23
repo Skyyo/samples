@@ -1,6 +1,5 @@
 package com.skyyo.samples.application.activity
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -18,8 +17,8 @@ import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.skyyo.samples.application.EditProfileGraph
 import com.skyyo.samples.application.Destination
+import com.skyyo.samples.application.EditProfileGraph
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
 import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
@@ -32,9 +31,12 @@ import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
-import com.skyyo.samples.features.navigateWithResult.dogContacts.DogContactsScreen
-import com.skyyo.samples.features.navigateWithResult.dogDetails.DogDetailsScreen
-import com.skyyo.samples.features.navigateWithResult.dogFeed.DogFeedScreen
+import com.skyyo.samples.features.navigateWithResult.simple.dogContacts.DogContactsScreen
+import com.skyyo.samples.features.navigateWithResult.simple.dogDetails.DogDetailsScreen
+import com.skyyo.samples.features.navigateWithResult.simple.dogFeed.DogFeedScreen
+import com.skyyo.samples.features.navigateWithResult.withObject.catContacts.CatContactsScreen
+import com.skyyo.samples.features.navigateWithResult.withObject.catDetails.CatDetailsScreen
+import com.skyyo.samples.features.navigateWithResult.withObject.catFeed.CatFeedScreen
 import com.skyyo.samples.features.otp.OtpScreen
 import com.skyyo.samples.features.pagination.paging.CatsPagingScreen
 import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomScreen
@@ -58,57 +60,16 @@ fun PopulatedNavHost(
     startDestination: String,
     innerPadding: PaddingValues,
     navController: NavHostController,
-    onBackPressIntercepted: (() -> Unit)? = null
 ) = AnimatedNavHost(
     navController = navController,
     startDestination = startDestination,
     modifier = Modifier.padding(innerPadding)
 ) {
     composable(Destination.SampleContainer.route) { SampleContainerScreen() }
-    composable(Destination.Profile.route) {
-        onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        ProfileScreen()
-    }
-    composable(Destination.Cats.route) {
-        onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        CatsScreen()
-    }
-    composable(Destination.CatsRoom.route) {
-        onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        CatsRoomScreen()
-    }
-    composable(Destination.CatsPaging.route) {
-        onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        CatsPagingScreen()
-    }
-    composable(Destination.CatsPagingRoom.route) {
-        onBackPressIntercepted?.let { BackHandler(onBack = it) }
-        CatsPagingRoomScreen()
-    }
-
-    composable(Destination.DogFeed.route) { DogFeedScreen() }
-    composable(Destination.DogDetails.route) { DogDetailsScreen() }
-    composable(Destination.DogContacts.route) { DogContactsScreen() }
-
-
-    navigation(
-        route = EditProfileGraph.route,
-        startDestination = EditProfileGraph.EditProfile.route
-    ) {
-        composable(route = EditProfileGraph.EditProfile.route) { EditProfileScreen() }
-        composable(route = EditProfileGraph.EditProfileConfirmation.route) {
-            val navGraphSharedViewModel: ProfileSharedViewModel = hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
-            EditProfileConfirmationScreen(navGraphSharedViewModel)
-        }
-        composable(route = EditProfileGraph.EditProfileConfirmation2.route) {
-            val navGraphSharedViewModel: ProfileSharedViewModel = hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
-            EditProfileConfirmation2Screen(navGraphSharedViewModel)
-        }
-    }
-
-
-
-
+    composable(Destination.Cats.route) { CatsScreen() }
+    composable(Destination.CatsRoom.route) { CatsRoomScreen() }
+    composable(Destination.CatsPaging.route) { CatsPagingScreen() }
+    composable(Destination.CatsPagingRoom.route) { CatsPagingRoomScreen() }
     composable(Destination.Map.route) { GoogleMapScreen() }
     composable(Destination.ForceTheme.route) { ForceThemeScreen() }
     composable(Destination.CameraX.route) { CameraXScreen() }
@@ -117,10 +78,17 @@ fun PopulatedNavHost(
     composable(Destination.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
     composable(Destination.ViewPager.route) { ViewPagerScreen() }
     composable(Destination.StickyHeader.route) { ListsScreen() }
-    composable(Destination.InputValidationManual.route, enterTransition = { _, _ ->
-        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(400))
+    composable(Destination.DogFeed.route) { DogFeedScreen() }
+    composable(Destination.DogDetails.route) { DogDetailsScreen() }
+    composable(Destination.DogContacts.route) { DogContactsScreen() }
+    composable(Destination.CatFeed.route) { CatFeedScreen() }
+    composable(Destination.CatDetails.route) { CatDetailsScreen() }
+    composable(Destination.CatContacts.route) { CatContactsScreen() }
+    composable(Destination.InputValidationManual.route,
+        enterTransition = { _, _ ->
+            slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(400))
 //                fadeIn(animationSpec = tween(2000))
-    },
+        },
         exitTransition = { _, _ ->
             slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(400))
         },
@@ -139,4 +107,23 @@ fun PopulatedNavHost(
     composable(Destination.Table.route) { TableScreen() }
     composable(Destination.ParallaxEffect.route) { ParallaxEffectScreen() }
     composable(Destination.CustomView.route) { CustomViewScreen() }
+
+    composable(Destination.Profile.route) { ProfileScreen() }
+
+    navigation(
+        route = EditProfileGraph.route,
+        startDestination = EditProfileGraph.EditProfile.route
+    ) {
+        composable(route = EditProfileGraph.EditProfile.route) { EditProfileScreen() }
+        composable(route = EditProfileGraph.EditProfileConfirmation.route) {
+            val navGraphSharedViewModel: ProfileSharedViewModel =
+                hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
+            EditProfileConfirmationScreen(navGraphSharedViewModel)
+        }
+        composable(route = EditProfileGraph.EditProfileConfirmation2.route) {
+            val navGraphSharedViewModel: ProfileSharedViewModel =
+                hiltViewModel(navController.getBackStackEntry(EditProfileGraph.EditProfile.route))
+            EditProfileConfirmation2Screen(navGraphSharedViewModel)
+        }
+    }
 }

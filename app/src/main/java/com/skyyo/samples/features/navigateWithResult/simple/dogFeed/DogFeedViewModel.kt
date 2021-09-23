@@ -1,13 +1,10 @@
-package com.skyyo.samples.features.navigateWithResult.dogFeed
+package com.skyyo.samples.features.navigateWithResult.simple.dogFeed
 
-import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.application.Destination
-import com.skyyo.samples.application.models.Dog
-import com.skyyo.samples.extensions.navigateWithObject
 import com.skyyo.samples.extensions.observeNavigationResult
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +19,7 @@ class DogFeedViewModel @Inject constructor(
 ) : ViewModel() {
 
     //this is the result from DogContacts composable
-//    val dogStatus = MutableLiveData<String>()
-    val dog = MutableLiveData<Dog>()
+    val dogStatus = MutableLiveData<String>()
 
     init {
         observeDogStatusResult()
@@ -32,25 +28,14 @@ class DogFeedViewModel @Inject constructor(
     private fun observeDogStatusResult() {
         navigationDispatcher.emit {
             viewModelScope.launch {
-//                it.observeNavigationResult<String>("dogStatus")?.collect {
-//                    dogStatus.value = it
-//                }
-                it.observeNavigationResult<Dog>("dog")?.collect {
-                    dog.value = it
+                it.observeNavigationResult<String>("dogStatus")?.collect {
+                    dogStatus.value = it
                 }
             }
         }
     }
 
-    fun goDogAdopt(dogId: String) = navigationDispatcher.emit {
-        it.navigate(Destination.DogDetails.createRoute(dogId))
+    fun goDogDetails() = navigationDispatcher.emit {
+        it.navigate(Destination.DogDetails.createRoute("2211"))
     }
-
-    fun goDogAdoptWithObject(dog: Dog) = navigationDispatcher.emit {
-        it.navigateWithObject(
-            route = Destination.DogDetails.route,
-            arguments = bundleOf("dog" to dog)
-        )
-    }
-
 }

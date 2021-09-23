@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.navigateWithResult.dogDetails
+package com.skyyo.samples.features.navigateWithResult.withObject.catDetails
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.SavedStateHandle
@@ -11,22 +11,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class DogDetailsViewModel @Inject constructor(
+class CatDetailsViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val handle: SavedStateHandle,
 ) : ViewModel() {
 
-    //    val dogId: String = requireNotNull(handle.get("dogId"))
-    val dog: Dog = requireNotNull(handle.get("dog"))
+    val cat: Dog = requireNotNull(handle.get("cat"))
 
-    fun goContacts() = navigationDispatcher.emit {
-        it.navigate(Destination.DogContacts.createRoute("3333"))
-    }
-
-    fun goContactsWithObject() = navigationDispatcher.emit {
+    fun goCatContacts() = navigationDispatcher.emit {
         it.navigateWithObject(
-            route = Destination.DogContacts.route,
-            arguments = bundleOf("dog" to dog)
+            route = Destination.CatContacts.route,
+            arguments = bundleOf("cat" to cat)
         )
     }
 

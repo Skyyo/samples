@@ -56,8 +56,12 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.ViewPager.route)
     }
 
-    fun goNavWithResultSample() = navigationDispatcher.emit {
+    fun goNavigationWithValuesSimple() = navigationDispatcher.emit {
         it.navigate(Destination.DogFeed.route)
+    }
+
+    fun goNavigationWithValuesObject() = navigationDispatcher.emit {
+        it.navigate(Destination.CatFeed.route)
     }
 
     fun goStickyHeaders() = navigationDispatcher.emit {

@@ -24,14 +24,17 @@ sealed class Destination(val route: String) {
     object Otp : Destination("otp")
     object Table : Destination("table")
     object CustomView : Destination("customViewScreen")
+
     object DogFeed : Destination("dogFeed")
-    object DogDetails : Destination("dogDetails") {
+    object DogDetails : Destination("dogDetails/{dogId}") {
         fun createRoute(dogId: String) = "dogDetails/$dogId"
     }
-    //    object DogContacts : Destination("dogContacts/{dogId}") {
-    object DogContacts : Destination("dogContacts") {
+    object DogContacts : Destination("dogContacts/{dogId}") {
         fun createRoute(dogId: String) = "dogContacts/$dogId"
     }
+    object CatFeed : Destination("catFeed")
+    object CatDetails : Destination("catDetails")
+    object CatContacts : Destination("catContacts")
 
 
     object Profile : Destination("profile")
