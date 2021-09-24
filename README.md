@@ -13,6 +13,10 @@ Modal Drawer
 - can't change width, [issue](https://issuetracker.google.com/issues/190879368)
 - can't peek to reveal, [issue](https://issuetracker.google.com/issues/167408603)
 
+Google Maps
+- [issue](https://github.com/googlemaps/android-maps-utils/issues/949)
+- [issue](https://issuetracker.google.com/issues/197880217)
+
 Keyboard
 - [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress ( affecting OTP sample )
 - [issue](https://issuetracker.google.com/issues/199297778) with adjustPan mode not pinning to the focused textField
@@ -23,13 +27,12 @@ Miscellaneous
 - drag & drop feature. [possible workaround](https://stackoverflow.com/questions/64913067/reorder-lazycolumn-items-with-drag-drop)
 - there is no out of the box support for scroll bars as of August 19, 2021. [Sample for simple cases](https://stackoverflow.com/questions/66341823/jetpack-compose-scrollbars/68056586#68056586)
 - bottomSheet destination is not preserved by default when navigating to new destination and coming back. [Workaround](https://medium.com/@theapache64/saving-bottomsheets-state-%EF%B8%8F-d9426cafbcbb)
-- google maps related [issue](https://github.com/googlemaps/android-maps-utils/issues/949)
-- google maps related [issue](https://issuetracker.google.com/issues/197880217)
 - no way to create nested sticky headers. Workaround imo is changing design or making one lvl of the headers as a composable that animates text changes.
 - LazyVerticalGrid seems to be really imperformant and [not adviced](https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyVerticalGrid(androidx.compose.foundation.lazy.GridCells,androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.foundation.layout.Arrangement.Horizontal,kotlin.Function1)) to use. Instead use combinations of Column + Rows
 - Fling breaks on skipped frames. [issue](https://issuetracker.google.com/issues/190788866)
+- Need to find an alternative to onboarding guides from the view system like these libraries provided: [onboardingFlow](https://github.com/MrIceman/onboardingflow),[TapTargetView](https://github.com/KeepSafe/TapTargetView),[Spotlight](https://github.com/TakuSemba/Spotlight)
 
-# Limitations & potential issues
+# Limitations
 - We're forced to use [ProvideWindowInsets](https://google.github.io/accompanist/insets/#usage) composable as a wrapper for composables in fragment based projects
 - There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)
 - Deep links might require lot of additional work if we need to open them in a specific bottom bar / drawer tab.
