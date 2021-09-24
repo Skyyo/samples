@@ -46,6 +46,10 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
             onClick = viewModel::goHiltComposeSharedViewModel
         ) { Text(text = "hilt+compose shared viewModel") }
         Spacer(modifier = Modifier.height(8.dp))
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnackbar) {
+            Text(text = "snackbar")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 

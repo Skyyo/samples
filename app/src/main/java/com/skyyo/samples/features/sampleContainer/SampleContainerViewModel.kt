@@ -116,4 +116,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goScrollAnimation1() = navigationDispatcher.emit {
         it.navigate(Destination.ScrollAnimation1.route)
     }
+
+    fun goSnackbar() = navigationDispatcher.emit {
+        it.navigate(Destination.Snackbar.route)
+    }
 }
