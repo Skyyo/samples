@@ -51,6 +51,10 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
             Text(text = "snackbar")
         }
         Spacer(modifier = Modifier.height(8.dp))
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goDropdown) {
+            Text(text = "dropdown")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 

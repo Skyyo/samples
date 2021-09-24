@@ -132,4 +132,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goGradientScroll() = navigationDispatcher.emit {
         it.navigate(Destination.GradientScroll.route)
     }
+
+    fun goDropdown() = navigationDispatcher.emit {
+        it.navigate(Destination.Dropdown.route)
+    }
 }
