@@ -112,4 +112,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goQrScanning() = navigationDispatcher.emit {
         it.navigate(Destination.QrCodeScanning.route)
     }
+
+    fun goScrollAnimation1() = navigationDispatcher.emit {
+        it.navigate(Destination.ScrollAnimation1.route)
+    }
 }

@@ -35,6 +35,7 @@ sealed class Destination(val route: String) {
     object CatDetails : Destination("catDetails")
     object CatContacts : Destination("catContacts")
     object QrCodeScanning : Destination("qrCodeScanning")
+    object ScrollAnimation1 : Destination("scrollAnimation1")
 
 }
 

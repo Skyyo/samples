@@ -113,6 +113,10 @@ fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goParallaxEffect) {
         Text(text = "parallax effect ")
     }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goScrollAnimation1) {
+        Text(text = "scroll animation 1")
+    }
 }
 
 @Composable
