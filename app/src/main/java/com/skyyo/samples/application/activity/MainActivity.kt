@@ -81,17 +81,15 @@ class MainActivity : ComponentActivity() {
             }
 
             IgdbBrowserTheme(savedTheme) {
-                ProvideWindowInsets() {
+                ProvideWindowInsets {
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {
-                        Scaffold(
-                            content = { innerPadding ->
-                                PopulatedNavHost(
-                                    startDestination = Destination.SampleContainer.route,
-                                    innerPadding = innerPadding,
-                                    navController = navController
-                                )
-                            })
+                        Scaffold {
+                            PopulatedNavHost(
+                                startDestination = Destination.SampleContainer.route,
+                                navController = navController
+                            )
+                        }
                     }
                 }
             }

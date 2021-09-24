@@ -120,4 +120,12 @@ class SampleContainerViewModel @Inject constructor(
     fun goSnackbar() = navigationDispatcher.emit {
         it.navigate(Destination.Snackbar.route)
     }
+
+    fun goBottomBar() = navigationDispatcher.emit {
+        it.navigate(Destination.BottomBar.route)
+    }
+
+    fun goNavigationDrawer() = navigationDispatcher.emit {
+        it.navigate(Destination.Drawer.route)
+    }
 }

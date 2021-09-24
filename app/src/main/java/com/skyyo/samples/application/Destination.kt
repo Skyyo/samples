@@ -37,7 +37,11 @@ sealed class Destination(val route: String) {
     object QrCodeScanning : Destination("qrCodeScanning")
     object ScrollAnimation1 : Destination("scrollAnimation1")
     object Snackbar : Destination("snack")
-
+    object BottomBar : Destination("bottomBar")
+    object Drawer : Destination("drawer")
+    object Tab1 : Destination("tab1")
+    object Tab2 : Destination("tab2")
+    object Tab3 : Destination("tab3")
 }
 
 sealed class ProfileGraph(val route: String) {

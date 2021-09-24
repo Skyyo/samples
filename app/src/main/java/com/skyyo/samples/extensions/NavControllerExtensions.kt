@@ -5,6 +5,7 @@ import androidx.lifecycle.asFlow
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import com.skyyo.samples.application.Destination
 
 //sets value to previous savedStateHandle unless route is specified
 fun <T> NavController.setNavigationResult(route: String? = null, key: String, result: T) {
@@ -33,4 +34,16 @@ fun NavController.navigateWithObject(
     navigate(route, navOptions, extras)
     if (arguments == null || arguments.isEmpty) return
     currentBackStackEntry?.arguments?.putAll(arguments)
+}
+
+//popUpToRoute - should always be the start destination of the bottomBar, not app
+fun NavController.navigateToRootDestination(
+    route: String,
+    popUpToRoute: String = Destination.Tab1.route
+) {
+    navigate(route) {
+        popUpTo(popUpToRoute) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
+    }
 }

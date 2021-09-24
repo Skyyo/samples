@@ -35,6 +35,7 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         ScrollBasedAnimations(viewModel)
         UIelements(viewModel)
         NavigateWithResults(viewModel)
+        NavigationCores(viewModel)
         Spacer(modifier = Modifier.height(28.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -51,6 +52,21 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         }
         Spacer(modifier = Modifier.height(8.dp))
     }
+}
+
+@Composable
+fun NavigationCores(viewModel: SampleContainerViewModel) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "navigation cores")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goBottomBar
+    ) { Text(text = "bottom bar") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goNavigationDrawer
+    ) { Text(text = "navigation drawer") }
 }
 
 @Composable

@@ -31,7 +31,7 @@ fun SnackbarScreen() {
             Text(text = "show snack")
         }
         SnackbarHost(
-            //this allows to customize the snackbar appereance
+            //this allows to customize the snackbar appearance
             snackbar = {
                 Box(
                     Modifier

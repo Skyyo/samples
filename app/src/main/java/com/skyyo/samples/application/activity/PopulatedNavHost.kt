@@ -38,6 +38,8 @@ import com.skyyo.samples.features.navigateWithResult.simple.dogFeed.DogFeedScree
 import com.skyyo.samples.features.navigateWithResult.withObject.catContacts.CatContactsScreen
 import com.skyyo.samples.features.navigateWithResult.withObject.catDetails.CatDetailsScreen
 import com.skyyo.samples.features.navigateWithResult.withObject.catFeed.CatFeedScreen
+import com.skyyo.samples.features.navigationCores.bottomBar.BottomBarScreen
+import com.skyyo.samples.features.navigationCores.drawer.DrawerScreen
 import com.skyyo.samples.features.otp.OtpScreen
 import com.skyyo.samples.features.pagination.paging.CatsPagingScreen
 import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomScreen
@@ -65,12 +67,10 @@ import com.skyyo.samples.features.viewPager.ViewPagerScreen
 @Composable
 fun PopulatedNavHost(
     startDestination: String,
-    innerPadding: PaddingValues,
     navController: NavHostController,
 ) = AnimatedNavHost(
     navController = navController,
     startDestination = startDestination,
-    modifier = Modifier.padding(innerPadding)
 ) {
     composable(Destination.SampleContainer.route) { SampleContainerScreen() }
     composable(Destination.Cats.route) { CatsScreen() }
@@ -135,4 +135,6 @@ fun PopulatedNavHost(
     composable(Destination.QrCodeScanning.route) { QrScreen() }
     composable(Destination.ScrollAnimation1.route) { ScrollAnimation1Screen() }
     composable(Destination.Snackbar.route) { SnackbarScreen() }
+    composable(Destination.BottomBar.route) { BottomBarScreen() }
+    composable(Destination.Drawer.route) { DrawerScreen() }
 }
