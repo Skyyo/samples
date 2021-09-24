@@ -3,7 +3,6 @@ package com.skyyo.samples.features.gradientScroll
 import android.animation.ArgbEvaluator
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -69,7 +68,9 @@ fun GradientMessage(
 ) {
     var backgroundColor by remember { mutableStateOf(Color.Transparent) }
 
-    Box(
+    Text(
+        text = message,
+        color = Color.White,
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp)
             .onGloballyPositioned { coordinates: LayoutCoordinates ->
@@ -87,14 +88,9 @@ fun GradientMessage(
             .background(
                 color = backgroundColor,
                 shape = Shapes.large
-            ),
-    ) {
-        Text(
-            text = message,
-            color = Color.White,
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-        )
-    }
+            )
+            .padding(vertical = 8.dp, horizontal = 16.dp),
+    )
 }
 
 
