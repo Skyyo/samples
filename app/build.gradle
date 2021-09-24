@@ -30,6 +30,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.debug
             minifyEnabled true
             buildConfigField "String", "BASE_URL", "\"https://cataas.com/api/\""
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

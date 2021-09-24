@@ -128,4 +128,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goNavigationDrawer() = navigationDispatcher.emit {
         it.navigate(Destination.Drawer.route)
     }
+
+    fun goGradientScroll() = navigationDispatcher.emit {
+        it.navigate(Destination.GradientScroll.route)
+    }
 }

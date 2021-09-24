@@ -42,6 +42,7 @@ sealed class Destination(val route: String) {
     object Tab1 : Destination("tab1")
     object Tab2 : Destination("tab2")
     object Tab3 : Destination("tab3")
+    object GradientScroll : Destination("gradientScroll")
 }
 
 sealed class ProfileGraph(val route: String) {

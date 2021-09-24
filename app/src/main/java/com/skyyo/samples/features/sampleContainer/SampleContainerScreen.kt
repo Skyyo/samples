@@ -137,6 +137,10 @@ fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goScrollAnimation1) {
         Text(text = "scroll animation 1")
     }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGradientScroll) {
+        Text(text = "gradient change")
+    }
 }
 
 @Composable

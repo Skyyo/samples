@@ -4,12 +4,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -29,6 +26,7 @@ import com.skyyo.samples.features.cameraX.CameraXScreen
 import com.skyyo.samples.features.customView.CustomViewScreen
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
+import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
@@ -137,4 +135,5 @@ fun PopulatedNavHost(
     composable(Destination.Snackbar.route) { SnackbarScreen() }
     composable(Destination.BottomBar.route) { BottomBarScreen() }
     composable(Destination.Drawer.route) { DrawerScreen() }
+    composable(Destination.GradientScroll.route) { GradientScrollScreen() }
 }
