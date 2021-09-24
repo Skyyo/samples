@@ -61,7 +61,7 @@ Uncategorized
 - Staggered grid example
 - circular reveal upon changing theme
 - cool transformation animations in google owl sample
-- dynamic gradient on scroll
+- dynamic gradient on scroll ( take a look at one of the google samples,and add another gradient scroll sample )
 - dominant colour for background in the google jetcaster sample
 - https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
 - compose with ad mob
