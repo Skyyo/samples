@@ -31,6 +31,7 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         BottomSheets(viewModel)
         InputValidations(viewModel)
         PopularAndroidIntegrations(viewModel)
+        ExoPlayerSamples(viewModel)
         ThemeAndLocalization(viewModel)
         ScrollBasedAnimations(viewModel)
         UIelements(viewModel)
@@ -175,6 +176,21 @@ fun PopularAndroidIntegrations(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goQrScanning
     ) { Text(text = "scan qr code with ML kit") }
+}
+
+@Composable
+fun ExoPlayerSamples(viewModel: SampleContainerViewModel) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "ExoPlayer")
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goExoPlayerColumn
+    ) { Text(text = "exoPlayer in column") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goExoPlayerAutoplayColumn
+    ) { Text(text = "exoPlayer auto playback in column") }
 }
 
 @Composable

@@ -136,4 +136,12 @@ class SampleContainerViewModel @Inject constructor(
     fun goDropdown() = navigationDispatcher.emit {
         it.navigate(Destination.Dropdown.route)
     }
+
+    fun goExoPlayerColumn() = navigationDispatcher.emit {
+        it.navigate(Destination.ExoPlayerColumn.route)
+    }
+
+    fun goExoPlayerAutoplayColumn() = navigationDispatcher.emit {
+        it.navigate(Destination.ExoPlayerAutoplayColumn.route)
+    }
 }

@@ -128,6 +128,8 @@ dependencies {
     implementation 'androidx.camera:camera-view:1.0.0-alpha28'
 
     implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
+
 
     debugImplementation "com.github.YarikSOffice.Venom:venom:0.4.1"
     releaseImplementation "com.github.YarikSOffice.Venom:venom-no-op:0.4.1"
