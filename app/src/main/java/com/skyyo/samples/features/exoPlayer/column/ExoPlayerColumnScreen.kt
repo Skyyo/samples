@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.exoPlayer.column
 
+import android.view.LayoutInflater
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +27,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
+import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoItem
 import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
@@ -36,7 +38,7 @@ import com.skyyo.samples.utils.OnClick
 //TODO add seekTo & storing of last known position
 //TODO there is a bug because next videos has last frame of last played video when starting
 
-//TODO customize UI because player looks bad atm
+//TODO add listeners
 
 @Composable
 fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel()) {
@@ -115,9 +117,9 @@ private fun VideoCard(
 ) {
     val context = LocalContext.current
     val exoPlayerPreview = remember {
-        PlayerView(context).apply {
-
-        }
+        val videoPlayerLayout =
+            LayoutInflater.from(context).inflate(R.layout.video_player, null, false)
+        videoPlayerLayout.findViewById(R.id.playerView) as PlayerView
     }
 
     LaunchedEffect(isPlaying) {
@@ -138,3 +140,10 @@ private fun VideoCard(
         AndroidView({ exoPlayerPreview }, Modifier.height(256.dp))
     }
 }
+
+//@Composable
+//fun VideoPlayer() {
+//    AndroidViewBinding(factory = VideoPlayerBinding:inflate){
+//
+//    }
+//}

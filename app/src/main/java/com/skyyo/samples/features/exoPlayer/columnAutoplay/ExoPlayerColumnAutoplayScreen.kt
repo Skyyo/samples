@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.exoPlayer.columnAutoplay
 
+import android.view.LayoutInflater
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +28,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
+import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoItem
 import com.skyyo.samples.theme.Shapes
 import kotlin.math.abs
@@ -37,7 +39,7 @@ import kotlin.math.abs
 //TODO add playback for first & last items by adjusting findPlayingItemId using listState
 //TODO there is a bug because next videos has last frame of last played video when starting
 
-//TODO customize UI because player looks bad atm
+//TODO add listeners
 
 @Composable
 fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = hiltViewModel()) {
@@ -115,8 +117,8 @@ private fun VideoCard(
 ) {
     val context = LocalContext.current
     val exoPlayerPreview = remember {
-        PlayerView(context).apply {
-        }
+        val videoPlayerLayout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null, false)
+        videoPlayerLayout.findViewById(R.id.playerView) as PlayerView
     }
 
     LaunchedEffect(isPlaying) {

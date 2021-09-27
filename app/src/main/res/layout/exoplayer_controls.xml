@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/exoPlaybackControlView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <ImageButton
+        android:id="@id/exo_play"
+        style="@style/ExoMediaButton.Play"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:background="@null"
+        app:tint="@android:color/black" />
+
+    <ImageButton
+        android:id="@id/exo_pause"
+        style="@style/ExoMediaButton.Pause"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:background="@null"
+        app:tint="@android:color/black" />
+
+    <TextView
+        android:id="@id/exo_position"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        tools:text="00-00" />
+
+    <com.google.android.exoplayer2.ui.DefaultTimeBar
+        android:id="@id/exo_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="56dp"
+        android:focusable="true"
+        android:importantForAccessibility="yes"
+        app:buffered_color="@android:color/holo_green_light"
+        app:played_color="@android:color/holo_green_dark"
+        app:scrubber_color="@android:color/white"
+        app:unplayed_color="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@id/exo_duration"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        tools:text="10-00" />
+
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/exo_ffwd"-->
+    <!--        style="@style/ExoMediaButton.FastForward"-->
+    <!--        android:layout_width="56dp"-->
+    <!--        android:layout_height="56dp"-->
+    <!--        android:background="@null"-->
+    <!--        app:tint="@android:color/black"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/playPauseContainer"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/playPauseContainer"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/playPauseContainer" />-->
+
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/exo_rew"-->
+    <!--        style="@style/ExoMediaButton.Rewind"-->
+    <!--        android:layout_width="56dp"-->
+    <!--        android:layout_height="56dp"-->
+    <!--        android:background="@null"-->
+    <!--        app:tint="@android:color/black"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/playPauseContainer"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/playPauseContainer"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/playPauseContainer" />-->
+</FrameLayout>
