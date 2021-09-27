@@ -29,14 +29,16 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.skyyo.samples.features.exoPlayer.VideoItem
 import com.skyyo.samples.theme.Shapes
-import java.lang.Math.abs
+import kotlin.math.abs
 
 
 //TODO optimize by using thumbnails instead of PlayerViews everywhere.
 //TODO add seekTo & storing of last known position
-//TODO customize UI because player looks bad atm
 //TODO add playback for first & last items by adjusting findPlayingItemId using listState
 //TODO there is a bug because next videos has last frame of last played video when starting
+
+//TODO customize UI because player looks bad atm
+
 @Composable
 fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -50,19 +52,18 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     }
     val videos by viewModel.videos.observeAsState(listOf())
     // not sure we need derivedState for videos here
-    val currentlyPlayingId by derivedStateOf { findPlayingItemId(listState, videos) }
+    val playingVideoItem by derivedStateOf { findPlayingItemId(listState, videos) }
 
-    //optimise by logging recompositions
     DisposableEffect(exoPlayer) {
         val observer = object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume() {
-                if (currentlyPlayingId != -1) exoPlayer.play()
+                if (playingVideoItem != null) exoPlayer.play()
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
             fun onPause() {
-                if (currentlyPlayingId != -1) exoPlayer.pause()
+                if (playingVideoItem != null) exoPlayer.pause()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -73,12 +74,11 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
         }
     }
 
-    LaunchedEffect(currentlyPlayingId) {
-        if (currentlyPlayingId == -1) {
+    LaunchedEffect(playingVideoItem) {
+        if (playingVideoItem == null) {
             exoPlayer.stop()
         } else {
-            val playingItem = videos.find { it.id == currentlyPlayingId }
-            exoPlayer.setMediaItem(MediaItem.fromUri(playingItem!!.mediaUrl))
+            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
             exoPlayer.prepare()
         }
     }
@@ -100,7 +100,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
             VideoCard(
                 videoItem = video,
                 exoPlayer = exoPlayer,
-                isPlaying = video.id == currentlyPlayingId,
+                isPlaying = video.id == playingVideoItem?.id,
             )
         }
     }
@@ -116,7 +116,6 @@ private fun VideoCard(
     val context = LocalContext.current
     val exoPlayerPreview = remember {
         PlayerView(context).apply {
-            //TODO add listeners for play/pause etc
         }
     }
 
@@ -140,16 +139,16 @@ private fun VideoCard(
 fun findPlayingItemId(
     listState: LazyListState,
     items: List<VideoItem>
-): Int {
+): VideoItem? {
     val layoutInfo = listState.layoutInfo
     val visibleItems = layoutInfo.visibleItemsInfo.map { items[it.index] }
     return when (visibleItems.size) {
-        1 -> visibleItems.first().id
+        1 -> visibleItems.first()
         else -> {
             val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
             val itemsFromCenter =
                 layoutInfo.visibleItemsInfo.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
-            return itemsFromCenter.map { items[it.index] }.firstOrNull()?.id ?: -1
+            return itemsFromCenter.map { items[it.index] }.firstOrNull()
         }
     }
 }

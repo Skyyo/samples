@@ -34,8 +34,10 @@ import com.skyyo.samples.utils.OnClick
 //TODO add listeners for play/pause etc
 //TODO optimize by using thumbnails instead of PlayerViews everywhere.
 //TODO add seekTo & storing of last known position
-//TODO customize UI because player looks bad atm
 //TODO there is a bug because next videos has last frame of last played video when starting
+
+//TODO customize UI because player looks bad atm
+
 @Composable
 fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel()) {
     val context = LocalContext.current
