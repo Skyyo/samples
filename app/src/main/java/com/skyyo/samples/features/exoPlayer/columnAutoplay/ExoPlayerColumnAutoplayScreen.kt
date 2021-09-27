@@ -1,6 +1,7 @@
 package com.skyyo.samples.features.exoPlayer.columnAutoplay
 
 import android.view.LayoutInflater
+import android.widget.ImageButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -46,12 +47,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val listState = rememberLazyListState()
-    val exoPlayer = remember {
-        SimpleExoPlayer.Builder(context).build().apply {
-            repeatMode = Player.REPEAT_MODE_ALL
-            playWhenReady = true
-        }
-    }
+    val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
     val videos by viewModel.videos.observeAsState(listOf())
     // not sure we need derivedState for videos here
     val playingVideoItem by derivedStateOf { findPlayingItemId(listState, videos) }
@@ -80,6 +76,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
         if (playingVideoItem == null) {
             exoPlayer.stop()
         } else {
+            exoPlayer.playWhenReady = true
             exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
             exoPlayer.prepare()
         }
@@ -117,8 +114,10 @@ private fun VideoCard(
 ) {
     val context = LocalContext.current
     val exoPlayerPreview = remember {
-        val videoPlayerLayout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null, false)
-        videoPlayerLayout.findViewById(R.id.playerView) as PlayerView
+        val layout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null, false)
+        layout.findViewById<ImageButton>(R.id.exo_pause).setOnClickListener { exoPlayer.pause() }
+        layout.findViewById<ImageButton>(R.id.exo_play).setOnClickListener { exoPlayer.play() }
+        layout.findViewById(R.id.playerView) as PlayerView
     }
 
     LaunchedEffect(isPlaying) {

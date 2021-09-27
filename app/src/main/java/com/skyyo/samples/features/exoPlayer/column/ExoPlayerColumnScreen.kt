@@ -1,11 +1,13 @@
 package com.skyyo.samples.features.exoPlayer.column
 
 import android.view.LayoutInflater
+import android.view.View
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -15,12 +17,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
@@ -107,6 +111,7 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun VideoCard(
     modifier: Modifier = Modifier,
@@ -116,11 +121,24 @@ private fun VideoCard(
     onClick: OnClick
 ) {
     val context = LocalContext.current
-    val exoPlayerPreview = remember {
-        val videoPlayerLayout =
-            LayoutInflater.from(context).inflate(R.layout.video_player, null, false)
-        videoPlayerLayout.findViewById(R.id.playerView) as PlayerView
+    val isPlayerUiVisible = remember { mutableStateOf(false) }
+    val isPlayIconShown = remember(isPlaying, isPlayerUiVisible.value) {
+        mutableStateOf(if (isPlayerUiVisible.value) true else !isPlaying)
     }
+    val exoPlayerPreview = remember {
+        val layout = LayoutInflater.from(context).inflate(R.layout.video_player, null, false)
+        val playerView = layout.findViewById(R.id.playerView) as PlayerView
+        playerView.apply {
+            setControllerVisibilityListener {
+                if (isPlayerUiVisible.value) {
+                    isPlayerUiVisible.value = it == View.VISIBLE
+                } else {
+                    isPlayerUiVisible.value = true
+                }
+            }
+        }
+    }
+    val playStatusIcon = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
 
     LaunchedEffect(isPlaying) {
         exoPlayerPreview.player = if (isPlaying) exoPlayer else null
@@ -134,16 +152,21 @@ private fun VideoCard(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Video #${videoItem.id}")
-        Button(modifier = Modifier.background(Color.Red), onClick = { onClick() }) {
-            Text(text = if (isPlaying) "Stop" else "Play")
+        Box {
+            AndroidView({ exoPlayerPreview }, Modifier.height(256.dp))
+            if (isPlayIconShown.value) {
+                Icon(
+                    painter = painterResource(playStatusIcon),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(72.dp)
+                        .clickable {
+                            isPlayIconShown.value = false
+                            onClick()
+                        })
+            }
         }
-        AndroidView({ exoPlayerPreview }, Modifier.height(256.dp))
     }
-}
 
-//@Composable
-//fun VideoPlayer() {
-//    AndroidViewBinding(factory = VideoPlayerBinding:inflate){
-//
-//    }
-//}
+}
