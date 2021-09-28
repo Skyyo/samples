@@ -39,9 +39,6 @@ import kotlin.math.abs
 //TODO add seekTo & storing of last known position
 //TODO add playback for first & last items by adjusting findPlayingItemId using listState
 //TODO there is a bug because next videos has last frame of last played video when starting
-
-//TODO add listeners
-
 @Composable
 fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -76,6 +73,8 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
         if (playingVideoItem == null) {
             exoPlayer.stop()
         } else {
+            // move playWhenReady to exoPlayer initialization if you don't want to play next video
+            // automatically
             exoPlayer.playWhenReady = true
             exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
             exoPlayer.prepare()
@@ -135,6 +134,8 @@ private fun VideoCard(
         AndroidView({ exoPlayerPreview }, Modifier.height(256.dp))
     }
 }
+fun LazyListState.isScrolledToTheEnd() =
+    layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
 
 
 fun findPlayingItemId(

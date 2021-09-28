@@ -6,7 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -28,7 +30,6 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.skyyo.samples.R
@@ -37,37 +38,43 @@ import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
 
 
-//TODO add listeners for play/pause etc
 //TODO optimize by using thumbnails instead of PlayerViews everywhere.
 //TODO add seekTo & storing of last known position
 //TODO there is a bug because next videos has last frame of last played video when starting
-
-//TODO add listeners
-
 @Composable
 fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val exoPlayer = remember {
-        SimpleExoPlayer.Builder(context).build().apply {
-            repeatMode = Player.REPEAT_MODE_ALL
-            playWhenReady = true
-        }
+    val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
+    val listState = rememberLazyListState()
+    val videos by viewModel.videos.observeAsState(listOf())
+    val playingVideoItem by viewModel.currentlyPlayingItem.observeAsState()
+
+    val isCurrentItemVisible by derivedStateOf {
+        isCurrentItemVisible(
+            listState,
+            playingVideoItem,
+            videos
+        )
     }
 
-    val videos by viewModel.videos.observeAsState(listOf())
-    val currentlyPlayingId by viewModel.currentlyPlayingId.observeAsState(-1)
+    LaunchedEffect(isCurrentItemVisible) {
+        if (!isCurrentItemVisible && playingVideoItem != null) {
+            viewModel.onPlayVideoClick(playingVideoItem)
+            exoPlayer.pause()
+        }
+    }
 
     DisposableEffect(exoPlayer) {
         val observer = object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_START)
             fun onStart() {
-                if (currentlyPlayingId != -1) exoPlayer.play()
+                if (playingVideoItem != null) exoPlayer.play()
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
             fun onStop() {
-                if (currentlyPlayingId != -1) exoPlayer.pause()
+                if (playingVideoItem != null) exoPlayer.pause()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -78,17 +85,18 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
         }
     }
 
-    LaunchedEffect(currentlyPlayingId) {
-        if (currentlyPlayingId == -1) {
+    LaunchedEffect(playingVideoItem) {
+        if (playingVideoItem == null) {
             exoPlayer.stop()
         } else {
-            val playingItem = videos.find { it.id == currentlyPlayingId }
-            exoPlayer.setMediaItem(MediaItem.fromUri(playingItem!!.mediaUrl))
+            exoPlayer.playWhenReady = true
+            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
             exoPlayer.prepare()
         }
     }
 
     LazyColumn(
+        state = listState,
         modifier = Modifier.fillMaxSize(),
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
@@ -104,8 +112,8 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
             VideoCard(
                 videoItem = video,
                 exoPlayer = exoPlayer,
-                isPlaying = video.id == currentlyPlayingId,
-                onClick = { viewModel.onPlayVideoClick(video.id) }
+                isPlaying = video.id == playingVideoItem?.id,
+                onClick = { viewModel.onPlayVideoClick(video) }
             )
         }
     }
@@ -170,3 +178,18 @@ private fun VideoCard(
     }
 
 }
+
+fun isCurrentItemVisible(
+    listState: LazyListState,
+    currentlyPlayedItem: VideoItem?,
+    videos: List<VideoItem>
+): Boolean {
+    return if (currentlyPlayedItem == null) {
+        false
+    } else {
+        val layoutInfo = listState.layoutInfo
+        val visibleItems = layoutInfo.visibleItemsInfo.map { videos[it.index] }
+        visibleItems.contains(currentlyPlayedItem)
+    }
+}
+

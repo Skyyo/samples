@@ -11,7 +11,7 @@ import javax.inject.Inject
 class ExoPlayerColumnViewModel @Inject constructor() : ViewModel() {
 
     val videos = MutableLiveData<List<VideoItem>>()
-    val currentlyPlayingId = MutableLiveData<Int>()
+    val currentlyPlayingItem = MutableLiveData<VideoItem?>()
 
     init {
         populateListWithFakeData()
@@ -63,11 +63,11 @@ class ExoPlayerColumnViewModel @Inject constructor() : ViewModel() {
         videos.postValue(testVideos)
     }
 
-    fun onPlayVideoClick(id: Int) {
+    fun onPlayVideoClick(item: VideoItem?) {
         //if id == currentlyPlayingId -  the same video was clicked again, we should stop the playback
-        when (currentlyPlayingId.value) {
-            id -> currentlyPlayingId.postValue(-1)
-            else -> currentlyPlayingId.postValue(id)
+        when (currentlyPlayingItem.value) {
+            item -> currentlyPlayingItem.postValue(null)
+            else -> currentlyPlayingItem.postValue(item)
         }
     }
 }
