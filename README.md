@@ -71,6 +71,7 @@ Uncategorized
 - enhance parallax sample, show how to add snapping behaviour
 - add more animate on scroll effects
 - draggable sample like [here](https://proandroiddev.com/jetpack-compose-calculator-ui-4dfa2ab9048e). Sample which allows to drag elements in 1 screen from top, right & bottom for example.
+- exoplayer sample with gestures like [here](https://github.com/nihk/exo-viewpager-fun)
   
   # License
 ```
