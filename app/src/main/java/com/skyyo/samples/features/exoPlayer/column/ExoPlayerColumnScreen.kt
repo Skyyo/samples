@@ -39,7 +39,6 @@ import com.skyyo.samples.utils.OnClick
 
 
 //TODO optimize by using thumbnails instead of PlayerViews everywhere.
-//TODO add seekTo & storing of last known position
 //TODO there is a bug because next videos has last frame of last played video when starting
 @Composable
 fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel()) {
@@ -60,7 +59,7 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
 
     LaunchedEffect(isCurrentItemVisible) {
         if (!isCurrentItemVisible && playingVideoItem != null) {
-            viewModel.onPlayVideoClick(playingVideoItem)
+            viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingVideoItem)
             exoPlayer.pause()
         }
     }
@@ -85,12 +84,16 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
         }
     }
 
+    //this can be replaced with one shot events
     LaunchedEffect(playingVideoItem) {
         if (playingVideoItem == null) {
             exoPlayer.stop()
         } else {
             exoPlayer.playWhenReady = true
-            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
+            exoPlayer.setMediaItem(
+                MediaItem.fromUri(playingVideoItem!!.mediaUrl),
+                playingVideoItem!!.lastPlayedPosition
+            )
             exoPlayer.prepare()
         }
     }
@@ -113,7 +116,9 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
                 videoItem = video,
                 exoPlayer = exoPlayer,
                 isPlaying = video.id == playingVideoItem?.id,
-                onClick = { viewModel.onPlayVideoClick(video) }
+                onClick = {
+                    viewModel.onPlayVideoClick(exoPlayer.currentPosition, video)
+                }
             )
         }
     }

@@ -36,9 +36,9 @@ import kotlin.math.abs
 
 
 //TODO optimize by using thumbnails instead of PlayerViews everywhere.
-//TODO add seekTo & storing of last known position
 //TODO add playback for first & last items by adjusting findPlayingItemId using listState
 //TODO there is a bug because next videos has last frame of last played video when starting
+
 @Composable
 fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = hiltViewModel()) {
     val context = LocalContext.current
