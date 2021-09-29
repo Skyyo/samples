@@ -26,7 +26,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.skyyo.samples.R
@@ -36,7 +35,6 @@ import kotlin.math.abs
 
 
 //TODO optimize by using thumbnails instead of PlayerViews everywhere.
-//TODO add playback for first & last items by adjusting findPlayingItemId using listState
 //TODO there is a bug because next videos has last frame of last played video when starting
 
 @Composable
@@ -46,7 +44,6 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     val listState = rememberLazyListState()
     val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
     val videos by viewModel.videos.observeAsState(listOf())
-    // not sure we need derivedState for videos here
     val playingVideoItem by derivedStateOf { findPlayingItemId(listState, videos) }
 
     DisposableEffect(exoPlayer) {
@@ -134,23 +131,37 @@ private fun VideoCard(
         AndroidView({ exoPlayerPreview }, Modifier.height(256.dp))
     }
 }
-fun LazyListState.isScrolledToTheEnd() =
-    layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
-
 
 fun findPlayingItemId(
     listState: LazyListState,
-    items: List<VideoItem>
+    videos: List<VideoItem>
 ): VideoItem? {
+    if (listState.layoutInfo.visibleItemsInfo.isNullOrEmpty()) return null
+
     val layoutInfo = listState.layoutInfo
-    val visibleItems = layoutInfo.visibleItemsInfo.map { items[it.index] }
-    return when (visibleItems.size) {
-        1 -> visibleItems.first()
+    val visibleItems = layoutInfo.visibleItemsInfo
+
+    val isFirstItemVisible = listState.firstVisibleItemIndex == 0
+    val isFirstItemPlayerVisible = listState.firstVisibleItemScrollOffset <= 256.dp.value
+    val totalOffset = layoutInfo.viewportEndOffset
+
+    val isLastItemVisible = when (visibleItems.last().index) {
+        videos.size - 1 -> true
+        else -> false
+    }
+    val itemSize = visibleItems.last().size
+    val itemOffset = visibleItems.last().offset
+
+    return when {
+        //last video should be played
+        isLastItemVisible && totalOffset - itemOffset >= itemSize -> videos.last()
+        //first video should be played
+        isFirstItemVisible && isFirstItemPlayerVisible -> videos.first()
+        visibleItems.size == 1 -> videos.first()
         else -> {
             val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
-            val itemsFromCenter =
-                layoutInfo.visibleItemsInfo.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
-            return itemsFromCenter.map { items[it.index] }.firstOrNull()
+            val itemsFromCenter = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
+            return itemsFromCenter.firstNotNullOf { videos[it.index] }
         }
     }
 }

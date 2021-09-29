@@ -193,6 +193,7 @@ fun isCurrentItemVisible(
         false
     } else {
         val layoutInfo = listState.layoutInfo
+        //can be optimized using indexes for certain scenarios
         val visibleItems = layoutInfo.visibleItemsInfo.map { videos[it.index] }
         visibleItems.contains(currentlyPlayedItem)
     }
