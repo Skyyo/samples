@@ -45,6 +45,7 @@ sealed class Destination(val route: String) {
     object GradientScroll : Destination("gradientScroll")
     object Dropdown : Destination("dropdown")
     object ExoPlayerColumn : Destination("exoPlayerColumn")
+    object ExoPlayerColumnIndexed : Destination("exoPlayerColumnIndexed")
     object ExoPlayerAutoplayColumn : Destination("exoPlayerAutoplayColumn")
 }
 

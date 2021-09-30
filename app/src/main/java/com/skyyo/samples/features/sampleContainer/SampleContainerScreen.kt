@@ -189,6 +189,11 @@ fun ExoPlayerSamples(viewModel: SampleContainerViewModel) {
     Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goExoPlayerColumnIndexed
+    ) { Text(text = "exoPlayer in column indexed") }
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goExoPlayerAutoplayColumn
     ) { Text(text = "exoPlayer auto playback in column") }
 }

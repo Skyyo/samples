@@ -1,6 +1,7 @@
-package com.skyyo.samples.features.exoPlayer.column
+package com.skyyo.samples.features.exoPlayer.columnIndexed
 
 import android.graphics.drawable.Drawable
+import android.media.MediaMetadataRetriever
 import android.view.LayoutInflater
 import android.view.View
 import androidx.compose.foundation.Image
@@ -9,7 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -36,13 +37,13 @@ import coil.fetch.VideoFrameFileFetcher
 import coil.fetch.VideoFrameUriFetcher
 import coil.request.ImageRequest
 import coil.request.videoFrameMillis
+import coil.request.videoFrameOption
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.skyyo.samples.R
-import com.skyyo.samples.features.exoPlayer.VideoItem
 import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
 
@@ -50,21 +51,20 @@ import com.skyyo.samples.utils.OnClick
 //TODO optimize by using thumbnails instead of PlayerViews everywhere.
 //TODO there is a bug because next videos has last frame of last played video when starting
 @Composable
-fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel()) {
+fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
     val listState = rememberLazyListState()
     val videos by viewModel.videos.observeAsState(listOf())
-    val playingVideoItem by viewModel.currentlyPlayingItem.observeAsState()
+    val playingItemIndex by viewModel.currentlyPlayingIndex.observeAsState()
     val isCurrentItemVisible by derivedStateOf {
         isCurrentItemVisible(
             listState,
-            playingVideoItem,
+            playingItemIndex,
             videos
         )
     }
-    //can/should be provided by dagger if used in multiple places
     val imageLoader = remember {
         ImageLoader.Builder(context)
             .componentRegistry {
@@ -76,8 +76,8 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
     }
 
     LaunchedEffect(isCurrentItemVisible) {
-        if (!isCurrentItemVisible && playingVideoItem != null) {
-            viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingVideoItem)
+        if (!isCurrentItemVisible && playingItemIndex != null) {
+            viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingItemIndex!!)
             exoPlayer.pause()
         }
     }
@@ -86,12 +86,12 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
         val observer = object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_START)
             fun onStart() {
-                if (playingVideoItem != null) exoPlayer.play()
+                if (playingItemIndex != null) exoPlayer.play()
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
             fun onStop() {
-                if (playingVideoItem != null) exoPlayer.pause()
+                if (playingItemIndex != null) exoPlayer.pause()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -103,15 +103,13 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
     }
 
     //this can be replaced with one shot events
-    LaunchedEffect(playingVideoItem) {
-        if (playingVideoItem == null) {
+    LaunchedEffect(playingItemIndex) {
+        if (playingItemIndex == null) {
             exoPlayer.stop()
         } else {
             exoPlayer.playWhenReady = true
-            exoPlayer.setMediaItem(
-                MediaItem.fromUri(playingVideoItem!!.mediaUrl),
-                playingVideoItem!!.lastPlayedPosition
-            )
+            val video = videos[playingItemIndex!!]
+            exoPlayer.setMediaItem(MediaItem.fromUri(video.mediaUrl), video.lastPlayedPosition)
             exoPlayer.prepare()
         }
     }
@@ -128,15 +126,15 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
             additionalBottom = 8.dp
         )
     ) {
-        items(videos, { video -> video.id }) { video ->
+        itemsIndexed(videos, { _, video -> video.id }) { index, video ->
             Spacer(modifier = Modifier.height(16.dp))
             VideoCard(
                 videoItem = video,
                 exoPlayer = exoPlayer,
                 imageLoader = imageLoader,
-                isPlaying = video.id == playingVideoItem?.id,
+                isPlaying = index == playingItemIndex,
                 onClick = {
-                    viewModel.onPlayVideoClick(exoPlayer.currentPosition, video)
+                    viewModel.onPlayVideoClick(exoPlayer.currentPosition, index)
                 }
             )
         }
@@ -148,7 +146,7 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
 private fun VideoCard(
     modifier: Modifier = Modifier,
     imageLoader: ImageLoader,
-    videoItem: VideoItem,
+    videoItem: VideoItemImmutable,
     isPlaying: Boolean,
     exoPlayer: SimpleExoPlayer,
     onClick: OnClick
@@ -180,7 +178,7 @@ private fun VideoCard(
             .data(videoItem.mediaUrl)
             .size(256, 256)
             .videoFrameMillis(videoItem.lastPlayedPosition)
-//            .videoFrameOption(MediaMetadataRetriever.OPTION_PREVIOUS_SYNC)
+            .videoFrameOption(MediaMetadataRetriever.OPTION_PREVIOUS_SYNC)
             .build()
     )
 
@@ -198,10 +196,13 @@ private fun VideoCard(
     ) {
         Text(text = "Video #${videoItem.id}")
         Image(
-            painter = rememberImagePainter(data = videoThumbnail.value),
+            painter = rememberImagePainter(
+                data = videoThumbnail.value
+            ),
             contentDescription = null,
             modifier = Modifier.size(156.dp)
         )
+
         Box {
             AndroidView({ exoPlayerPreview }, Modifier.height(256.dp))
             if (isPlayIconShown.value) {
@@ -220,18 +221,20 @@ private fun VideoCard(
     }
 }
 
+//TODO check
 fun isCurrentItemVisible(
     listState: LazyListState,
-    currentlyPlayedItem: VideoItem?,
-    videos: List<VideoItem>
+    currentlyPlayedIndex: Int?,
+    videos: List<VideoItemImmutable>
 ): Boolean {
-    return if (currentlyPlayedItem == null) {
+    return if (currentlyPlayedIndex == null) {
         false
     } else {
         val layoutInfo = listState.layoutInfo
-        //can be optimized using indexes for certain scenarios
         val visibleItems = layoutInfo.visibleItemsInfo.map { videos[it.index] }
-        visibleItems.contains(currentlyPlayedItem)
+        layoutInfo.visibleItemsInfo
+//        visibleItems.contains(currentlyPlayedItem)
+        visibleItems.contains(videos[currentlyPlayedIndex])
     }
 }
 

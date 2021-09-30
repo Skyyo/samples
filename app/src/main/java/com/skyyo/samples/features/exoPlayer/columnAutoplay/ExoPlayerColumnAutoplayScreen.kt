@@ -160,8 +160,8 @@ fun findPlayingItemId(
         visibleItems.size == 1 -> videos.first()
         else -> {
             val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
-            val itemsFromCenter = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
-            return itemsFromCenter.firstNotNullOf { videos[it.index] }
+            val centerItems = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
+            return centerItems.firstNotNullOf { videos[it.index] }
         }
     }
 }
