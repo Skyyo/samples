@@ -72,6 +72,8 @@ Uncategorized
 - add more animate on scroll effects
 - draggable sample like [here](https://proandroiddev.com/jetpack-compose-calculator-ui-4dfa2ab9048e). Sample which allows to drag elements in 1 screen from top, right & bottom for example.
 - exoplayer sample with gestures like [here](https://github.com/nihk/exo-viewpager-fun)
+- check if exoplyaer sample with indexes is reliable when used with paging library
+- memory leaks in compose section 
   
   # License
 ```
