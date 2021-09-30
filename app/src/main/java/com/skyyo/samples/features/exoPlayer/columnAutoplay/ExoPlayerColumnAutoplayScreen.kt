@@ -1,14 +1,11 @@
 package com.skyyo.samples.features.exoPlayer.columnAutoplay
 
-import android.view.LayoutInflater
-import android.widget.ImageButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -18,18 +15,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import coil.ImageLoader
+import coil.decode.VideoFrameDecoder
+import coil.fetch.VideoFrameFileFetcher
+import coil.fetch.VideoFrameUriFetcher
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.PlayerView
-import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoItem
+import com.skyyo.samples.features.exoPlayer.VideoPlayerWithControls
+import com.skyyo.samples.features.exoPlayer.VideoThumbnail
 import com.skyyo.samples.theme.Shapes
 import kotlin.math.abs
 
@@ -45,6 +45,15 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
     val videos by viewModel.videos.observeAsState(listOf())
     val playingVideoItem by derivedStateOf { findPlayingItemId(listState, videos) }
+    val imageLoader = remember {
+        ImageLoader.Builder(context)
+            .componentRegistry {
+                add(VideoFrameFileFetcher(context))
+                add(VideoFrameUriFetcher(context))
+                add(VideoFrameDecoder(context))
+            }
+            .build()
+    }
 
     DisposableEffect(exoPlayer) {
         val observer = object : LifecycleObserver {
@@ -66,6 +75,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
         }
     }
 
+    //TODO can be removed with doing this on item click/init if playerView is reused?
     LaunchedEffect(playingVideoItem) {
         if (playingVideoItem == null) {
             exoPlayer.stop()
@@ -93,6 +103,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
         items(videos, { video -> video.id }) { video ->
             Spacer(modifier = Modifier.height(16.dp))
             VideoCard(
+                imageLoader = imageLoader,
                 videoItem = video,
                 exoPlayer = exoPlayer,
                 isPlaying = video.id == playingVideoItem?.id,
@@ -103,32 +114,24 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
 
 @Composable
 private fun VideoCard(
-    modifier: Modifier = Modifier,
+    imageLoader: ImageLoader,
     videoItem: VideoItem,
     isPlaying: Boolean,
     exoPlayer: SimpleExoPlayer,
 ) {
-    val context = LocalContext.current
-    val exoPlayerPreview = remember {
-        val layout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null, false)
-        layout.findViewById<ImageButton>(R.id.exo_pause).setOnClickListener { exoPlayer.pause() }
-        layout.findViewById<ImageButton>(R.id.exo_play).setOnClickListener { exoPlayer.play() }
-        layout.findViewById(R.id.playerView) as PlayerView
-    }
-
-    LaunchedEffect(isPlaying) {
-        exoPlayerPreview.player = if (isPlaying) exoPlayer else null
-    }
-
     Column(
-        modifier = modifier
+        modifier = Modifier
+            .height(256.dp)
             .fillMaxWidth()
             .background(Color.DarkGray, Shapes.medium)
             .clip(Shapes.medium),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Video #${videoItem.id}")
-        AndroidView({ exoPlayerPreview }, Modifier.height(256.dp))
+        if (isPlaying) {
+            VideoPlayerWithControls(exoPlayer)
+        } else {
+            VideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
+        }
     }
 }
 

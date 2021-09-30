@@ -8,4 +8,5 @@
     android:layout_gravity="center"
     android:keepScreenOn="true"
     app:controller_layout_id="@layout/exoplayer_controls_minimal"
+    app:show_timeout="1000"
     tools:background="@android:color/black" />

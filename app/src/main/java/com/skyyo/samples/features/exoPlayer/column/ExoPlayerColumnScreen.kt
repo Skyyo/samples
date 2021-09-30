@@ -1,9 +1,5 @@
 package com.skyyo.samples.features.exoPlayer.column
 
-import android.graphics.drawable.Drawable
-import android.view.LayoutInflater
-import android.view.View
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,26 +19,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import coil.ImageLoader
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
 import coil.decode.VideoFrameDecoder
 import coil.fetch.VideoFrameFileFetcher
 import coil.fetch.VideoFrameUriFetcher
-import coil.request.ImageRequest
-import coil.request.videoFrameMillis
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.PlayerView
 import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoItem
+import com.skyyo.samples.features.exoPlayer.VideoPlayer
+import com.skyyo.samples.features.exoPlayer.VideoThumbnail
 import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
 
@@ -143,7 +135,6 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun VideoCard(
     modifier: Modifier = Modifier,
@@ -153,41 +144,7 @@ private fun VideoCard(
     exoPlayer: SimpleExoPlayer,
     onClick: OnClick
 ) {
-    val context = LocalContext.current
     val isPlayerUiVisible = remember { mutableStateOf(false) }
-    val isPlayIconShown = remember(isPlaying, isPlayerUiVisible.value) {
-        mutableStateOf(if (isPlayerUiVisible.value) true else !isPlaying)
-    }
-    val exoPlayerPreview = remember {
-        val layout = LayoutInflater.from(context).inflate(R.layout.video_player, null, false)
-        val playerView = layout.findViewById(R.id.playerView) as PlayerView
-        playerView.apply {
-            setControllerVisibilityListener {
-                if (isPlayerUiVisible.value) {
-                    isPlayerUiVisible.value = it == View.VISIBLE
-                } else {
-                    isPlayerUiVisible.value = true
-                }
-            }
-        }
-    }
-    val playStatusIcon = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
-    val videoThumbnail: MutableState<Drawable?> = remember {
-        mutableStateOf(null)
-    }
-    val request by rememberUpdatedState(
-        ImageRequest.Builder(context)
-            .data(videoItem.mediaUrl)
-            .size(256, 256)
-            .videoFrameMillis(videoItem.lastPlayedPosition)
-//            .videoFrameOption(MediaMetadataRetriever.OPTION_PREVIOUS_SYNC)
-            .build()
-    )
-
-    LaunchedEffect(isPlaying) {
-        exoPlayerPreview.player = if (isPlaying) exoPlayer else null
-        videoThumbnail.value = imageLoader.execute(request).drawable
-    }
 
     Column(
         modifier = modifier
@@ -197,24 +154,26 @@ private fun VideoCard(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Video #${videoItem.id}")
-        Image(
-            painter = rememberImagePainter(data = videoThumbnail.value),
-            contentDescription = null,
-            modifier = Modifier.size(156.dp)
-        )
         Box {
-            AndroidView({ exoPlayerPreview }, Modifier.height(256.dp))
-            if (isPlayIconShown.value) {
+            if (isPlaying) {
+                VideoPlayer(exoPlayer) { uiVisible ->
+                    if (isPlayerUiVisible.value) {
+                        isPlayerUiVisible.value = uiVisible
+                    } else {
+                        isPlayerUiVisible.value = true
+                    }
+                }
+            } else {
+                VideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
+            }
+            if (if (isPlayerUiVisible.value) true else !isPlaying) {
                 Icon(
-                    painter = painterResource(playStatusIcon),
+                    painter = painterResource(if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play),
                     contentDescription = "",
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(72.dp)
-                        .clickable {
-                            isPlayIconShown.value = false
-                            onClick()
-                        })
+                        .clickable { onClick() })
             }
         }
     }
