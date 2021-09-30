@@ -2,6 +2,7 @@ package com.skyyo.samples.features.exoPlayer.columnIndexed
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.skyyo.samples.features.exoPlayer.VideoItemImmutable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

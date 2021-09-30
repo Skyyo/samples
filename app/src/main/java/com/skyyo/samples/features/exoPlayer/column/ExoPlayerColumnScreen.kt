@@ -146,36 +146,39 @@ private fun VideoCard(
 ) {
     val isPlayerUiVisible = remember { mutableStateOf(false) }
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .background(Color.DarkGray, Shapes.medium)
             .clip(Shapes.medium),
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.Center
     ) {
-        Text(text = "Video #${videoItem.id}")
-        Box {
-            if (isPlaying) {
-                VideoPlayer(exoPlayer) { uiVisible ->
-                    if (isPlayerUiVisible.value) {
-                        isPlayerUiVisible.value = uiVisible
-                    } else {
-                        isPlayerUiVisible.value = true
-                    }
+        if (isPlaying) {
+            VideoPlayer(exoPlayer) { uiVisible ->
+                if (isPlayerUiVisible.value) {
+                    isPlayerUiVisible.value = uiVisible
+                } else {
+                    isPlayerUiVisible.value = true
                 }
-            } else {
-                VideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
             }
-            if (if (isPlayerUiVisible.value) true else !isPlaying) {
-                Icon(
-                    painter = painterResource(if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(72.dp)
-                        .clickable { onClick() })
-            }
+        } else {
+            VideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
         }
+        if (if (isPlayerUiVisible.value) true else !isPlaying) {
+            Icon(
+                painter = painterResource(if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play),
+                contentDescription = "",
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(72.dp)
+                    .clickable { onClick() })
+        }
+        Text(
+            text = "${videoItem.id}",
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(8.dp)
+        )
     }
 }
 

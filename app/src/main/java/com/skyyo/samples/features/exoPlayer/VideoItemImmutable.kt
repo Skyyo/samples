@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.exoPlayer.columnIndexed
+package com.skyyo.samples.features.exoPlayer
 
 import androidx.compose.runtime.Immutable
 

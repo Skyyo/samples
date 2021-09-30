@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -28,8 +29,8 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.VideoItem
-import com.skyyo.samples.features.exoPlayer.VideoPlayerWithControls
 import com.skyyo.samples.features.exoPlayer.VideoThumbnail
+import com.skyyo.samples.features.exoPlayer.composables.VideoPlayerWithControls
 import com.skyyo.samples.theme.Shapes
 import kotlin.math.abs
 
@@ -119,19 +120,25 @@ private fun VideoCard(
     isPlaying: Boolean,
     exoPlayer: SimpleExoPlayer,
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .height(256.dp)
             .fillMaxWidth()
             .background(Color.DarkGray, Shapes.medium)
             .clip(Shapes.medium),
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.Center
     ) {
         if (isPlaying) {
             VideoPlayerWithControls(exoPlayer)
         } else {
             VideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
         }
+        Text(
+            text = "${videoItem.id}",
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(8.dp)
+        )
     }
 }
 
