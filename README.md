@@ -3,7 +3,7 @@ For pagination & network images it uses [CATAAS](https://cataas.com/#/).
 
 # Known issues
 
-Navigation-Hilt-Compose
+Navigation-Compose
 - [Issue](https://issuetracker.google.com/issues/200817333) with fast tapping on destination
 
 Paging
