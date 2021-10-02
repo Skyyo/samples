@@ -21,7 +21,7 @@ fun VideoPlayerWithControls(
 ) {
     val context = LocalContext.current
     val playerView: PlayerView = remember {
-        val layout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null, false)
+        val layout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null)
         layout.findViewById<ImageButton>(R.id.exo_pause).setOnClickListener { exoPlayer.pause() }
         layout.findViewById<ImageButton>(R.id.exo_play).setOnClickListener { exoPlayer.play() }
         (layout.findViewById(R.id.playerView) as PlayerView).apply {
@@ -30,10 +30,17 @@ fun VideoPlayerWithControls(
     }
 //    DisposableEffect(Unit) {
 //        onDispose {
+//            playerView.player!!.clearVideoSurface()
 //            playerView.player = null
+//            playerView.removeAllViewsInLayout()
 ////            playerView = null
 //        }
 //    }
 
-    AndroidView({ playerView }, Modifier.height(256.dp).background(Color.Black))
+    AndroidView(
+        { playerView },
+        Modifier
+            .height(256.dp)
+            .background(Color.Black)
+    )
 }

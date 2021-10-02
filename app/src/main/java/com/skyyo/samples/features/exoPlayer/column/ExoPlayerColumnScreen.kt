@@ -118,7 +118,7 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
             additionalBottom = 8.dp
         )
     ) {
-        items(videos, { video -> video.id }) { video ->
+        items(videos, VideoItem::id) { video ->
             Spacer(modifier = Modifier.height(16.dp))
             VideoCard(
                 videoItem = video,

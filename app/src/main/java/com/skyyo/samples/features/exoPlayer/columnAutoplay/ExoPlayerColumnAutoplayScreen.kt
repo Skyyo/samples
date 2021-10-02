@@ -20,16 +20,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import coil.ImageLoader
-import coil.decode.VideoFrameDecoder
-import coil.fetch.VideoFrameFileFetcher
-import coil.fetch.VideoFrameUriFetcher
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.skyyo.samples.extensions.log
 import com.skyyo.samples.features.exoPlayer.VideoItem
-import com.skyyo.samples.features.exoPlayer.composables.DynamicVideoThumbnail
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
 import com.skyyo.samples.features.exoPlayer.composables.VideoPlayerWithControls
 import com.skyyo.samples.theme.Shapes
@@ -76,7 +72,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     //TODO can be removed with doing this on item click/init if playerView is reused?
     LaunchedEffect(playingVideoItem) {
         if (playingVideoItem == null) {
-            exoPlayer.stop()
+            if (exoPlayer.isPlaying) exoPlayer.stop()
         } else {
             // move playWhenReady to exoPlayer initialization if you don't want to play next video
             // automatically
@@ -98,7 +94,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
             additionalBottom = 8.dp
         )
     ) {
-        items(videos, { video -> video.id }) { video ->
+        items(videos, VideoItem::id) { video ->
             Spacer(modifier = Modifier.height(16.dp))
             VideoCard(
 //                imageLoader = imageLoader,
@@ -149,7 +145,8 @@ fun findPlayingItem(
     val layoutInfo = listState.layoutInfo
     val visibleItems = layoutInfo.visibleItemsInfo
 
-    val firstItemVisible = listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0
+    val firstItemVisible =
+        listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0
     if (firstItemVisible) return videos.first()
 
     val lastItem = visibleItems.last()
