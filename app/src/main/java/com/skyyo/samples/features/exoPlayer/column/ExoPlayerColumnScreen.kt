@@ -33,14 +33,12 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoItem
-import com.skyyo.samples.features.exoPlayer.VideoPlayer
-import com.skyyo.samples.features.exoPlayer.VideoThumbnail
+import com.skyyo.samples.features.exoPlayer.composables.VideoPlayer
+import com.skyyo.samples.features.exoPlayer.composables.DynamicVideoThumbnail
+import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
 import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
 
-
-//TODO optimize by using thumbnails instead of PlayerViews everywhere.
-//TODO there is a bug because next videos has last frame of last played video when starting
 @Composable
 fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -57,15 +55,15 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
         )
     }
     //can/should be provided by dagger if used in multiple places
-    val imageLoader = remember {
-        ImageLoader.Builder(context)
-            .componentRegistry {
-                add(VideoFrameFileFetcher(context))
-                add(VideoFrameUriFetcher(context))
-                add(VideoFrameDecoder(context))
-            }
-            .build()
-    }
+//    val imageLoader = remember {
+//        ImageLoader.Builder(context)
+//            .componentRegistry {
+//                add(VideoFrameFileFetcher(context))
+//                add(VideoFrameUriFetcher(context))
+//                add(VideoFrameDecoder(context))
+//            }
+//            .build()
+//    }
 
     LaunchedEffect(isCurrentItemVisible) {
         if (!isCurrentItemVisible && playingVideoItem != null) {
@@ -125,7 +123,7 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
             VideoCard(
                 videoItem = video,
                 exoPlayer = exoPlayer,
-                imageLoader = imageLoader,
+//                imageLoader = imageLoader,
                 isPlaying = video.id == playingVideoItem?.id,
                 onClick = {
                     viewModel.onPlayVideoClick(exoPlayer.currentPosition, video)
@@ -138,7 +136,7 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
 @Composable
 private fun VideoCard(
     modifier: Modifier = Modifier,
-    imageLoader: ImageLoader,
+//    imageLoader: ImageLoader,
     videoItem: VideoItem,
     isPlaying: Boolean,
     exoPlayer: SimpleExoPlayer,
@@ -162,7 +160,8 @@ private fun VideoCard(
                 }
             }
         } else {
-            VideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
+            StaticVideoThumbnail(videoItem.thumbnail)
+//            DynamicVideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
         }
         if (if (isPlayerUiVisible.value) true else !isPlaying) {
             Icon(

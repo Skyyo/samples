@@ -29,14 +29,11 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.VideoItem
-import com.skyyo.samples.features.exoPlayer.VideoThumbnail
+import com.skyyo.samples.features.exoPlayer.composables.DynamicVideoThumbnail
+import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
 import com.skyyo.samples.features.exoPlayer.composables.VideoPlayerWithControls
 import com.skyyo.samples.theme.Shapes
 import kotlin.math.abs
-
-
-//TODO optimize by using thumbnails instead of PlayerViews everywhere.
-//TODO there is a bug because next videos has last frame of last played video when starting
 
 @Composable
 fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = hiltViewModel()) {
@@ -45,16 +42,16 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     val listState = rememberLazyListState()
     val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
     val videos by viewModel.videos.observeAsState(listOf())
-    val playingVideoItem by derivedStateOf { findPlayingItemId(listState, videos) }
-    val imageLoader = remember {
-        ImageLoader.Builder(context)
-            .componentRegistry {
-                add(VideoFrameFileFetcher(context))
-                add(VideoFrameUriFetcher(context))
-                add(VideoFrameDecoder(context))
-            }
-            .build()
-    }
+    val playingVideoItem by derivedStateOf { findPlayingItem(listState, videos) }
+//    val imageLoader = remember {
+//        ImageLoader.Builder(context)
+//            .componentRegistry {
+//                add(VideoFrameFileFetcher(context))
+//                add(VideoFrameUriFetcher(context))
+//                add(VideoFrameDecoder(context))
+//            }
+//            .build()
+//    }
 
     DisposableEffect(exoPlayer) {
         val observer = object : LifecycleObserver {
@@ -104,7 +101,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
         items(videos, { video -> video.id }) { video ->
             Spacer(modifier = Modifier.height(16.dp))
             VideoCard(
-                imageLoader = imageLoader,
+//                imageLoader = imageLoader,
                 videoItem = video,
                 exoPlayer = exoPlayer,
                 isPlaying = video.id == playingVideoItem?.id,
@@ -115,7 +112,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
 
 @Composable
 private fun VideoCard(
-    imageLoader: ImageLoader,
+//    imageLoader: ImageLoader,
     videoItem: VideoItem,
     isPlaying: Boolean,
     exoPlayer: SimpleExoPlayer,
@@ -131,7 +128,8 @@ private fun VideoCard(
         if (isPlaying) {
             VideoPlayerWithControls(exoPlayer)
         } else {
-            VideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
+            StaticVideoThumbnail(videoItem.thumbnail)
+//            DynamicVideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
         }
         Text(
             text = "${videoItem.id}",
@@ -142,7 +140,7 @@ private fun VideoCard(
     }
 }
 
-fun findPlayingItemId(
+fun findPlayingItem(
     listState: LazyListState,
     videos: List<VideoItem>
 ): VideoItem? {
@@ -151,27 +149,19 @@ fun findPlayingItemId(
     val layoutInfo = listState.layoutInfo
     val visibleItems = layoutInfo.visibleItemsInfo
 
-    val isFirstItemVisible = listState.firstVisibleItemIndex == 0
-    val isFirstItemPlayerVisible = listState.firstVisibleItemScrollOffset <= 256.dp.value
-    val totalOffset = layoutInfo.viewportEndOffset
+    val firstItemVisible = listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0
+    if (firstItemVisible) return videos.first()
 
-    val isLastItemVisible = when (visibleItems.last().index) {
-        videos.size - 1 -> true
-        else -> false
+    val lastItem = visibleItems.last()
+    val lastItemVisible = lastItem.index == videos.size - 1
+    if (lastItemVisible) {
+        val itemSize = lastItem.size
+        val itemOffset = lastItem.offset
+        val totalOffset = layoutInfo.viewportEndOffset
+        if (totalOffset - itemOffset >= itemSize) return videos.last()
     }
-    val itemSize = visibleItems.last().size
-    val itemOffset = visibleItems.last().offset
 
-    return when {
-        //last video should be played
-        isLastItemVisible && totalOffset - itemOffset >= itemSize -> videos.last()
-        //first video should be played
-        isFirstItemVisible && isFirstItemPlayerVisible -> videos.first()
-        visibleItems.size == 1 -> videos.first()
-        else -> {
-            val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
-            val centerItems = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
-            return centerItems.firstNotNullOf { videos[it.index] }
-        }
-    }
+    val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+    val centerItems = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
+    return centerItems.firstNotNullOf { videos[it.index] }
 }

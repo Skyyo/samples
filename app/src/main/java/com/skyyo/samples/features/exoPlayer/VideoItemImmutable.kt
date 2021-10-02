@@ -7,5 +7,6 @@ import androidx.compose.runtime.Immutable
 data class VideoItemImmutable(
     val id: Int,
     val mediaUrl: String,
+    val thumbnail: String,
     val lastPlayedPosition: Long = 0
 )

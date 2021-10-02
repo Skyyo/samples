@@ -1,8 +1,7 @@
-package com.skyyo.samples.features.exoPlayer
+package com.skyyo.samples.features.exoPlayer.composables
 
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
