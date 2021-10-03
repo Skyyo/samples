@@ -1,9 +1,7 @@
 package com.skyyo.samples.application.activity
 
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -73,6 +71,8 @@ fun PopulatedNavHost(
 ) = AnimatedNavHost(
     navController = navController,
     startDestination = startDestination,
+    enterTransition = { _, _ -> fadeIn(animationSpec = tween(350)) },
+    exitTransition = { _, _ -> fadeOut(animationSpec = tween(350)) }
 ) {
     composable(Destination.SampleContainer.route) { SampleContainerScreen() }
     composable(Destination.Cats.route) { CatsScreen() }

@@ -1,6 +1,7 @@
 package com.skyyo.samples.features.exoPlayer.composables
 
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
@@ -16,21 +17,23 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.skyyo.samples.R
 
 @Composable
-fun VideoPlayerWithControls(
-    exoPlayer: SimpleExoPlayer,
-) {
+fun VideoPlayerWithControls(exoPlayer: SimpleExoPlayer) {
     val context = LocalContext.current
-    val playerView: PlayerView = remember {
+    val playerView = remember {
         val layout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null)
         layout.findViewById<ImageButton>(R.id.exo_pause).setOnClickListener { exoPlayer.pause() }
         layout.findViewById<ImageButton>(R.id.exo_play).setOnClickListener { exoPlayer.play() }
-        (layout.findViewById(R.id.playerView) as PlayerView).apply {
+        val playerView = (layout.findViewById(R.id.playerView) as PlayerView).apply {
             player = exoPlayer
         }
+        layout.id = View.generateViewId()
+        playerView
+//        layout
     }
-//    DisposableEffect(Unit) {
+
+    //    DisposableEffect(Unit) {
 //        onDispose {
-//            playerView.player!!.clearVideoSurface()
+//            playerView.onPause()
 //            playerView.player = null
 //            playerView.removeAllViewsInLayout()
 ////            playerView = null
@@ -39,8 +42,6 @@ fun VideoPlayerWithControls(
 
     AndroidView(
         { playerView },
-        Modifier
-            .height(256.dp)
-            .background(Color.Black)
+        Modifier.height(256.dp).background(Color.Black)
     )
 }

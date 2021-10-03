@@ -23,18 +23,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
-import coil.decode.VideoFrameDecoder
-import coil.fetch.VideoFrameFileFetcher
-import coil.fetch.VideoFrameUriFetcher
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoItemImmutable
-import com.skyyo.samples.features.exoPlayer.composables.DynamicVideoThumbnail
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
 import com.skyyo.samples.features.exoPlayer.composables.VideoPlayer
 import com.skyyo.samples.theme.Shapes
@@ -96,7 +91,7 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
     //this can be replaced with one shot events
     LaunchedEffect(playingItemIndex) {
         if (playingItemIndex == null) {
-            exoPlayer.stop()
+            if (exoPlayer.isPlaying) exoPlayer.stop()
         } else {
             exoPlayer.playWhenReady = true
             val video = videos[playingItemIndex!!]
