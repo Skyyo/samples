@@ -29,6 +29,7 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.R
+import com.skyyo.samples.extensions.log
 import com.skyyo.samples.features.exoPlayer.VideoItemImmutable
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
 import com.skyyo.samples.theme.Shapes
@@ -43,11 +44,16 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
     val listState = rememberLazyListState()
     val videos by viewModel.videos.observeAsState(listOf())
     val playingItemIndex by viewModel.currentlyPlayingIndex.observeAsState()
-    val isCurrentItemVisible by derivedStateOf {
-        isCurrentItemVisible(listState, playingItemIndex, videos)
-    }
-
+    //TODO using derivedStateOf+isCurrentItemVisible causes leaks. Using Dispose instead, to stop
+    // playback when item is out of screen bounds works properly with derivedStateOf, so that
+    // we don't recompose the ExoPlayerColumnIndexedScreen infinitelym but it's not a proper approach
+    // to stop playback
+//    val isCurrentItemVisible by derivedStateOf {
+//        isCurrentItemVisible(listState, playingItemIndex, videos)
+//    }
+    val isCurrentItemVisible = isCurrentItemVisible(listState, playingItemIndex, videos)
     LaunchedEffect(isCurrentItemVisible) {
+        log("LaunchedEffect(isCurrentItemVisible)")
         if (!isCurrentItemVisible && playingItemIndex != null) {
             viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingItemIndex!!)
             exoPlayer.pause()
@@ -55,6 +61,7 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
     }
 
     DisposableEffect(exoPlayer) {
+        log("DisposableEffect(exoPlayer)")
         val observer = object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_START)
             fun onStart() {
@@ -77,6 +84,7 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
 
     //this can be replaced with one shot events
     LaunchedEffect(playingItemIndex) {
+        log("LaunchedEffect(playingItemIndex)")
         if (playingItemIndex == null) {
             if (exoPlayer.isPlaying) exoPlayer.pause()
         } else {
@@ -123,7 +131,6 @@ private fun VideoCard(
     onClick: OnClick
 ) {
     val isPlayerUiVisible = remember { mutableStateOf(false) }
-
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -165,12 +172,12 @@ fun isCurrentItemVisible(
     currentlyPlayedIndex: Int?,
     videos: List<VideoItemImmutable>
 ): Boolean {
+//    log("isCurrentItemVisible")
     return if (currentlyPlayedIndex == null) {
         false
     } else {
         val layoutInfo = listState.layoutInfo
         val visibleItems = layoutInfo.visibleItemsInfo.map { videos[it.index] }
-        layoutInfo.visibleItemsInfo
         visibleItems.contains(videos[currentlyPlayedIndex])
     }
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.skyyo.samples.R
+import com.skyyo.samples.extensions.log
 import com.skyyo.samples.utils.OnClick
 
 @Composable
@@ -23,6 +24,7 @@ fun VideoPlayerIndexed(
 //    onDisposed: OnClick,
     onControllerVisibilityChanged: (uiVisible: Boolean) -> Unit
 ) {
+    log("VideoPlayerIndexed")
     val context = LocalContext.current
     val playerView = remember {
         val layout = LayoutInflater.from(context).inflate(R.layout.video_player, null, false)
