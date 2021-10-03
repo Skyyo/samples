@@ -86,4 +86,13 @@ class ExoPlayerColumnIndexedViewModel @Inject constructor() : ViewModel() {
             else -> currentlyPlayingIndex.postValue(videoIndex)
         }
     }
+
+    fun onVideoItemDispose(playbackPosition: Long, videoIndex: Int) {
+        if (currentlyPlayingIndex.value == videoIndex) {
+            currentlyPlayingIndex.postValue(null)
+            videos.value = videos.value!!.toMutableList().also { list ->
+                list[videoIndex] = list[videoIndex].copy(lastPlayedPosition = playbackPosition)
+            }
+        }
+    }
 }

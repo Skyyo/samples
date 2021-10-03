@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.exoPlayer.composables
+package com.skyyo.samples.features.exoPlayer.columnAutoplay
 
 import android.view.LayoutInflater
 import android.view.View
@@ -31,17 +31,20 @@ fun VideoPlayerWithControls(exoPlayer: SimpleExoPlayer) {
 //        layout
     }
 
-    //    DisposableEffect(Unit) {
+//    DisposableEffect(Unit) {
 //        onDispose {
-//            playerView.onPause()
-//            playerView.player = null
-//            playerView.removeAllViewsInLayout()
+//            log("disposing view")
+//            playerView.player?.pause()
+////            playerView.player = null
+////            playerView.removeAllViewsInLayout()
 ////            playerView = null
 //        }
 //    }
 
     AndroidView(
         { playerView },
-        Modifier.height(256.dp).background(Color.Black)
+        Modifier
+            .height(256.dp)
+            .background(Color.Black)
     )
 }

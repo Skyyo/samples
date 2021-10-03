@@ -31,7 +31,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoItemImmutable
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
-import com.skyyo.samples.features.exoPlayer.composables.VideoPlayer
 import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
 
@@ -45,21 +44,8 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
     val videos by viewModel.videos.observeAsState(listOf())
     val playingItemIndex by viewModel.currentlyPlayingIndex.observeAsState()
     val isCurrentItemVisible by derivedStateOf {
-        isCurrentItemVisible(
-            listState,
-            playingItemIndex,
-            videos
-        )
+        isCurrentItemVisible(listState, playingItemIndex, videos)
     }
-//    val imageLoader = remember {
-//        ImageLoader.Builder(context)
-//            .componentRegistry {
-//                add(VideoFrameFileFetcher(context))
-//                add(VideoFrameUriFetcher(context))
-//                add(VideoFrameDecoder(context))
-//            }
-//            .build()
-//    }
 
     LaunchedEffect(isCurrentItemVisible) {
         if (!isCurrentItemVisible && playingItemIndex != null) {
@@ -84,6 +70,7 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+            exoPlayer.stop()
             exoPlayer.release()
         }
     }
@@ -91,7 +78,7 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
     //this can be replaced with one shot events
     LaunchedEffect(playingItemIndex) {
         if (playingItemIndex == null) {
-            if (exoPlayer.isPlaying) exoPlayer.stop()
+            if (exoPlayer.isPlaying) exoPlayer.pause()
         } else {
             exoPlayer.playWhenReady = true
             val video = videos[playingItemIndex!!]
@@ -117,7 +104,6 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
             VideoCard(
                 videoItem = video,
                 exoPlayer = exoPlayer,
-//                imageLoader = imageLoader,
                 isPlaying = index == playingItemIndex,
                 onClick = {
                     viewModel.onPlayVideoClick(exoPlayer.currentPosition, index)
@@ -131,7 +117,6 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
 @Composable
 private fun VideoCard(
     modifier: Modifier = Modifier,
-//    imageLoader: ImageLoader,
     videoItem: VideoItemImmutable,
     isPlaying: Boolean,
     exoPlayer: SimpleExoPlayer,
@@ -147,7 +132,7 @@ private fun VideoCard(
         contentAlignment = Alignment.Center
     ) {
         if (isPlaying) {
-            VideoPlayer(exoPlayer) { uiVisible ->
+            VideoPlayerIndexed(exoPlayer) { uiVisible ->
                 if (isPlayerUiVisible.value) {
                     isPlayerUiVisible.value = uiVisible
                 } else {
@@ -156,7 +141,6 @@ private fun VideoCard(
             }
         } else {
             StaticVideoThumbnail(videoItem.thumbnail)
-//            DynamicVideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
         }
         if (if (isPlayerUiVisible.value) true else !isPlaying) {
             Icon(
@@ -176,7 +160,6 @@ private fun VideoCard(
     }
 }
 
-//TODO check
 fun isCurrentItemVisible(
     listState: LazyListState,
     currentlyPlayedIndex: Int?,

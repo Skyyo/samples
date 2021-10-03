@@ -30,7 +30,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoItem
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
-import com.skyyo.samples.features.exoPlayer.composables.VideoPlayer
 import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
 
@@ -83,6 +82,7 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+            exoPlayer.stop()
             exoPlayer.release()
         }
     }
@@ -90,7 +90,7 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
     //this can be replaced with one shot events
     LaunchedEffect(playingVideoItem) {
         if (playingVideoItem == null) {
-            if (exoPlayer.isPlaying) exoPlayer.stop()
+            if (exoPlayer.isPlaying) exoPlayer.pause()
         } else {
             exoPlayer.playWhenReady = true
             exoPlayer.setMediaItem(

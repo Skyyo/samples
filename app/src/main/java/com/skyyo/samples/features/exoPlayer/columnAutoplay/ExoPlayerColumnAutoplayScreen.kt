@@ -26,7 +26,6 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.VideoItem
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
-import com.skyyo.samples.features.exoPlayer.composables.VideoPlayerWithControls
 import com.skyyo.samples.theme.Shapes
 import kotlin.math.abs
 
@@ -37,16 +36,26 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     val listState = rememberLazyListState()
     val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
     val videos by viewModel.videos.observeAsState(listOf())
+
+    //TODO using derivedStateOf causes ExoPlayer to leak???
+    // using playingVideoItem = findPlayingItem makes recompositions of infinite amount
+//    val playingVideoItem = findPlayingItem(listState, videos)
     val playingVideoItem by derivedStateOf { findPlayingItem(listState, videos) }
-//    val imageLoader = remember {
-//        ImageLoader.Builder(context)
-//            .componentRegistry {
-//                add(VideoFrameFileFetcher(context))
-//                add(VideoFrameUriFetcher(context))
-//                add(VideoFrameDecoder(context))
-//            }
-//            .build()
-//    }
+
+    LaunchedEffect(playingVideoItem) {
+        //TODO never null except 1 composition
+        if (playingVideoItem == null) {
+            if (exoPlayer.isPlaying) exoPlayer.pause()
+        } else {
+            // move playWhenReady to exoPlayer initialization if you don't want to play next video
+            // automatically
+//                log("pausing player")
+//            if (exoPlayer.isPlaying) exoPlayer.pause()
+            exoPlayer.playWhenReady = true
+            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
+            exoPlayer.prepare()
+        }
+    }
 
     DisposableEffect(exoPlayer) {
         val observer = object : LifecycleObserver {
@@ -64,20 +73,8 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+            exoPlayer.stop()
             exoPlayer.release()
-        }
-    }
-
-    //TODO can be removed with doing this on item click/init if playerView is reused?
-    LaunchedEffect(playingVideoItem) {
-        if (playingVideoItem == null) {
-            if (exoPlayer.isPlaying) exoPlayer.stop()
-        } else {
-            // move playWhenReady to exoPlayer initialization if you don't want to play next video
-            // automatically
-            exoPlayer.playWhenReady = true
-            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
-            exoPlayer.prepare()
         }
     }
 
@@ -96,7 +93,6 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
         items(videos, VideoItem::id) { video ->
             Spacer(modifier = Modifier.height(16.dp))
             VideoCard(
-//                imageLoader = imageLoader,
                 videoItem = video,
                 exoPlayer = exoPlayer,
                 isPlaying = video.id == playingVideoItem?.id,
@@ -107,7 +103,6 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
 
 @Composable
 private fun VideoCard(
-//    imageLoader: ImageLoader,
     videoItem: VideoItem,
     isPlaying: Boolean,
     exoPlayer: SimpleExoPlayer,
@@ -124,7 +119,6 @@ private fun VideoCard(
             VideoPlayerWithControls(exoPlayer)
         } else {
             StaticVideoThumbnail(videoItem.thumbnail)
-//            DynamicVideoThumbnail(imageLoader, videoItem.mediaUrl, videoItem.lastPlayedPosition)
         }
         Text(
             text = "${videoItem.id}",

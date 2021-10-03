@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.exoPlayer.composables
+package com.skyyo.samples.features.exoPlayer.column
 
 import android.view.LayoutInflater
 import android.view.View
