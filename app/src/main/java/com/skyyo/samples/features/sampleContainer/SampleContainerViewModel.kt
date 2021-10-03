@@ -133,19 +133,19 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.GradientScroll.route)
     }
 
-    fun goDropdown() = navigationDispatcher.emit {
-        it.navigate(Destination.Dropdown.route)
-    }
-
-    fun goExoPlayerColumn() = navigationDispatcher.emit {
-        it.navigate(Destination.ExoPlayerColumn.route)
+    fun goExoPlayerColumnReference() = navigationDispatcher.emit {
+        it.navigate(Destination.ExoPlayerColumnReference.route)
     }
 
     fun goExoPlayerColumnIndexed() = navigationDispatcher.emit {
         it.navigate(Destination.ExoPlayerColumnIndexed.route)
     }
 
-    fun goExoPlayerAutoplayColumn() = navigationDispatcher.emit {
-        it.navigate(Destination.ExoPlayerAutoplayColumn.route)
+    fun goExoPlayerColumnAutoplay() = navigationDispatcher.emit {
+        it.navigate(Destination.ExoPlayerColumnAutoplay.route)
+    }
+
+    fun goExoPlayerColumnDynamicThumb() = navigationDispatcher.emit {
+        it.navigate(Destination.ExoPlayerColumnDynamicThumb.route)
     }
 }

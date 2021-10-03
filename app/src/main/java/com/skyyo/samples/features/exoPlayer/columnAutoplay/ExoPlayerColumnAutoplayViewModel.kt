@@ -2,7 +2,7 @@ package com.skyyo.samples.features.exoPlayer.columnAutoplay
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyyo.samples.features.exoPlayer.VideoItem
+import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

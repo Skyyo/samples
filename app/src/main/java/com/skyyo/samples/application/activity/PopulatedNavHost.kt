@@ -22,10 +22,10 @@ import com.skyyo.samples.features.bottomSheets.BottomSheetScreen
 import com.skyyo.samples.features.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.samples.features.cameraX.CameraXScreen
 import com.skyyo.samples.features.customView.CustomViewScreen
-import com.skyyo.samples.features.dropdowns.DropdownScreen
-import com.skyyo.samples.features.exoPlayer.column.ExoPlayerColumnScreen
 import com.skyyo.samples.features.exoPlayer.columnAutoplay.ExoPlayerColumnAutoplayScreen
+import com.skyyo.samples.features.exoPlayer.columnDynamicThumb.ExoPlayerColumnDynamicThumbScreen
 import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexedScreen
+import com.skyyo.samples.features.exoPlayer.columnReference.ExoPlayerColumnReferenceScreen
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
@@ -140,8 +140,8 @@ fun PopulatedNavHost(
     composable(Destination.BottomBar.route) { BottomBarScreen() }
     composable(Destination.Drawer.route) { DrawerScreen() }
     composable(Destination.GradientScroll.route) { GradientScrollScreen() }
-    composable(Destination.Dropdown.route) { DropdownScreen() }
-    composable(Destination.ExoPlayerColumn.route) { ExoPlayerColumnScreen() }
+    composable(Destination.ExoPlayerColumnReference.route) { ExoPlayerColumnReferenceScreen() }
     composable(Destination.ExoPlayerColumnIndexed.route) { ExoPlayerColumnIndexedScreen() }
-    composable(Destination.ExoPlayerAutoplayColumn.route) { ExoPlayerColumnAutoplayScreen() }
+    composable(Destination.ExoPlayerColumnAutoplay.route) { ExoPlayerColumnAutoplayScreen() }
+    composable(Destination.ExoPlayerColumnDynamicThumb.route) { ExoPlayerColumnDynamicThumbScreen() }
 }

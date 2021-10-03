@@ -43,10 +43,10 @@ sealed class Destination(val route: String) {
     object Tab2 : Destination("tab2")
     object Tab3 : Destination("tab3")
     object GradientScroll : Destination("gradientScroll")
-    object Dropdown : Destination("dropdown")
-    object ExoPlayerColumn : Destination("exoPlayerColumn")
+    object ExoPlayerColumnReference : Destination("exoPlayerColumnRef")
     object ExoPlayerColumnIndexed : Destination("exoPlayerColumnIndexed")
-    object ExoPlayerAutoplayColumn : Destination("exoPlayerAutoplayColumn")
+    object ExoPlayerColumnAutoplay : Destination("exoPlayerColumnAutoplay")
+    object ExoPlayerColumnDynamicThumb : Destination("exoPlayerColumnDynamicThumb")
 }
 
 sealed class ProfileGraph(val route: String) {

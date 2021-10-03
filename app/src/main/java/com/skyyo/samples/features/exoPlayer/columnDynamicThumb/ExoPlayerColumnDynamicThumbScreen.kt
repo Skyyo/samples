@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.exoPlayer.columnIndexed
+package com.skyyo.samples.features.exoPlayer.columnDynamicThumb
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,22 +17,37 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import coil.ImageLoader
+import coil.decode.VideoFrameDecoder
+import coil.fetch.VideoFrameFileFetcher
+import coil.fetch.VideoFrameUriFetcher
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexedViewModel
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 
 @Composable
-fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
+fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val exoPlayer = remember(context) { SimpleExoPlayer.Builder(context).build() }
     val listState = rememberLazyListState()
+    // can / should? be provided by dagger if used in multiple places
+    val imageLoader = remember {
+        ImageLoader.Builder(context)
+            .componentRegistry {
+                add(VideoFrameFileFetcher(context))
+                add(VideoFrameUriFetcher(context))
+                add(VideoFrameDecoder(context))
+            }
+            .build()
+    }
 
     val videos by viewModel.videos.observeAsState(listOf())
     val playingItemIndex by viewModel.currentlyPlayingIndex.observeAsState()
@@ -99,6 +114,7 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
             VideoCardIndexed(
                 videoItem = video,
                 exoPlayer = exoPlayer,
+                imageLoader = imageLoader,
                 isPlaying = index == playingItemIndex,
                 onClick = {
                     viewModel.onPlayVideoClick(exoPlayer.currentPosition, index)

@@ -1,6 +1,9 @@
 package com.skyyo.samples.features.sampleContainer
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -12,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
 
@@ -30,44 +32,32 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Pagination(viewModel)
         BottomSheets(viewModel)
         InputValidations(viewModel)
-        PopularAndroidIntegrations(viewModel)
+        Camera(viewModel)
+        Maps(viewModel)
         ExoPlayerSamples(viewModel)
         ThemeAndLocalization(viewModel)
         ScrollBasedAnimations(viewModel)
         UIelements(viewModel)
         NavigateWithResults(viewModel)
         NavigationCores(viewModel)
-        Spacer(modifier = Modifier.height(28.dp))
+        Text(text = "uncategorized")
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = viewModel::goAutoScroll
         ) { Text(text = "auto scroll") }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goHiltComposeSharedViewModel
-        ) { Text(text = "hilt+compose shared viewModel") }
-        Spacer(modifier = Modifier.height(8.dp))
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnackbar) {
             Text(text = "snackbar")
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goDropdown) {
-            Text(text = "dropdown")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
 @Composable
 fun NavigationCores(viewModel: SampleContainerViewModel) {
-    Spacer(modifier = Modifier.height(8.dp))
     Text(text = "navigation cores")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goBottomBar
     ) { Text(text = "bottom bar") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goNavigationDrawer
@@ -76,43 +66,40 @@ fun NavigationCores(viewModel: SampleContainerViewModel) {
 
 @Composable
 fun NavigateWithResults(viewModel: SampleContainerViewModel) {
-    Spacer(modifier = Modifier.height(8.dp))
-    Text(text = "navigate to/back with results")
+    Text(text = "Share data between composables")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goNavigationWithValuesSimple
-    ) { Text(text = "navigate forward/back simple") }
-    Spacer(modifier = Modifier.height(8.dp))
+    ) { Text(text = "navigate forward/back (primitives)") }
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goNavigationWithValuesObject
-    ) { Text(text = "navigate forward/back with object") }
+    ) { Text(text = "navigate forward/back (parcelable)") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goHiltComposeSharedViewModel
+    ) { Text(text = "hilt + shared viewModel") }
 }
 
 @Composable
 fun UIelements(viewModel: SampleContainerViewModel) {
-    Spacer(modifier = Modifier.height(8.dp))
-    Text(text = "ui elements")
+    Text(text = "UI elements")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goOtp
     ) { Text(text = "otp view") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goViewPager
     ) { Text(text = "view pager") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goStickyHeaders
     ) { Text(text = "sticky headers") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goTable
     ) { Text(text = "table") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCustomView) {
         Text(
             text = "custom view", style = LocalTextStyle.current.copy(
@@ -128,21 +115,18 @@ fun UIelements(viewModel: SampleContainerViewModel) {
 
 @Composable
 fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
-    Spacer(modifier = Modifier.height(8.dp))
-    Text(text = "scroll based animations")
+    Text(text = "Scroll based animations")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goNestedHorizontalLists
     ) { Text(text = "app bar auto-elevation animation") }
-    Spacer(modifier = Modifier.height(8.dp))
+
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goParallaxEffect) {
         Text(text = "parallax effect ")
     }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goScrollAnimation1) {
         Text(text = "scroll animation 1")
     }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGradientScroll) {
         Text(text = "gradient change")
     }
@@ -150,8 +134,7 @@ fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
 
 @Composable
 fun ThemeAndLocalization(viewModel: SampleContainerViewModel) {
-    Spacer(modifier = Modifier.height(8.dp))
-    Text(text = "theme & localization")
+    Text(text = "Theme & localization")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goForceTheme
@@ -159,19 +142,21 @@ fun ThemeAndLocalization(viewModel: SampleContainerViewModel) {
 }
 
 @Composable
-fun PopularAndroidIntegrations(viewModel: SampleContainerViewModel) {
-    Spacer(modifier = Modifier.height(8.dp))
-    Text(text = "popular android integrations")
+fun Maps(viewModel: SampleContainerViewModel) {
+    Text(text = "Maps")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goMap
     ) { Text(text = "google map") }
-    Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+fun Camera(viewModel: SampleContainerViewModel) {
+    Text(text = "Camera")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goCameraX
     ) { Text(text = "camera x") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goQrScanning
@@ -180,38 +165,36 @@ fun PopularAndroidIntegrations(viewModel: SampleContainerViewModel) {
 
 @Composable
 fun ExoPlayerSamples(viewModel: SampleContainerViewModel) {
-    Spacer(modifier = Modifier.height(8.dp))
-    Text(text = "ExoPlayer")
+    Text(text = "ExoPlayer in LazyColumn")
     Button(
         modifier = Modifier.fillMaxWidth(),
-        onClick = viewModel::goExoPlayerColumn
-    ) { Text(text = "exoPlayer in column") }
-    Spacer(modifier = Modifier.height(8.dp))
+        onClick = viewModel::goExoPlayerColumnReference
+    ) { Text(text = "reference based") }
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goExoPlayerColumnIndexed
-    ) { Text(text = "exoPlayer in column indexed") }
-    Spacer(modifier = Modifier.height(8.dp))
+    ) { Text(text = "index based") }
     Button(
         modifier = Modifier.fillMaxWidth(),
-        onClick = viewModel::goExoPlayerAutoplayColumn
-    ) { Text(text = "exoPlayer auto playback in column") }
+        onClick = viewModel::goExoPlayerColumnAutoplay
+    ) { Text(text = "auto-playback") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goExoPlayerColumnDynamicThumb
+    ) { Text(text = "dynamic thumbnails") }
 }
 
 @Composable
 fun InputValidations(viewModel: SampleContainerViewModel) {
-    Spacer(modifier = Modifier.height(8.dp))
     Text(text = "Input validations")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goInputManualValidation
     ) { Text(text = "manual") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goInputAutoValidation
     ) { Text(text = "auto") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goInputDebounceValidation
@@ -220,18 +203,15 @@ fun InputValidations(viewModel: SampleContainerViewModel) {
 
 @Composable
 fun BottomSheets(viewModel: SampleContainerViewModel) {
-    Spacer(modifier = Modifier.height(8.dp))
     Text(text = "Bottom sheets")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goBottomSheetDestination
     ) { Text(text = "as destination") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goBottomSheetsContainer
-    ) { Text(text = "modal ") }
-    Spacer(modifier = Modifier.height(8.dp))
+    ) { Text(text = "modal") }
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goBottomSheetsScaffold
@@ -240,24 +220,21 @@ fun BottomSheets(viewModel: SampleContainerViewModel) {
 
 @Composable
 fun Pagination(viewModel: SampleContainerViewModel) {
-    Text(text = "pagination")
+    Text(text = "Pagination")
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goPaginationSimple
     ) { Text(text = "simple") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goPaginationRoom
-    ) { Text(text = "room") }
-    Spacer(modifier = Modifier.height(8.dp))
+    ) { Text(text = "simple + room") }
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goPaginationPaging
     ) { Text(text = "paging") }
-    Spacer(modifier = Modifier.height(8.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goPaginationPagingRoom
-    ) { Text(text = "paging with room") }
+    ) { Text(text = "paging + room") }
 }

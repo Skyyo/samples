@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.exoPlayer.columnAutoplay
+package com.skyyo.samples.features.exoPlayer.columnReference
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,47 +23,53 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import kotlinx.coroutines.flow.collect
-import kotlin.math.abs
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
-fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = hiltViewModel()) {
+fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val listState = rememberLazyListState()
     val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
+    val listState = rememberLazyListState()
     val videos by viewModel.videos.observeAsState(listOf())
-    val playingVideoItem = remember { mutableStateOf(videos.firstOrNull()) }
+    val playingVideoItem by viewModel.currentlyPlayingItem.observeAsState()
+    val isPlayingItemVisible = remember { mutableStateOf(false) }
 
-    LaunchedEffect(videos, listState.firstVisibleItemIndex) {
+    LaunchedEffect(playingVideoItem) {
+        if (playingVideoItem == null) {
+            if (exoPlayer.isPlaying) exoPlayer.pause()
+        } else {
+            exoPlayer.playWhenReady = true
+            exoPlayer.setMediaItem(
+                MediaItem.fromUri(playingVideoItem!!.mediaUrl),
+                playingVideoItem!!.lastPlayedPosition
+            )
+            exoPlayer.prepare()
+        }
+
         snapshotFlow {
-            listState.playingItem(videos)
-        }.collect {
-            playingVideoItem.value = listState.playingItem(videos)
+            listState.visibleAreaContainsItem(playingVideoItem, videos)
+        }.distinctUntilChanged().collect {
+            isPlayingItemVisible.value = listState.visibleAreaContainsItem(playingVideoItem, videos)
         }
     }
 
-    LaunchedEffect(playingVideoItem.value) {
-        // is null only upon entering the screen
-        if (playingVideoItem.value == null) {
-            if (exoPlayer.isPlaying) exoPlayer.pause()
-        } else {
-            // move playWhenReady to exoPlayer initialization if you don't
-            // want to play next video automatically
-            exoPlayer.playWhenReady = true
-            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem.value!!.mediaUrl))
-            exoPlayer.prepare()
+    LaunchedEffect(isPlayingItemVisible.value) {
+        if (!isPlayingItemVisible.value && playingVideoItem != null) {
+            viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingVideoItem)
+            exoPlayer.pause()
         }
     }
 
     DisposableEffect(exoPlayer) {
         val observer = object : LifecycleObserver {
-            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-            fun onResume() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_START)
+            fun onStart() {
                 if (playingVideoItem != null) exoPlayer.play()
             }
 
-            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-            fun onPause() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+            fun onStop() {
                 if (playingVideoItem != null) exoPlayer.pause()
             }
         }
@@ -77,8 +83,8 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
         state = listState,
+        modifier = Modifier.fillMaxSize(),
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
             applyTop = true,
@@ -90,31 +96,26 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     ) {
         items(videos, VideoItem::id) { video ->
             Spacer(modifier = Modifier.height(16.dp))
-            AutoPlayVideoCard(
+            VideoCardReference(
                 videoItem = video,
                 exoPlayer = exoPlayer,
-                isPlaying = video.id == playingVideoItem.value?.id,
+                isPlaying = video.id == playingVideoItem?.id,
+                onClick = {
+                    viewModel.onPlayVideoClick(exoPlayer.currentPosition, video)
+                }
             )
         }
     }
 }
 
-private fun LazyListState.playingItem(videos: List<VideoItem>): VideoItem? {
-    if (layoutInfo.visibleItemsInfo.isNullOrEmpty() || videos.isEmpty()) return null
-    val layoutInfo = layoutInfo
-    val visibleItems = layoutInfo.visibleItemsInfo
-    val lastItem = visibleItems.last()
-    val firstItemVisible = firstVisibleItemIndex == 0 && firstVisibleItemScrollOffset == 0
-    val itemSize = lastItem.size
-    val itemOffset = lastItem.offset
-    val totalOffset = layoutInfo.viewportEndOffset
-    val lastItemVisible = lastItem.index == videos.size - 1 && totalOffset - itemOffset >= itemSize
-    val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
-    val centerItems = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
-
-    return when {
-        firstItemVisible -> videos.first()
-        lastItemVisible -> videos.last()
-        else -> centerItems.firstNotNullOf { videos[it.index] }
+private fun LazyListState.visibleAreaContainsItem(
+    currentlyPlayedVideoItem: VideoItem?,
+    videos: List<VideoItem>
+) = when {
+    currentlyPlayedVideoItem == null -> false
+    videos.isEmpty() -> false
+    else -> {
+        layoutInfo.visibleItemsInfo.map { videos[it.index] }.contains(currentlyPlayedVideoItem)
     }
 }
+

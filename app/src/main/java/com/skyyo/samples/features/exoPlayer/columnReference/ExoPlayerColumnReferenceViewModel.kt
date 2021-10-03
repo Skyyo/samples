@@ -1,14 +1,14 @@
-package com.skyyo.samples.features.exoPlayer.column
+package com.skyyo.samples.features.exoPlayer.columnReference
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyyo.samples.features.exoPlayer.VideoItem
+import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 
 @HiltViewModel
-class ExoPlayerColumnViewModel @Inject constructor() : ViewModel() {
+class ExoPlayerColumnReferenceViewModel @Inject constructor() : ViewModel() {
 
     val videos = MutableLiveData<List<VideoItem>>()
     val currentlyPlayingItem = MutableLiveData<VideoItem?>()
@@ -79,7 +79,6 @@ class ExoPlayerColumnViewModel @Inject constructor() : ViewModel() {
             item -> {
                 currentlyPlayingItem.postValue(null)
                 videos.value = videos.value!!.toMutableList().also { mutableList ->
-//                    mutableList[2] = mutableList[2].copy(lastPlayedPosition = playbackPosition)
                     mutableList.find { it == item }?.lastPlayedPosition = playbackPosition
                 }
             }

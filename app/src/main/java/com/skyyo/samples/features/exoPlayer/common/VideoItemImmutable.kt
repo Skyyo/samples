@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.exoPlayer
+package com.skyyo.samples.features.exoPlayer.common
 
 import androidx.compose.runtime.Immutable
 
