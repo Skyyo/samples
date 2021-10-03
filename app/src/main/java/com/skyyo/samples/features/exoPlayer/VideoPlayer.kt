@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.exoPlayer.column
+package com.skyyo.samples.features.exoPlayer
 
 import android.view.LayoutInflater
 import android.view.View
@@ -29,5 +29,15 @@ fun VideoPlayer(
             player = exoPlayer
         }
     }
-    AndroidView({ playerView }, Modifier.height(256.dp).background(Color.Black))
+
+    // dispose approach doesn't work to pause player since it's not invoked as soon as
+    // view is not visible to the user
+    //    DisposableEffect(Unit) {
+    //        onDispose { onDisposed() }
+    //    }
+
+    AndroidView({ playerView },
+        Modifier
+            .height(256.dp)
+            .background(Color.Black))
 }

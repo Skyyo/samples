@@ -31,27 +31,26 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.R
 import com.skyyo.samples.extensions.log
 import com.skyyo.samples.features.exoPlayer.VideoItemImmutable
+import com.skyyo.samples.features.exoPlayer.VideoPlayer
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
 import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 
 @Composable
 fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
+
+    val exoPlayer = remember(context) { SimpleExoPlayer.Builder(context).build() }
     val listState = rememberLazyListState()
+
     val videos by viewModel.videos.observeAsState(listOf())
     val playingItemIndex by viewModel.currentlyPlayingIndex.observeAsState()
-    //TODO using derivedStateOf+isCurrentItemVisible causes leaks. Using Dispose instead, to stop
-    // playback when item is out of screen bounds works properly with derivedStateOf, so that
-    // we don't recompose the ExoPlayerColumnIndexedScreen infinitelym but it's not a proper approach
-    // to stop playback
-//    val isCurrentItemVisible by derivedStateOf {
-//        isCurrentItemVisible(listState, playingItemIndex, videos)
-//    }
-    val isCurrentItemVisible = isCurrentItemVisible(listState, playingItemIndex, videos)
+    val isCurrentItemVisible by listState.isCurrentItemVisible(playingItemIndex, videos)
+
     LaunchedEffect(isCurrentItemVisible) {
         log("LaunchedEffect(isCurrentItemVisible)")
         if (!isCurrentItemVisible && playingItemIndex != null) {
@@ -139,7 +138,7 @@ private fun VideoCard(
         contentAlignment = Alignment.Center
     ) {
         if (isPlaying) {
-            VideoPlayerIndexed(exoPlayer) { uiVisible ->
+            VideoPlayer(exoPlayer) { uiVisible ->
                 if (isPlayerUiVisible.value) {
                     isPlayerUiVisible.value = uiVisible
                 } else {
@@ -167,18 +166,57 @@ private fun VideoCard(
     }
 }
 
-fun isCurrentItemVisible(
-    listState: LazyListState,
+@Composable
+fun LazyListState.isCurrentItemVisible(
     currentlyPlayedIndex: Int?,
-    videos: List<VideoItemImmutable>
-): Boolean {
-//    log("isCurrentItemVisible")
-    return if (currentlyPlayedIndex == null) {
-        false
-    } else {
-        val layoutInfo = listState.layoutInfo
-        val visibleItems = layoutInfo.visibleItemsInfo.map { videos[it.index] }
-        visibleItems.contains(videos[currentlyPlayedIndex])
+    videos: List<VideoItemImmutable>,
+): State<Boolean> {
+    val isVisible = remember {
+        val initialValue = when {
+            currentlyPlayedIndex == null -> false
+            videos.isEmpty() -> false
+            else -> {
+                val visibleItems = layoutInfo.visibleItemsInfo.map { videos[it.index] }
+                visibleItems.contains(videos[currentlyPlayedIndex])
+            }
+        }
+        mutableStateOf(initialValue)
     }
+    LaunchedEffect(this, currentlyPlayedIndex) {
+        snapshotFlow {
+            when {
+                currentlyPlayedIndex == null -> false
+                videos.isEmpty() -> false
+                else -> {
+                    val visibleItems = layoutInfo.visibleItemsInfo.map { videos[it.index] }
+                    visibleItems.contains(videos[currentlyPlayedIndex])
+                }
+            }
+        }.distinctUntilChanged().collect {
+            when {
+                currentlyPlayedIndex == null -> isVisible.value = false
+                videos.isEmpty() -> isVisible.value = false
+                else -> {
+                    val visibleItems = layoutInfo.visibleItemsInfo.map { videos[it.index] }
+                    isVisible.value = visibleItems.contains(videos[currentlyPlayedIndex])
+                }
+            }
+        }
+    }
+    return isVisible
 }
+
+//use when playback should be stopped when single pixel of item is off screen
+//@Composable
+//fun LazyListState.isItemVisible(key: Int): State<Boolean> {
+//    val isVisible = remember {
+//        mutableStateOf(layoutInfo.visibleItemsInfo.firstOrNull { it.key == key } != null)
+//    }
+//    LaunchedEffect(this, key) {
+//        snapshotFlow {
+//            layoutInfo.visibleItemsInfo.firstOrNull { it.key == key } != null
+//        }.distinctUntilChanged().collect { isVisible.value = it }
+//    }
+//    return isVisible
+//}
 

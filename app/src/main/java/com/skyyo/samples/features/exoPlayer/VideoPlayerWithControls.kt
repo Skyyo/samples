@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.exoPlayer.columnAutoplay
+package com.skyyo.samples.features.exoPlayer
 
 import android.view.LayoutInflater
 import android.view.View
@@ -21,30 +21,14 @@ fun VideoPlayerWithControls(exoPlayer: SimpleExoPlayer) {
     val context = LocalContext.current
     val playerView = remember {
         val layout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null)
-        layout.findViewById<ImageButton>(R.id.exo_pause).setOnClickListener { exoPlayer.pause() }
-        layout.findViewById<ImageButton>(R.id.exo_play).setOnClickListener { exoPlayer.play() }
         val playerView = (layout.findViewById(R.id.playerView) as PlayerView).apply {
             player = exoPlayer
         }
+        layout.findViewById<ImageButton>(R.id.exo_pause).setOnClickListener { exoPlayer.pause() }
+        layout.findViewById<ImageButton>(R.id.exo_play).setOnClickListener { exoPlayer.play() }
         layout.id = View.generateViewId()
         playerView
-//        layout
     }
 
-//    DisposableEffect(Unit) {
-//        onDispose {
-//            log("disposing view")
-//            playerView.player?.pause()
-////            playerView.player = null
-////            playerView.removeAllViewsInLayout()
-////            playerView = null
-//        }
-//    }
-
-    AndroidView(
-        { playerView },
-        Modifier
-            .height(256.dp)
-            .background(Color.Black)
-    )
+    AndroidView({ playerView }, Modifier.height(256.dp).background(Color.Black))
 }

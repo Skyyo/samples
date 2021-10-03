@@ -29,6 +29,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoItem
+import com.skyyo.samples.features.exoPlayer.VideoPlayer
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
 import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
