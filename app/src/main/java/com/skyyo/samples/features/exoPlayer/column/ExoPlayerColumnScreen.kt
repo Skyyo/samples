@@ -33,6 +33,8 @@ import com.skyyo.samples.features.exoPlayer.VideoPlayer
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
 import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.utils.OnClick
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel()) {
@@ -42,13 +44,8 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
     val listState = rememberLazyListState()
     val videos by viewModel.videos.observeAsState(listOf())
     val playingVideoItem by viewModel.currentlyPlayingItem.observeAsState()
-    val isCurrentItemVisible by derivedStateOf {
-        isCurrentItemVisible(
-            listState,
-            playingVideoItem,
-            videos
-        )
-    }
+    val isPlayingItemVisible by listState.isCurrentItemVisible(playingVideoItem, videos)
+
     //can/should be provided by dagger if used in multiple places
 //    val imageLoader = remember {
 //        ImageLoader.Builder(context)
@@ -60,10 +57,24 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
 //            .build()
 //    }
 
-    LaunchedEffect(isCurrentItemVisible) {
-        if (!isCurrentItemVisible && playingVideoItem != null) {
+    LaunchedEffect(isPlayingItemVisible) {
+        if (!isPlayingItemVisible && playingVideoItem != null) {
             viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingVideoItem)
             exoPlayer.pause()
+        }
+    }
+
+    //this can be replaced with one shot events
+    LaunchedEffect(playingVideoItem) {
+        if (playingVideoItem == null) {
+            if (exoPlayer.isPlaying) exoPlayer.pause()
+        } else {
+            exoPlayer.playWhenReady = true
+            exoPlayer.setMediaItem(
+                MediaItem.fromUri(playingVideoItem!!.mediaUrl),
+                playingVideoItem!!.lastPlayedPosition
+            )
+            exoPlayer.prepare()
         }
     }
 
@@ -85,20 +96,6 @@ fun ExoPlayerColumnScreen(viewModel: ExoPlayerColumnViewModel = hiltViewModel())
             lifecycleOwner.lifecycle.removeObserver(observer)
             exoPlayer.stop()
             exoPlayer.release()
-        }
-    }
-
-    //this can be replaced with one shot events
-    LaunchedEffect(playingVideoItem) {
-        if (playingVideoItem == null) {
-            if (exoPlayer.isPlaying) exoPlayer.pause()
-        } else {
-            exoPlayer.playWhenReady = true
-            exoPlayer.setMediaItem(
-                MediaItem.fromUri(playingVideoItem!!.mediaUrl),
-                playingVideoItem!!.lastPlayedPosition
-            )
-            exoPlayer.prepare()
         }
     }
 
@@ -177,18 +174,32 @@ private fun VideoCard(
     }
 }
 
-fun isCurrentItemVisible(
-    listState: LazyListState,
-    currentlyPlayedItem: VideoItem?,
+@Composable
+fun LazyListState.isCurrentItemVisible(
+    currentlyPlayedVideoItem: VideoItem?,
+    videos: List<VideoItem>,
+): State<Boolean> {
+    val isVisible = remember {
+        mutableStateOf(visibleAreaContainsPlayingItem(currentlyPlayedVideoItem, videos))
+    }
+    LaunchedEffect(this, currentlyPlayedVideoItem) {
+        snapshotFlow {
+            visibleAreaContainsPlayingItem(currentlyPlayedVideoItem, videos)
+        }.distinctUntilChanged().collect {
+            isVisible.value = visibleAreaContainsPlayingItem(currentlyPlayedVideoItem, videos)
+        }
+    }
+    return isVisible
+}
+
+fun LazyListState.visibleAreaContainsPlayingItem(
+    currentlyPlayedVideoItem: VideoItem?,
     videos: List<VideoItem>
-): Boolean {
-    return if (currentlyPlayedItem == null) {
-        false
-    } else {
-        val layoutInfo = listState.layoutInfo
-        //can be optimized using indexes for certain scenarios
-        val visibleItems = layoutInfo.visibleItemsInfo.map { videos[it.index] }
-        visibleItems.contains(currentlyPlayedItem)
+) = when {
+    currentlyPlayedVideoItem == null -> false
+    videos.isEmpty() -> false
+    else -> {
+        layoutInfo.visibleItemsInfo.map { videos[it.index] }.contains(currentlyPlayedVideoItem)
     }
 }
 

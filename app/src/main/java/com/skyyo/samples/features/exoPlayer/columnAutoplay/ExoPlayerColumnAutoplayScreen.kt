@@ -28,6 +28,7 @@ import com.skyyo.samples.features.exoPlayer.VideoItem
 import com.skyyo.samples.features.exoPlayer.VideoPlayerWithControls
 import com.skyyo.samples.features.exoPlayer.composables.StaticVideoThumbnail
 import com.skyyo.samples.theme.Shapes
+import kotlinx.coroutines.flow.collect
 import kotlin.math.abs
 
 @Composable
@@ -37,21 +38,14 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     val listState = rememberLazyListState()
     val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
     val videos by viewModel.videos.observeAsState(listOf())
-
-    //TODO using derivedStateOf causes ExoPlayer to leak???
-    // using playingVideoItem = findPlayingItem makes recompositions of infinite amount
-//    val playingVideoItem = findPlayingItem(listState, videos)
-    val playingVideoItem by derivedStateOf { findPlayingItem(listState, videos) }
+    val playingVideoItem by listState.findPlayingItem(videos, listState.firstVisibleItemIndex)
 
     LaunchedEffect(playingVideoItem) {
-        //TODO never null except 1 composition
         if (playingVideoItem == null) {
             if (exoPlayer.isPlaying) exoPlayer.pause()
         } else {
-            // move playWhenReady to exoPlayer initialization if you don't want to play next video
-            // automatically
-//                log("pausing player")
-//            if (exoPlayer.isPlaying) exoPlayer.pause()
+            // move playWhenReady to exoPlayer initialization if you don't
+            // want to play next video automatically
             exoPlayer.playWhenReady = true
             exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
             exoPlayer.prepare()
@@ -130,29 +124,34 @@ private fun VideoCard(
     }
 }
 
-fun findPlayingItem(
-    listState: LazyListState,
-    videos: List<VideoItem>
-): VideoItem? {
-    if (listState.layoutInfo.visibleItemsInfo.isNullOrEmpty()) return null
-
-    val layoutInfo = listState.layoutInfo
-    val visibleItems = layoutInfo.visibleItemsInfo
-
-    val firstItemVisible =
-        listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0
-    if (firstItemVisible) return videos.first()
-
-    val lastItem = visibleItems.last()
-    val lastItemVisible = lastItem.index == videos.size - 1
-    if (lastItemVisible) {
-        val itemSize = lastItem.size
-        val itemOffset = lastItem.offset
-        val totalOffset = layoutInfo.viewportEndOffset
-        if (totalOffset - itemOffset >= itemSize) return videos.last()
+@Composable
+fun LazyListState.findPlayingItem(
+    videos: List<VideoItem>,
+    key: Int,
+): State<VideoItem?> {
+    val visibleItem = remember { mutableStateOf(itemToPlay(videos)) }
+    LaunchedEffect(this, videos, key) {
+        snapshotFlow { itemToPlay(videos) }.collect { visibleItem.value = itemToPlay(videos) }
     }
+    return visibleItem
+}
 
+fun LazyListState.itemToPlay(videos: List<VideoItem>): VideoItem? {
+    if (layoutInfo.visibleItemsInfo.isNullOrEmpty() || videos.isEmpty()) return null
+    val layoutInfo = layoutInfo
+    val visibleItems = layoutInfo.visibleItemsInfo
+    val lastItem = visibleItems.last()
+    val firstItemVisible = firstVisibleItemIndex == 0 && firstVisibleItemScrollOffset == 0
+    val itemSize = lastItem.size
+    val itemOffset = lastItem.offset
+    val totalOffset = layoutInfo.viewportEndOffset
+    val lastItemVisible = lastItem.index == videos.size - 1 && totalOffset - itemOffset >= itemSize
     val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
     val centerItems = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
-    return centerItems.firstNotNullOf { videos[it.index] }
+
+    return when {
+        firstItemVisible -> videos.first()
+        lastItemVisible -> videos.last()
+        else -> centerItems.firstNotNullOf { videos[it.index] }
+    }
 }
