@@ -1,9 +1,6 @@
 package com.skyyo.samples.features.sampleContainer
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -15,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
 
@@ -62,6 +60,7 @@ fun NavigationCores(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goNavigationDrawer
     ) { Text(text = "navigation drawer") }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -79,6 +78,7 @@ fun NavigateWithResults(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goHiltComposeSharedViewModel
     ) { Text(text = "hilt + shared viewModel") }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -111,6 +111,7 @@ fun UIelements(viewModel: SampleContainerViewModel) {
             )
         )
     }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -130,6 +131,7 @@ fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGradientScroll) {
         Text(text = "gradient change")
     }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -139,6 +141,7 @@ fun ThemeAndLocalization(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goForceTheme
     ) { Text(text = "force theme") }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -148,6 +151,7 @@ fun Maps(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goMap
     ) { Text(text = "google map") }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -161,6 +165,7 @@ fun Camera(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goQrScanning
     ) { Text(text = "scan qr code with ML kit") }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -182,6 +187,7 @@ fun ExoPlayerSamples(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goExoPlayerColumnDynamicThumb
     ) { Text(text = "dynamic thumbnails") }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -199,6 +205,7 @@ fun InputValidations(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goInputDebounceValidation
     ) { Text(text = "debounce") }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -216,6 +223,7 @@ fun BottomSheets(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goBottomSheetsScaffold
     ) { Text(text = "persistent") }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -237,4 +245,5 @@ fun Pagination(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goPaginationPagingRoom
     ) { Text(text = "paging + room") }
+    Spacer(modifier = Modifier.height(16.dp))
 }
