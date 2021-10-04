@@ -59,12 +59,12 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
         val observer = object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume() {
-                if (playingVideoItem != null) exoPlayer.play()
+                if (playingVideoItem.value != null) exoPlayer.play()
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
             fun onPause() {
-                if (playingVideoItem != null) exoPlayer.pause()
+                if (playingVideoItem.value != null) exoPlayer.pause()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
