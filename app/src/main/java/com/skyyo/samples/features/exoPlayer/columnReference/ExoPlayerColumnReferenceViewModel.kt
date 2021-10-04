@@ -74,15 +74,25 @@ class ExoPlayerColumnReferenceViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onPlayVideoClick(playbackPosition: Long, item: VideoItem?) {
-        //if item == playbackPosition - the same video was clicked again, we should stop the playback
         when (currentlyPlayingItem.value) {
+            // video is not playing at the moment
+            null -> currentlyPlayingItem.postValue(item)
+            // this video is already playing
             item -> {
                 currentlyPlayingItem.postValue(null)
-                videos.value = videos.value!!.toMutableList().also { mutableList ->
-                    mutableList.find { it == item }?.lastPlayedPosition = playbackPosition
+                videos.value = videos.value!!.toMutableList().also { list ->
+                    list.find { it == item }?.lastPlayedPosition = playbackPosition
                 }
             }
-            else -> currentlyPlayingItem.postValue(item)
+            // video is playing, and we're requesting new video to play
+            else -> {
+                videos.value = videos.value!!.toMutableList().also { list ->
+                    list.find {
+                        it == currentlyPlayingItem.value
+                    }?.lastPlayedPosition = playbackPosition
+                }
+                currentlyPlayingItem.postValue(item)
+            }
         }
     }
 
