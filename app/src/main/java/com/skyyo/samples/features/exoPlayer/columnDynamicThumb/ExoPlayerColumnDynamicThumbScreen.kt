@@ -55,7 +55,7 @@ fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel
 
     LaunchedEffect(playingItemIndex) {
         if (playingItemIndex == null) {
-            if (exoPlayer.isPlaying) exoPlayer.pause()
+            exoPlayer.pause()
         } else {
             exoPlayer.playWhenReady = true
             val video = videos[playingItemIndex!!]

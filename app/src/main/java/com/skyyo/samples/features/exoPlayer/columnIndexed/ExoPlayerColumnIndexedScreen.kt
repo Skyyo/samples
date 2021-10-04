@@ -40,7 +40,7 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
 
     LaunchedEffect(playingItemIndex) {
         if (playingItemIndex == null) {
-            if (exoPlayer.isPlaying) exoPlayer.pause()
+            exoPlayer.pause()
         } else {
             exoPlayer.playWhenReady = true
             val video = videos[playingItemIndex!!]
@@ -51,6 +51,7 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
             listState.visibleAreaContainsItem(playingItemIndex, videos)
         }.distinctUntilChanged().collect {
             isCurrentItemVisible.value = listState.visibleAreaContainsItem(playingItemIndex, videos)
+
         }
     }
 

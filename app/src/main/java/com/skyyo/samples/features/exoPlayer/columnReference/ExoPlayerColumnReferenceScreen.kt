@@ -37,7 +37,7 @@ fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel 
 
     LaunchedEffect(playingVideoItem) {
         if (playingVideoItem == null) {
-            if (exoPlayer.isPlaying) exoPlayer.pause()
+            exoPlayer.pause()
         } else {
             exoPlayer.playWhenReady = true
             exoPlayer.setMediaItem(

@@ -45,7 +45,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     LaunchedEffect(playingVideoItem.value) {
         // is null only upon entering the screen
         if (playingVideoItem.value == null) {
-            if (exoPlayer.isPlaying) exoPlayer.pause()
+            exoPlayer.pause()
         } else {
             // move playWhenReady to exoPlayer initialization if you don't
             // want to play next video automatically
