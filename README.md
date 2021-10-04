@@ -69,11 +69,14 @@ Uncategorized
 - https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
 - compose with ad mob
 - enhance parallax sample, show how to add snapping behaviour
-- add more animate on scroll effects
+- add more animate on scroll animations
+- add on scroll animation using animatable DP
+- App bar auto elevation for dark theme sample
 - draggable sample like [here](https://proandroiddev.com/jetpack-compose-calculator-ui-4dfa2ab9048e). Sample which allows to drag elements in 1 screen from top, right & bottom for example.
 - exoplayer sample with gestures like [here](https://github.com/nihk/exo-viewpager-fun)
 - check if exoplyaer sample with indexes is reliable when used with paging library
 - memory leaks in compose section 
+
   
   # License
 ```
