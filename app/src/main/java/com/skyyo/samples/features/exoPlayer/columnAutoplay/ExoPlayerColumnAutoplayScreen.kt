@@ -33,10 +33,10 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     val videos by viewModel.videos.observeAsState(listOf())
     val playingVideoItem = remember { mutableStateOf(videos.firstOrNull()) }
 
-    LaunchedEffect(videos, listState.firstVisibleItemIndex) {
+    LaunchedEffect(Unit) {
         snapshotFlow {
             listState.playingItem(videos)
-        }.collect { videoItem->
+        }.collect { videoItem ->
             playingVideoItem.value = videoItem
         }
     }
@@ -53,6 +53,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
             exoPlayer.playWhenReady = true
         }
     }
+
     DisposableEffect(exoPlayer) {
         val lifecycleObserver = LifecycleEventObserver { _, event ->
             if (playingVideoItem.value == null) return@LifecycleEventObserver

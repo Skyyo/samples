@@ -16,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import coil.ImageLoader
 import coil.decode.VideoFrameDecoder
 import coil.fetch.VideoFrameFileFetcher
@@ -29,7 +27,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexedViewModel
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 
 @Composable
@@ -54,6 +51,14 @@ fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel
     val playingItemIndex by viewModel.currentlyPlayingIndex.observeAsState()
     val isCurrentItemVisible = remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) {
+        snapshotFlow {
+            listState.visibleAreaContainsItem(playingItemIndex, videos)
+        }.collect { isVisible ->
+            isCurrentItemVisible.value = isVisible
+        }
+    }
+
     LaunchedEffect(playingItemIndex) {
         if (playingItemIndex == null) {
             exoPlayer.pause()
@@ -63,17 +68,11 @@ fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel
             exoPlayer.prepare()
             exoPlayer.playWhenReady = true
         }
-        snapshotFlow {
-            listState.visibleAreaContainsItem(playingItemIndex, videos)
-        }.collect { isVisible->
-            isCurrentItemVisible.value = isVisible
-        }
     }
 
     LaunchedEffect(isCurrentItemVisible.value) {
         if (!isCurrentItemVisible.value && playingItemIndex != null) {
             viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingItemIndex!!)
-            exoPlayer.pause()
         }
     }
 

@@ -22,7 +22,6 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel = hiltViewModel()) {
@@ -34,18 +33,7 @@ fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel 
     val playingVideoItem by viewModel.currentlyPlayingItem.observeAsState()
     val isPlayingItemVisible = remember { mutableStateOf(false) }
 
-    LaunchedEffect(playingVideoItem) {
-        if (playingVideoItem == null) {
-            exoPlayer.pause()
-        } else {
-            exoPlayer.playWhenReady = true
-            exoPlayer.setMediaItem(
-                MediaItem.fromUri(playingVideoItem!!.mediaUrl),
-                playingVideoItem!!.lastPlayedPosition
-            )
-            exoPlayer.prepare()
-        }
-
+    LaunchedEffect(Unit) {
         snapshotFlow {
             listState.visibleAreaContainsItem(playingVideoItem, videos)
         }.collect { isVisible ->
@@ -53,10 +41,22 @@ fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel 
         }
     }
 
+    LaunchedEffect(playingVideoItem) {
+        if (playingVideoItem == null) {
+            exoPlayer.pause()
+        } else {
+            exoPlayer.setMediaItem(
+                MediaItem.fromUri(playingVideoItem!!.mediaUrl),
+                playingVideoItem!!.lastPlayedPosition
+            )
+            exoPlayer.prepare()
+            exoPlayer.playWhenReady = true
+        }
+    }
+
     LaunchedEffect(isPlayingItemVisible.value) {
         if (!isPlayingItemVisible.value && playingVideoItem != null) {
             viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingVideoItem)
-            exoPlayer.pause()
         }
     }
 

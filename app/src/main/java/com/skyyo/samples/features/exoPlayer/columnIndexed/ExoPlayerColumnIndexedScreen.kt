@@ -22,7 +22,6 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 
 @Composable
@@ -37,6 +36,14 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
     val playingItemIndex by viewModel.currentlyPlayingIndex.observeAsState()
     val isCurrentItemVisible = remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) {
+        snapshotFlow {
+            listState.visibleAreaContainsItem(playingItemIndex, videos)
+        }.collect { isVisible ->
+            isCurrentItemVisible.value = isVisible
+        }
+    }
+
     LaunchedEffect(playingItemIndex) {
         if (playingItemIndex == null) {
             exoPlayer.pause()
@@ -46,17 +53,11 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
             exoPlayer.prepare()
             exoPlayer.playWhenReady = true
         }
-        snapshotFlow {
-            listState.visibleAreaContainsItem(playingItemIndex, videos)
-        }.collect { isVisible ->
-            isCurrentItemVisible.value = isVisible
-        }
     }
 
     LaunchedEffect(isCurrentItemVisible.value) {
         if (!isCurrentItemVisible.value && playingItemIndex != null) {
             viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingItemIndex!!)
-            exoPlayer.pause()
         }
     }
 
