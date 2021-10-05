@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillNode
@@ -12,6 +13,7 @@ import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -57,22 +59,24 @@ fun Modifier.addVerticalScrollbar(
     }
 }
 
-@ExperimentalComposeUiApi
+@OptIn(ExperimentalComposeUiApi::class)
 fun Modifier.autofill(
-    onFill: ((String) -> Unit),
+    onFill: (String) -> Unit,
     vararg autofillTypes: AutofillType
 ) = composed {
     val autofill = LocalAutofill.current
+    // TODO 9/14/2021 Shouldn't we remember the AutofillNode?
     val autofillNode = AutofillNode(onFill = onFill, autofillTypes = autofillTypes.toList())
+    // TODO 9/14/2021 Check if there are no issues with this invocation
     LocalAutofillTree.current += autofillNode
     onGloballyPositioned { autofillNode.boundingBox = it.boundsInWindow() }
         .onFocusChanged { focusState ->
-            autofill?.run {
-                if (focusState.isFocused) {
-                    requestAutofillForNode(autofillNode)
-                } else {
-                    cancelAutofillForNode(autofillNode)
-                }
+        autofill?.run {
+            if (focusState.isFocused) {
+                requestAutofillForNode(autofillNode)
+            } else {
+                cancelAutofillForNode(autofillNode)
             }
         }
+    }
 }
