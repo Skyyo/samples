@@ -31,7 +31,7 @@ class InputValidationAutoViewModel @Inject constructor(
     val areInputsValid = combine(name, creditCardNumber) { name, cardNumber ->
         name.value.isNotEmpty() && name.errorId == null &&
                 cardNumber.value.isNotEmpty() && cardNumber.errorId == null
-    }.stateIn(viewModelScope, SharingStarted.Lazily, false)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
     private var focusedTextField = handle.get("focusedTextField") ?: FocusedTextFieldKey.NAME
         set(value) {
             field = value

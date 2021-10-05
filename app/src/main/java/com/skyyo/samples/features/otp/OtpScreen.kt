@@ -33,7 +33,7 @@ fun OtpScreen(otpViewModel: OtpViewModel = hiltViewModel()) {
             text = "Otp view",
             modifier = Modifier.padding(16.dp)
         )
-        //TODO optimize the otp since current implementation is bad
+        //TODO optimize the otp since current implementation is bad.
         // add viewModel + PD restoration. add customization options to
         // cover 90% of cases
         Otp(Modifier.align(Alignment.CenterHorizontally))

@@ -3,7 +3,7 @@ package com.skyyo.samples.features.cameraX
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
+import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

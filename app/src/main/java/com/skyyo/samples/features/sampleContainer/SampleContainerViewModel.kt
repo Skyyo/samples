@@ -1,115 +1,151 @@
 package com.skyyo.samples.features.sampleContainer
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.skyyo.samples.application.Screens
-import com.skyyo.samples.application.network.calls.AuthCalls
-import com.skyyo.samples.application.persistance.DataStoreManager
-import com.skyyo.samples.extensions.tryOrNull
-import com.skyyo.samples.utils.eventDispatchers.NavigationDispatcher
+import com.skyyo.samples.application.Destination
+import com.skyyo.samples.application.ProfileGraph
+import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class SampleContainerViewModel @Inject constructor(
-    private val navigationDispatcher: NavigationDispatcher,
-    private val authCalls: AuthCalls,
-    private val dataStoreManager: DataStoreManager,
+    private val navigationDispatcher: NavigationDispatcher
 ) : ViewModel() {
 
-    private val _events = Channel<SampleContainerScreenEvent>()
-    val events = _events.receiveAsFlow()
-
-    fun signIn() = viewModelScope.launch(Dispatchers.IO) {
-        _events.send(SampleContainerScreenEvent.UpdateLoadingIndicator(isLoading = true))
-        val response = tryOrNull { authCalls.signIn() }
-        if (response == null) {
-            _events.send(SampleContainerScreenEvent.NetworkError)
-            _events.send(SampleContainerScreenEvent.UpdateLoadingIndicator(isLoading = false))
-        } else {
-            dataStoreManager.setAccessToken(response.accessToken)
-            goHome()
-        }
+    fun goPaginationSimple() = navigationDispatcher.emit {
+        it.navigate(Destination.Cats.route)
     }
 
-    private fun goHome() = navigationDispatcher.emit {
-        it.navigate(Screens.DogFeed.route) {
-            popUpTo(Screens.SampleContainer.route) {
-                inclusive = true
-            }
-        }
+    fun goPaginationRoom() = navigationDispatcher.emit {
+        it.navigate(Destination.CatsRoom.route)
+    }
+
+    fun goPaginationPaging() = navigationDispatcher.emit {
+        it.navigate(Destination.CatsPaging.route)
+    }
+
+    fun goPaginationPagingRoom() = navigationDispatcher.emit {
+        it.navigate(Destination.CatsPagingRoom.route)
     }
 
     fun goMap() = navigationDispatcher.emit {
-        it.navigate(Screens.Map.route)
+        it.navigate(Destination.Map.route)
     }
 
     fun goForceTheme() = navigationDispatcher.emit {
-        it.navigate(Screens.ForceTheme.route)
+        it.navigate(Destination.ForceTheme.route)
     }
 
     fun goCameraX() = navigationDispatcher.emit {
-        it.navigate(Screens.CameraX.route)
+        it.navigate(Destination.CameraX.route)
     }
 
     fun goBottomSheetDestination() = navigationDispatcher.emit {
-        it.navigate(Screens.BottomSheet.route)
+        it.navigate(Destination.BottomSheet.route)
     }
 
     fun goBottomSheetsContainer() = navigationDispatcher.emit {
-        it.navigate(Screens.ModalBottomSheet.route)
+        it.navigate(Destination.ModalBottomSheet.route)
     }
 
     fun goBottomSheetsScaffold() = navigationDispatcher.emit {
-        it.navigate(Screens.BottomSheetScaffold.route)
+        it.navigate(Destination.BottomSheetScaffold.route)
     }
 
     fun goViewPager() = navigationDispatcher.emit {
-        it.navigate(Screens.ViewPager.route)
+        it.navigate(Destination.ViewPager.route)
     }
 
-    fun goNavWithResultSample() = navigationDispatcher.emit {
-        it.navigate(Screens.DogFeed.route)
+    fun goNavigationWithValuesSimple() = navigationDispatcher.emit {
+        it.navigate(Destination.DogFeed.route)
+    }
+
+    fun goNavigationWithValuesObject() = navigationDispatcher.emit {
+        it.navigate(Destination.CatFeed.route)
     }
 
     fun goStickyHeaders() = navigationDispatcher.emit {
-        it.navigate(Screens.Lists.route)
+        it.navigate(Destination.StickyHeader.route)
     }
 
     fun goInputAutoValidation() = navigationDispatcher.emit {
-        it.navigate(Screens.InputValidationAuto.route)
+        it.navigate(Destination.InputValidationAuto.route)
     }
 
     fun goInputDebounceValidation() = navigationDispatcher.emit {
-        it.navigate(Screens.InputValidationDebounce.route)
+        it.navigate(Destination.InputValidationDebounce.route)
     }
 
     fun goInputManualValidation() = navigationDispatcher.emit {
-        it.navigate(Screens.InputValidationManual.route)
-    }
-
-    fun goAnimations() = navigationDispatcher.emit {
-        it.navigate(Screens.Animations.route)
+        it.navigate(Destination.InputValidationManual.route)
     }
 
     fun goOtp() = navigationDispatcher.emit {
-        it.navigate(Screens.Otp.route)
+        it.navigate(Destination.Otp.route)
     }
 
     fun goNestedHorizontalLists() = navigationDispatcher.emit {
-        it.navigate(Screens.NestedHorizontalLists.route)
+        it.navigate(Destination.AppBarElevation.route)
     }
 
     fun goAutoScroll() = navigationDispatcher.emit {
-        it.navigate(Screens.AutoScroll.route)
+        it.navigate(Destination.AutoScroll.route)
     }
 
     fun goTable() = navigationDispatcher.emit {
-        it.navigate(Screens.Table.route)
+        it.navigate(Destination.Table.route)
+    }
+
+    fun goParallaxEffect() = navigationDispatcher.emit {
+        it.navigate(Destination.ParallaxEffect.route)
+    }
+
+    fun goCustomView() = navigationDispatcher.emit {
+        it.navigate(Destination.CustomView.route)
+    }
+
+    fun goHiltComposeSharedViewModel() = navigationDispatcher.emit {
+        it.navigate(ProfileGraph.Profile.route)
+    }
+
+    fun goQrScanning() = navigationDispatcher.emit {
+        it.navigate(Destination.QrCodeScanning.route)
+    }
+
+    fun goScrollAnimation1() = navigationDispatcher.emit {
+        it.navigate(Destination.ScrollAnimation1.route)
+    }
+
+    fun goSnackbar() = navigationDispatcher.emit {
+        it.navigate(Destination.Snackbar.route)
+    }
+
+    fun goBottomBar() = navigationDispatcher.emit {
+        it.navigate(Destination.BottomBar.route)
+    }
+
+    fun goNavigationDrawer() = navigationDispatcher.emit {
+        it.navigate(Destination.Drawer.route)
+    }
+
+    fun goGradientScroll() = navigationDispatcher.emit {
+        it.navigate(Destination.GradientScroll.route)
+    }
+
+    fun goExoPlayerColumnReference() = navigationDispatcher.emit {
+        it.navigate(Destination.ExoPlayerColumnReference.route)
+    }
+
+    fun goExoPlayerColumnIndexed() = navigationDispatcher.emit {
+        it.navigate(Destination.ExoPlayerColumnIndexed.route)
+    }
+
+    fun goExoPlayerColumnAutoplay() = navigationDispatcher.emit {
+        it.navigate(Destination.ExoPlayerColumnAutoplay.route)
+    }
+
+    fun goExoPlayerColumnDynamicThumb() = navigationDispatcher.emit {
+        it.navigate(Destination.ExoPlayerColumnDynamicThumb.route)
     }
 }

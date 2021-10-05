@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">Samples</string>
-    <string name="games">Games</string>
-    <string name="games_room">Games Room</string>
-    <string name="games_paging">Games Paging</string>
-    <string name="games_paging_r">Games Paging Room</string>
     <string name="map">Map</string>
     <string name="dog_feed">Dog feed</string>
     <string name="profile">Profile</string>
@@ -18,4 +14,7 @@
     <string name="name">name</string>
     <string name="name_too_short">name too short</string>
     <string name="card_number_too_short">card number too short</string>
+    <string name="please_grant_camera_permission_qr">Please\ngrant camera permission to scan\nQR code and preview glasses</string>
+    <string name="please_grant_camera_permission_from_settings">Please grant camera permission from application settings</string>
+
 </resources>

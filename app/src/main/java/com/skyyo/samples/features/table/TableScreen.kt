@@ -2,6 +2,7 @@ package com.skyyo.samples.features.table
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -88,6 +89,7 @@ fun TableScreen() {
         cellWidth = cellWidth,
         data = people,
         modifier = Modifier
+            .fillMaxSize()
             .statusBarsPadding()
             .navigationBarsPadding()
             .verticalScroll(rememberScrollState()),

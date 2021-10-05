@@ -1,6 +1,7 @@
 package com.skyyo.samples.features.autoscroll
 
 import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,7 +32,7 @@ fun AutoScrollScreen() {
     LazyRow(
         state = lazyRowState,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .statusBarsPadding()
     ) {
         infinityItems(list.size) { index ->

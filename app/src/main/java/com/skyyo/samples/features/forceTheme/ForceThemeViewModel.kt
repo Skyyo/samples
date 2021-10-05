@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.application.persistance.DataStoreManager
-import com.skyyo.samples.features.sampleContainer.THEME_DARK
-import com.skyyo.samples.features.sampleContainer.THEME_LIGHT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

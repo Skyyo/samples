@@ -36,6 +36,8 @@ fun Context.toast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
+// don't use unless the difference between liveData & stateFlow for
+// scenarios with search/flatMapLatest is used
 fun <T> SavedStateHandle.getStateFlow(
     scope: CoroutineScope,
     key: String,

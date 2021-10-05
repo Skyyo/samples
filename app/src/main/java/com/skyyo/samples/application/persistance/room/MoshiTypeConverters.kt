@@ -1,7 +1,7 @@
 package com.skyyo.samples.application.persistance.room
 
 import androidx.room.TypeConverter
-import com.skyyo.samples.application.models.remote.Game
+import com.skyyo.samples.application.models.Cat
 import com.squareup.moshi.*
 
 object MoshiTypeConverters {
@@ -23,12 +23,12 @@ object MoshiTypeConverters {
     @TypeConverter
     @JvmStatic
     @FromJson
-    fun fromGame(data: Game): String = moshi.adapter(Game::class.java).toJson(data)
+    fun fromCat(data: Cat): String = moshi.adapter(Cat::class.java).toJson(data)
 
     @TypeConverter
     @JvmStatic
     @ToJson
-    fun toGame(json: String): Game? = moshi.adapter(Game::class.java).fromJson(json)
+    fun toCat(json: String): Cat? = moshi.adapter(Cat::class.java).fromJson(json)
 
 
 }
