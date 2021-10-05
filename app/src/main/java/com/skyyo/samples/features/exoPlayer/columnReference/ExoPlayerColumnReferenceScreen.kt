@@ -48,8 +48,8 @@ fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel 
 
         snapshotFlow {
             listState.visibleAreaContainsItem(playingVideoItem, videos)
-        }.distinctUntilChanged().collect {
-            isPlayingItemVisible.value = listState.visibleAreaContainsItem(playingVideoItem, videos)
+        }.collect { isVisible ->
+            isPlayingItemVisible.value = isVisible
         }
     }
 

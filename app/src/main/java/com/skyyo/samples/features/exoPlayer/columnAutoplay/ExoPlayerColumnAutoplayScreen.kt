@@ -36,8 +36,8 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     LaunchedEffect(videos, listState.firstVisibleItemIndex) {
         snapshotFlow {
             listState.playingItem(videos)
-        }.collect {
-            playingVideoItem.value = listState.playingItem(videos)
+        }.collect { videoItem->
+            playingVideoItem.value = videoItem
         }
     }
 
@@ -48,9 +48,9 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
         } else {
             // move playWhenReady to exoPlayer initialization if you don't
             // want to play next video automatically
-            exoPlayer.playWhenReady = true
             exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem.value!!.mediaUrl))
             exoPlayer.prepare()
+            exoPlayer.playWhenReady = true
         }
     }
     DisposableEffect(exoPlayer) {
