@@ -15,8 +15,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.LifecycleEventObserver
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.MediaItem
@@ -62,22 +61,17 @@ fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel 
     }
 
     DisposableEffect(exoPlayer) {
-        val observer = object : LifecycleObserver {
-            @OnLifecycleEvent(Lifecycle.Event.ON_START)
-            fun onStart() {
-                if (playingVideoItem != null) exoPlayer.play()
-            }
-
-            @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-            fun onStop() {
-                if (playingVideoItem != null) exoPlayer.pause()
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            if (playingVideoItem == null) return@LifecycleEventObserver
+            when (event) {
+                Lifecycle.Event.ON_START -> exoPlayer.play()
+                Lifecycle.Event.ON_STOP -> exoPlayer.pause()
             }
         }
-        lifecycleOwner.lifecycle.addObserver(observer)
 
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
         onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-            exoPlayer.stop()
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
             exoPlayer.release()
         }
     }

@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import coil.ImageLoader
@@ -77,22 +78,17 @@ fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel
     }
 
     DisposableEffect(exoPlayer) {
-        val observer = object : LifecycleObserver {
-            @OnLifecycleEvent(Lifecycle.Event.ON_START)
-            fun onStart() {
-                if (playingItemIndex != null) exoPlayer.play()
-            }
-
-            @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-            fun onStop() {
-                if (playingItemIndex != null) exoPlayer.pause()
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            if (playingItemIndex == null) return@LifecycleEventObserver
+            when (event) {
+                Lifecycle.Event.ON_START -> exoPlayer.play()
+                Lifecycle.Event.ON_STOP -> exoPlayer.pause()
             }
         }
-        lifecycleOwner.lifecycle.addObserver(observer)
 
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
         onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-            exoPlayer.stop()
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
             exoPlayer.release()
         }
     }
