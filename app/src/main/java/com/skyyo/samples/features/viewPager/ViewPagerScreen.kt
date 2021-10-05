@@ -2,6 +2,7 @@ package com.skyyo.samples.features.viewPager
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -61,11 +62,16 @@ fun ViewPagerScreen() {
                     height = 2.dp
                 )
             },
-            backgroundColor = backgroundColor
+            backgroundColor = Color.Unspecified
         ) {
             // Add tabs for all of our pages
             pages.forEachIndexed { index, title ->
+                val cornerSizeInPercents by animateIntAsState(if (index == pagerState.currentPage) 50 else 25)
                 Tab(
+                    modifier = Modifier.background(
+                        backgroundColor,
+                        RoundedCornerShape(cornerSizeInPercents)
+                    ),
                     text = { Text("$title") },
 //                    selectedContentColor = Color.Yellow,
 //                    unselectedContentColor = Color.Green,
