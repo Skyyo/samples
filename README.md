@@ -76,6 +76,7 @@ Uncategorized
 - exoplayer sample with gestures like [here](https://github.com/nihk/exo-viewpager-fun)
 - check if exoplyaer sample with indexes is reliable when used with paging library
 - memory leaks in compose section 
+- add flexible autocomplete & auto-fill sample/samples
 
   
   # License
