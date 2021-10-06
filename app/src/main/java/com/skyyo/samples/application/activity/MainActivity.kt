@@ -25,7 +25,6 @@ import com.skyyo.samples.theme.IgdbBrowserTheme
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -75,9 +74,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             LaunchedEffect(Unit) {
-                launch {
-                    navigationEvents.collect { event -> event(navController) }
-                }
+                navigationEvents.collect { event -> event(navController) }
             }
 
             IgdbBrowserTheme(savedTheme) {

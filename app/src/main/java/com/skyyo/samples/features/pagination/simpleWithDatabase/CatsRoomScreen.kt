@@ -33,7 +33,6 @@ import com.skyyo.samples.features.pagination.common.FadingFab
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -59,15 +58,12 @@ fun CatsRoomScreen(viewModel: CatsRoomViewModel = hiltViewModel()) {
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     LaunchedEffect(Unit) {
-        launch {
-            events.collect { event ->
-                when (event) {
-                    is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
-                    is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
-                }
+        events.collect { event ->
+            when (event) {
+                is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
+                is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
             }
         }
-
     }
 
     SwipeRefresh(

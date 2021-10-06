@@ -34,14 +34,13 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.common.composables.CircularProgressIndicatorRow
 import com.skyyo.samples.extensions.toast
+import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.features.pagination.common.CustomCard
 import com.skyyo.samples.features.pagination.common.FadingFab
-import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -82,13 +81,11 @@ fun CatsPagingScreen(viewModel: CatsPagingViewModel = hiltViewModel()) {
     }
 
     LaunchedEffect(Unit) {
-        launch {
-            events.collect { event ->
-                when (event) {
-                    is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
-                    is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
-                    is CatsScreenEvent.RefreshList -> cats.refresh()
-                }
+        events.collect { event ->
+            when (event) {
+                is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
+                is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
+                is CatsScreenEvent.RefreshList -> cats.refresh()
             }
         }
     }
