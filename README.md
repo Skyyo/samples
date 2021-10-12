@@ -58,6 +58,11 @@ Pager
 - check & fix/file issue with scroll indicator going only to the right side upon swiping. [video](https://photos.app.goo.gl/ejzGBMT4TvVv3nSu8)
 - add tab indicator animation like on google weather application.
 
+Snap behaviour ( seems there is already [WIP](https://twitter.com/chrisbanes/status/1442909344597635072) on it and it might be available on accompanist soon
+- simple snap like in pager (for lazyColumns/rows)
+- snap to X items, eg. snap to 3 visible items
+- grid snapping
+  
 Uncategorized
 - spinners with a lot of items like country flags etc.
 - Container transformations. eg. small circle from bottom end of the screen floats to the center of the screen and changes it's size. Both back& forward animations should be flawless and tested across PD.
@@ -82,6 +87,7 @@ Uncategorized
 - check if exoplyaer sample with indexes is reliable when used with paging library
 - memory leaks in compose section 
 - add flexible autocomplete & auto-fill sample/samples
+- add reselect bottomBar tab listener and dispatch this event to the composable. Might we use arguments based approached?
 
   
   # License
