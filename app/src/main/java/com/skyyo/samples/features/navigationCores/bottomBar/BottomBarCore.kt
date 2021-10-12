@@ -2,6 +2,9 @@ package com.skyyo.samples.features.navigationCores.bottomBar
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -57,6 +60,8 @@ fun BottomBarCore(
         AnimatedNavHost(
             navController = navController,
             startDestination = startDestination,
+            enterTransition = { _, _ -> fadeIn(animationSpec = tween(350)) },
+            exitTransition = { _, _ -> fadeOut(animationSpec = tween(350)) },
             modifier = Modifier.padding(0.dp)
         ) {
 
