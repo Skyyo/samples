@@ -85,7 +85,7 @@ fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
             when (event) {
                 is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
                 is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
-                CatsScreenEvent.RefreshList -> cats.refresh()
+                is CatsScreenEvent.RefreshList -> cats.refresh()
             }
         }
     }

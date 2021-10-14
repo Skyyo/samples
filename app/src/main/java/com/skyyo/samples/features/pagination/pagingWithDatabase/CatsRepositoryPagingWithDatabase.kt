@@ -7,6 +7,7 @@ import com.skyyo.samples.application.network.calls.CatCalls
 import com.skyyo.samples.application.persistance.room.AppDatabase
 import com.skyyo.samples.application.persistance.room.cats.CatsDao
 import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeysDao
+import com.skyyo.samples.features.pagination.paging.PAGE_INITIAL_LIMIT
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ class CatsRepositoryPagingWithDatabase @Inject constructor(
     fun getCatsPaging(query: String) = Pager(
         config = PagingConfig(
             pageSize = PAGE_LIMIT,
-            initialLoadSize = PAGE_LIMIT,
+            initialLoadSize = PAGE_INITIAL_LIMIT,
             enablePlaceholders = false
         ),
         remoteMediator = CatsRemoteMediator(db, catsCalls, catsDao, catsKeysDao, query),

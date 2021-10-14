@@ -13,6 +13,7 @@ import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeys
 import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeysDao
 import com.skyyo.samples.extensions.tryOrNull
 import com.skyyo.samples.features.pagination.common.PagingException
+import com.skyyo.samples.features.pagination.paging.PAGE_INITIAL_LIMIT
 
 private const val START_PAGE = 0
 
@@ -28,16 +29,18 @@ class CatsRemoteMediator(
     override suspend fun initialize(): InitializeAction = InitializeAction.LAUNCH_INITIAL_REFRESH
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Cat>): MediatorResult {
+
         val page = when (loadType) {
-            LoadType.REFRESH -> {
-                0
+            LoadType.REFRESH -> START_PAGE
 //                val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
 //                remoteKeys?.nextKey?.minus(1) ?: START_PAGE
-            }
+
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 when (val nextKey = remoteKeys?.nextKey) {
-                    null -> return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                    null -> {
+                        return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                    }
                     else -> nextKey
                 }
             }
@@ -55,9 +58,9 @@ class CatsRemoteMediator(
 //                }
             }
         }
-        val limit = state.config.pageSize
-        val offset = if (page == START_PAGE) 0 else page * limit
-
+        val limit = if (page == START_PAGE) state.config.initialLoadSize else state.config.pageSize
+        val offset = if (page == START_PAGE) 0 else PAGE_INITIAL_LIMIT + (page - 1) * limit
+        //offset = page * limit  use when PAGE_INITIAL_LIMIT == PAGE_LIMIT
         val response = tryOrNull { catCalls.getCats(offset, limit) }
 
         return when {
@@ -74,7 +77,11 @@ class CatsRemoteMediator(
                     val nextKey = if (isLastPageReached) null else page + 1
 
                     val keys = cats.map {
-                        CatsRemoteKeys(catId = it.id.hashCode(), prevKey = prevKey, nextKey = nextKey)
+                        CatsRemoteKeys(
+                            catId = it.id.hashCode(),
+                            prevKey = prevKey,
+                            nextKey = nextKey
+                        )
                     }
                     catsKeysDao.insertAll(keys)
                     catsDao.insertAll(cats)

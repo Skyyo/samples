@@ -25,7 +25,8 @@ class CatsSource(
             }
             else -> {
                 page = params.key!!
-                offset = page * limit
+                //offset = page * limit  use when PAGE_INITIAL_LIMIT == PAGE_LIMIT
+                offset = PAGE_INITIAL_LIMIT + (page - 1) * limit
             }
         }
 
