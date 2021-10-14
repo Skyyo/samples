@@ -51,7 +51,7 @@ Paging ( all cases should be tested with both PagingSource & RemoteMediator vers
 - paging with Grids
 - allow modifying lists using selectedIds array, to ensure any modification behaviour is working well & can be properlly restored across PD ( eg. selection, checkboxes )
 - immitate socket updates ( eg. stock price updates or smth )
-- example with initial size default. This requires handling the initial offset being x3.
+- check out if it's a bug or misconfiguration inside paging+room sample. Upon entering the screen we're fetching twice.
 
 Pager
 - check & fix bad performance on viewPager sample.
