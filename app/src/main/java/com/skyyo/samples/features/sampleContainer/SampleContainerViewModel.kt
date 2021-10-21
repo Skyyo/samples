@@ -148,4 +148,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goExoPlayerColumnDynamicThumb() = navigationDispatcher.emit {
         it.navigate(Destination.ExoPlayerColumnDynamicThumb.route)
     }
+
+    fun goDominantColor() = navigationDispatcher.emit {
+        it.navigate(Destination.DominantColor.route)
+    }
 }

@@ -22,6 +22,7 @@ import com.skyyo.samples.features.bottomSheets.BottomSheetScreen
 import com.skyyo.samples.features.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.samples.features.cameraX.CameraXScreen
 import com.skyyo.samples.features.customView.CustomViewScreen
+import com.skyyo.samples.features.dominantColor.DominantColorScreen
 import com.skyyo.samples.features.exoPlayer.columnAutoplay.ExoPlayerColumnAutoplayScreen
 import com.skyyo.samples.features.exoPlayer.columnDynamicThumb.ExoPlayerColumnDynamicThumbScreen
 import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexedScreen
@@ -144,4 +145,5 @@ fun PopulatedNavHost(
     composable(Destination.ExoPlayerColumnIndexed.route) { ExoPlayerColumnIndexedScreen() }
     composable(Destination.ExoPlayerColumnAutoplay.route) { ExoPlayerColumnAutoplayScreen() }
     composable(Destination.ExoPlayerColumnDynamicThumb.route) { ExoPlayerColumnDynamicThumbScreen() }
+    composable(Destination.DominantColor.route) { DominantColorScreen() }
 }
