@@ -47,6 +47,7 @@ sealed class Destination(val route: String) {
     object ExoPlayerColumnIndexed : Destination("exoPlayerColumnIndexed")
     object ExoPlayerColumnAutoplay : Destination("exoPlayerColumnAutoplay")
     object ExoPlayerColumnDynamicThumb : Destination("exoPlayerColumnDynamicThumb")
+    object DominantColor : Destination("dominantColor")
 }
 
 sealed class ProfileGraph(val route: String) {

@@ -46,6 +46,9 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnackbar) {
             Text(text = "snackbar")
         }
+        Button(modifier = Modifier.fillMaxWidth(),onClick = viewModel::goDominantColor) {
+            Text(text = "dominant color")
+        }
     }
 }
 
