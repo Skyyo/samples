@@ -23,7 +23,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun OtpScreen(otpViewModel: OtpViewModel = hiltViewModel()) {
+fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

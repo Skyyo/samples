@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun GoogleMapScreen(viewModelGoogle: GoogleMapViewModel = hiltViewModel()) {
+fun GoogleMapScreen(viewModel: GoogleMapViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycle = lifecycleOwner.lifecycle
@@ -49,11 +49,11 @@ fun GoogleMapScreen(viewModelGoogle: GoogleMapViewModel = hiltViewModel()) {
             id = View.generateViewId()
         }
     }
-    val markers = remember(viewModelGoogle.markers, lifecycleOwner) {
-        viewModelGoogle.markers.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    val markers = remember(viewModel.markers, lifecycleOwner) {
+        viewModel.markers.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
     }
-    val events = remember(viewModelGoogle.events, lifecycleOwner) {
-        viewModelGoogle.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+    val events = remember(viewModel.events, lifecycleOwner) {
+        viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
     }
 
     LaunchedEffect(Unit) {
@@ -82,7 +82,7 @@ fun GoogleMapScreen(viewModelGoogle: GoogleMapViewModel = hiltViewModel()) {
             }
             setOnCameraIdleListener(clusterManager)
             setOnMapClickListener {
-                viewModelGoogle.removePolyline()
+                viewModel.removePolyline()
             }
         }
         launch { observePoints(markers, clusterManager) }
