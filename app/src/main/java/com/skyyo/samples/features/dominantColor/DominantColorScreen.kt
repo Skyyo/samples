@@ -6,10 +6,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -42,9 +39,9 @@ import kotlin.math.min
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun DominantColorScreen(vm: DominantColorViewModel = hiltViewModel()) {
+fun DominantColorScreen(viewModel: DominantColorViewModel = hiltViewModel()) {
 
-    val cats = vm.cats.collectAsLazyPagingItems()
+    val cats = viewModel.cats.collectAsLazyPagingItems()
     val pagerState = rememberPagerState(pageCount = cats.itemCount)
     val bgColor = MaterialTheme.colors.background
     val dominantColorState =
@@ -59,7 +56,8 @@ fun DominantColorScreen(vm: DominantColorViewModel = hiltViewModel()) {
         HorizontalPager(
             modifier = Modifier
                 .fillMaxSize()
-                .systemBarsPadding(), state = pagerState
+                .systemBarsPadding(),
+            state = pagerState
         ) {
             val catId = cats[it]?.id
             CatCard(catId = catId)
@@ -69,7 +67,10 @@ fun DominantColorScreen(vm: DominantColorViewModel = hiltViewModel()) {
 
 @Composable
 fun CatCard(catId: String?) {
+    /* To avoid this https://github.com/Skyyo/samples/pull/15#pullrequestreview-787405549
+    we should limit size of Card or Image, so they couldn't fill all height while fetching image **/
     Card(
+        modifier = Modifier.fillMaxWidth().aspectRatio(.85f),
         backgroundColor = MaterialTheme.colors.primary
     ) {
         Column {
