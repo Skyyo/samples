@@ -85,7 +85,8 @@ Uncategorized
 - check if exoplyaer sample with indexes is reliable when used with paging library
 - memory leaks in compose section 
 - add flexible autocomplete & auto-fill sample/samples
-- add reselect bottomBar tab listener and dispatch this event to the composable. Might we use arguments based approached?
+- add reselect bottomBar tab listener and dispatch this event to the composable.
+- try out [media3](https://android-developers.googleblog.com/2021/10/jetpack-media3.html?m=1) and think whether it makes sense, and what are its strong sides
 
   
   # License
