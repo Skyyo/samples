@@ -248,5 +248,9 @@ fun Pagination(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goPaginationPagingRoom
     ) { Text(text = "paging + room") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goRealTimeUpdates
+    ) { Text(text = "real time updates") }
     Spacer(modifier = Modifier.height(16.dp))
 }

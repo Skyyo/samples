@@ -15,7 +15,7 @@ import com.skyyo.samples.extensions.tryOrNull
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.features.pagination.paging.PAGE_INITIAL_LIMIT
 
-private const val START_PAGE = 0
+const val START_PAGE = 0
 
 @OptIn(ExperimentalPagingApi::class)
 class CatsRemoteMediator(

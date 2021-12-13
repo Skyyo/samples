@@ -29,6 +29,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.CatsPagingRoom.route)
     }
 
+    fun goRealTimeUpdates() = navigationDispatcher.emit {
+        it.navigate(Destination.RealTimeUpdates.route)
+    }
+
     fun goMap() = navigationDispatcher.emit {
         it.navigate(Destination.Map.route)
     }

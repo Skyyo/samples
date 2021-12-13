@@ -7,7 +7,7 @@ import com.skyyo.samples.application.network.calls.CatCalls
 import com.skyyo.samples.extensions.tryOrNull
 import com.skyyo.samples.features.pagination.common.PagingException
 
-private const val START_PAGE = 0
+const val START_PAGE = 0
 
 class CatsSource(
     private val catCalls: CatCalls,

@@ -6,7 +6,7 @@ import com.skyyo.samples.application.network.calls.CatCalls
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
-private const val PAGE_LIMIT = 30
+const val PAGE_LIMIT = 30
 const val PAGE_INITIAL_LIMIT = 90
 
 @ViewModelScoped

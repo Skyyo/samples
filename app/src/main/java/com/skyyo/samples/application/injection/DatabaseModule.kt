@@ -8,6 +8,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asExecutor
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -18,6 +20,8 @@ object DatabaseModule {
     @Provides
     fun provideDatabase(@ApplicationContext ctx: Context) =
         Room.databaseBuilder(ctx, AppDatabase::class.java, "space-x-compose-database")
+            .setQueryExecutor(Dispatchers.IO.asExecutor())
+            .setTransactionExecutor(Dispatchers.IO.asExecutor())
             .fallbackToDestructiveMigration()
             .build()
 
@@ -28,4 +32,12 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideCatsRemoteKeysDao(appDatabase: AppDatabase) = appDatabase.catsRemoteKeysDao()
+
+    @Singleton
+    @Provides
+    fun provideAssetsDao(appDatabase: AppDatabase) = appDatabase.assetsDao()
+
+    @Singleton
+    @Provides
+    fun provideAssetsRemoteKeysDao(appDatabase: AppDatabase) = appDatabase.assetsRemoteKeysDao()
 }

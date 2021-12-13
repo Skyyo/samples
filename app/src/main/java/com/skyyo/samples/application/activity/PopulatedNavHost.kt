@@ -47,6 +47,7 @@ import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomSc
 import com.skyyo.samples.features.pagination.simple.CatsScreen
 import com.skyyo.samples.features.pagination.simpleWithDatabase.CatsRoomScreen
 import com.skyyo.samples.features.parallaxEffect.ParallaxEffectScreen
+import com.skyyo.samples.features.realTimeUpdates.RealTimeUpdatesScreen
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
 import com.skyyo.samples.features.scanQR.QrScreen
 import com.skyyo.samples.features.scrollAnimation1.ScrollAnimation1Screen
@@ -146,4 +147,5 @@ fun PopulatedNavHost(
     composable(Destination.ExoPlayerColumnAutoplay.route) { ExoPlayerColumnAutoplayScreen() }
     composable(Destination.ExoPlayerColumnDynamicThumb.route) { ExoPlayerColumnDynamicThumbScreen() }
     composable(Destination.DominantColor.route) { DominantColorScreen() }
+    composable(Destination.RealTimeUpdates.route) { RealTimeUpdatesScreen() }
 }

@@ -3,7 +3,11 @@ package com.skyyo.samples.application.persistance.room
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.skyyo.samples.application.models.Asset
 import com.skyyo.samples.application.models.Cat
+import com.skyyo.samples.application.persistance.room.assets.AssetsDao
+import com.skyyo.samples.application.persistance.room.assets.AssetsRemoteKeys
+import com.skyyo.samples.application.persistance.room.assets.AssetsRemoteKeysDao
 import com.skyyo.samples.application.persistance.room.cats.CatsDao
 import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeys
 import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeysDao
@@ -13,6 +17,8 @@ import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeysDao
     entities = [
         Cat::class,
         CatsRemoteKeys::class,
+        Asset::class,
+        AssetsRemoteKeys::class
     ],
 )
 
@@ -20,5 +26,6 @@ import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeysDao
 abstract class AppDatabase : RoomDatabase() {
     abstract fun catsDao(): CatsDao
     abstract fun catsRemoteKeysDao(): CatsRemoteKeysDao
-
+    abstract fun assetsDao(): AssetsDao
+    abstract fun assetsRemoteKeysDao(): AssetsRemoteKeysDao
 }
