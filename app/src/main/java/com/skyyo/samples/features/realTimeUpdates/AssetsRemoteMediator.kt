@@ -13,6 +13,8 @@ import com.skyyo.samples.application.persistance.room.assets.AssetsRemoteKeys
 import com.skyyo.samples.application.persistance.room.assets.AssetsRemoteKeysDao
 import com.skyyo.samples.extensions.tryOrNull
 import com.skyyo.samples.features.pagination.pagingWithDatabase.START_PAGE
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalPagingApi::class)
 class AssetsRemoteMediator(
@@ -30,27 +32,28 @@ class AssetsRemoteMediator(
         }
     }
 
-    override suspend fun load(loadType: LoadType, state: PagingState<Int, Asset>): MediatorResult {
-        val page = when (loadType) {
-            LoadType.REFRESH -> START_PAGE
-            LoadType.APPEND -> {
-                val remoteKeys = getRemoteKeyForLastItem(state)
-                when (val nextKey = remoteKeys?.nextKey) {
-                    null -> {
-                        return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+    override suspend fun load(loadType: LoadType, state: PagingState<Int, Asset>): MediatorResult =
+        withContext(Dispatchers.IO) {
+            val page = when (loadType) {
+                LoadType.REFRESH -> START_PAGE
+                LoadType.APPEND -> {
+                    val remoteKeys = getRemoteKeyForLastItem(state)
+                    when (val nextKey = remoteKeys?.nextKey) {
+                        null -> {
+                            return@withContext MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                        }
+                        else -> nextKey
                     }
-                    else -> nextKey
-                }
             }
             LoadType.PREPEND -> {
-                return MediatorResult.Success(endOfPaginationReached = true)
+                return@withContext MediatorResult.Success(endOfPaginationReached = true)
             }
         }
         val limit = if (page == START_PAGE) state.config.initialLoadSize else state.config.pageSize
         val offset =
-            if (page == START_PAGE) 0 else state.config.initialLoadSize + (page - 1) * limit
+            if (page == START_PAGE) 0 else state.config.initialLoadSize + page * limit
         val response = tryOrNull { calls.getAssets(offset = offset, limit = limit) }
-        response ?: return MediatorResult.Error(Exception())
+            response ?: return@withContext MediatorResult.Error(Exception())
         val assets = response.data
         val isLastPageReached = assets.size != limit
         appDatabase.withTransaction {
@@ -72,6 +75,6 @@ class AssetsRemoteMediator(
             assetsRemoteKeysDao.insertAll(keys)
             assetsDao.insertAll(assets)
         }
-        return MediatorResult.Success(endOfPaginationReached = isLastPageReached)
+            return@withContext MediatorResult.Success(endOfPaginationReached = isLastPageReached)
     }
 }

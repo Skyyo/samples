@@ -11,9 +11,11 @@ import com.skyyo.samples.application.persistance.room.assets.AssetsDao
 import com.skyyo.samples.application.persistance.room.assets.AssetsRemoteKeysDao
 import com.skyyo.samples.features.realTimeUpdates.AssetsRemoteMediator
 import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -66,7 +68,7 @@ class CryptoRepository @Inject constructor(
         )
     }
 
-    suspend fun updateAsset(id: String, price: String) {
+    suspend fun updateAsset(id: String, price: String) = withContext(Dispatchers.IO) {
         val asset = assetsDao.getAssetById(id)
         assetsDao.updateAsset(
             asset.copy(
