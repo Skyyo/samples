@@ -6,8 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
@@ -21,12 +19,10 @@ const val IMAGE_HEIGHT = 256
 fun ParallaxEffectScreen() {
 
     val scrollState = rememberScrollState()
-    val imageAlpha by derivedStateOf {
-        min(1f, 1 - (scrollState.value / 600f))
-    }
-    val imageOffsetY by derivedStateOf { scrollState.value * 0.1f }
-    val imageHeight by derivedStateOf { (IMAGE_HEIGHT.dp - imageOffsetY.dp).coerceAtLeast(0.dp) }
-//    val contentTopPadding by derivedStateOf { (IMAGE_HEIGHT.dp - imageOffsetY.dp ).coerceAtLeast(0.dp) }
+    val imageAlpha = min(1f, 1 - (scrollState.value / 600f))
+    val imageOffsetY = scrollState.value * 0.1f
+    val imageHeight = (IMAGE_HEIGHT.dp - imageOffsetY.dp).coerceAtLeast(0.dp)
+
     Box(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
