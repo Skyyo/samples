@@ -87,6 +87,8 @@ Uncategorized
 - add flexible autocomplete & auto-fill sample/samples
 - add reselect bottomBar tab listener and dispatch this event to the composable.
 - try out [media3](https://android-developers.googleblog.com/2021/10/jetpack-media3.html?m=1) and think whether it makes sense, and what are its strong sides
+- signature view, it should also persist the signature after PD 
+- marquee text
 
   
   # License
