@@ -89,6 +89,7 @@ Uncategorized
 - try out [media3](https://android-developers.googleblog.com/2021/10/jetpack-media3.html?m=1) and think whether it makes sense, and what are its strong sides
 - signature view, it should also persist the signature after PD 
 - marquee text
+- animate shape form, eg from circle to star
 
   
   # License
