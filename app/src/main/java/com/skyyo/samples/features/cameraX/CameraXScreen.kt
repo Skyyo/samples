@@ -5,11 +5,14 @@ import android.content.Context
 import android.net.Uri
 import android.view.View
 import androidx.camera.core.*
+import androidx.camera.core.ImageCapture.FLASH_MODE_OFF
+import androidx.camera.core.ImageCapture.FLASH_MODE_ON
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,21 +21,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.BottomCenter
+import androidx.compose.ui.Alignment.Companion.BottomEnd
+import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -55,7 +57,8 @@ import java.util.concurrent.Executors
 fun CameraXScreen(viewModel: CameraXViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
-
+    var isFlashlightOn by remember { mutableStateOf(false) }
+    var isAlwaysOnFlashLightEnabled by remember { mutableStateOf(false) }
     val lastTakenPictureUri by viewModel.latestTakenPictureUri.observeAsState()
 
     val imageCapture = remember {
@@ -88,9 +91,35 @@ fun CameraXScreen(viewModel: CameraXViewModel = hiltViewModel()) {
     ) {
         Box {
             CameraPreview(
+                isAlwaysOnFlashLightEnabled = isAlwaysOnFlashLightEnabled,
                 modifier = Modifier.fillMaxSize(),
                 imageCapture = imageCapture
             )
+            ToggleFlashlightButton(
+                isFlashlightOn = isFlashlightOn,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .navigationBarsPadding()
+                    .size(48.dp)
+                    .clickable {
+                        imageCapture.flashMode = when {
+                            isFlashlightOn -> FLASH_MODE_OFF
+                            else -> FLASH_MODE_ON
+                        }
+                        isFlashlightOn = !isFlashlightOn
+                    }
+                    .align(BottomStart))
+            ToggleFlashlightButton(
+                isFlashlightOn = isFlashlightOn,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .navigationBarsPadding()
+                    .size(48.dp)
+                    .background(Color.Magenta)
+                    .clickable {
+                        isAlwaysOnFlashLightEnabled = !isAlwaysOnFlashLightEnabled
+                    }
+                    .align(BottomEnd))
             LastPictureThumbnail(
                 uri = lastTakenPictureUri,
                 modifier = Modifier
@@ -112,7 +141,11 @@ fun CameraXScreen(viewModel: CameraXViewModel = hiltViewModel()) {
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
-fun CameraPreview(modifier: Modifier = Modifier, imageCapture: ImageCapture) {
+fun CameraPreview(
+    isAlwaysOnFlashLightEnabled: Boolean,
+    modifier: Modifier = Modifier,
+    imageCapture: ImageCapture,
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -120,34 +153,38 @@ fun CameraPreview(modifier: Modifier = Modifier, imageCapture: ImageCapture) {
         PreviewView(context).apply {
             id = View.generateViewId()
             scaleType = PreviewView.ScaleType.FILL_CENTER
+            implementationMode = PreviewView.ImplementationMode.COMPATIBLE
         }
     }
-    val cameraProviderFeature = remember { ProcessCameraProvider.getInstance(context) }
-    val executor = remember { ContextCompat.getMainExecutor(context) }
-    val preview = remember {
-        Preview.Builder()
-            .setTargetAspectRatio(AspectRatio.RATIO_16_9)
-//            .setTargetResolution(Size(1280, 720))
-            .build().also {
-                it.setSurfaceProvider(cameraPreview.surfaceProvider)
-            }
+    val cameraProvider by produceState<ProcessCameraProvider?>(null) {
+        value = ProcessCameraProvider.getInstance(context).get()
     }
-    val cameraSelector = remember { CameraSelector.DEFAULT_BACK_CAMERA }
-
-    DisposableEffect(Unit) {
-        val cameraProvider = cameraProviderFeature.get()
-
-        cameraProviderFeature.addListener({
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(
+    val camera = remember(cameraProvider) {
+        cameraProvider?.let { camProvider ->
+            camProvider.unbindAll()
+            camProvider.bindToLifecycle(
                 lifecycleOwner,
-                cameraSelector,
-                preview,
+                CameraSelector.DEFAULT_BACK_CAMERA,
+                Preview.Builder()
+                    .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+                    .build().also { preview ->
+                        preview.setSurfaceProvider(cameraPreview.surfaceProvider)
+                    },
                 imageCapture
             )
-        }, executor)
+        }
+    }
 
-        onDispose { cameraProvider.unbindAll() }
+    DisposableEffect(Unit) {
+        onDispose { cameraProvider?.unbindAll() }
+    }
+
+    LaunchedEffect(isAlwaysOnFlashLightEnabled) {
+        camera?.let {
+            if (it.cameraInfo.hasFlashUnit()) {
+                it.cameraControl.enableTorch(isAlwaysOnFlashLightEnabled)
+            }
+        }
     }
 
     AndroidView({ cameraPreview }, modifier)
@@ -162,11 +199,20 @@ fun TakePictureButton(modifier: Modifier = Modifier) {
     )
 }
 
+@Composable
+fun ToggleFlashlightButton(isFlashlightOn: Boolean, modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(id = if (isFlashlightOn) R.drawable.ic_flashlight_on else R.drawable.ic_flashlight_off),
+        contentDescription = "",
+        modifier = modifier
+    )
+}
+
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun LastPictureThumbnail(
     uri: Uri?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Crossfade(targetState = uri, animationSpec = tween(500)) { imageUri ->
         val painter = rememberImagePainter(
@@ -187,7 +233,7 @@ private fun takePhoto(
     imageCapture: ImageCapture,
     context: Context,
     viewModel: CameraXViewModel,
-    cameraExecutor: ExecutorService
+    cameraExecutor: ExecutorService,
 ) {
     val folderName = context.getString(R.string.app_name)
     val mediaDir = context.filesDir?.let { File(it, folderName).apply { mkdirs() } }
