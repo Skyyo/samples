@@ -48,6 +48,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.skyyo.samples.R
 import com.skyyo.samples.extensions.goAppPermissions
 import com.skyyo.samples.extensions.toast
+import com.skyyo.samples.extensions.tryOrNull
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -157,7 +158,7 @@ fun CameraPreview(
         }
     }
     val cameraProvider by produceState<ProcessCameraProvider?>(null) {
-        value = ProcessCameraProvider.getInstance(context).get()
+        value = tryOrNull { ProcessCameraProvider.getInstance(context).get() }
     }
     val camera = remember(cameraProvider) {
         cameraProvider?.let { camProvider ->
