@@ -31,7 +31,7 @@ fun DrawerCore(
     drawerScreens: List<Destination>,
     startDestination: String,
     navController: NavHostController,
-    systemUiController: SystemUiController
+    systemUiController: SystemUiController,
 ) {
     val isDrawerVisible = rememberSaveable { mutableStateOf(false) }
     val selectedTab = rememberSaveable { mutableStateOf(0) }
@@ -102,8 +102,8 @@ fun DrawerCore(
             AnimatedNavHost(
                 navController = navController,
                 startDestination = startDestination,
-                enterTransition = { _, _ -> fadeIn(animationSpec = tween(350)) },
-                exitTransition = { _, _ -> fadeOut(animationSpec = tween(350)) },
+                enterTransition = { fadeIn(animationSpec = tween(350)) },
+                exitTransition = { fadeOut(animationSpec = tween(350)) },
                 modifier = Modifier.padding(0.dp)
             ) {
 

@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
@@ -60,8 +59,8 @@ fun BottomBarCore(
         AnimatedNavHost(
             navController = navController,
             startDestination = startDestination,
-            enterTransition = { _, _ -> fadeIn(animationSpec = tween(350)) },
-            exitTransition = { _, _ -> fadeOut(animationSpec = tween(350)) },
+            enterTransition = { fadeIn(animationSpec = tween(350)) },
+            exitTransition = { fadeOut(animationSpec = tween(350)) },
             modifier = Modifier.padding(0.dp)
         ) {
 

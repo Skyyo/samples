@@ -72,8 +72,8 @@ fun PopulatedNavHost(
 ) = AnimatedNavHost(
     navController = navController,
     startDestination = startDestination,
-    enterTransition = { _, _ -> fadeIn(animationSpec = tween(350)) },
-    exitTransition = { _, _ -> fadeOut(animationSpec = tween(350)) }
+    enterTransition = { fadeIn(animationSpec = tween(350)) },
+    exitTransition = { fadeOut(animationSpec = tween(350)) }
 ) {
     composable(Destination.SampleContainer.route) { SampleContainerScreen() }
     composable(Destination.Cats.route) { CatsScreen() }
@@ -95,16 +95,16 @@ fun PopulatedNavHost(
     composable(Destination.CatDetails.route) { CatDetailsScreen() }
     composable(Destination.CatContacts.route) { CatContactsScreen() }
     composable(Destination.InputValidationManual.route,
-        enterTransition = { _, _ ->
+        enterTransition = {
             slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(400))
         },
-        exitTransition = { _, _ ->
+        exitTransition = {
             slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(400))
         },
-        popEnterTransition = { _, _ ->
+        popEnterTransition = {
             slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(400))
         },
-        popExitTransition = { _, _ ->
+        popExitTransition = {
             slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(400))
         }) { InputValidationManualScreen() }
     composable(Destination.InputValidationAuto.route) { InputValidationAutoScreen() }

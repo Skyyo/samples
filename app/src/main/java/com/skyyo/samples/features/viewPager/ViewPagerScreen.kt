@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.*
@@ -36,7 +37,7 @@ fun ViewPagerScreen() {
         initialOffscreenLimit = 3, // to preload more items
     )
     val backgroundColor by animateColorAsState(
-        targetValue = androidx.compose.ui.graphics.lerp(
+        targetValue = lerp(
             start = MaterialTheme.colors.primary,
             stop = MaterialTheme.colors.secondary,
             fraction = with(pagerState) { (currentPageOffset + currentPage) / pageCount }
