@@ -114,6 +114,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
             )
         )
     }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goSignatureView
+    ) { Text(text = "signature view") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 

@@ -54,6 +54,7 @@ import com.skyyo.samples.features.sharedViewModel.ProfileSharedViewModel
 import com.skyyo.samples.features.sharedViewModel.confirmProfile.EditProfileConfirmationScreen
 import com.skyyo.samples.features.sharedViewModel.editProfile.EditProfileScreen
 import com.skyyo.samples.features.sharedViewModel.profile.ProfileScreen
+import com.skyyo.samples.features.signatureView.SignatureViewScreen
 import com.skyyo.samples.features.snackbar.SnackbarScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
@@ -115,6 +116,7 @@ fun PopulatedNavHost(
     composable(Destination.Table.route) { TableScreen() }
     composable(Destination.ParallaxEffect.route) { ParallaxEffectScreen() }
     composable(Destination.CustomView.route) { CustomViewScreen() }
+    composable(Destination.SignatureView.route) { SignatureViewScreen() }
     navigation(
         route = ProfileGraph.route,
         startDestination = ProfileGraph.Profile.route
