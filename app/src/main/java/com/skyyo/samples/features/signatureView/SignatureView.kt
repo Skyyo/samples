@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlin.math.roundToInt
 
+data class MotionEventValue(val eventType: Int, val x: Float, val y: Float)
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignatureView(
@@ -35,10 +37,8 @@ fun SignatureView(
             strokeWidth = stroke.width
         }
     }
-    val savedList = rememberSaveable { mutableListOf<Pair<Boolean, Pair<Float, Float>>>() }
-    val motionEventValue = remember {
-        mutableStateOf<Pair<Boolean, Pair<Float, Float>>?>(null)
-    }
+    val savedList = rememberSaveable { mutableListOf<MotionEventValue>() }
+    val motionEventValue = remember { mutableStateOf<MotionEventValue?>(null) }
 
     fun getBitmap(): Bitmap {
         val bounds = viewBounds.value
@@ -74,14 +74,14 @@ fun SignatureView(
             .pointerInteropFilter {
                 val x = it.x
                 val y = it.y
-                val value: Pair<Boolean, Pair<Float, Float>>
+                val value: MotionEventValue
                 when (it.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        value = Pair(true, Pair(x, y))
+                        value = MotionEventValue(it.action, x,y)
                         motionEventValue.value = value
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        value = Pair(false, Pair(x, y))
+                        value = MotionEventValue(it.action, x,y)
                         motionEventValue.value = value
                     }
                 }
@@ -102,13 +102,13 @@ fun SignatureView(
     }
 }
 
-fun List<Pair<Boolean, Pair<Float, Float>>>.toPath(): Path {
+fun List<MotionEventValue>.toPath(): Path {
     val path = Path()
-    forEach {
-        if (it.first) {
-            path.moveTo(it.second.first, it.second.second)
+    forEach { value ->
+        if (value.eventType == MotionEvent.ACTION_DOWN) {
+            path.moveTo(value.x, value.y)
         } else {
-            path.lineTo(it.second.first, it.second.second)
+            path.lineTo(value.x, value.y)
         }
     }
     return path
