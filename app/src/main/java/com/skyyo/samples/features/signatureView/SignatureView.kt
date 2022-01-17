@@ -36,12 +36,8 @@ fun SignatureView(
         }
     }
     val savedList = rememberSaveable { mutableListOf<Pair<Boolean, Pair<Float, Float>>>() }
-    val triggerList = remember {
-        if (savedList.isEmpty()) {
-            mutableStateListOf()
-        } else {
-            savedList.toMutableStateList()
-        }
+    val motionEventValue = remember {
+        mutableStateOf<Pair<Boolean, Pair<Float, Float>>?>(null)
     }
 
     fun getBitmap(): Bitmap {
@@ -60,7 +56,7 @@ fun SignatureView(
         events.collect { event ->
             when (event) {
                 SignatureViewEvent.Reset -> {
-                    triggerList.clear()
+                    motionEventValue.value = null
                     savedList.clear()
                 }
                 SignatureViewEvent.Save -> {
@@ -82,20 +78,20 @@ fun SignatureView(
                 when (it.action) {
                     MotionEvent.ACTION_DOWN -> {
                         value = Pair(true, Pair(x, y))
-                        triggerList.add(value)
+                        motionEventValue.value = value
                     }
                     MotionEvent.ACTION_MOVE -> {
                         value = Pair(false, Pair(x, y))
-                        triggerList.add(value)
+                        motionEventValue.value = value
                     }
                 }
                 true
             },
     ) {
-        triggerList.run {
-            if (triggerList.isNotEmpty()) savedList.clear()
-            savedList.addAll(triggerList)
-
+        motionEventValue.value.run {
+            this?.let {
+                savedList.add(it)
+            }
             drawPath(
                 path = savedList.toPath(),
                 color = paintColor,
