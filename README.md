@@ -66,7 +66,6 @@ Snap behaviour ( seems there is already [WIP](https://twitter.com/chrisbanes/sta
 Uncategorized
 - spinners with a lot of items like country flags etc.
 - Container transformations. eg. small circle from bottom end of the screen floats to the center of the screen and changes it's size. Both back& forward animations should be flawless and tested across PD.
-- Hide bottomBar on scroll
 - Animations typical for iOS. can be found in [olx](https://play.google.com/store/apps/details?id=ua.slando&hl=en&gl=US), [monobank](https://play.google.com/store/apps/details?id=com.ftband.mono&hl=en&gl=US). When we scroll something, toolbar changes content relatively to some text/icon being scrolled behind the toolbar
 - Draw / hide something using coordinates. Look into ```onGloballyPositioned``` modifier
 - How to do custom shapes ripples
