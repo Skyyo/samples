@@ -42,9 +42,6 @@ Miscellaneous
   
 # TODO
   
-CameraX
-- investigate crashe on orientation change
-
 Paging ( all cases should be tested with both PagingSource & RemoteMediator versions ).
 - add sample of how to use maxSize 
 - scroll to top feature with maxSize (page dropping) enabled.
