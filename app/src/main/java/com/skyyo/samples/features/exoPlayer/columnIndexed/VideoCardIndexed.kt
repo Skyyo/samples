@@ -17,8 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.media3.exoplayer.ExoPlayer
 import coil.annotation.ExperimentalCoilApi
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoThumbnail
@@ -32,7 +32,7 @@ fun VideoCardIndexed(
     modifier: Modifier = Modifier,
     videoItem: VideoItemImmutable,
     isPlaying: Boolean,
-    exoPlayer: SimpleExoPlayer,
+    exoPlayer: ExoPlayer,
     onClick: OnClick
 ) {
     val isPlayerUiVisible = remember { mutableStateOf(false) }

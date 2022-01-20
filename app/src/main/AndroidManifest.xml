@@ -27,6 +27,14 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".features.exoPlayer.SampleMediaSessionService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService"/>
+                <action android:name="android.media.browse.MediaBrowserService"/>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyANU9EllOVGyMnpOANajwjD91qrZIhoJa0" />

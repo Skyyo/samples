@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.exoPlayer.columnIndexed
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,20 +17,23 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 import kotlinx.coroutines.flow.collect
 
 
+@SuppressLint("UnsafeOptInUsageError")
+@OptIn(UnstableApi::class)
 @Composable
 fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val exoPlayer = remember(context) { SimpleExoPlayer.Builder(context).build() }
+    val exoPlayer = remember(context) { ExoPlayer.Builder(context).build() }
     val listState = rememberLazyListState()
 
     val videos by viewModel.videos.observeAsState(listOf())

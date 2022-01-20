@@ -125,7 +125,9 @@ dependencies {
     implementation 'androidx.camera:camera-view:1.0.0-alpha32'
 
     implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:17.0.0'
-    implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
+    implementation 'androidx.media3:media3-exoplayer:1.0.0-alpha01'
+    implementation 'androidx.media3:media3-ui:1.0.0-alpha01'
+    implementation 'androidx.media3:media3-session:1.0.0-alpha01'
 
     implementation "androidx.palette:palette-ktx:1.0.0"
 

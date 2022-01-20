@@ -19,7 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
@@ -34,7 +33,7 @@ fun VideoCardIndexed(
     imageLoader: ImageLoader,
     isPlaying: Boolean,
     onClick: OnClick,
-    exoPlayer: SimpleExoPlayer
+    exoPlayer: androidx.media3.exoplayer.ExoPlayer
 ) {
     val isPlayerUiVisible = remember { mutableStateOf(false) }
     val isPlayButtonVisible = if (isPlayerUiVisible.value) true else !isPlaying

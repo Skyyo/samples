@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.exoPlayer
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
@@ -12,12 +13,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.PlayerView
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import com.skyyo.samples.R
 
+@SuppressLint("UnsafeOptInUsageError")
+@OptIn(UnstableApi::class)
 @Composable
-fun VideoPlayerWithControls(exoPlayer: SimpleExoPlayer) {
+fun VideoPlayerWithControls(exoPlayer: ExoPlayer) {
     val context = LocalContext.current
     val playerView = remember {
         val layout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null)
