@@ -52,7 +52,6 @@ Paging ( all cases should be tested with both PagingSource & RemoteMediator vers
 
 Pager
 - check & fix bad performance on viewPager sample.
-- check & fix/file issue with scroll indicator going only to the right side upon swiping. [video](https://photos.app.goo.gl/ejzGBMT4TvVv3nSu8)
 - add tab indicator animation like on google weather application.
 
 Snap behaviour ( seems there is already [WIP](https://twitter.com/chrisbanes/status/1442909344597635072) on it and it might be available on accompanist soon
