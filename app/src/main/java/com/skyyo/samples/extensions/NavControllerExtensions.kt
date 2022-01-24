@@ -1,10 +1,9 @@
 package com.skyyo.samples.extensions
 
 import android.os.Bundle
+import androidx.core.net.toUri
 import androidx.lifecycle.asFlow
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigator
+import androidx.navigation.*
 import com.skyyo.samples.application.Destination
 
 //sets value to previous savedStateHandle unless route is specified
@@ -31,9 +30,18 @@ fun NavController.navigateWithObject(
     extras: Navigator.Extras? = null,
     arguments: Bundle? = null
 ) {
-    navigate(route, navOptions, extras)
-    if (arguments == null || arguments.isEmpty) return
-    currentBackStackEntry?.arguments?.putAll(arguments)
+    val routeLink = NavDeepLinkRequest.Builder
+        .fromUri(NavDestination.createRoute(route).toUri())
+        .build()
+
+    val deepLinkMatch = graph.matchDeepLink(routeLink)
+    if (deepLinkMatch != null && arguments != null) {
+        val destination = deepLinkMatch.destination
+        val id = destination.id
+        navigate(id, arguments, navOptions, extras)
+    } else {
+        navigate(route, navOptions, extras)
+    }
 }
 
 //popUpToRoute - should always be the start destination of the bottomBar, not app
