@@ -134,4 +134,5 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    implementation "dev.chrisbanes.snapper:snapper:0.1.0"
 }
