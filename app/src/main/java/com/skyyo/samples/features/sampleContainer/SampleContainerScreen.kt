@@ -52,6 +52,9 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goZoomable) {
             Text(text = "zoomable")
         }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goPdfViewer) {
+            Text(text = "PdfViewer")
+        }
     }
 }
 

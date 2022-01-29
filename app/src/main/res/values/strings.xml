@@ -16,5 +16,6 @@
     <string name="card_number_too_short">card number too short</string>
     <string name="please_grant_camera_permission_qr">Please\ngrant camera permission to scan\nQR code and preview glasses</string>
     <string name="please_grant_camera_permission_from_settings">Please grant camera permission from application settings</string>
-
+    <string name="please_grant_storage_permission">Please\ngrant storage permission to open PDF file</string>
+    <string name="please_grant_storage_permission_from_settings">Please grant storage permission from application settings</string>
 </resources>

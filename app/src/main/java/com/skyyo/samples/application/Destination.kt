@@ -49,6 +49,7 @@ sealed class Destination(val route: String) {
     object ExoPlayerColumnDynamicThumb : Destination("exoPlayerColumnDynamicThumb")
     object DominantColor : Destination("dominantColor")
     object Zoomable : Destination("zoomable")
+    object PdfViewer : Destination("pdfViewer")
 }
 
 sealed class ProfileGraph(val route: String) {
