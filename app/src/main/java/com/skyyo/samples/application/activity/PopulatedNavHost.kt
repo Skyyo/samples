@@ -58,6 +58,7 @@ import com.skyyo.samples.features.snackbar.SnackbarScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
+import com.skyyo.samples.features.zoomable.ZoomableScreen
 
 @OptIn(
     ExperimentalAnimationApi::class,
@@ -146,4 +147,5 @@ fun PopulatedNavHost(
     composable(Destination.ExoPlayerColumnAutoplay.route) { ExoPlayerColumnAutoplayScreen() }
     composable(Destination.ExoPlayerColumnDynamicThumb.route) { ExoPlayerColumnDynamicThumbScreen() }
     composable(Destination.DominantColor.route) { DominantColorScreen() }
+    composable(Destination.Zoomable.route) { ZoomableScreen() }
 }

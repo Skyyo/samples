@@ -152,4 +152,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goDominantColor() = navigationDispatcher.emit {
         it.navigate(Destination.DominantColor.route)
     }
+
+    fun goZoomable() = navigationDispatcher.emit {
+        it.navigate(Destination.Zoomable.route)
+    }
 }
