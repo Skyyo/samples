@@ -81,11 +81,14 @@ Uncategorized
 - memory leaks in compose section 
 - add flexible autocomplete & auto-fill sample/samples
 - add reselect bottomBar tab listener and dispatch this event to the composable.
-- try out [media3](https://android-developers.googleblog.com/2021/10/jetpack-media3.html?m=1) and think whether it makes sense, and what are its strong sides
-- signature view, it should also persist the signature after PD 
-- marquee text
 - animate shape form, eg from circle to star
-
+- add snowflakes as modifier like [here](https://youtu.be/FgZvs1BsAxE), but snowflakes that actually look like snow.Relate to my gist [here](https://gist.github.com/Skyyo/adbc9f30f1f4a50bc587958ccd442dff), it's a working solution for view system inspired by Telegram Android hidden winter feature, circa 2019. Modifier should handle being added to different view types ( please use common sense in case there are blockers )
+- update ViewPager sample since they've removed scroll limit. Need to see when would we really want to use it now instead of directly using LazyColumn/Row
+- Spolier animation on text, like in Telegram Android
+- Circular reveal animation. Ensure it can be used with Fragment based project, or show 2 different samples. Info: [1](https://pspdfkit.com/blog/2020/change-android-themes-with-circular-reveal-animation/), [2](https://dev.to/bmonjoie/jetpack-compose-reveal-effect-1fao), [3](https://proandroiddev.com/change-theme-dynamically-with-circular-reveal-animation-on-android-8cd574f5f0d8), [4](https://github.com/frogermcs/InstaMaterial/blob/Post-8/app/src/main/java/io/github/froger/instamaterial/ui/view/RevealBackgroundView.java#L71-L98)
+- sample of how to handle exclusion of back gesture areas. Sample should contain a LazyRow, which has it's sides excluded from the system gesture invocation.
+- custom calendar, should be customizable like [this](https://github.com/kizitonwose/CalendarView). Info: [1](https://github.com/halilozercan/compose-schedule-calendar),[2](https://github.com/boguszpawlowski/ComposeCalendar),[3](https://github.com/sigmadeltasoftware/CalPose)
+- WownloadManager sample. Should cover all cases (internet connection loss, fresh boot etc, cancellation) Compare with WorkManager, and describe pros & cons.
   
   # License
 ```
