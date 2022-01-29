@@ -196,7 +196,6 @@ class SnapperFlingBehavior(
             "Decay fling finished. Distance: $lastValue. Final vel: $velocityLeft"
 )
 
-        // TODO ahamula: maybe spring animation is better than just scrolling (snapback behavior) ?
         if (!needSpringAfter && layoutInfo.currentItem?.let { it.index % snapItemsCount == 0  && it.offset == 0} == false) {
             needSpringAfter = true
         }
@@ -334,7 +333,6 @@ class SnapperFlingBehavior(
      * Returns the distance in pixels that is required to 'snap back' to the [targetIndex].
      * Returns 0 if a snap back is not needed.
      */
-    //TODO ahamule: This function changed from snapper library, we use spring animation to snap to n items.
     private fun calculateSnapBack(
         initialVelocity: Float,
         currentItem: SnapperLayoutItemInfo,

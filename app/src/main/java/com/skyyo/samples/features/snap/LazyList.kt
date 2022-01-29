@@ -162,54 +162,35 @@ class LazyListNSnapperLayoutInfo(
         val flingDistance = decayAnimationSpec.calculateTargetValue(0f, velocity)
             .coerceIn(-maximumFlingDistance, maximumFlingDistance)
 
-        val distanceNext = distanceToIndexSnap(indexToSnap + snapItemsCount)
-        val distanceCurrent = distanceToIndexSnap(indexToSnap)
+        val distanceNext = (indexToSnap + snapItemsCount - curr.index) * distancePerItem
+        val distanceCurrent = (curr.index - indexToSnap) * distancePerItem
 
         // If the fling doesn't reach the next snap point (in the fling direction), we try
         // and snap depending on which snap point is closer to the current scroll position
         if (
-            (flingDistance >= 0 && flingDistance < distanceNext) ||
-            (flingDistance < 0 && flingDistance > distanceCurrent)
+            (flingDistance >= 0 && flingDistance < distanceNext / 2) ||
+            (flingDistance < 0 && -flingDistance < distanceCurrent / 2)
         ) {
-            return if (distanceNext < -distanceCurrent) {
+            return if (distanceNext + curr.offset < distanceCurrent - curr.offset) {
                 (indexToSnap + snapItemsCount).coerceIn(0, (itemCount / snapItemsCount) * snapItemsCount)
             } else {
                 indexToSnap
             }
         }
 
-        // forwards, toward index + 1, backwards towards index
-        val distanceToNextSnap = distanceToIndexSnap(curr.index)
-
-        /**
-         * We calculate the index delta by dividing the fling distance by the average
-         * scroll per child.
-         *
-         * We take the current item offset into account by subtracting `distanceToNextSnap`
-         * from the fling distance. This is then applied as an extra index delta below.
-         */
-
-        //TODO ahamula: check this logic of finding target index for spring animation
-        val indexDelta = truncate(
-            (flingDistance - distanceToNextSnap) / distancePerItem
-        ).let {
-            // As we removed the `distanceToNextSnap` from the fling distance, we need to calculate
-            // whether we need to take that into account...
-            var distanceInSnapRanges = (curr.index - indexToSnap + it.toInt()) / snapItemsCount
-
-            if (velocity > 0 && (curr.index + it.toInt()) % snapItemsCount > snapItemsCount / 2) {
-                distanceInSnapRanges ++
-            } else if (velocity < 0) {
-                val distanceToPrevSnap = ((curr.index + it.toInt() - indexToSnap) % snapItemsCount) * distancePerItem + curr.offset
-                val distanceToNextSnap = snapItemsCount * distancePerItem - distanceToPrevSnap
-
-                if(-distanceToPrevSnap < distanceToNextSnap) distanceInSnapRanges --
-            }
-
-            distanceInSnapRanges * snapItemsCount
+        return if (flingDistance < 0) {
+            val shifting = (flingDistance + (curr.index - indexToSnap - snapItemsCount) * distancePerItem) / distancePerItem
+            var targetIndex = (shifting.toInt() / snapItemsCount) * snapItemsCount
+            val snapOffset = shifting - targetIndex
+            if (snapOffset > -snapItemsCount / 2f) targetIndex += snapItemsCount
+            indexToSnap + targetIndex
+        } else {
+            val shifting = ((curr.index - indexToSnap) * distancePerItem + flingDistance) / distancePerItem
+            var targetIndex = (shifting.toInt() / snapItemsCount) * snapItemsCount
+            val snapOffset = shifting - targetIndex
+            if (snapOffset > snapItemsCount / 2f) targetIndex += snapItemsCount
+            indexToSnap + targetIndex
         }
-
-        return (indexToSnap + indexDelta).coerceIn(0, (itemCount / snapItemsCount) * snapItemsCount)
     }
 
     /**
