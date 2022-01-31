@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.layout.SubcomposeMeasureScope
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -25,6 +26,8 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.delay
 
 enum class ScrollDirection { Forward, Backward }
@@ -43,6 +46,7 @@ fun MarqueeText(
     gradientEdgeColor: Color = Color.White,
     scrollDirection: ScrollDirection = ScrollDirection.Forward,
     scrollStartDelay: Int = 2000,
+    scrollSpeed: Int = 7500,
     textEndsSpacing: Int = SPACING_LARGE,
     edgeGradientWidth: Dp = 12.dp,
     color: Color = Color.Unspecified,
@@ -59,7 +63,10 @@ fun MarqueeText(
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
 ) {
-    val createText = @Composable { localModifier: Modifier ->
+    val viewLifecycleOwner = LocalLifecycleOwner.current
+    val lifecycle = viewLifecycleOwner.lifecycle
+
+    val textComposable = @Composable { localModifier: Modifier ->
         Text(
             text,
             textAlign = textAlign,
@@ -81,13 +88,14 @@ fun MarqueeText(
     }
     var mainTextOffset by remember { mutableStateOf(0) }
     val textLayoutInfoState = remember { mutableStateOf<TextLayoutInfo?>(null) }
+    var isPaused by remember { mutableStateOf(true) }
 
     val scrollAnimationUpdateDelay = 1000L
 
     LaunchedEffect(textLayoutInfoState.value) {
         val textLayoutInfo = textLayoutInfoState.value ?: return@LaunchedEffect
 
-        val duration = 7500 * textLayoutInfo.textWidth / textLayoutInfo.containerWidth
+        val duration = scrollSpeed * textLayoutInfo.textWidth / textLayoutInfo.containerWidth
 
         val scrollInitialValue = when (scrollDirection) {
             ScrollDirection.Forward -> 0
@@ -114,10 +122,19 @@ fun MarqueeText(
             val scrollStartTime = withFrameNanos { it }
             do {
                 val scrollPlayTime = withFrameNanos { it } - scrollStartTime
-                mainTextOffset = scrollingAnimation.getValueFromNanos(scrollPlayTime)
+                if (!isPaused) {
+                    mainTextOffset = scrollingAnimation.getValueFromNanos(scrollPlayTime)
+                }
             } while (!scrollingAnimation.isFinishedFromNanos(scrollPlayTime))
             delay(scrollAnimationUpdateDelay)
         } while (true)
+    }
+    DisposableEffect(Unit) {
+        val lifecycleEventObserver = LifecycleEventObserver { _, event ->
+            isPaused = event == Lifecycle.Event.ON_PAUSE
+        }
+        lifecycle.addObserver(lifecycleEventObserver)
+        onDispose { lifecycle.removeObserver(lifecycleEventObserver) }
     }
 
     SubcomposeLayout(modifier.clipToBounds()) { constraints ->
@@ -133,7 +150,7 @@ fun MarqueeText(
             MarqueeComponents.MainText,
             infiniteWidthConstraints
         ) {
-            createText(Modifier)
+            textComposable(Modifier)
         }
         val mainTextWidth = mainText.width
         val maxContainerWidth = constraints.maxWidth
@@ -145,7 +162,7 @@ fun MarqueeText(
         )
         if (maxContainerWidth >= nextTextOffset) {
             nextText = measureSubcompose(MarqueeComponents.NextText, infiniteWidthConstraints) {
-                createText(Modifier)
+                textComposable(Modifier)
             }
         }
         val gradient = measureSubcompose(

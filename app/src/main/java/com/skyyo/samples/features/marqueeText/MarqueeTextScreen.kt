@@ -22,6 +22,7 @@ fun MarqueeTextScreen() {
         MarqueeText(
             text = "How scurvy. You command like an ale. Aw, yer not vandalizing me without a courage!",
             textEndsSpacing = SPACING_MEDIUM,
+            scrollSpeed = 3000,
             scrollDirection = ScrollDirection.Backward
         )
         MarqueeText(
