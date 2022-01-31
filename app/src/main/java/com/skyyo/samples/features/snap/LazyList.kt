@@ -14,7 +14,6 @@ import dev.chrisbanes.snapper.*
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
-import kotlin.math.truncate
 
 /**
  * Create and remember a snapping [FlingBehavior] to be used with the given [layoutInfo].
@@ -151,7 +150,9 @@ class LazyListNSnapperLayoutInfo(
         maximumFlingDistance: Float,
     ): Int {
         val curr = currentItem ?: return -1
-        val indexToSnap = curr.index.minIndexToSnap()
+        val currentIndex = curr.index
+        val offset = curr.offset
+        val indexToSnap = currentIndex.minIndexToSnap()
 
         val distancePerItem = estimateDistancePerItem()
         if (distancePerItem <= 0) {
@@ -162,8 +163,8 @@ class LazyListNSnapperLayoutInfo(
         val flingDistance = decayAnimationSpec.calculateTargetValue(0f, velocity)
             .coerceIn(-maximumFlingDistance, maximumFlingDistance)
 
-        val distanceNext = (indexToSnap + snapItemsCount - curr.index) * distancePerItem
-        val distanceCurrent = (curr.index - indexToSnap) * distancePerItem
+        val distanceNext = (indexToSnap + snapItemsCount - currentIndex) * distancePerItem
+        val distanceCurrent = (currentIndex - indexToSnap) * distancePerItem
 
         // If the fling doesn't reach the next snap point (in the fling direction), we try
         // and snap depending on which snap point is closer to the current scroll position
@@ -179,13 +180,13 @@ class LazyListNSnapperLayoutInfo(
         }
 
         return if (flingDistance < 0) {
-            val shifting = (flingDistance + (curr.index - indexToSnap - snapItemsCount) * distancePerItem) / distancePerItem
+            val shifting = (flingDistance + (currentIndex - indexToSnap - snapItemsCount) * distancePerItem - offset) / distancePerItem
             var targetIndex = (shifting.toInt() / snapItemsCount) * snapItemsCount
             val snapOffset = shifting - targetIndex
             if (snapOffset > -snapItemsCount / 2f) targetIndex += snapItemsCount
             indexToSnap + targetIndex
         } else {
-            val shifting = ((curr.index - indexToSnap) * distancePerItem + flingDistance) / distancePerItem
+            val shifting = ((currentIndex - indexToSnap) * distancePerItem + flingDistance - offset) / distancePerItem
             var targetIndex = (shifting.toInt() / snapItemsCount) * snapItemsCount
             val snapOffset = shifting - targetIndex
             if (snapOffset > snapItemsCount / 2f) targetIndex += snapItemsCount

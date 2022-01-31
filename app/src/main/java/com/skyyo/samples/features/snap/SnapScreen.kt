@@ -1,15 +1,20 @@
 package com.skyyo.samples.features.snap
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.systemBarsPadding
 import com.skyyo.samples.R
@@ -24,7 +29,13 @@ fun SnapScreen() {
     ) {
         SnapTo1LazyRow()
 
-        SnapToNLazyRow(5)
+        var snapItemsCount by remember { mutableStateOf(5) }
+        TextField(value = snapItemsCount.toString(), onValueChange = { snapItemsCount =
+            if (it.isEmpty()) 5 else it.toInt() }, keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        ))
+        SnapToNLazyRow(snapItemsCount)
     }
 }
 
@@ -48,7 +59,7 @@ fun SnapTo1LazyRow() {
 
 @Composable
 fun SnapItem(position: Int, snapItemsCount: Int) {
-    Box {
+    Box(Modifier.border(1.dp, color = if (position % snapItemsCount == 0) Color.Blue else Color.Red)) {
         Icon(
             painter = painterResource(id = R.drawable.common_full_open_on_phone),
             contentDescription = "",
