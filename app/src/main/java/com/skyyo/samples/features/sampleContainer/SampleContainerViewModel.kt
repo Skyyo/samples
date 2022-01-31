@@ -105,6 +105,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.CustomView.route)
     }
 
+    fun goSignatureView() = navigationDispatcher.emit {
+        it.navigate(Destination.SignatureView.route)
+    }
+
     fun goHiltComposeSharedViewModel() = navigationDispatcher.emit {
         it.navigate(ProfileGraph.Profile.route)
     }
