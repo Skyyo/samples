@@ -1,4 +1,4 @@
-# Project containing Jetpack Compose samples 
+# Project containing Jetpack Compose & Android samples 
 For pagination & network images it uses [CATAAS](https://cataas.com/#/).
 
 # Known issues
@@ -89,6 +89,7 @@ Uncategorized
 - sample of how to handle exclusion of back gesture areas. Sample should contain a LazyRow, which has it's sides excluded from the system gesture invocation.
 - custom calendar, should be customizable like [this](https://github.com/kizitonwose/CalendarView). Info: [1](https://github.com/halilozercan/compose-schedule-calendar),[2](https://github.com/boguszpawlowski/ComposeCalendar),[3](https://github.com/sigmadeltasoftware/CalPose)
 - DownloadManager sample. Should cover all cases (internet connection loss, fresh boot etc, cancellation) Compare with WorkManager, and describe pros & cons.
+- [Baseline Profile](https://developer.android.com/studio/profile/baselineprofiles#creating-profile-rules). Measure the impact on dummy flows
 
 - check the issue with compose & svg's. Icons don't mirror?
 - add flexible autocomplete & auto-fill sample/samples
