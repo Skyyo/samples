@@ -19,7 +19,7 @@ Google Maps
 
 Keyboard
 - [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress ( affecting OTP sample )
-- [issue](https://issuetracker.google.com/issues/199297778) with adjustPan mode not pinning to the focused textField
+- [issue](https://issuetracker.google.com/issues/199297778), [issue](https://issuetracker.google.com/issues/205751272), [issue](https://issuetracker.google.com/issues/192043120) with adjustPan/adjustResize mode not pinning to the focused textField. [Workaround](https://issuetracker.google.com/issues/205751272#comment3)
 - [issue](https://issuetracker.google.com/issues/199561561) with keyboard being hidden when focus is shared between composables & views
 
 Miscellaneous

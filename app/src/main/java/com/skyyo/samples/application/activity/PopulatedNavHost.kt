@@ -33,6 +33,7 @@ import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
+import com.skyyo.samples.features.marqueeText.MarqueeTextScreen
 import com.skyyo.samples.features.navigateWithResult.simple.dogContacts.DogContactsScreen
 import com.skyyo.samples.features.navigateWithResult.simple.dogDetails.DogDetailsScreen
 import com.skyyo.samples.features.navigateWithResult.simple.dogFeed.DogFeedScreen
@@ -116,6 +117,7 @@ fun PopulatedNavHost(
     composable(Destination.Table.route) { TableScreen() }
     composable(Destination.ParallaxEffect.route) { ParallaxEffectScreen() }
     composable(Destination.CustomView.route) { CustomViewScreen() }
+    composable(Destination.MarqueeText.route) { MarqueeTextScreen() }
     navigation(
         route = ProfileGraph.route,
         startDestination = ProfileGraph.Profile.route

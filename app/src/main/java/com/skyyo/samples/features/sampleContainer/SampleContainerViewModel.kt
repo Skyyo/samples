@@ -105,6 +105,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.CustomView.route)
     }
 
+    fun goMarqueeText() = navigationDispatcher.emit {
+        it.navigate(Destination.MarqueeText.route)
+    }
+
     fun goHiltComposeSharedViewModel() = navigationDispatcher.emit {
         it.navigate(ProfileGraph.Profile.route)
     }
