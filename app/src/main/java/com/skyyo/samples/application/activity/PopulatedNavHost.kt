@@ -56,6 +56,7 @@ import com.skyyo.samples.features.sharedViewModel.confirmProfile.EditProfileConf
 import com.skyyo.samples.features.sharedViewModel.editProfile.EditProfileScreen
 import com.skyyo.samples.features.sharedViewModel.profile.ProfileScreen
 import com.skyyo.samples.features.snackbar.SnackbarScreen
+import com.skyyo.samples.features.snap.SnapScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
@@ -141,6 +142,7 @@ fun PopulatedNavHost(
     composable(Destination.QrCodeScanning.route) { QrScreen() }
     composable(Destination.ScrollAnimation1.route) { ScrollAnimation1Screen() }
     composable(Destination.Snackbar.route) { SnackbarScreen() }
+    composable(Destination.Snap.route) { SnapScreen() }
     composable(Destination.BottomBar.route) { BottomBarScreen() }
     composable(Destination.Drawer.route) { DrawerScreen() }
     composable(Destination.GradientScroll.route) { GradientScrollScreen() }

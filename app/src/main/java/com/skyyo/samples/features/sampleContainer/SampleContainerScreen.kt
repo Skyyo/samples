@@ -49,6 +49,9 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goDominantColor) {
             Text(text = "dominant color")
         }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnap) {
+            Text(text = "snapping")
+        }
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goZoomable) {
             Text(text = "zoomable")
         }
