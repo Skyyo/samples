@@ -16,6 +16,9 @@ Modal Drawer
 Google Maps
 - [issue](https://github.com/googlemaps/android-maps-utils/issues/949)
 - [issue](https://issuetracker.google.com/issues/197880217)
+  
+Icons
+- [auto mirroring doesn't work](https://issuetracker.google.com/issues/193457331)
 
 Keyboard
 - [issue](https://issuetracker.google.com/issues/199297778), [issue](https://issuetracker.google.com/issues/205751272), [issue](https://issuetracker.google.com/issues/192043120) with adjustPan/adjustResize mode not pinning to the focused textField. [Workaround](https://issuetracker.google.com/issues/205751272#comment3)
