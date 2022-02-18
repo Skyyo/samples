@@ -15,10 +15,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.systemBarsPadding
 import com.skyyo.samples.R
 import dev.chrisbanes.snapper.*
+import kotlin.math.max
+import kotlin.math.min
+
+private const val FAST_FLING_THRESHOLD = 9
+private const val MAX_FLING_DISTANCE = 15
 
 @Composable
 fun SnapScreen() {
@@ -53,7 +59,7 @@ fun SnapTo1LazyRow() {
             snapOffsetForItem = SnapOffsets.Start
         )
     ) {
-        items(200, { it }) { SnapItem(it, 1) }
+        items(50, { it }) { SnapItem(it, 1) }
     }
 }
 
@@ -75,17 +81,48 @@ fun SnapItem(position: Int, snapItemsCount: Int) {
 @Composable
 fun SnapToNLazyRow(snapItemsCount: Int) {
     val listState = rememberLazyListState()
+    val contentPadding = PaddingValues(10.dp)
+
     LazyRow(
         modifier = Modifier.padding(top = 10.dp),
         state = listState,
+        contentPadding = contentPadding,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         flingBehavior = rememberSnapperFlingBehavior(
-            snapItemsCount = snapItemsCount,
-            layoutInfo = rememberLazyListSnapperLayoutInfo(
-                lazyListState = listState,
-                snapItemsCount = snapItemsCount
-            ),
+            lazyListState = listState,
+            endContentPadding = contentPadding.calculateEndPadding(LayoutDirection.Ltr),
+            snapOffsetForItem = SnapOffsets.Start,
+            snapIndex = { layout,startIndex, targetIndex ->
+                run {
+                    val totalItemsCount = layout.totalItemsCount
+                    var indexOfFirstItemInGroup = targetIndex.firstItemInGroup(totalItemsCount, snapItemsCount)
+                    if (startIndex - targetIndex > MAX_FLING_DISTANCE) {
+                        indexOfFirstItemInGroup = (startIndex - MAX_FLING_DISTANCE) / snapItemsCount * snapItemsCount
+                    } else if (targetIndex - startIndex > MAX_FLING_DISTANCE) {
+                        indexOfFirstItemInGroup = (startIndex + MAX_FLING_DISTANCE) / snapItemsCount * snapItemsCount
+                    }
+                    val flingForward = targetIndex > startIndex
+                    if (flingForward && targetIndex - startIndex > FAST_FLING_THRESHOLD) {
+                        return@run indexOfFirstItemInGroup
+                    }
+                    if (!flingForward && startIndex - targetIndex > FAST_FLING_THRESHOLD) {
+                        return@run min(indexOfFirstItemInGroup + snapItemsCount, totalItemsCount - 1)
+                    }
+
+                    val indexOfFirstItemOfNextGroup = indexOfFirstItemInGroup + snapItemsCount
+
+                    when {
+                        targetIndex - indexOfFirstItemInGroup < indexOfFirstItemOfNextGroup - targetIndex -> indexOfFirstItemInGroup
+                        else -> min(indexOfFirstItemOfNextGroup, totalItemsCount - 1)
+                    }
+                }
+            },
         ),
     ) {
         items(50, { it }) { SnapItem(it, snapItemsCount) }
     }
+}
+
+private fun Int.firstItemInGroup(totalItemsCount: Int, itemsInGroup: Int): Int {
+    return (min(max(this, 0) / itemsInGroup, totalItemsCount / itemsInGroup)) * itemsInGroup
 }
