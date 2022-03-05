@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,6 +35,8 @@ import com.skyyo.samples.R
 import com.skyyo.samples.extensions.goAppPermissions
 import com.skyyo.samples.features.zoomable.Zoomable
 import com.skyyo.samples.utils.OnClick
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.InputStream
 
@@ -43,6 +46,7 @@ fun PdfViewerScreen(viewModel: PdfViewerViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val storagePermissionState = rememberPermissionState(Manifest.permission.READ_EXTERNAL_STORAGE)
     val uri by viewModel.uri.collectAsState()
+    val pdfRenderer by viewModel.pdfRenderer.collectAsState()
 
     ProvideWindowInsets {
         PermissionRequired(
@@ -60,37 +64,51 @@ fun PdfViewerScreen(viewModel: PdfViewerViewModel = hiltViewModel()) {
                 )
             },
             content = {
-                if (uri != null) {
-                    val pdfRender = remember(uri) {
-                        val inputStream: InputStream? = context.contentResolver.openInputStream(uri!!)
-                        val file = File(context.filesDir, "pdf")
-                        file.writeBytes(inputStream!!.readBytes())
-                        inputStream.close()
-                        PdfRenderer(
-                            ParcelFileDescriptor.open(
-                                file,
-                                ParcelFileDescriptor.MODE_READ_ONLY
+                LaunchedEffect(uri) {
+                    if (uri != null) {
+                        launch(Dispatchers.IO) {
+                            val inputStream: InputStream? =
+                                context.contentResolver.openInputStream(uri!!)
+                            val file = File(context.filesDir, "pdf")
+                            file.writeBytes(inputStream!!.readBytes())
+                            inputStream.close()
+                            viewModel.pdfRenderer.value = PdfRenderer(
+                                ParcelFileDescriptor.open(
+                                    file,
+                                    ParcelFileDescriptor.MODE_READ_ONLY
+                                )
                             )
-                        )
-                    }
-
-                    DisposableEffect(Unit) {
-                        onDispose {
-                            pdfRender.close()
                         }
                     }
-                    Zoomable() {
-                        LazyColumn(
-                            Modifier.statusBarsPadding()
-                        ) {
-                            items(pdfRender.pageCount) {
-                                val bitmap = remember(it) { generatePageBitmap(pdfRender, it, PdfQuality.NORMAL) }
-                                PdfPageItem(bitmap = bitmap)
+                }
+                when {
+                    pdfRenderer != null -> {
+                        DisposableEffect(Unit) {
+                            onDispose {
+                                pdfRenderer!!.close()
+                            }
+                        }
+                        Zoomable() {
+                            LazyColumn(Modifier.statusBarsPadding()) {
+                                items(pdfRenderer!!.pageCount) {
+                                    val bitmap = remember(it) {
+                                        generatePageBitmap(
+                                            pdfRenderer!!,
+                                            it,
+                                            PdfQuality.NORMAL
+                                        )
+                                    }
+                                    PdfPageItem(bitmap = bitmap)
+                                }
                             }
                         }
                     }
-                } else {
-                    ChoosePdfButton(viewModel)
+                    uri != null -> {
+                        Box(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                        }
+                    }
+                    else -> ChoosePdfButton(viewModel)
                 }
             }
         )
@@ -158,7 +176,7 @@ fun PdfPageItem(bitmap: Bitmap) {
         contentDescription = "",
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(vertical = 8.dp)
             .background(Color.White),
         contentScale = ContentScale.Crop
     )
