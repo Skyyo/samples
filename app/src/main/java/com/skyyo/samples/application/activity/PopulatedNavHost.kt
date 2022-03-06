@@ -48,6 +48,7 @@ import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomSc
 import com.skyyo.samples.features.pagination.simple.CatsScreen
 import com.skyyo.samples.features.pagination.simpleWithDatabase.CatsRoomScreen
 import com.skyyo.samples.features.parallaxEffect.ParallaxEffectScreen
+import com.skyyo.samples.features.pdfViewer.PdfViewerScreen
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
 import com.skyyo.samples.features.scanQR.QrScreen
 import com.skyyo.samples.features.scrollAnimation1.ScrollAnimation1Screen
@@ -152,4 +153,5 @@ fun PopulatedNavHost(
     composable(Destination.ExoPlayerColumnDynamicThumb.route) { ExoPlayerColumnDynamicThumbScreen() }
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
+    composable(Destination.PdfViewer.route) { PdfViewerScreen() }
 }

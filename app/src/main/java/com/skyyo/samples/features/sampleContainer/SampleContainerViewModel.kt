@@ -164,4 +164,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goZoomable() = navigationDispatcher.emit {
         it.navigate(Destination.Zoomable.route)
     }
+
+    fun goPdfViewer() = navigationDispatcher.emit {
+        it.navigate(Destination.PdfViewer.route)
+    }
 }
