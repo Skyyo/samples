@@ -20,6 +20,7 @@ import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScreen
 import com.skyyo.samples.features.bottomSheets.ModalBottomSheetScreen
+import com.skyyo.samples.features.bringIntoViewRequester.BringIntoViewRequesterScreen
 import com.skyyo.samples.features.cameraX.CameraXScreen
 import com.skyyo.samples.features.customView.CustomViewScreen
 import com.skyyo.samples.features.dominantColor.DominantColorScreen
@@ -154,4 +155,5 @@ fun PopulatedNavHost(
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
     composable(Destination.PdfViewer.route) { PdfViewerScreen() }
+    composable(Destination.BringIntoViewRequester.route) { BringIntoViewRequesterScreen() }
 }

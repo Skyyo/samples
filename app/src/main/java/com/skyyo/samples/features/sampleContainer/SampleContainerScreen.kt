@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
 
-
 @Composable
 fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel()) {
     Column(
@@ -38,26 +37,33 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         UIelements(viewModel)
         NavigateWithResults(viewModel)
         NavigationCores(viewModel)
-        Text(text = "uncategorized")
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::goAutoScroll
-        ) { Text(text = "auto scroll") }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnackbar) {
-            Text(text = "snackbar")
-        }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goDominantColor) {
-            Text(text = "dominant color")
-        }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnap) {
-            Text(text = "snapping")
-        }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goZoomable) {
-            Text(text = "zoomable")
-        }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goPdfViewer) {
-            Text(text = "pdf viewer")
-        }
+        Uncategorized(viewModel)
+    }
+}
+
+@Composable
+fun Uncategorized(viewModel: SampleContainerViewModel) {
+    Text(text = "uncategorized")
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goAutoScroll) {
+        Text(text = "auto scroll")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnackbar) {
+        Text(text = "snackbar")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goDominantColor) {
+        Text(text = "dominant color")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnap) {
+        Text(text = "snapping")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goZoomable) {
+        Text(text = "zoomable")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goPdfViewer) {
+        Text(text = "pdf viewer")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goBringIntoViewRequester) {
+        Text(text = "bring into view requester")
     }
 }
 
