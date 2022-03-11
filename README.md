@@ -21,8 +21,7 @@ Icons
 - [auto mirroring doesn't work](https://issuetracker.google.com/issues/193457331)
 
 Keyboard
-- [issue](https://issuetracker.google.com/issues/199297778), [issue](https://issuetracker.google.com/issues/205751272), [issue](https://issuetracker.google.com/issues/192043120) with adjustPan/adjustResize mode not pinning to the focused textField. [Workaround](https://issuetracker.google.com/issues/205751272#comment3)
-- [issue](https://issuetracker.google.com/issues/199561561) with keyboard being hidden when focus is shared between composables & views
+- [issue](https://issuetracker.google.com/issues/205751272), [issue](https://issuetracker.google.com/issues/192043120) with adjustPan/adjustResize mode not pinning to the focused textField. [Workaround](https://issuetracker.google.com/issues/205751272#comment3)
 
 Miscellaneous
 - We can't drop usage of liveData completely since we can't return stateFlow from the savedStateHandle, also it is still needed for scenarios which cover flow being observed with flatMapLatest ( as a typical scenario for searching by query ). Latter [issue](https://github.com/Kotlin/kotlinx.coroutines/issues/2223)
@@ -78,7 +77,6 @@ Animations
 
 
 Uncategorized
-- [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress ( affecting OTP sample ). It's marked as fixed, let's check it and adjust code to have proper OTP sample.
 - spinners with a lot of items like country flags etc.
 - Draw / hide something using coordinates. Look into ```onGloballyPositioned``` modifier
 - How to do custom shapes ripples
