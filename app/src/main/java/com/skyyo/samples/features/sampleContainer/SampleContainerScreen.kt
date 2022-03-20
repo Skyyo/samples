@@ -58,6 +58,9 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goPdfViewer) {
             Text(text = "pdf viewer")
         }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCalendar) {
+            Text(text = "calendar")
+        }
     }
 }
 
