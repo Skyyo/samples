@@ -1,10 +1,13 @@
 package com.skyyo.samples.features.snap
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -17,8 +20,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
 import com.skyyo.samples.R
+import com.skyyo.samples.utils.OnClick
 import dev.chrisbanes.snapper.*
 import kotlin.math.max
 import kotlin.math.min
@@ -27,7 +32,7 @@ private const val FAST_FLING_THRESHOLD = 9
 private const val MAX_FLING_DISTANCE = 15
 
 @Composable
-fun SnapScreen() {
+fun SnapScreen(viewModel: SnapViewModel = hiltViewModel()) {
     Column(
         Modifier
             .fillMaxSize()
@@ -42,7 +47,56 @@ fun SnapScreen() {
             imeAction = ImeAction.Done
         ))
         SnapToNLazyRow(snapItemsCount)
+
+        LeakingListener(onClick1 = viewModel::onClick1, onClick2 = viewModel::onClick2)
     }
+}
+
+@Composable
+fun LeakingListener(onClick1: OnClick, onClick2: OnClick) {
+    var text by remember {
+        mutableStateOf("test")
+    }
+
+    val onClick = if (text == "test") onClick1 else onClick2
+    TextFieldWithoutArg(text, onClick)
+    TextFieldWithArg(text, onClick)
+
+    Button(onClick = { text = "test2"; }) {
+        Text(text = "recompose")
+    }
+}
+
+@Composable
+fun TextFieldWithoutArg(text: String, onClick: OnClick) {
+    val keyboardActions = remember {
+        Log.d("TAG", "without arg")
+        KeyboardActions(
+            onDone = { onClick() }
+        )
+    }
+
+    TextField(
+        value = text,
+        onValueChange = {},
+        keyboardActions = keyboardActions,
+    )
+}
+
+@Composable
+fun TextFieldWithArg(text: String, onClick: OnClick) {
+    val keyboardActions = remember(onClick) {
+        Log.d("TAG", "with arg")
+        KeyboardActions(
+            onDone = { onClick() }
+        )
+    }
+
+    TextField(
+        value = text,
+        onValueChange = {},
+        keyboardActions = keyboardActions,
+    )
 }
 
 @OptIn(ExperimentalSnapperApi::class)
