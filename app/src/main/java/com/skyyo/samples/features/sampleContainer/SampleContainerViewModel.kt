@@ -57,6 +57,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.ViewPager.route)
     }
 
+    fun goInfiniteViewPager() = navigationDispatcher.emit {
+        it.navigate(Destination.InfiniteViewPager.route)
+    }
+
     fun goNavigationWithValuesSimple() = navigationDispatcher.emit {
         it.navigate(Destination.DogFeed.route)
     }

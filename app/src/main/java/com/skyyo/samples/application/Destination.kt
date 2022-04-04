@@ -14,6 +14,7 @@ sealed class Destination(val route: String) {
     object CameraX : Destination("cameraX")
     object ForceTheme : Destination("forceTheme")
     object ViewPager : Destination("viewPager")
+    object InfiniteViewPager : Destination("infiniteViewPager")
     object InputValidationManual : Destination("manual")
     object InputValidationAuto : Destination("auto")
     object InputValidationDebounce : Destination("debounce")

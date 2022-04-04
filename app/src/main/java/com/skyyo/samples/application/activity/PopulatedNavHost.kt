@@ -30,6 +30,7 @@ import com.skyyo.samples.features.exoPlayer.columnReference.ExoPlayerColumnRefer
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
+import com.skyyo.samples.features.infiniteViewPager.InfiniteViewPagerScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
@@ -91,6 +92,7 @@ fun PopulatedNavHost(
     composable(Destination.ModalBottomSheet.route) { ModalBottomSheetScreen() }
     composable(Destination.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
     composable(Destination.ViewPager.route) { ViewPagerScreen() }
+    composable(Destination.InfiniteViewPager.route) { InfiniteViewPagerScreen() }
     composable(Destination.StickyHeader.route) { ListsScreen() }
     composable(Destination.DogFeed.route) { DogFeedScreen() }
     composable(Destination.DogDetails.route) { DogDetailsScreen() }

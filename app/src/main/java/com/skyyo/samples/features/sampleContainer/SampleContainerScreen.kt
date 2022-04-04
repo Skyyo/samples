@@ -106,6 +106,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
     ) { Text(text = "view pager") }
     Button(
         modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goInfiniteViewPager
+    ) { Text(text = "infinite view pager") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goStickyHeaders
     ) { Text(text = "sticky headers") }
     Button(
