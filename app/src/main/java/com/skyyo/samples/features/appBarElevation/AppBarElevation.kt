@@ -2,11 +2,7 @@ package com.skyyo.samples.features.appBarElevation
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.*
-import androidx.compose.material.Card
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -18,6 +14,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.lazy.grid.*
+import androidx.compose.foundation.lazy.rememberLazyListState
 
 @Composable
 fun AppBarElevation() {
@@ -43,49 +41,34 @@ fun AppBarElevation() {
             }
         }
     ) {
-        LazyColumnLazyRow(items, scrollState)
-    }
-//    Column {
-//        TopAppBar(
-//            elevation = elevation,
-//            backgroundColor = Color.White,
-//        ) {
-//            Text(text = "TestAppBarElevation")
-//        }
-//        LazyColumnLazyRow(items, scrollState)
-//    }
-}
-
-@Composable
-private fun LazyColumnLazyRow(items: List<Int>, state: LazyListState) {
-    LazyColumn(state = state, content = {
-        itemsIndexed(items) { _, num ->
-            LazyRowItems(row = num, items)
+        LazyVerticalGrid(
+            modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Fixed(1),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            itemsIndexed(items){ index, _ ->
+                HorizontalGrid(index, items)
+            }
         }
-    })
-}
-
-@Composable
-private fun LazyRowItems(row: Int, items: List<Int>) {
-    LazyRow(content = {
-        itemsIndexed(items) { _, item ->
-            TestItem(row = row, column = item)
-        }
-    })
-}
-
-@Composable
-private fun TestItem(row: Int, column: Int) {
-    Card {
-        Text(
-            text = "row $row column $column",
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .width(150.dp)
-                .height(150.dp)
-                .padding(10.dp)
-                .shadow(1.dp),
-        )
     }
+}
 
+@Composable
+fun HorizontalGrid(index: Int, items: List<Int>) {
+    LazyHorizontalGrid(
+        modifier = Modifier.height(150.dp), // required set height
+        rows = GridCells.Fixed(1)
+    ) {
+        items(items){
+            Text(
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .size(150.dp)
+                    .padding(10.dp)
+                    .shadow(1.dp),
+                text = "row $index column $it",
+            )
+        }
+    }
 }
