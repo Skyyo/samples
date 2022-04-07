@@ -57,6 +57,7 @@ import com.skyyo.samples.features.sharedViewModel.profile.ProfileScreen
 import com.skyyo.samples.features.snackbar.SnackbarScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
+import com.skyyo.samples.features.videopager.VideoPagerScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
 
 @OptIn(
@@ -145,5 +146,6 @@ fun PopulatedNavHost(
     composable(Destination.ExoPlayerColumnIndexed.route) { ExoPlayerColumnIndexedScreen() }
     composable(Destination.ExoPlayerColumnAutoplay.route) { ExoPlayerColumnAutoplayScreen() }
     composable(Destination.ExoPlayerColumnDynamicThumb.route) { ExoPlayerColumnDynamicThumbScreen() }
+    composable(Destination.VideoPager.route) { VideoPagerScreen() }
     composable(Destination.DominantColor.route) { DominantColorScreen() }
 }

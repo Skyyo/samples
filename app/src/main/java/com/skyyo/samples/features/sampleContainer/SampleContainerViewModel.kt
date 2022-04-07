@@ -149,6 +149,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.ExoPlayerColumnDynamicThumb.route)
     }
 
+    fun goVideoPager() = navigationDispatcher.emit {
+        it.navigate(Destination.VideoPager.route)
+    }
+
     fun goDominantColor() = navigationDispatcher.emit {
         it.navigate(Destination.DominantColor.route)
     }
