@@ -168,4 +168,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goPdfViewer() = navigationDispatcher.emit {
         it.navigate(Destination.PdfViewer.route)
     }
+
+    fun goAutoFill() = navigationDispatcher.emit {
+        it.navigate(Destination.AutoFill.route)
+    }
 }

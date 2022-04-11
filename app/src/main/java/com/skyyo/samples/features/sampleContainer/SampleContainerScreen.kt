@@ -127,6 +127,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goMarqueeText
     ) { Text(text = "marquee text") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goAutoFill
+    ) { Text(text = "autoFill") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 

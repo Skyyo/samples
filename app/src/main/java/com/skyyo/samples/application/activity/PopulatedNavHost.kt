@@ -16,6 +16,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.ProfileGraph
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
+import com.skyyo.samples.features.autofill.AutoFillScreen
 import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScreen
@@ -154,4 +155,5 @@ fun PopulatedNavHost(
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
     composable(Destination.PdfViewer.route) { PdfViewerScreen() }
+    composable(Destination.AutoFill.route) { AutoFillScreen() }
 }
