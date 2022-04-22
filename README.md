@@ -69,7 +69,8 @@ Animations
 - Container transformations. eg. small circle from bottom end of the screen floats to the center of the screen and changes it's size. Both back& forward animations should be flawless and tested across PD.
 - Spolier animation on text, like in Telegram Android
 - add snowflakes as modifier like [here](https://youtu.be/FgZvs1BsAxE), but snowflakes that actually look like snow.Relate to my gist [here](https://gist.github.com/Skyyo/adbc9f30f1f4a50bc587958ccd442dff), it's a working solution for view system inspired by Telegram Android hidden winter feature, circa 2019. Modifier should handle being added to different view types ( please use common sense in case there are blockers )
-- Circular reveal animation. Ensure it can be used with Fragment based project, or show 2 different samples. Info: [1](https://pspdfkit.com/blog/2020/change-android-themes-with-circular-reveal-animation/), [2](https://dev.to/bmonjoie/jetpack-compose-reveal-effect-1fao), [3](https://proandroiddev.com/change-theme-dynamically-with-circular-reveal-animation-on-android-8cd574f5f0d8), [4](https://github.com/frogermcs/InstaMaterial/blob/Post-8/app/src/main/java/io/github/froger/instamaterial/ui/view/RevealBackgroundView.java#L71-L98)
+- Circular reveal animation. Ensure it can be used with Fragment based project, or show 2 different samples. Info: [1](https://pspdfkit.com/blog/2020/change-android-themes-with-circular-reveal-animation/), [2](https://dev.to/bmonjoie/jetpack-compose-reveal-effect-1fao), [3](https://proandroiddev.com/change-theme-dynamically-with-circular-reveal-animation-on-android-8cd574f5f0d8), [4](https://github.com/frogermcs/InstaMaterial/blob/Post-8/app/src/main/java/io/github/froger/instamaterial/ui/view/RevealBackgroundView.java#L71-L98).
+There is a [library](https://github.com/canopas/Intro-showcase-view) which needs to be tried out, maybe that's exactly what is needed
 - circular reveal upon changing theme
 - cool transformation animations in google owl sample
 - complex motion layout example ( currently it supports only 2 states so might be left for later )
@@ -84,7 +85,6 @@ Uncategorized
 - https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
 - compose with ad mob
 - draggable sample like [here](https://proandroiddev.com/jetpack-compose-calculator-ui-4dfa2ab9048e). Sample which allows to drag elements in 1 screen from top, right & bottom for example.
-- memory leaks in compose section 
 - add reselect bottomBar tab listener and dispatch this event to the composable.
 - sample of how to handle exclusion of back gesture areas. Sample should contain a LazyRow, which has it's sides excluded from the system gesture invocation.
 - custom calendar, should be customizable like [this](https://github.com/kizitonwose/CalendarView). Info: [1](https://github.com/halilozercan/compose-schedule-calendar),[2](https://github.com/boguszpawlowski/ComposeCalendar),[3](https://github.com/sigmadeltasoftware/CalPose)
