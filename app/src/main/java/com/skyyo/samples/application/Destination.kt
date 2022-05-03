@@ -46,6 +46,7 @@ sealed class Destination(val route: String) {
     object Tab2 : Destination("tab2")
     object Tab3 : Destination("tab3")
     object GradientScroll : Destination("gradientScroll")
+    object NoticeableScrollableRow: Destination("noticeableScrollableRow")
     object ExoPlayerColumnReference : Destination("exoPlayerColumnRef")
     object ExoPlayerColumnIndexed : Destination("exoPlayerColumnIndexed")
     object ExoPlayerColumnAutoplay : Destination("exoPlayerColumnAutoplay")

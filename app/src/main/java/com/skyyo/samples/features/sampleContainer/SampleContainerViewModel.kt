@@ -145,6 +145,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.GradientScroll.route)
     }
 
+    fun goNoticeableScrollableRow() = navigationDispatcher.emit {
+        it.navigate(Destination.NoticeableScrollableRow.route)
+    }
+
     fun goExoPlayerColumnReference() = navigationDispatcher.emit {
         it.navigate(Destination.ExoPlayerColumnReference.route)
     }
