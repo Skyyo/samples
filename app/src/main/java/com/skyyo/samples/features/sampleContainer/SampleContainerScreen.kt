@@ -151,6 +151,9 @@ fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGradientScroll) {
         Text(text = "gradient change")
     }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goNoticeableScrollableRow) {
+        Text(text = "noticeable scrollable row")
+    }
     Spacer(modifier = Modifier.height(16.dp))
 }
 

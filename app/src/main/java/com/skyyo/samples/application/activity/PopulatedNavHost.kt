@@ -43,6 +43,7 @@ import com.skyyo.samples.features.navigateWithResult.withObject.catDetails.CatDe
 import com.skyyo.samples.features.navigateWithResult.withObject.catFeed.CatFeedScreen
 import com.skyyo.samples.features.navigationCores.bottomBar.BottomBarScreen
 import com.skyyo.samples.features.navigationCores.drawer.DrawerScreen
+import com.skyyo.samples.features.noticeableScrollableRow.NoticeableScrollableRowScreen
 import com.skyyo.samples.features.otp.OtpScreen
 import com.skyyo.samples.features.pagination.paging.CatsPagingScreen
 import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomScreen
@@ -149,6 +150,7 @@ fun PopulatedNavHost(
     composable(Destination.BottomBar.route) { BottomBarScreen() }
     composable(Destination.Drawer.route) { DrawerScreen() }
     composable(Destination.GradientScroll.route) { GradientScrollScreen() }
+    composable(Destination.NoticeableScrollableRow.route) { NoticeableScrollableRowScreen() }
     composable(Destination.ExoPlayerColumnReference.route) { ExoPlayerColumnReferenceScreen() }
     composable(Destination.ExoPlayerColumnIndexed.route) { ExoPlayerColumnIndexedScreen() }
     composable(Destination.ExoPlayerColumnAutoplay.route) { ExoPlayerColumnAutoplayScreen() }
