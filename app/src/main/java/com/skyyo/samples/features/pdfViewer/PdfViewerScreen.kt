@@ -11,6 +11,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -34,11 +35,15 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.skyyo.samples.R
 import com.skyyo.samples.extensions.goAppPermissions
 import com.skyyo.samples.features.zoomable.Zoomable
+import com.skyyo.samples.features.zoomable.rememberZoomableState
 import com.skyyo.samples.utils.OnClick
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
+import java.util.concurrent.Executors
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -47,6 +52,7 @@ fun PdfViewerScreen(viewModel: PdfViewerViewModel = hiltViewModel()) {
     val storagePermissionState = rememberPermissionState(Manifest.permission.READ_EXTERNAL_STORAGE)
     val uri by viewModel.uri.collectAsState()
     val pdfRenderer by viewModel.pdfRenderer.collectAsState()
+    val executor = remember { Executors.newSingleThreadExecutor().asCoroutineDispatcher() }
 
     ProvideWindowInsets {
         PermissionRequired(
@@ -83,20 +89,34 @@ fun PdfViewerScreen(viewModel: PdfViewerViewModel = hiltViewModel()) {
                 }
                 when {
                     pdfRenderer != null -> {
+                        val zoomableState = rememberZoomableState()
+                        val lazyListState = rememberLazyListState()
                         DisposableEffect(Unit) {
                             onDispose {
                                 pdfRenderer!!.close()
                             }
                         }
-                        Zoomable() {
-                            LazyColumn(Modifier.statusBarsPadding()) {
-                                items(pdfRenderer!!.pageCount) {
-                                    val bitmap = remember(it) {
-                                        generatePageBitmap(
-                                            pdfRenderer!!,
-                                            it,
-                                            PdfQuality.NORMAL
-                                        )
+                        Zoomable(state = zoomableState) {
+                            LazyColumn(Modifier.statusBarsPadding(), state = lazyListState) {
+                                items(pdfRenderer!!.pageCount) { item ->
+                                    val pagesRange = lazyListState.firstVisibleItemIndex - 1..lazyListState.firstVisibleItemIndex + 1
+                                    val quality = when {
+                                        pagesRange.contains(item) && zoomableState.scale > 1.5 -> PdfQuality.NORMAL
+                                        lazyListState.firstVisibleItemIndex == item && zoomableState.scale > 2 -> PdfQuality.ENHANCED
+                                        else -> PdfQuality.FAST
+                                    }
+                                    val bitmap by produceState<Bitmap?>(
+                                        initialValue = null,
+                                        key1 = item,
+                                        key2 = quality
+                                    ) {
+                                        value = withContext(executor) {
+                                            generatePageBitmap(
+                                                pdfRenderer!!,
+                                                item,
+                                                quality
+                                            )
+                                        }
                                     }
                                     PdfPageItem(bitmap = bitmap)
                                 }
@@ -170,16 +190,18 @@ fun StoragePermissionNotGrantedContent(@StringRes explanationStringId: Int, onCl
 }
 
 @Composable
-fun PdfPageItem(bitmap: Bitmap) {
-    Image(
-        bitmap = bitmap.asImageBitmap(),
-        contentDescription = "",
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .background(Color.White),
-        contentScale = ContentScale.Crop
-    )
+fun PdfPageItem(bitmap: Bitmap?) {
+    if (bitmap != null) {
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = "",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .background(Color.White),
+            contentScale = ContentScale.Crop
+        )
+    }
 }
 
 
@@ -187,7 +209,7 @@ fun generatePageBitmap(renderer: PdfRenderer, page: Int, pdfQuality: PdfQuality)
     val openedPage = renderer.openPage(page)
     val bitmapNew = Bitmap.createBitmap(
         openedPage.width * pdfQuality.ratio,
-        openedPage.height  * pdfQuality.ratio,
+        openedPage.height * pdfQuality.ratio,
         Bitmap.Config.ARGB_8888
     )
     openedPage.render(
