@@ -26,6 +26,7 @@ fun AutoFillScreen() {
     val firstName = remember { mutableStateOf("") }
     val lastName = remember { mutableStateOf("") }
     val phoneNumber = remember { mutableStateOf("") }
+    val creditCard = remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -36,8 +37,9 @@ fun AutoFillScreen() {
     ) {
         OutlinedTextField(
             modifier = Modifier.autofill(
+                value = email.value,
                 onFill = { email.value = it },
-                AutofillType.EmailAddress,
+                AutofillType.EmailAddress
             ),
             value = email.value,
             onValueChange = { email.value = it },
@@ -50,6 +52,7 @@ fun AutoFillScreen() {
 
         OutlinedTextField(
             modifier = Modifier.autofill(
+                value = firstName.value,
                 onFill = { firstName.value = it },
                 AutofillType.PersonFirstName,
             ),
@@ -61,9 +64,10 @@ fun AutoFillScreen() {
                 keyboardType = KeyboardType.Text
             ),
 
-        )
+            )
         OutlinedTextField(
             modifier = Modifier.autofill(
+                value = lastName.value,
                 onFill = { lastName.value = it },
                 AutofillType.PersonLastName,
             ),
@@ -77,6 +81,7 @@ fun AutoFillScreen() {
         )
         OutlinedTextField(
             modifier = Modifier.autofill(
+                value = phoneNumber.value,
                 onFill = { phoneNumber.value = it },
                 AutofillType.PhoneNumber,
             ),
@@ -84,8 +89,22 @@ fun AutoFillScreen() {
             onValueChange = { phoneNumber.value = it },
             label = { Text(text = "Phone number") },
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
+                imeAction = ImeAction.Next,
                 keyboardType = KeyboardType.Phone
+            ),
+        )
+        OutlinedTextField(
+            modifier = Modifier.autofill(
+                value = creditCard.value,
+                onFill = { creditCard.value = it },
+                AutofillType.CreditCardNumber,
+            ),
+            value = creditCard.value,
+            onValueChange = { creditCard.value = it },
+            label = { Text(text = "Credit card") },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
