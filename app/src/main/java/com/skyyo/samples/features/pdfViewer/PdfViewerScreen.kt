@@ -101,8 +101,8 @@ fun PdfViewerScreen(viewModel: PdfViewerViewModel = hiltViewModel()) {
                                 items(pdfRenderer!!.pageCount) { item ->
                                     val pagesRange = lazyListState.firstVisibleItemIndex - 1..lazyListState.firstVisibleItemIndex + 1
                                     val quality = when {
+                                        pagesRange.contains(item) && zoomableState.scale > 2 -> PdfQuality.ENHANCED
                                         pagesRange.contains(item) && zoomableState.scale > 1.5 -> PdfQuality.NORMAL
-                                        lazyListState.firstVisibleItemIndex == item && zoomableState.scale > 2 -> PdfQuality.ENHANCED
                                         else -> PdfQuality.FAST
                                     }
                                     val bitmap by produceState<Bitmap?>(
@@ -216,7 +216,10 @@ fun generatePageBitmap(renderer: PdfRenderer, page: Int, pdfQuality: PdfQuality)
         bitmapNew,
         null,
         null,
-        PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY
+        when(pdfQuality) {
+            PdfQuality.ENHANCED -> PdfRenderer.Page.RENDER_MODE_FOR_PRINT
+            else -> PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY
+        }
     )
     openedPage.close()
     return bitmapNew
