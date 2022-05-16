@@ -37,6 +37,26 @@ fun AutofillScreen() {
     val creditCard2InteractionSource = remember { MutableInteractionSource() }
     val firstName2InteractionSource = remember { MutableInteractionSource() }
 
+    val numberKeyboardOptions = remember {
+        KeyboardOptions(
+            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Number
+        )
+    }
+    val textKeyboardOptions = remember {
+        KeyboardOptions(
+            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Text
+        )
+    }
+    val creditCardAutofillTypes = remember {
+        listOf(
+            AutofillType.CreditCardNumber,
+            AutofillType.CreditCardExpirationYear,
+            AutofillType.CreditCardExpirationMonth,
+            AutofillType.CreditCardExpirationDay,
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,11 +77,8 @@ fun AutofillScreen() {
             onFill = {
                 email.value = it
             },
-            autofillTypes = listOf(AutofillType.EmailAddress),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Text
-            ),
+            autofillTypes = remember { listOf(AutofillType.EmailAddress) },
+            keyboardOptions = textKeyboardOptions,
             label = { Text(text = "Email") }
         )
         AutoFilledTextField(
@@ -73,16 +90,8 @@ fun AutofillScreen() {
             onFill = {
                 creditCard.value = it
             },
-            autofillTypes = listOf(
-                AutofillType.CreditCardNumber,
-                AutofillType.CreditCardExpirationYear,
-                AutofillType.CreditCardExpirationMonth,
-                AutofillType.CreditCardExpirationDay,
-            ),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Text
-            ),
+            autofillTypes = creditCardAutofillTypes,
+            keyboardOptions = numberKeyboardOptions,
             label = { Text(text = "Credit Card") }
         )
         AutoFilledTextField(
@@ -94,11 +103,8 @@ fun AutofillScreen() {
             onFill = {
                 firstName.value = it
             },
-            autofillTypes = listOf(AutofillType.PersonFirstName),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Text
-            ),
+            autofillTypes = remember { listOf(AutofillType.PersonFirstName) },
+            keyboardOptions = textKeyboardOptions,
             label = { Text(text = "First name") }
         )
         Spacer(modifier = Modifier.height(30.dp))
@@ -111,16 +117,13 @@ fun AutofillScreen() {
                     onFill = {
                         email2.value = TextFieldValue(text = it, selection = TextRange(it.length))
                     },
-                    autofillTypes = listOf(AutofillType.EmailAddress),
+                    autofillTypes = remember { listOf(AutofillType.EmailAddress) },
                     interactionSource = email2InteractionSource
                 ),
             value = email2.value,
             onValueChange = { email2.value = it },
             label = { Text(text = "Email") },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Text
-            ),
+            keyboardOptions = textKeyboardOptions,
             interactionSource = email2InteractionSource
         )
 
@@ -135,21 +138,13 @@ fun AutofillScreen() {
                             selection = TextRange(it.length)
                         )
                     },
-                    autofillTypes = listOf(
-                        AutofillType.CreditCardNumber,
-                        AutofillType.CreditCardExpirationYear,
-                        AutofillType.CreditCardExpirationMonth,
-                        AutofillType.CreditCardExpirationDay,
-                    ),
+                    autofillTypes = creditCardAutofillTypes,
                     interactionSource = creditCard2InteractionSource
                 ),
             value = creditCard2.value,
             onValueChange = { creditCard2.value = it },
             label = { Text(text = "Credit card") },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Number
-            ),
+            keyboardOptions = numberKeyboardOptions,
             interactionSource = creditCard2InteractionSource
         )
         OutlinedTextField(
@@ -163,21 +158,21 @@ fun AutofillScreen() {
                             selection = TextRange(it.length)
                         )
                     },
-                    autofillTypes = listOf(AutofillType.PersonFirstName),
+                    autofillTypes = remember { listOf(AutofillType.PersonFirstName) },
                     interactionSource = firstName2InteractionSource
                 ),
             value = firstName2.value,
             onValueChange = { firstName2.value = it },
             label = { Text(text = "First name") },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Text
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    keyboardController?.hide()
-                }
-            ),
+            keyboardOptions = remember {
+                KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Text
+                )
+            },
+            keyboardActions = remember {
+                KeyboardActions(onDone = { keyboardController?.hide() })
+            },
             interactionSource = firstName2InteractionSource
         )
     }
