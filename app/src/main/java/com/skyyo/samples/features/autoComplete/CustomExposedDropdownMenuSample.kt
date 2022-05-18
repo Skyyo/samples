@@ -2,16 +2,9 @@ package com.skyyo.samples.features.autoComplete
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 
@@ -51,13 +44,7 @@ fun CustomExposedDropdownMenuSample(modifier: Modifier = Modifier, initialList: 
             },
             label = { Text("Label") },
             trailingIcon = {
-                IconButton(onClick = {}, modifier = Modifier.clearAndSetSemantics {  }) {
-                    Icon(
-                        modifier = Modifier.rotate(if (expanded) 180f else 360f),
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = null
-                    )
-                }
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
         )
 

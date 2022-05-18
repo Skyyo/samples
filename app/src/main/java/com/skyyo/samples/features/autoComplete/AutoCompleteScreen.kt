@@ -47,11 +47,11 @@ fun AutoCompleteScreen() {
         NativeExposedDropDownMenuSample(modifier = Modifier.fillMaxWidth(), initialList = initialList)
         Spacer(modifier = Modifier.height(60.dp))
         Text(text = "Custom exposed dropdown menu")
-        CustomExposedDropdownMenuSample(modifier = Modifier.fillMaxWidth(), initialList = initialList)
+        CustomExposedDropdownMenuSample(modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp), initialList = initialList)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "AndroidView")
         AndroidViewTextFieldWithDropDownSample(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
             items = provideCountries(),
             selectedValue = "",
         )
