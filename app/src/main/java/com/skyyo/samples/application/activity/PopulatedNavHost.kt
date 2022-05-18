@@ -16,6 +16,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.ProfileGraph
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
+import com.skyyo.samples.features.autoComplete.AutoCompleteScreen
 import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScreen
@@ -123,6 +124,7 @@ fun PopulatedNavHost(
     composable(Destination.ParallaxEffect.route) { ParallaxEffectScreen() }
     composable(Destination.CustomView.route) { CustomViewScreen() }
     composable(Destination.MarqueeText.route) { MarqueeTextScreen() }
+    composable(Destination.AutoComplete.route) { AutoCompleteScreen() }
     navigation(
         route = ProfileGraph.route,
         startDestination = ProfileGraph.Profile.route
