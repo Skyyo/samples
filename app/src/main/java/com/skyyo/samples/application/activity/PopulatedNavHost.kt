@@ -30,6 +30,7 @@ import com.skyyo.samples.features.exoPlayer.columnReference.ExoPlayerColumnRefer
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
+import com.skyyo.samples.features.imagePicker.ImagePicker
 import com.skyyo.samples.features.infiniteViewPager.InfiniteViewPagerScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
@@ -158,4 +159,5 @@ fun PopulatedNavHost(
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
     composable(Destination.PdfViewer.route) { PdfViewerScreen() }
+    composable(Destination.ImagePicker.route) { ImagePicker() }
 }

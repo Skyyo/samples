@@ -54,6 +54,7 @@ sealed class Destination(val route: String) {
     object DominantColor : Destination("dominantColor")
     object Zoomable : Destination("zoomable")
     object PdfViewer : Destination("pdfViewer")
+    object ImagePicker : Destination("iamgePicker")
 }
 
 sealed class ProfileGraph(val route: String) {
