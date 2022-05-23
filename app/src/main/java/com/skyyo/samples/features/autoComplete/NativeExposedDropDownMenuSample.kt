@@ -7,10 +7,10 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NativeExposedDropDownMenuSample(modifier: Modifier = Modifier, initialList: List<String>) {
+fun NativeExposedDropDownMenuSample(modifier: Modifier = Modifier, countries: List<String>) {
     var expanded by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
-    var options by remember { mutableStateOf(initialList) }
+    var suggestions by remember { mutableStateOf(countries) }
 
     ExposedDropdownMenuBox(
         modifier = modifier,
@@ -24,10 +24,10 @@ fun NativeExposedDropDownMenuSample(modifier: Modifier = Modifier, initialList: 
             value = query,
             onValueChange = {
                 query = it
-                options = if (it.isEmpty()) initialList
+                suggestions = if (it.isEmpty()) countries
                 else {
-                    val filteredList = initialList.filter {
-                        it.lowercase().startsWith(query.lowercase()) && it != query
+                    val filteredList = countries.filter { country ->
+                        country.lowercase().startsWith(query.lowercase()) && country != query
                     }
                     filteredList
                 }
@@ -43,7 +43,7 @@ fun NativeExposedDropDownMenuSample(modifier: Modifier = Modifier, initialList: 
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            options.forEach { selectionOption ->
+            suggestions.forEach { selectionOption ->
                 DropdownMenuItem(
                     onClick = {
                         query = selectionOption

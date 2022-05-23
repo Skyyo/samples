@@ -249,7 +249,7 @@ internal fun calculateTransformOrigin(
 fun CustomExposedDropdownMenuBox(
     modifier: Modifier = Modifier,
     expanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit,
+    onClick: () -> Unit,
     content: @Composable CustomExposedDropdownMenuBoxScope.() -> Unit,
 ) {
     val density = LocalDensity.current
@@ -288,9 +288,7 @@ fun CustomExposedDropdownMenuBox(
                     menuHeight = newHeight
                 }
             }
-            .expandable(
-                onExpandedChange = { onExpandedChange(!expanded) },
-            )
+            .expandable(onClick = onClick)
             .focusRequester(focusRequester)
             .onFocusChanged { focusState ->
                 hasFocus = focusState.isFocused
@@ -340,7 +338,7 @@ private fun updateHeight(
 }
 
 private fun Modifier.expandable(
-    onExpandedChange: () -> Unit
+    onClick: () -> Unit
 ) = pointerInput(Unit) {
     forEachGesture {
         coroutineScope {
@@ -351,13 +349,13 @@ private fun Modifier.expandable(
                 } while (
                     !event.changes.fastAll { it.changedToUp() }
                 )
-                onExpandedChange.invoke()
+                onClick.invoke()
             }
         }
     }
 }.semantics {
     onClick {
-        onExpandedChange.invoke()
+        onClick.invoke()
         true
     }
 }

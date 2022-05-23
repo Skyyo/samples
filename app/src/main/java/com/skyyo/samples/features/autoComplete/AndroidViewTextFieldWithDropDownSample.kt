@@ -10,7 +10,7 @@ import com.skyyo.samples.R
 
 @Composable
 fun AndroidViewTextFieldWithDropDownSample(
-    items: List<String>,
+    suggestions: List<String>,
     selectedValue: String?,
     modifier: Modifier = Modifier,
     onSelect: (Int) -> Unit = {}
@@ -21,7 +21,7 @@ fun AndroidViewTextFieldWithDropDownSample(
                 TextInputLayout.inflate(context, R.layout.text_input_field, null) as TextInputLayout
 
             val autoCompleteTextView = textInputLayout.editText as? AutoCompleteTextView
-            val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, items)
+            val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, suggestions)
             autoCompleteTextView?.setAdapter(adapter)
             autoCompleteTextView?.setText(selectedValue, false)
             autoCompleteTextView?.setOnItemClickListener { _, _, index, _ -> onSelect(index) }
@@ -30,7 +30,7 @@ fun AndroidViewTextFieldWithDropDownSample(
         update = { textInputLayout ->
             val autoCompleteTextView = textInputLayout.editText as? AutoCompleteTextView
             val adapter =
-                ArrayAdapter(textInputLayout.context, android.R.layout.simple_list_item_1, items)
+                ArrayAdapter(textInputLayout.context, android.R.layout.simple_list_item_1, suggestions)
             autoCompleteTextView?.setAdapter(adapter)
             autoCompleteTextView?.setText(selectedValue, false)
         },
