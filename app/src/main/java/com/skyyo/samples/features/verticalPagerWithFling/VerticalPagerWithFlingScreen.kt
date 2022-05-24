@@ -1,13 +1,8 @@
-package com.skyyo.samples.features.videopager
+package com.skyyo.samples.features.verticalPagerWithFling
 
-import android.net.Uri
-import androidx.compose.foundation.gestures.FlingBehavior
-import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.layout.Spacer
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
@@ -15,33 +10,25 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
+import com.skyyo.samples.features.verticalPagerWithFling.composables.AutoPlayVideoCard
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.SnapOffsets
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 private const val MAX_ITEM_FLING = 1
 
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
-fun VideoPagerWithFlingScreen(viewModel: VideoPagerWithFlingViewModel = hiltViewModel()) {
+fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val listState = rememberLazyListState()
@@ -54,10 +41,9 @@ fun VideoPagerWithFlingScreen(viewModel: VideoPagerWithFlingViewModel = hiltView
         override fun onPlaybackStateChanged(playbackState: Int) {
             super.onPlaybackStateChanged(playbackState)
             if (playbackState == Player.STATE_ENDED) {
-                coroutineScope.launch {
-                    playingVideoIndex .value?.let { index ->
-                        listState.animateScrollToItem(index)
-                    }
+                playingVideoIndex.value?.let { index ->
+                    Log.d("vitalik", index.toString())
+                    coroutineScope.launch { listState.animateScrollToItem(index + 1) }
                 }
             }
         }

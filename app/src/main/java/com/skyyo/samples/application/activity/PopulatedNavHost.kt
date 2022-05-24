@@ -57,7 +57,7 @@ import com.skyyo.samples.features.sharedViewModel.profile.ProfileScreen
 import com.skyyo.samples.features.snackbar.SnackbarScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
-import com.skyyo.samples.features.videopager.VideoPagerWithFlingScreen
+import com.skyyo.samples.features.verticalPagerWithFling.VideoPagerWithFlingScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
 
 @OptIn(

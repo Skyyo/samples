@@ -1,4 +1,4 @@
-package com.skyyo.samples.features.videopager
+package com.skyyo.samples.features.verticalPagerWithFling
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class VideoPagerWithFlingViewModel @Inject constructor() : ViewModel() {
+class VerticalPagerWithFlingViewModel @Inject constructor() : ViewModel() {
 
     val videos = MutableLiveData<List<VideoItem>>()
 
