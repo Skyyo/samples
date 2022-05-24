@@ -1,17 +1,20 @@
 package com.skyyo.samples.application.activity
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.plusAssign
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -23,22 +26,35 @@ import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.persistance.DataStoreManager
 import com.skyyo.samples.theme.IgdbBrowserTheme
 import com.skyyo.samples.utils.NavigationDispatcher
+import com.skyyo.samples.utils.supportedLanguages
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var dataStoreManager: DataStoreManager
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface LanguageEntryPoint {
+        fun getDataStoreManager(): DataStoreManager
+    }
+
+    private lateinit var dataStoreManager: DataStoreManager
 
     @Inject
     lateinit var navigationDispatcher: NavigationDispatcher
 
     @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        configureLanguage()
         super.onCreate(savedInstanceState)
         applyEdgeToEdge()
 
@@ -93,6 +109,20 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun configureLanguage() {
+        val accessors = EntryPointAccessors.fromApplication(this, LanguageEntryPoint::class.java)
+        dataStoreManager = accessors.getDataStoreManager()
+        val currentLocales = AppCompatDelegate.getApplicationLocales()
+        val currentSystemLocale = currentLocales.getFirstMatch(supportedLanguages.map { it.code }.toTypedArray())
+        if (currentSystemLocale != null) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                dataStoreManager.setLanguageCode(currentSystemLocale.language)
+            }
+        } else {
+            val languageCode = runBlocking { dataStoreManager.getLanguageCode().first() }
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageCode))
+        }
+    }
 
     private fun applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)

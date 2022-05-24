@@ -19,4 +19,6 @@
     <string name="please_grant_storage_permission">Please\ngrant storage permission to open PDF file</string>
     <string name="please_grant_storage_permission_from_settings">Please grant storage permission from application settings</string>
     <string name="error_otp_wrong">Otp is wrong</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

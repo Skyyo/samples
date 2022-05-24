@@ -20,4 +20,6 @@
     <string name="please_grant_storage_permission">Будь-ласка\n надайте доступ до сховища для відкриття PDF файлів</string>
     <string name="please_grant_storage_permission_from_settings">Будь-ласка надайте доступ до сховища з налаштувань аплікації</string>
     <string name="error_otp_wrong">Otp код неправильний</string>
+    <string name="ok">Добре</string>
+    <string name="cancel">Відмінити</string>
 </resources>

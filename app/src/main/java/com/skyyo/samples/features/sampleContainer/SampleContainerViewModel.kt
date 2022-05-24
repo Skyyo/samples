@@ -180,4 +180,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goImagePicker() = navigationDispatcher.emit {
         it.navigate(Destination.ImagePicker.route)
     }
+
+    fun goLanguagePicker() = navigationDispatcher.emit {
+        it.navigate(Destination.LanguagePicker.route)
+    }
 }
