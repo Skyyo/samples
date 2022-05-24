@@ -47,7 +47,7 @@ sealed class Destination(val route: String) {
     object ExoPlayerColumnIndexed : Destination("exoPlayerColumnIndexed")
     object ExoPlayerColumnAutoplay : Destination("exoPlayerColumnAutoplay")
     object ExoPlayerColumnDynamicThumb : Destination("exoPlayerColumnDynamicThumb")
-    object VideoPager : Destination("videoPager")
+    object VerticalPagerWithFling : Destination("videopager")
     object DominantColor : Destination("dominantColor")
 }
 

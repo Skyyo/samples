@@ -192,7 +192,7 @@ fun ExoPlayerSamples(viewModel: SampleContainerViewModel) {
     ) { Text(text = "dynamic thumbnails") }
     Button(
         modifier = Modifier.fillMaxWidth(),
-        onClick = viewModel::goVideoPager
+        onClick = viewModel::goVerticalPagerWithFling
     ) { Text(text = "videopager") }
     Spacer(modifier = Modifier.height(16.dp))
 }
