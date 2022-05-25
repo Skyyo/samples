@@ -1,7 +1,7 @@
 package com.skyyo.samples.features.imagePicker
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.READ_MEDIA_IMAGES
+//import android.Manifest.permission.READ_MEDIA_IMAGES
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -26,11 +26,11 @@ fun ImagePicker() {
     val pickSingleImageRequest = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {}
     val pickMultipleImagesRequest = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) {}
     val permissionState =
-        if (Build.VERSION.SDK_INT >= 33) {
+        /*if (Build.VERSION.SDK_INT >= 33) {
             rememberPermissionState(permission = READ_MEDIA_IMAGES)
-        } else {
+        } else {*/
             rememberPermissionState(permission = READ_EXTERNAL_STORAGE)
-        }
+        //}
     ProvideWindowInsets {
         Column(
             Modifier
