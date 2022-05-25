@@ -7,10 +7,9 @@ import dagger.hilt.android.internal.managers.ViewComponentManager
 
 fun Context.getLifecycle() = when(this) {
     is ViewComponentManager.FragmentContextWrapper -> {
-        val wrapperInstance = this
         val fragmentMethod = ViewComponentManager.FragmentContextWrapper::class.java.getDeclaredMethod("getFragment")
         fragmentMethod.isAccessible = true
-        (fragmentMethod.invoke(wrapperInstance) as Fragment).lifecycle
+        (fragmentMethod.invoke(this) as Fragment).lifecycle
     }
     else -> (this as ComponentActivity).lifecycle
 }
