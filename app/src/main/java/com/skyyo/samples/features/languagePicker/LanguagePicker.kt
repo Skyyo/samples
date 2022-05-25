@@ -10,13 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.skyyo.samples.R
-import com.skyyo.samples.utils.getLifecycle
 import com.skyyo.samples.utils.supportedLanguages
 import kotlinx.coroutines.flow.receiveAsFlow
 
@@ -26,8 +26,8 @@ fun LanguagePicker(viewModel: LanguageViewModel = hiltViewModel()) {
     val currentLanguage by viewModel.currentLanguage.collectAsState()
     val text by viewModel.text.collectAsState()
 
-    val lifecycle = context.getLifecycle()
-    val events = remember(viewModel.events, lifecycle) {
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val events = remember(viewModel.events) {
         viewModel.events.receiveAsFlow().flowWithLifecycle(lifecycle)
     }
 
