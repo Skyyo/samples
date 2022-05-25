@@ -16,10 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.skyyo.samples.R
 import com.skyyo.samples.application.activity.BOTTOM_NAVIGATION_HEIGHT
+import com.skyyo.samples.features.languagePicker.ARG_TEXT
 
 class SecondTabFragment: Fragment() {
     override fun onCreateView(
@@ -37,7 +39,7 @@ class SecondTabFragment: Fragment() {
                 contentAlignment = Alignment.Center
             ) {
                 Text(text = stringResource(R.string.change_language), modifier = Modifier.clickable {
-                    findNavController().navigate(R.id.goLanguage)
+                    findNavController().navigate(R.id.goLanguage, bundleOf(ARG_TEXT to "123"))
                 })
             }
         }

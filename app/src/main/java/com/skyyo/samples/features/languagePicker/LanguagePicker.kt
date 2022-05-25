@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 fun LanguagePicker(viewModel: LanguageViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val currentLanguage by viewModel.currentLanguage.collectAsState()
+    val text by viewModel.text.collectAsState()
 
     val lifecycle = context.getLifecycle()
     val events = remember(viewModel.events, lifecycle) {
@@ -51,6 +53,8 @@ fun LanguagePicker(viewModel: LanguageViewModel = hiltViewModel()) {
             .statusBarsPadding()
             .padding(20.dp)
     ) {
+        TextField(value = text, onValueChange = viewModel::setText)
+
         Text(
             text = "Current language: " + currentLanguage.name,
             modifier = Modifier.padding(top = 10.dp)

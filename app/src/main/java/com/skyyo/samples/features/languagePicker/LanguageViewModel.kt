@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.languagePicker
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.application.persistance.DataStoreManager
@@ -14,8 +15,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+const val ARG_TEXT = "text"
+
 @HiltViewModel
 class LanguageViewModel @Inject constructor(
+    private val handle: SavedStateHandle,
     private val dataStoreManager: DataStoreManager
 ): ViewModel() {
     val events = Channel<LanguageEvent>(Channel.UNLIMITED)
@@ -26,6 +30,11 @@ class LanguageViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000L),
         initialValue = supportedLanguages.first { it.code == DEFAULT_LANGUAGE_CODE }
     )
+    val text = handle.getStateFlow(ARG_TEXT, "")
+
+    fun setText(newText: String) {
+        handle[ARG_TEXT] = newText
+    }
 
     fun changeLanguage(language: Language) {
         if (language != currentLanguage.value) {
