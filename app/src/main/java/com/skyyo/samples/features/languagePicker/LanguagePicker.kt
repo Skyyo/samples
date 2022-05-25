@@ -1,7 +1,6 @@
 package com.skyyo.samples.features.languagePicker
 
 import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.RadioButton
@@ -16,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.skyyo.samples.R
+import com.skyyo.samples.utils.getLifecycle
 import com.skyyo.samples.utils.supportedLanguages
 import kotlinx.coroutines.flow.receiveAsFlow
 
@@ -24,7 +24,7 @@ fun LanguagePicker(viewModel: LanguageViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val currentLanguage by viewModel.currentLanguage.collectAsState()
 
-    val lifecycle = (context as ComponentActivity).lifecycle
+    val lifecycle = context.getLifecycle()
     val events = remember(viewModel.events, lifecycle) {
         viewModel.events.receiveAsFlow().flowWithLifecycle(lifecycle)
     }

@@ -22,4 +22,6 @@
     <string name="error_otp_wrong">Otp код неправильний</string>
     <string name="ok">Добре</string>
     <string name="cancel">Відмінити</string>
+    <string name="menu_first_tab">Перша</string>
+    <string name="menu_second_tab">Друга</string>
 </resources>

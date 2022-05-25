@@ -21,4 +21,6 @@
     <string name="error_otp_wrong">Otp is wrong</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="menu_first_tab">First tab</string>
+    <string name="menu_second_tab">Second tab</string>
 </resources>
