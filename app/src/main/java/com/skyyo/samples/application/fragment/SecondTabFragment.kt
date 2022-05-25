@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -35,7 +36,7 @@ class SecondTabFragment: Fragment() {
                     .padding(bottom = BOTTOM_NAVIGATION_HEIGHT.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "change language", modifier = Modifier.clickable {
+                Text(text = stringResource(R.string.change_language), modifier = Modifier.clickable {
                     findNavController().navigate(R.id.goLanguage)
                 })
             }

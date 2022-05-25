@@ -24,4 +24,5 @@
     <string name="cancel">Відмінити</string>
     <string name="menu_first_tab">Перша</string>
     <string name="menu_second_tab">Друга</string>
+    <string name="change_language">Змінити мову</string>
 </resources>

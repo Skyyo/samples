@@ -3,4 +3,5 @@
     <string name="app_name">Samples</string>
     <string name="menu_first_tab">Hebrew 1</string>
     <string name="menu_second_tab">Hebrew 2</string>
+    <string name="change_language">Change hebrew</string>
 </resources>
