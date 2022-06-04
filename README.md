@@ -3,9 +3,6 @@ For pagination & network images it uses [CATAAS](https://cataas.com/#/).
 
 # Known issues
 
-Navigation-Compose
-- [Issue](https://issuetracker.google.com/issues/200817333) with fast tapping on destination
-
 Paging
 - Can't declare state listeners on the Flow<PagingData<Value>> or Pager or similar. We're forced to propagate important events from bottom to top instead of top to bottom. [issue](https://issuetracker.google.com/issues/200577793)
 
@@ -34,7 +31,6 @@ Miscellaneous
 - Need to find an alternative to onboarding guides from the view system like these libraries provided: [onboardingFlow](https://github.com/MrIceman/onboardingflow),[TapTargetView](https://github.com/KeepSafe/TapTargetView),[Spotlight](https://github.com/TakuSemba/Spotlight)
 
 # Limitations
-- We're forced to use [ProvideWindowInsets](https://google.github.io/accompanist/insets/#usage) composable as a wrapper for composables in fragment based projects
 - There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)
 - Deep links might require lot of additional work if we need to open them in a specific bottom bar / drawer tab.
 - We need to use [setViewCompositionStrategy](https://developer.android.com/jetpack/compose/interop/interop-apis) when working with fragments
@@ -53,9 +49,6 @@ Paging ( all cases should be tested with both PagingSource & RemoteMediator vers
 Pager
 - add tab indicator animation like on google weather application.
 - update ViewPager sample since they've removed scroll limit. Need to see when would we really want to use it now instead of directly using LazyColumn/Row.
-
-Snap behaviour ( seems there is already [WIP](https://twitter.com/chrisbanes/status/1442909344597635072) on it and it might be available on accompanist soon
-- grid snapping
 
 Google Maps
 - try out the [compose maps version](https://github.com/googlemaps/android-maps-compose), and check all issues related to the maps we have right now. Especially regarding dynamic styling. 
@@ -78,22 +71,16 @@ There is a [library](https://github.com/canopas/Intro-showcase-view) which needs
 
 
 Uncategorized
-- spinners with a lot of items like country flags etc.
 - Draw / hide something using coordinates. Look into ```onGloballyPositioned``` modifier
-- How to do custom shapes ripples
+- How to do custom shaped ripples
 - Staggered grid example
 - https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
-- compose with ad mob
 - draggable sample like [here](https://proandroiddev.com/jetpack-compose-calculator-ui-4dfa2ab9048e). Sample which allows to drag elements in 1 screen from top, right & bottom for example.
 - add reselect bottomBar tab listener and dispatch this event to the composable.
 - sample of how to handle exclusion of back gesture areas. Sample should contain a LazyRow, which has it's sides excluded from the system gesture invocation.
-- custom calendar, should be customizable like [this](https://github.com/kizitonwose/CalendarView). Info: [1](https://github.com/halilozercan/compose-schedule-calendar),[2](https://github.com/boguszpawlowski/ComposeCalendar),[3](https://github.com/sigmadeltasoftware/CalPose)
 - DownloadManager sample. Should cover all cases (internet connection loss, fresh boot etc, cancellation) Compare with WorkManager, and describe pros & cons.
 - [Baseline Profile](https://developer.android.com/studio/profile/baselineprofiles#creating-profile-rules). Measure the impact on dummy flows
-
 - check the issue with compose & svg's. Icons don't mirror?
-- add flexible autocomplete & auto-fill sample/samples
-- exoplayer sample with gestures like [here](https://github.com/nihk/exo-viewpager-fun)
   
 # License
 ```
