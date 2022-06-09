@@ -180,4 +180,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goPdfViewer() = navigationDispatcher.emit {
         it.navigate(Destination.PdfViewer.route)
     }
+
+    fun goCalendar() = navigationDispatcher.emit {
+        it.navigate(Destination.Calendar.route)
+    }
 }
