@@ -33,11 +33,10 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
     val lifecycleOwner = LocalLifecycleOwner.current
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
     val videos by viewModel.videos.observeAsState(listOf())
     val playingVideoItem = remember { mutableStateOf(videos.firstOrNull()) }
     val playingVideoIndex = remember { mutableStateOf<Int?>(null) }
-    val flingListener = remember {
+    val videoPlaybackStateChangedListener = remember {
         object : Player.Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
                 super.onPlaybackStateChanged(playbackState)
@@ -48,6 +47,11 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
                     }
                 }
             }
+        }
+    }
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().also {
+            it.addListener(videoPlaybackStateChangedListener)
         }
     }
 
@@ -67,7 +71,6 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
         } else {
             exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem.value!!.mediaUrl))
             exoPlayer.prepare()
-            exoPlayer.addListener(flingListener)
             exoPlayer.playWhenReady = true
         }
     }
@@ -95,7 +98,7 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
             lazyListState = listState,
             snapOffsetForItem = SnapOffsets.Center,
             snapIndex = { _, startIndex, targetIndex ->
-                targetIndex.coerceIn(startIndex - MAX_ITEM_FLING, startIndex + MAX_ITEM_FLING )
+                targetIndex.coerceIn(startIndex - MAX_ITEM_FLING, startIndex + MAX_ITEM_FLING)
             }
         )
     ) {
