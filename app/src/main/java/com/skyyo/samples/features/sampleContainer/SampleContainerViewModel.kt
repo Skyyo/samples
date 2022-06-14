@@ -169,6 +169,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.ExoPlayerColumnDynamicThumb.route)
     }
 
+    fun goVerticalPagerWithFling() = navigationDispatcher.emit {
+        it.navigate(Destination.VerticalPagerWithFling.route)
+    }
+
     fun goDominantColor() = navigationDispatcher.emit {
         it.navigate(Destination.DominantColor.route)
     }
