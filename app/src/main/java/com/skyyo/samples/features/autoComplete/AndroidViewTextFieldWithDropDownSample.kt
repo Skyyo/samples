@@ -22,20 +22,21 @@ fun AndroidViewTextFieldWithDropDownSample(
         ArrayAdapter(context, android.R.layout.simple_list_item_1, suggestions)
     }
     val textInputLayout = remember {
-        TextInputLayout.inflate(context, R.layout.text_input_field, null) as TextInputLayout
+        (TextInputLayout.inflate(
+            context,
+            R.layout.text_input_field,
+            null
+        ) as TextInputLayout).also { til ->
+            (til.editText as AutoCompleteTextView).setOnItemClickListener { _, _, index, _ ->
+                onSelect(index)
+            }
+        }
     }
     val autoCompleteTextView = remember { textInputLayout.editText as? AutoCompleteTextView }
 
     AndroidView(
         modifier = modifier,
-        factory = {
-            autoCompleteTextView?.apply {
-                setAdapter(adapter)
-                setText(selectedValue)
-                setOnItemClickListener { _, _, index, _ -> onSelect(index) }
-            }
-            textInputLayout
-        },
+        factory = { textInputLayout },
         update = {
             autoCompleteTextView?.setAdapter(adapter)
             autoCompleteTextView?.setText(selectedValue, false)
