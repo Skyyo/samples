@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.skyyo.samples">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,13 +10,16 @@
 
     <application
         android:name="com.skyyo.samples.application.Application"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.SamplesTheme">
+        android:theme="@style/Theme.SamplesTheme"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/full_backup_content"
+        tools:targetApi="s">
         <activity
             android:name="com.skyyo.samples.application.activity.MainActivity"
             android:exported="true"
