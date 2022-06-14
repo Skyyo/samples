@@ -32,18 +32,20 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     val exoPlayer = remember { ExoPlayer.Builder(context).build() }
     val videos by viewModel.videos.observeAsState(listOf())
     val playingVideoItem = remember { mutableStateOf(videos.firstOrNull()) }
     val playingVideoIndex = remember { mutableStateOf<Int?>(null) }
-    val coroutineScope = rememberCoroutineScope()
-    val flingListener = object : Player.Listener {
-        override fun onPlaybackStateChanged(playbackState: Int) {
-            super.onPlaybackStateChanged(playbackState)
-            if (playbackState == Player.STATE_ENDED) {
-                playingVideoIndex.value?.let { index ->
-                    Log.d("vitalik", index.toString())
-                    coroutineScope.launch { listState.animateScrollToItem(index + 1) }
+    val flingListener = remember {
+        object : Player.Listener {
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                super.onPlaybackStateChanged(playbackState)
+                if (playbackState == Player.STATE_ENDED) {
+                    playingVideoIndex.value?.let { index ->
+                        Log.d("vitalik", index.toString())
+                        coroutineScope.launch { listState.animateScrollToItem(index + 1) }
+                    }
                 }
             }
         }
