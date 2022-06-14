@@ -38,9 +38,12 @@ fun DrawerCore(
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     val animationSpec = remember { tween<Float>(500) }
+    BackHandler(enabled = scaffoldState.drawerState.isOpen) {
+        scope.launch { scaffoldState.drawerState.close() }
+    }
 
     DisposableEffect(Unit) {
-        val callback = NavController.OnDestinationChangedListener { _, destination, args ->
+        val navigationCallback = NavController.OnDestinationChangedListener { _, destination, args ->
             when (destination.route) {
 //                Destination.Tab3.route -> {
 //                    systemUiController.statusBarDarkContentEnabled = false
@@ -52,9 +55,9 @@ fun DrawerCore(
                 }
             }
         }
-        navController.addOnDestinationChangedListener(callback)
+        navController.addOnDestinationChangedListener(navigationCallback)
         onDispose {
-            navController.removeOnDestinationChangedListener(callback)
+            navController.removeOnDestinationChangedListener(navigationCallback)
         }
     }
 
