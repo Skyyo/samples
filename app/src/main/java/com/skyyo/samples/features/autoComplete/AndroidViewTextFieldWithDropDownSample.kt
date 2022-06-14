@@ -18,7 +18,7 @@ fun AndroidViewTextFieldWithDropDownSample(
     onSelect: (Int) -> Unit = {},
 ) {
     val context = LocalContext.current
-    val adapter = remember {
+    val adapter = remember(suggestions) {
         ArrayAdapter(context, android.R.layout.simple_list_item_1, suggestions)
     }
     val textInputLayout = remember {
@@ -27,6 +27,7 @@ fun AndroidViewTextFieldWithDropDownSample(
     val autoCompleteTextView = remember { textInputLayout.editText as? AutoCompleteTextView }
 
     AndroidView(
+        modifier = modifier,
         factory = {
             autoCompleteTextView?.apply {
                 setAdapter(adapter)
@@ -35,6 +36,9 @@ fun AndroidViewTextFieldWithDropDownSample(
             }
             textInputLayout
         },
-        modifier = modifier
+        update = {
+            autoCompleteTextView?.setAdapter(adapter)
+            autoCompleteTextView?.setText(selectedValue, false)
+        },
     )
 }
