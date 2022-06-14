@@ -1,6 +1,7 @@
 package com.skyyo.samples.application.activity
 
 import android.os.Bundle
+import android.window.OnBackInvokedDispatcher
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -42,11 +43,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-private const val USE_BOTTOM_NAVIGATION_WITH_FRAGMENTS = true
+private const val USE_BOTTOM_NAVIGATION_WITH_FRAGMENTS = false
 const val BOTTOM_NAVIGATION_HEIGHT = 56
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    val backPressedDispatcher = OnBackInvokedDispatcher()
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
@@ -152,6 +155,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
+
+    override fun onBackPressed() {
+        if (!backPressedDispatcher.handleOnBackPress()) {
+            super.onBackPressed()
+        }
     }
 }
 
