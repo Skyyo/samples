@@ -3,6 +3,7 @@ package com.skyyo.samples.features.languagePicker
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -15,9 +16,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.flowWithLifecycle
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.WorkManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.skyyo.samples.R
 import com.skyyo.samples.utils.supportedLanguages
+import com.skyyo.samples.worker.ExpeditedWorker
+import com.skyyo.samples.worker.ForegroundWorker
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
@@ -54,7 +60,23 @@ fun LanguagePicker(viewModel: LanguageViewModel = hiltViewModel()) {
             .padding(20.dp)
     ) {
         TextField(value = text, onValueChange = viewModel::setText)
+        Button(modifier = Modifier.padding(vertical = 10.dp), onClick = {
+            val request = OneTimeWorkRequestBuilder<ExpeditedWorker>()
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .build()
+            WorkManager.getInstance(context).enqueue(request)
+        }) {
+            Text(text = "start expedited work")
+        }
 
+        Button(modifier = Modifier.padding(vertical = 10.dp), onClick = {
+            val request = OneTimeWorkRequestBuilder<ForegroundWorker>()
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .build()
+            WorkManager.getInstance(context).enqueue(request)
+        }) {
+            Text(text = "start foreground work")
+        }
         Text(
             text = "Current language: " + currentLanguage.name,
             modifier = Modifier.padding(top = 10.dp)
