@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.skyyo.samples.R
 import com.skyyo.samples.extensions.observeBackStackStateHandle
-import com.skyyo.samples.features.languagePicker.ARG_TEXT
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
@@ -29,5 +28,5 @@ class SecondTabViewModel @Inject constructor(
         firstTabHandle[FIRST_TAB_INPUT] = newInput
     }
 
-    fun goLanguage() = navigationDispatcher.emit { it.navigate(R.id.goLanguage, bundleOf(ARG_TEXT to "123")) }
+    fun goLanguage() = navigationDispatcher.emit { it.navigate(R.id.goLanguage) }
 }
