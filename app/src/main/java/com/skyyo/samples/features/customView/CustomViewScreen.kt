@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
+import android.window.OnBackInvokedCallback
+import android.window.OnBackInvokedDispatcher
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -25,12 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.statusBarsPadding
-import com.skyyo.samples.application.activity.MainActivity
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.Method
-import java.lang.reflect.Proxy
 import kotlin.math.roundToInt
-
 
 @Composable
 fun CustomViewScreen(viewModel: CustomViewVM = hiltViewModel()) {
@@ -188,13 +185,8 @@ private fun DoubleBackPressComposable(doubleBackPressAction: () -> Unit) {
             newBackPressTime
         }
     }
-    Spacer(modifier = Modifier
-        .fillMaxWidth()
-        .height(20.dp)
-        .background(Color.Yellow))
+    Spacer(modifier = Modifier.fillMaxWidth().height(20.dp).background(Color.Yellow))
 }
-
-private class BackInvokedWrapper(val callback: Any)
 
 class DoubleBackPressView @JvmOverloads constructor(
     context: Context,
@@ -202,41 +194,19 @@ class DoubleBackPressView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ): View(context, attrs, defStyleAttr) {
 
+    private fun getCurrentInvokedDispatcher() = (context as Activity).onBackInvokedDispatcher
+
+    private val onBackInvokedCallback: OnBackInvokedCallback by lazy {
+        OnBackInvokedCallback {
+            prepareToInterceptOnBackCalls()
+            onBackPressed()
+        }
+    }
+
     private var doubleBackPressAction: () -> Unit = {}
     private var previousBackPressTime = 0L
     private var doublePressActionShouldBeInvoked = false
     private var isToastVisible = false
-    private var isCallbackRegistered = false
-    private var backInvokedWrapper = BackInvokedWrapper(
-        callback = when {
-            Build.VERSION.SDK_INT < 33 -> {
-                {
-                    prepareToInterceptOnBackCalls()
-                    onBackPressed()
-                    true
-                }
-            }
-            else -> {
-                createOnBackInvokedCallback {
-                    prepareToInterceptOnBackCalls()
-                    onBackPressed()
-                }
-            }
-        }
-    )
-
-    private fun createOnBackInvokedCallback(action: () -> Unit): Any {
-        val callbackClass = Class.forName("android.window.OnBackInvokedCallback")
-        return Proxy.newProxyInstance(
-            callbackClass.classLoader,
-            arrayOf<Class<*>>(callbackClass)
-        ) { _, method, _ ->
-            if (method.name.equals("onBackInvoked")) {
-                action()
-            }
-            Unit
-        }
-    }
 
     private val toast: Toast = Toast.makeText(context, "Press back one more time to continue", Toast.LENGTH_LONG).apply {
         addCallback(object: Toast.Callback() {
@@ -293,71 +263,21 @@ class DoubleBackPressView @JvmOverloads constructor(
         if (doublePressActionShouldBeInvoked) doubleBackPressAction()
     }
 
-    private fun syncBackInvokeState(shouldBeRegistered: Boolean) {
-        if (shouldBeRegistered && !isCallbackRegistered) {
-            (context as Activity).registerOnBackInvokedCallback()
-            isCallbackRegistered = true
-        } else if (!shouldBeRegistered && isCallbackRegistered) {
-            (context as Activity).unregisterOnBackInvokedCallback()
-            isCallbackRegistered = false
-        }
-    }
-
-    private fun Activity.onBackInvokedDispatcher(): Any? {
-        return try {
-            val backInvokeDispatcherField = javaClass.getDeclaredField("onBackInvokedDispatcher")
-            backInvokeDispatcherField.isAccessible = true
-            backInvokeDispatcherField.get(this)
-        } catch (e: NoSuchFieldException) {
-            null
-        }
-    }
-
-    private fun Activity.registerOnBackInvokedCallback() {
-        val dispatcher = onBackInvokedDispatcher()
-        if (dispatcher != null) {
-            val registerMethod = dispatcher.javaClass.getDeclaredMethod(
-                "registerOnBackInvokedCallback",
-                Int::class.java,
-                Class.forName("android.window.OnBackInvokedCallback")
-            )
-            registerMethod.isAccessible = true
-            val priorityField = dispatcher.javaClass.getDeclaredField("PRIORITY_OVERLAY")
-            priorityField.isAccessible = true
-            registerMethod.invoke(
-                dispatcher,
-                priorityField.get(dispatcher),
-                backInvokedWrapper.callback
-            )
-        } else {
-            (this as MainActivity).backInvokedDispatcher.registerOnBackInvokedCallback(
-                callback = backInvokedWrapper.callback as () -> Boolean
-            )
-        }
-    }
-
-    private fun Activity.unregisterOnBackInvokedCallback() {
-        val dispatcher = onBackInvokedDispatcher()
-        if (dispatcher != null) {
-            val unRegisterMethod = dispatcher.javaClass.getDeclaredMethod(
-                "unregisterOnBackInvokedCallback",
-                Class.forName("android.window.OnBackInvokedCallback")
-            )
-            unRegisterMethod.isAccessible = true
-            unRegisterMethod.invoke(dispatcher, backInvokedWrapper.callback)
-        } else {
-            (this as MainActivity).backInvokedDispatcher.unregisterOnBackInvokedCallback(backInvokedWrapper.callback as () -> Boolean)
-        }
-    }
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        syncBackInvokeState(true)
+        if (Build.VERSION.SDK_INT >= 33 || (Build.VERSION.SDK_INT == 32 && Build.VERSION.PREVIEW_SDK_INT != 0)) {
+            getCurrentInvokedDispatcher().registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                onBackInvokedCallback
+            )
+        }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         toast.cancel()
-        syncBackInvokeState(false)
+        if (Build.VERSION.SDK_INT >= 33 || (Build.VERSION.SDK_INT == 32 && Build.VERSION.PREVIEW_SDK_INT != 0)) {
+            getCurrentInvokedDispatcher().unregisterOnBackInvokedCallback(onBackInvokedCallback)
+        }
     }
 }

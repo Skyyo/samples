@@ -19,9 +19,10 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.SamplesTheme"
+        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/full_backup_content"
-        tools:targetApi="s">
+        tools:targetApi="33">
         <activity
             android:name="com.skyyo.samples.application.activity.MainActivity"
             android:exported="true"

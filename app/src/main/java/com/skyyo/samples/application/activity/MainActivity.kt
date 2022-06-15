@@ -25,7 +25,6 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.skyyo.samples.R
-import com.skyyo.samples.application.BackInvokedDispatcher
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.persistance.DataStoreManager
 import com.skyyo.samples.databinding.ActivityWithFragmentsBinding
@@ -43,12 +42,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-private const val USE_BOTTOM_NAVIGATION_WITH_FRAGMENTS = false
+private const val USE_BOTTOM_NAVIGATION_WITH_FRAGMENTS = true
 const val BOTTOM_NAVIGATION_HEIGHT = 56
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    val backInvokedDispatcher = BackInvokedDispatcher()
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
@@ -154,10 +152,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
-    }
-
-    override fun onBackPressed() {
-        if (!backInvokedDispatcher.handleBackPress()) super.onBackPressed()
     }
 }
 

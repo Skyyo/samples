@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdkPreview = "Tiramisu"
+    compileSdk = 33
 
     defaultConfig {
         applicationId 'com.skyyo.samples'
         minSdk 23
-        targetSdkPreview = "Tiramisu"
+        targetSdk = 33
         versionCode 1
         versionName "1.0"
 
