@@ -15,18 +15,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.foundation.lazy.rememberLazyListState
+
+const val VERTICAL_GRID_CELLS_COUNT = 3
 
 @Composable
 fun AppBarElevation() {
-    val scrollState = rememberLazyListState()
+    val scrollState = rememberLazyGridState()
     val items = remember { (0..200).map { it } }
     val transition = updateTransition(targetState = scrollState, label = "elevation")
     val elevation by transition.animateDp(label = "elevation") { state ->
         if (state.firstVisibleItemScrollOffset != 0) 16.dp else 0.dp
     }
-    // for now LazyVerticalGrid isn't advised,
-    // https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyVerticalGrid(androidx.compose.foundation.lazy.GridCells,androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.foundation.layout.Arrangement.Horizontal,kotlin.Function1)
 
     // we need Scaffold only because we're using cards with elevation. For some reason not
     // following the elevation priority is considered intended behaviour as described in this issue
@@ -43,32 +42,21 @@ fun AppBarElevation() {
     ) {
         LazyVerticalGrid(
             modifier = Modifier.fillMaxSize(),
-            columns = GridCells.Fixed(1),
+            columns = GridCells.Fixed(VERTICAL_GRID_CELLS_COUNT),
+            state = scrollState,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            itemsIndexed(items){ index, _ ->
-                HorizontalGrid(index, items)
+            items(items) {
+                Text(
+                    modifier = Modifier
+                        .size(150.dp)
+                        .padding(10.dp)
+                        .shadow(1.dp),
+                    text = "column $it",
+                    textAlign = TextAlign.Center,
+                )
             }
-        }
-    }
-}
-
-@Composable
-fun HorizontalGrid(index: Int, items: List<Int>) {
-    LazyHorizontalGrid(
-        modifier = Modifier.height(150.dp), // required set height
-        rows = GridCells.Fixed(1)
-    ) {
-        items(items){
-            Text(
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .size(150.dp)
-                    .padding(10.dp)
-                    .shadow(1.dp),
-                text = "row $index column $it",
-            )
         }
     }
 }
