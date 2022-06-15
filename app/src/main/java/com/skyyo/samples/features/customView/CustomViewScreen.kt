@@ -267,7 +267,7 @@ class DoubleBackPressView @JvmOverloads constructor(
         super.onAttachedToWindow()
         if (Build.VERSION.SDK_INT >= 33 || (Build.VERSION.SDK_INT == 32 && Build.VERSION.PREVIEW_SDK_INT != 0)) {
             getCurrentInvokedDispatcher().registerOnBackInvokedCallback(
-                OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                OnBackInvokedDispatcher.PRIORITY_OVERLAY,
                 onBackInvokedCallback
             )
         }

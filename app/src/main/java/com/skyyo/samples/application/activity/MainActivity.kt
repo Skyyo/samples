@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-private const val USE_BOTTOM_NAVIGATION_WITH_FRAGMENTS = true
+private const val USE_BOTTOM_NAVIGATION_WITH_FRAGMENTS = false
 const val BOTTOM_NAVIGATION_HEIGHT = 56
 
 @AndroidEntryPoint
