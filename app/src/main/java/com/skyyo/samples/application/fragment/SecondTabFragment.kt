@@ -3,45 +3,59 @@ package com.skyyo.samples.application.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.ui.Alignment
+import androidx.compose.material.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.findNavController
 import com.skyyo.samples.R
 import com.skyyo.samples.application.activity.BOTTOM_NAVIGATION_HEIGHT
-import com.skyyo.samples.features.languagePicker.ARG_TEXT
 
 class SecondTabFragment: Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = ComposeView(requireContext()).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Green)
-                    .statusBarsPadding()
-                    .padding(bottom = BOTTOM_NAVIGATION_HEIGHT.dp),
-                contentAlignment = Alignment.Center
+            CompositionLocalProvider(
+                LocalViewModelStoreOwner provides findNavController().currentBackStackEntry!!,
             ) {
-                Text(text = stringResource(R.string.change_language), modifier = Modifier.clickable {
-                    findNavController().navigate(R.id.goLanguage, bundleOf(ARG_TEXT to "123"))
-                })
+                SecondTabContent()
             }
+        }
+    }
+
+    @Composable
+    fun SecondTabContent(viewModel: SecondTabViewModel = hiltViewModel()) {
+        val firstTabInput by viewModel.firstTabInput.collectAsState()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(bottom = BOTTOM_NAVIGATION_HEIGHT.dp)
+        ) {
+            TextField(value = firstTabInput, onValueChange = viewModel::setFirstTabInput)
+            Text(
+                text = stringResource(R.string.change_language),
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .clickable(onClick = viewModel::goLanguage)
+            )
         }
     }
 }

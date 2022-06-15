@@ -2,9 +2,13 @@ package com.skyyo.samples.extensions
 
 import android.os.Bundle
 import androidx.core.net.toUri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asFlow
 import androidx.navigation.*
 import com.skyyo.samples.application.Destination
+import com.skyyo.samples.utils.NavigationDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 //sets value to previous savedStateHandle unless route is specified
 fun <T> NavController.setNavigationResult(route: String? = null, key: String, result: T) {
@@ -23,6 +27,30 @@ fun <T> NavController.observeNavigationResultLiveData(key: String) =
 
 fun <T> NavController.observeNavigationResult(key: String) =
     currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.asFlow()
+
+fun NavigationDispatcher.observeBackStackStateHandle(
+    destinationId: Int?,
+    observer: (SavedStateHandle) -> Unit
+) = emit {
+    val savedStateHandle = when(destinationId) {
+        null -> it.previousBackStackEntry!!.savedStateHandle
+        else -> it.getBackStackEntry(destinationId).savedStateHandle
+    }
+    observer(savedStateHandle)
+}
+
+fun <T> NavigationDispatcher.observeNavigationResult(
+    coroutineScope: CoroutineScope,
+    key: String,
+    initialValue: T,
+    observer: (T) -> Unit,
+) = emit { navController ->
+    coroutineScope.launch {
+        navController.currentBackStackEntry!!.savedStateHandle.getStateFlow(key, initialValue).collect {
+            observer(it)
+        }
+    }
+}
 
 fun NavController.navigateWithObject(
     route: String,

@@ -2,7 +2,7 @@ package com.skyyo.samples.features.imagePicker
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.READ_MEDIA_IMAGES
-import android.os.Build
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.os.BuildCompat
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
@@ -23,10 +24,14 @@ import com.google.accompanist.permissions.rememberPermissionState
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ImagePicker() {
-    val pickSingleImageRequest = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {}
-    val pickMultipleImagesRequest = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) {}
+    val pickSingleImageRequest = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+        Log.d("ImagePicker", "Single image uri: $it")
+    }
+    val pickMultipleImagesRequest = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) {
+        Log.d("ImagePicker", "Multiple image uri's: $it")
+    }
     val permissionState =
-        if (Build.VERSION.SDK_INT >= 33) {
+        if (BuildCompat.isAtLeastT()) {
             rememberPermissionState(permission = READ_MEDIA_IMAGES)
         } else {
             rememberPermissionState(permission = READ_EXTERNAL_STORAGE)

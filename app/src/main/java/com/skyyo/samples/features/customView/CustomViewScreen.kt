@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.os.BuildCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.statusBarsPadding
 import kotlin.math.roundToInt
@@ -265,7 +266,7 @@ class DoubleBackPressView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        if (Build.VERSION.SDK_INT >= 33 || (Build.VERSION.SDK_INT == 32 && Build.VERSION.PREVIEW_SDK_INT != 0)) {
+        if (BuildCompat.isAtLeastT()) {
             getCurrentInvokedDispatcher().registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_OVERLAY,
                 onBackInvokedCallback
@@ -276,7 +277,7 @@ class DoubleBackPressView @JvmOverloads constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         toast.cancel()
-        if (Build.VERSION.SDK_INT >= 33 || (Build.VERSION.SDK_INT == 32 && Build.VERSION.PREVIEW_SDK_INT != 0)) {
+        if (BuildCompat.isAtLeastT()) {
             getCurrentInvokedDispatcher().unregisterOnBackInvokedCallback(onBackInvokedCallback)
         }
     }

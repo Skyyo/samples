@@ -38,6 +38,7 @@ fun Context.toast(message: String) {
 
 // don't use unless the difference between liveData & stateFlow for
 // scenarios with search/flatMapLatest is used
+// TODO get rid of it in favor of getStateFlow method from savedstatehandle library
 fun <T> SavedStateHandle.getStateFlow(
     scope: CoroutineScope,
     key: String,
