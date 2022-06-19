@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">Samples</string>
     <string name="map">Карта</string>
-    <string name="dog_feed">Собачий корм</string>
     <string name="profile">Профіль</string>
     <string name="edit_profile">Зміна профіля</string>
     <string name="profile_confirmation">Підтвердження профіля</string>

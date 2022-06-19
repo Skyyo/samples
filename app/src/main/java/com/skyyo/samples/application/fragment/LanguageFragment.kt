@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.findNavController
-import com.skyyo.samples.features.languagePicker.LanguagePicker
+import com.skyyo.samples.features.languagePicker.LanguagePickerScreen
 class LanguageFragment: Fragment() {
 
     override fun onCreateView(
@@ -22,7 +22,7 @@ class LanguageFragment: Fragment() {
             CompositionLocalProvider(
                 LocalViewModelStoreOwner provides findNavController().currentBackStackEntry!!,
             ) {
-                LanguagePicker()
+                LanguagePickerScreen()
             }
         }
     }

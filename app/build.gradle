@@ -12,6 +12,7 @@ android {
     // There are some issues after migrating from Tiramisu to sdk 33
     // https://issuetracker.google.com/issues/236055503
     // to test app on android 13 use "preview" versions
+    // compileSdkPreview = "TiramisuPrivacySandbox"
     // compileSdkPreview = "Tiramisu"
 
     defaultConfig {
@@ -19,7 +20,7 @@ android {
         minSdk 23
         targetSdk = 33
         // to test app on android 13 use "preview" versions
-        // targetSdkPreview = "Tiramisu"
+        // targetSdkPreview = "TiramisuPrivacySandbox"
         versionCode 1
         versionName "1.0"
 

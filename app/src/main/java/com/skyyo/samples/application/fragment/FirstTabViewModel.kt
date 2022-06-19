@@ -16,6 +16,7 @@ class FirstTabViewModel @Inject constructor(
     navigationDispatcher: NavigationDispatcher
 ): ViewModel() {
     val input = handle.getStateFlow(FIRST_TAB_INPUT, "")
+
     init {
         navigationDispatcher.observeNavigationResult(viewModelScope, FIRST_TAB_INPUT, "") {
             handle[FIRST_TAB_INPUT] = it

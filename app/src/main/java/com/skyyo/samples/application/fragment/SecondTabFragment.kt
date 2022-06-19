@@ -21,7 +21,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.findNavController
 import com.skyyo.samples.R
-import com.skyyo.samples.application.activity.BOTTOM_NAVIGATION_HEIGHT
 
 class SecondTabFragment: Fragment() {
 
@@ -47,7 +46,7 @@ class SecondTabFragment: Fragment() {
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .padding(bottom = BOTTOM_NAVIGATION_HEIGHT.dp)
+                .padding(bottom = 56.dp)
         ) {
             TextField(value = firstTabInput, onValueChange = viewModel::setFirstTabInput)
             Text(
