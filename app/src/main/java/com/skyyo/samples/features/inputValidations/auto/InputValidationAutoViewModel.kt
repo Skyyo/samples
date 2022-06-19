@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.R
-import com.skyyo.samples.extensions.getStateFlow
 import com.skyyo.samples.features.inputValidations.FocusedTextFieldKey
 import com.skyyo.samples.features.inputValidations.InputValidator
 import com.skyyo.samples.features.inputValidations.InputWrapper
@@ -26,8 +25,8 @@ class InputValidationAutoViewModel @Inject constructor(
     private val handle: SavedStateHandle
 ) : ViewModel() {
 
-    val name = handle.getStateFlow(viewModelScope, "name", InputWrapper())
-    val creditCardNumber = handle.getStateFlow(viewModelScope, "creditCardNumber", InputWrapper())
+    val name = handle.getStateFlow( "name", InputWrapper())
+    val creditCardNumber = handle.getStateFlow( "creditCardNumber", InputWrapper())
     val areInputsValid = combine(name, creditCardNumber) { name, cardNumber ->
         name.value.isNotEmpty() && name.errorId == null &&
                 cardNumber.value.isNotEmpty() && cardNumber.errorId == null
@@ -47,12 +46,12 @@ class InputValidationAutoViewModel @Inject constructor(
 
     fun onNameEntered(input: String) {
         val errorId = InputValidator.getNameErrorIdOrNull(input)
-        name.value = name.value.copy(value = input, errorId = errorId)
+        handle["name"] = name.value.copy(value = input, errorId = errorId)
     }
 
     fun onCardNumberEntered(input: String) {
         val errorId = InputValidator.getCardNumberErrorIdOrNull(input)
-        creditCardNumber.value = creditCardNumber.value.copy(value = input, errorId = errorId)
+        handle["creditCardNumber"] = creditCardNumber.value.copy(value = input, errorId = errorId)
     }
 
     fun onTextFieldFocusChanged(key: FocusedTextFieldKey, isFocused: Boolean) {

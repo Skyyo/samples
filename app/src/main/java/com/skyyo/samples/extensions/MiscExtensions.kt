@@ -36,33 +36,6 @@ fun Context.toast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-// don't use unless the difference between liveData & stateFlow for
-// scenarios with search/flatMapLatest is used
-// TODO get rid of it in favor of getStateFlow method from savedstatehandle library
-fun <T> SavedStateHandle.getStateFlow(
-    scope: CoroutineScope,
-    key: String,
-    initialValue: T
-): MutableStateFlow<T> {
-    val liveData = getLiveData(key, initialValue)
-    val stateFlow = MutableStateFlow(initialValue)
-
-    val observer = Observer<T> { value -> if (value != stateFlow.value) stateFlow.value = value }
-    liveData.observeForever(observer)
-
-    stateFlow.onCompletion {
-        withContext(Dispatchers.Main.immediate) {
-            liveData.removeObserver(observer)
-        }
-    }.onEach { value ->
-        withContext(Dispatchers.Main.immediate) {
-            if (liveData.value != value) liveData.value = value
-        }
-    }.launchIn(scope)
-
-    return stateFlow
-}
-
 fun Context.goAppPermissions() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         addCategory(Intent.CATEGORY_DEFAULT)
