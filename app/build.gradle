@@ -21,6 +21,7 @@ android {
         targetSdk = 33
         // to test app on android 13 use "preview" versions
         // targetSdkPreview = "TiramisuPrivacySandbox"
+        // compileSdkPreview = "Tiramisu"
         versionCode 1
         versionName "1.0"
 
