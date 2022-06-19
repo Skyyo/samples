@@ -44,8 +44,12 @@ fun AppBarElevation() {
             modifier = Modifier.fillMaxSize(),
             columns = GridCells.Fixed(VERTICAL_GRID_CELLS_COUNT),
             state = scrollState,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = remember {
+                Arrangement.spacedBy(16.dp)
+            },
+            verticalArrangement = remember {
+                Arrangement.spacedBy(8.dp)
+            }
         ) {
             items(items) {
                 Text(
