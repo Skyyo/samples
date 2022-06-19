@@ -57,6 +57,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.ViewPager.route)
     }
 
+    fun goInfiniteViewPager() = navigationDispatcher.emit {
+        it.navigate(Destination.InfiniteViewPager.route)
+    }
+
     fun goNavigationWithValuesSimple() = navigationDispatcher.emit {
         it.navigate(Destination.DogFeed.route)
     }
@@ -109,6 +113,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.MarqueeText.route)
     }
 
+    fun goAutofill() = navigationDispatcher.emit {
+        it.navigate(Destination.Autofill.route)
+    }
+
     fun goHiltComposeSharedViewModel() = navigationDispatcher.emit {
         it.navigate(ProfileGraph.Profile.route)
     }
@@ -141,6 +149,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.GradientScroll.route)
     }
 
+    fun goNoticeableScrollableRow() = navigationDispatcher.emit {
+        it.navigate(Destination.NoticeableScrollableRow.route)
+    }
+
     fun goExoPlayerColumnReference() = navigationDispatcher.emit {
         it.navigate(Destination.ExoPlayerColumnReference.route)
     }
@@ -155,6 +167,10 @@ class SampleContainerViewModel @Inject constructor(
 
     fun goExoPlayerColumnDynamicThumb() = navigationDispatcher.emit {
         it.navigate(Destination.ExoPlayerColumnDynamicThumb.route)
+    }
+
+    fun goVerticalPagerWithFling() = navigationDispatcher.emit {
+        it.navigate(Destination.VerticalPagerWithFling.route)
     }
 
     fun goDominantColor() = navigationDispatcher.emit {

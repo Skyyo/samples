@@ -106,6 +106,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
     ) { Text(text = "view pager") }
     Button(
         modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goInfiniteViewPager
+    ) { Text(text = "infinite view pager") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goStickyHeaders
     ) { Text(text = "sticky headers") }
     Button(
@@ -127,6 +131,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goMarqueeText
     ) { Text(text = "marquee text") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goAutofill
+    ) { Text(text = "autofill") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 
@@ -146,6 +154,9 @@ fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
     }
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGradientScroll) {
         Text(text = "gradient change")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goNoticeableScrollableRow) {
+        Text(text = "noticeable scrollable row")
     }
     Spacer(modifier = Modifier.height(16.dp))
 }
@@ -203,6 +214,10 @@ fun ExoPlayerSamples(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goExoPlayerColumnDynamicThumb
     ) { Text(text = "dynamic thumbnails") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goVerticalPagerWithFling
+    ) { Text(text = "vertical pager with fling") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 

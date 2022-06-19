@@ -16,6 +16,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.ProfileGraph
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
+import com.skyyo.samples.features.autofill.AutofillScreen
 import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScreen
@@ -30,6 +31,7 @@ import com.skyyo.samples.features.exoPlayer.columnReference.ExoPlayerColumnRefer
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
+import com.skyyo.samples.features.infiniteViewPager.InfiniteViewPagerScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
@@ -42,6 +44,7 @@ import com.skyyo.samples.features.navigateWithResult.withObject.catDetails.CatDe
 import com.skyyo.samples.features.navigateWithResult.withObject.catFeed.CatFeedScreen
 import com.skyyo.samples.features.navigationCores.bottomBar.BottomBarScreen
 import com.skyyo.samples.features.navigationCores.drawer.DrawerScreen
+import com.skyyo.samples.features.noticeableScrollableRow.NoticeableScrollableRowScreen
 import com.skyyo.samples.features.otp.OtpScreen
 import com.skyyo.samples.features.pagination.paging.CatsPagingScreen
 import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomScreen
@@ -60,6 +63,7 @@ import com.skyyo.samples.features.snackbar.SnackbarScreen
 import com.skyyo.samples.features.snap.SnapScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
+import com.skyyo.samples.features.verticalPagerWithFling.VideoPagerWithFlingScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
 import com.skyyo.samples.features.zoomable.ZoomableScreen
 
@@ -91,6 +95,7 @@ fun PopulatedNavHost(
     composable(Destination.ModalBottomSheet.route) { ModalBottomSheetScreen() }
     composable(Destination.BottomSheetScaffold.route) { BottomSheetScaffoldScreen() }
     composable(Destination.ViewPager.route) { ViewPagerScreen() }
+    composable(Destination.InfiniteViewPager.route) { InfiniteViewPagerScreen() }
     composable(Destination.StickyHeader.route) { ListsScreen() }
     composable(Destination.DogFeed.route) { DogFeedScreen() }
     composable(Destination.DogDetails.route) { DogDetailsScreen() }
@@ -120,6 +125,7 @@ fun PopulatedNavHost(
     composable(Destination.ParallaxEffect.route) { ParallaxEffectScreen() }
     composable(Destination.CustomView.route) { CustomViewScreen() }
     composable(Destination.MarqueeText.route) { MarqueeTextScreen() }
+    composable(Destination.Autofill.route) { AutofillScreen() }
     navigation(
         route = ProfileGraph.route,
         startDestination = ProfileGraph.Profile.route
@@ -147,10 +153,12 @@ fun PopulatedNavHost(
     composable(Destination.BottomBar.route) { BottomBarScreen() }
     composable(Destination.Drawer.route) { DrawerScreen() }
     composable(Destination.GradientScroll.route) { GradientScrollScreen() }
+    composable(Destination.NoticeableScrollableRow.route) { NoticeableScrollableRowScreen() }
     composable(Destination.ExoPlayerColumnReference.route) { ExoPlayerColumnReferenceScreen() }
     composable(Destination.ExoPlayerColumnIndexed.route) { ExoPlayerColumnIndexedScreen() }
     composable(Destination.ExoPlayerColumnAutoplay.route) { ExoPlayerColumnAutoplayScreen() }
     composable(Destination.ExoPlayerColumnDynamicThumb.route) { ExoPlayerColumnDynamicThumbScreen() }
+    composable(Destination.VerticalPagerWithFling.route) { VideoPagerWithFlingScreen() }
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
     composable(Destination.PdfViewer.route) { PdfViewerScreen() }

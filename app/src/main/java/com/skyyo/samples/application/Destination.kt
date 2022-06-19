@@ -14,6 +14,7 @@ sealed class Destination(val route: String) {
     object CameraX : Destination("cameraX")
     object ForceTheme : Destination("forceTheme")
     object ViewPager : Destination("viewPager")
+    object InfiniteViewPager : Destination("infiniteViewPager")
     object InputValidationManual : Destination("manual")
     object InputValidationAuto : Destination("auto")
     object InputValidationDebounce : Destination("debounce")
@@ -25,6 +26,7 @@ sealed class Destination(val route: String) {
     object Table : Destination("table")
     object CustomView : Destination("customViewScreen")
     object MarqueeText: Destination("marqueeText")
+    object Autofill: Destination("autofill")
     object DogFeed : Destination("dogFeed")
     object DogDetails : Destination("dogDetails/{dogId}") {
         fun createRoute(dogId: String) = "dogDetails/$dogId"
@@ -45,10 +47,12 @@ sealed class Destination(val route: String) {
     object Tab2 : Destination("tab2")
     object Tab3 : Destination("tab3")
     object GradientScroll : Destination("gradientScroll")
+    object NoticeableScrollableRow: Destination("noticeableScrollableRow")
     object ExoPlayerColumnReference : Destination("exoPlayerColumnRef")
     object ExoPlayerColumnIndexed : Destination("exoPlayerColumnIndexed")
     object ExoPlayerColumnAutoplay : Destination("exoPlayerColumnAutoplay")
     object ExoPlayerColumnDynamicThumb : Destination("exoPlayerColumnDynamicThumb")
+    object VerticalPagerWithFling : Destination("videopager")
     object DominantColor : Destination("dominantColor")
     object Zoomable : Destination("zoomable")
     object PdfViewer : Destination("pdfViewer")
