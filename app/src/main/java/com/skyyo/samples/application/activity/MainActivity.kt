@@ -77,6 +77,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             IgdbBrowserTheme(savedTheme) {
+                //accompanist window insets not working well with in-app language change library
+                //shouldn't be an issue, as we already adopted native insets, and this works fine
                 ProvideWindowInsets {
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {

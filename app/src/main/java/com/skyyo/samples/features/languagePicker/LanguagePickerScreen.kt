@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
+import com.skyyo.samples.extensions.FixInAppLanguageSwitchLayoutDirection
 import java.util.*
 
 const val SUPPORTED_LANGUAGES = "en,ja,iw,uk"
@@ -19,7 +20,7 @@ const val SUPPORTED_LANGUAGES = "en,ja,iw,uk"
 val SUPPORTED_LANGUAGES_ARRAY: Array<String> = arrayOf("en", "ja", "iw", "uk")
 
 @Composable
-fun LanguagePickerScreen() {
+fun LanguagePickerScreen() = FixInAppLanguageSwitchLayoutDirection {
     val locales = remember { getSupportedLocales() }
     val currentLocale = remember { getCurrentLocale()?.toString() ?: "System default" }
 

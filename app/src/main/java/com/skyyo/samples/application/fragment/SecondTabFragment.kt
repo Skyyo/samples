@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.findNavController
 import com.skyyo.samples.R
+import com.skyyo.samples.extensions.FixInAppLanguageSwitchLayoutDirection
 
 class SecondTabFragment: Fragment() {
 
@@ -40,7 +41,7 @@ class SecondTabFragment: Fragment() {
     }
 
     @Composable
-    fun SecondTabContent(viewModel: SecondTabViewModel = hiltViewModel()) {
+    fun SecondTabContent(viewModel: SecondTabViewModel = hiltViewModel()) = FixInAppLanguageSwitchLayoutDirection {
         val firstTabInput by viewModel.firstTabInput.collectAsState()
         Column(
             modifier = Modifier

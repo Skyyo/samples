@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.findNavController
 import com.google.accompanist.insets.statusBarsPadding
+import com.skyyo.samples.extensions.FixInAppLanguageSwitchLayoutDirection
 
 class FirstTabFragment: Fragment() {
 
@@ -38,7 +39,7 @@ class FirstTabFragment: Fragment() {
     }
 
     @Composable
-    fun FirstTabContent(viewModel: FirstTabViewModel = hiltViewModel()) {
+    fun FirstTabContent(viewModel: FirstTabViewModel = hiltViewModel()) = FixInAppLanguageSwitchLayoutDirection {
         val text by viewModel.input.collectAsState()
         Text(
             modifier = Modifier
