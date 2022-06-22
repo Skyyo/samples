@@ -2,9 +2,12 @@ package com.skyyo.samples.features.healthConnect
 
 import android.app.Application
 import androidx.health.connect.client.HealthConnectClient
+import androidx.health.connect.client.metadata.DataOrigin
 import androidx.health.connect.client.permission.HealthDataRequestPermissions
 import androidx.health.connect.client.permission.Permission
 import androidx.health.connect.client.records.*
+import androidx.health.connect.client.request.ReadRecordsRequest
+import androidx.health.connect.client.time.TimeRangeFilter
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -33,7 +37,7 @@ class HealthConnectViewModel @Inject constructor(
     private val lastWrittenRecordUid = handle.getStateFlow<String?>(viewModelScope, "lastWrittenRecordUid", null)
     val stepsWritten = handle.getStateFlow(viewModelScope, "stepsWritten", 1L)
     val stepsRead = handle.getStateFlow<Long?>(viewModelScope, "stepsRead", null)
-    val stepsCanBeRead = lastWrittenRecordUid.map { it != null }
+    val localStepsCanBeRead = lastWrittenRecordUid.map { it != null }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
 
     suspend fun checkPermissions() {
@@ -63,6 +67,17 @@ class HealthConnectViewModel @Inject constructor(
         if (recordUid != null) {
             stepsRead.value = healthConnectClient.readSteps(recordUid)
         }
+    }
+
+    fun read3rdPartySteps() = viewModelScope.launch(Dispatchers.IO) {
+        val response = healthConnectClient.readRecords(
+            ReadRecordsRequest(
+                recordType = Steps::class,
+                timeRangeFilter = TimeRangeFilter.after(LocalDateTime.now().minusDays(1)),
+                dataOriginFilter = listOf(DataOrigin("com.example.healthconnectsample"))
+            )
+        )
+        stepsRead.value = response.records.sumOf { it.count }
     }
 
     private suspend fun HealthConnectClient.writeSteps(count: Long): String {

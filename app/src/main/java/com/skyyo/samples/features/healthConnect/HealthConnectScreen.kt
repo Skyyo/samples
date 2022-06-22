@@ -34,7 +34,7 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
     val permissions = viewModel.permissions
     val stepsWritten by viewModel.stepsWritten.collectAsState()
     val stepsRead by viewModel.stepsRead.collectAsState()
-    val stepsCanBeRead by viewModel.stepsCanBeRead.collectAsState()
+    val localStepsCanBeRead by viewModel.localStepsCanBeRead.collectAsState()
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
     val events = remember(viewModel.events) {
         viewModel.events.receiveAsFlow().flowWithLifecycle(localLifecycle, Lifecycle.State.RESUMED)
@@ -76,9 +76,10 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
                     StepsTracker(
                         stepsWritten = stepsWritten,
                         stepsRead = stepsRead,
-                        stepsCanBeRead = stepsCanBeRead,
+                        localStepsCanBeRead = localStepsCanBeRead,
                         onWriteClick = viewModel::writeSteps,
-                        onReadClick = viewModel::readSteps
+                        onReadClick = viewModel::readSteps,
+                        onReadThirdPartyClick = viewModel::read3rdPartySteps
                     )
                 } else {
                     PermissionRequired(
@@ -92,9 +93,10 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
                         StepsTracker(
                             stepsWritten = stepsWritten,
                             stepsRead = stepsRead,
-                            stepsCanBeRead = stepsCanBeRead,
+                            localStepsCanBeRead = localStepsCanBeRead,
                             onWriteClick = viewModel::writeSteps,
-                            onReadClick = viewModel::readSteps
+                            onReadClick = viewModel::readSteps,
+                            onReadThirdPartyClick = viewModel::read3rdPartySteps
                         )
                     }
                 }
@@ -116,24 +118,28 @@ fun InstallHealthConnect() {
 @Composable
 fun StepsTracker(
     stepsWritten: Long,
-    stepsCanBeRead: Boolean,
+    localStepsCanBeRead: Boolean,
     stepsRead: Long?,
     onWriteClick: OnClick,
-    onReadClick: OnClick
+    onReadClick: OnClick,
+    onReadThirdPartyClick: OnClick
 ) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Counter to write: $stepsWritten")
+            Text(text = "Steps to write: $stepsWritten")
             Button(modifier = Modifier.padding(start = 10.dp), onClick = onWriteClick) {
                 Text(text = "Write")
             }
         }
-        if (stepsCanBeRead) {
-            Row(modifier = Modifier.padding(top = 20.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Last read counter: $stepsRead")
+        Row(modifier = Modifier.padding(top = 20.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Read steps: $stepsRead")
+            if (localStepsCanBeRead) {
                 Button(modifier = Modifier.padding(start = 10.dp), onClick = onReadClick) {
-                    Text(text = "Read")
+                    Text(text = "Read local steps")
                 }
+            }
+            Button(modifier = Modifier.padding(start = 10.dp), onClick = onReadThirdPartyClick) {
+                Text(text = "Read 3rd party steps")
             }
         }
     }
