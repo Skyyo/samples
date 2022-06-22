@@ -3,5 +3,6 @@
     <array name="health_permissions">
         <item>androidx.health.permission.Steps.READ</item>
         <item>androidx.health.permission.Steps.WRITE</item>
+        <item>androidx.health.permission.ActivitySession.READ</item>
     </array>
 </resources>

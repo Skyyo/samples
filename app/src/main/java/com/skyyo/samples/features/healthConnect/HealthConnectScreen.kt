@@ -4,9 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +38,7 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
     val stepsWritten by viewModel.stepsWritten.collectAsState()
     val stepsRead by viewModel.stepsRead.collectAsState()
     val localStepsCanBeRead by viewModel.localStepsCanBeRead.collectAsState()
+    val accumulated3rdPartySteps by viewModel.accumulated3rdPartySteps.collectAsState()
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
     val events = remember(viewModel.events) {
         viewModel.events.receiveAsFlow().flowWithLifecycle(localLifecycle, Lifecycle.State.RESUMED)
@@ -77,6 +81,7 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
                         stepsWritten = stepsWritten,
                         stepsRead = stepsRead,
                         localStepsCanBeRead = localStepsCanBeRead,
+                        accumulated3rdPartySteps = accumulated3rdPartySteps,
                         onWriteClick = viewModel::writeSteps,
                         onReadClick = viewModel::readSteps,
                         onReadThirdPartyClick = viewModel::read3rdPartySteps
@@ -94,6 +99,7 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
                             stepsWritten = stepsWritten,
                             stepsRead = stepsRead,
                             localStepsCanBeRead = localStepsCanBeRead,
+                            accumulated3rdPartySteps = accumulated3rdPartySteps,
                             onWriteClick = viewModel::writeSteps,
                             onReadClick = viewModel::readSteps,
                             onReadThirdPartyClick = viewModel::read3rdPartySteps
@@ -120,10 +126,12 @@ fun StepsTracker(
     stepsWritten: Long,
     localStepsCanBeRead: Boolean,
     stepsRead: Long?,
+    accumulated3rdPartySteps: Long,
     onWriteClick: OnClick,
     onReadClick: OnClick,
-    onReadThirdPartyClick: OnClick
+    onReadThirdPartyClick: (String) -> Unit
 ) {
+    var thirdPartySessionUid by remember { mutableStateOf("") }
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = "Steps to write: $stepsWritten")
@@ -131,14 +139,34 @@ fun StepsTracker(
                 Text(text = "Write")
             }
         }
-        Row(modifier = Modifier.padding(top = 20.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Read steps: $stepsRead")
-            if (localStepsCanBeRead) {
-                Button(modifier = Modifier.padding(start = 10.dp), onClick = onReadClick) {
-                    Text(text = "Read local steps")
+        if (localStepsCanBeRead) {
+            Row(
+                modifier = Modifier.padding(top = 20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Read steps: $stepsRead")
+                if (localStepsCanBeRead) {
+                    Button(modifier = Modifier.padding(start = 10.dp), onClick = onReadClick) {
+                        Text(text = "Read local steps")
+                    }
                 }
             }
-            Button(modifier = Modifier.padding(start = 10.dp), onClick = onReadThirdPartyClick) {
+        }
+
+        Row(
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .horizontalScroll(rememberScrollState()),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Read 3rd party steps: $accumulated3rdPartySteps")
+            TextField(
+                modifier = Modifier.padding(start = 10.dp),
+                value = thirdPartySessionUid,
+                onValueChange = { thirdPartySessionUid = it}
+            )
+
+            Button(modifier = Modifier.padding(start = 10.dp), onClick = { onReadThirdPartyClick(thirdPartySessionUid) }) {
                 Text(text = "Read 3rd party steps")
             }
         }
