@@ -26,11 +26,26 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!--
+                The app needs to handle this intent and display an appropriate privacy policy
+                explaining how the user's data will be used and handled.
+                This intent is sent to the app when the user clicks on the "privacy policy" link
+                in the Health Connect permissions dialog.
+            -->
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="health_permissions"
+                android:resource="@array/health_permissions"/>
         </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyANU9EllOVGyMnpOANajwjD91qrZIhoJa0" />
     </application>
-
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
 </manifest>

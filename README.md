@@ -28,6 +28,7 @@ Miscellaneous
 - no way to create nested sticky headers. Workaround imo is changing design or making one lvl of the headers as a composable that animates text changes.
 - Fling breaks on skipped frames. [issue](https://issuetracker.google.com/issues/190788866)
 - Need to find an alternative to onboarding guides from the view system like these libraries provided: [onboardingFlow](https://github.com/MrIceman/onboardingflow),[TapTargetView](https://github.com/KeepSafe/TapTargetView),[Spotlight](https://github.com/TakuSemba/Spotlight)
+- Health connect permission resolving issue - https://issuetracker.google.com/issues/233239418
 
 # Limitations
 - There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)

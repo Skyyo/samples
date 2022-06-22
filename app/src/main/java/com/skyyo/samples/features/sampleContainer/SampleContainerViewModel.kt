@@ -184,4 +184,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goPdfViewer() = navigationDispatcher.emit {
         it.navigate(Destination.PdfViewer.route)
     }
+
+    fun goHealthConnect() = navigationDispatcher.emit {
+        it.navigate(Destination.HealthConnect.route)
+    }
 }
