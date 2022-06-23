@@ -184,4 +184,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goPdfViewer() = navigationDispatcher.emit {
         it.navigate(Destination.PdfViewer.route)
     }
+
+    fun goDragAndDrop() = navigationDispatcher.emit {
+        it.navigate(Destination.DragAndDrop.route)
+    }
 }
