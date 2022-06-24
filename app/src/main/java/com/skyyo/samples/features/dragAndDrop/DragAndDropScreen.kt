@@ -51,24 +51,18 @@ fun DragAndDropScreen() {
         contentPadding = remember { PaddingValues(16.dp) },
         verticalArrangement = remember { Arrangement.spacedBy(16.dp) }
     ) {
-        itemsIndexed(dragDropState.lazyListItems, key = { _, item -> item }) { index, item ->
-            DraggableItem(
-                dragDropState = dragDropState,
-                index = index,
-            ) { modifier, isDragging ->
-                val elevation by animateDpAsState(if (isDragging) 4.dp else 1.dp)
-                Card(elevation = elevation, modifier = modifier) {
-                    Text(
-                        text = "Item $item",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 10.dp)
-                    )
-                }
+        dragItems(dragDropState = dragDropState, key = { it }) { item, modifier, isDragging ->
+            val elevation by animateDpAsState(if (isDragging) 4.dp else 1.dp)
+            Card(elevation = elevation, modifier = modifier) {
+                Text(
+                    text = "Item $item",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 10.dp)
+                )
             }
         }
     }
-
 }
 
 @Composable
@@ -94,6 +88,31 @@ fun <T> rememberDragDropState(
         scrollEvents.collect { lazyListState.scrollBy(it) }
     }
     return state
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+fun <T> Modifier.dragContainer(dragDropState: DragDropState<T>): Modifier {
+    return pointerInput(dragDropState) {
+        detectDragGesturesAfterLongPress(
+            onDrag = { change, offset ->
+                change.consume()
+                dragDropState.onDrag(offset = offset)
+            },
+            onDragStart = { offset -> dragDropState.onDragStart(offset) },
+            onDragEnd = { dragDropState.onDragFinished() },
+            onDragCancel = { dragDropState.onDragFinished() }
+        )
+    }
+}
+
+fun <T> LazyListScope.dragItems(dragDropState: DragDropState<T>, key: (T) -> Any, content: @Composable (item: T, modifier: Modifier, isDragging: Boolean) -> Unit) {
+    item(key = null) { Spacer(modifier = Modifier) }
+    itemsIndexed(dragDropState.lazyListItems, key = { _, item -> key(item) }) { index, item ->
+        DraggableItem(
+            dragDropState = dragDropState,
+            index = index
+        ) { modifier, isDragging -> content(item, modifier, isDragging) }
+    }
 }
 
 class DragDropState<T> internal constructor(
@@ -148,7 +167,7 @@ class DragDropState<T> internal constructor(
                     )
                 )
                 indexOfAnimatableItem = null
-                onDropped(lazyListItems, lazyListItems[lastDragIndex])
+                onDropped(lazyListItems, lazyListItems[lastDragIndex - 1])
             }
         }
         draggingItemDraggedDelta = 0f
@@ -166,7 +185,7 @@ class DragDropState<T> internal constructor(
 
         val targetItem = state.layoutInfo.visibleItemsInfo.find { item ->
             middleOffset.toInt() in item.offset..item.offsetEnd &&
-                    draggingItem.index != item.index
+                    draggingItem.index != item.index && item.index != 0
         }
         if (targetItem != null) {
             val scrollToIndex = if (targetItem.index == state.firstVisibleItemIndex) {
@@ -181,12 +200,12 @@ class DragDropState<T> internal constructor(
                     // this is needed to neutralize automatic keeping the first item first.
                     state.scrollToItem(scrollToIndex, state.firstVisibleItemScrollOffset)
                     lazyListItems = lazyListItems.toMutableList().apply {
-                        add(targetItem.index, removeAt(draggingItem.index))
+                        add(targetItem.index - 1, removeAt(draggingItem.index - 1))
                     }
                 }
             } else {
                 lazyListItems = lazyListItems.toMutableList().apply {
-                    add(targetItem.index, removeAt(draggingItem.index))
+                    add(targetItem.index - 1, removeAt(draggingItem.index - 1))
                 }
             }
             draggingItemIndex = targetItem.index
@@ -211,36 +230,22 @@ class DragDropState<T> internal constructor(
     private set
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-fun <T> Modifier.dragContainer(dragDropState: DragDropState<T>): Modifier {
-    return pointerInput(dragDropState) {
-        detectDragGesturesAfterLongPress(
-            onDrag = { change, offset ->
-                change.consume()
-                dragDropState.onDrag(offset = offset)
-            },
-            onDragStart = { offset -> dragDropState.onDragStart(offset) },
-            onDragEnd = { dragDropState.onDragFinished() },
-            onDragCancel = { dragDropState.onDragFinished() }
-        )
-    }
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun <T> LazyItemScope.DraggableItem(
+private fun <T> LazyItemScope.DraggableItem(
     dragDropState: DragDropState<T>,
     index: Int,
     content: @Composable (modifier: Modifier, isDragging: Boolean) -> Unit
 ) {
-    val dragging = index == dragDropState.draggingItemIndex
+    val draggableItemIndex = index + 1
+    val dragging = draggableItemIndex == dragDropState.draggingItemIndex
     val draggingModifier = if (dragging) {
         Modifier
             .zIndex(1f)
             .graphicsLayer {
                 translationY = dragDropState.draggingItemOffset
             }
-    } else if (index == dragDropState.indexOfAnimatableItem) {
+    } else if (draggableItemIndex == dragDropState.indexOfAnimatableItem) {
         Modifier
             .zIndex(1f)
             .graphicsLayer {
