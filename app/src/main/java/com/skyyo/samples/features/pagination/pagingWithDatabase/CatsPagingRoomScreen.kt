@@ -1,6 +1,5 @@
 package com.skyyo.samples.features.pagination.pagingWithDatabase
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,9 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -33,16 +30,15 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.common.composables.CircularProgressIndicatorRow
+import com.skyyo.samples.extensions.collect
 import com.skyyo.samples.extensions.toast
 import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.features.pagination.common.CustomCard
 import com.skyyo.samples.features.pagination.common.FadingFab
-import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
-import kotlinx.coroutines.flow.collect
+import com.skyyo.samples.utils.OnClick
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -63,36 +59,24 @@ fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
         )
     }
 
-    val cats: LazyPagingItems<Cat> = viewModel.cats.collectAsLazyPagingItems()
-    val isRefreshing by remember { derivedStateOf { cats.loadState.refresh is LoadState.Loading } }
-    val isErrorOnFirstPage by remember { derivedStateOf { cats.loadState.refresh is LoadState.Error } }
-    val isError by remember { derivedStateOf { cats.loadState.append is LoadState.Error } }
-
-    SideEffect {
-        if (isErrorOnFirstPage) {
-            val errorState = cats.loadState.refresh as LoadState.Error
-            viewModel.onCatsLoadingError(errorState.error as PagingException)
-            return@SideEffect // Just to prevent 2x toasts
-        }
-        if (isError) {
-            val errorState = cats.loadState.append as LoadState.Error
-            viewModel.onCatsLoadingError(errorState.error as PagingException)
-        }
-    }
+    val cats: LazyPagingItems<Cat> = viewModel.cats.collect()
+    val isRefreshInProgress by remember { viewModel.isRefreshInProgress }
+    val firstPageError by remember { viewModel.firstPageError }
+    val currentPageError by remember { viewModel.currentPageError }
+    val newPageLoading by remember { viewModel.newPageLoading }
 
     LaunchedEffect(Unit) {
         events.collect { event ->
             when (event) {
                 is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
                 is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
-                is CatsScreenEvent.RefreshList -> cats.refresh()
             }
         }
     }
 
     SwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
-        onRefresh = viewModel::onSwipeToRefresh,
+        state = rememberSwipeRefreshState(isRefreshInProgress),
+        onRefresh = viewModel::refresh,
         indicator = { state, trigger ->
             SwipeRefreshIndicator(
                 state = state,
@@ -105,7 +89,15 @@ fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
         }
     ) {
         Box(Modifier.fillMaxSize()) {
-            CatsColumn(listState = listState, cats = cats)
+            CatsColumn(
+                listState = listState,
+                isRefreshInProgress = isRefreshInProgress,
+                firstPageError = firstPageError,
+                currentPageError = currentPageError,
+                newPageLoading = newPageLoading,
+                cats = cats,
+                onRetryClick = viewModel::onRetryClick
+            )
             FadingFab(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -121,7 +113,12 @@ fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
 @Composable
 fun CatsColumn(
     listState: LazyListState,
-    cats: LazyPagingItems<Cat>
+    isRefreshInProgress: Boolean,
+    firstPageError: Int?,
+    currentPageError: Int?,
+    newPageLoading: Boolean,
+    cats: LazyPagingItems<Cat>,
+    onRetryClick: OnClick
 ) {
     LazyColumn(
         state = listState,
@@ -136,7 +133,7 @@ fun CatsColumn(
         )
     ) {
         //refreshing on page 0
-        if (cats.loadState.refresh is LoadState.Loading) {
+        if (isRefreshInProgress) {
             item {
                 Text(
                     text = "refreshing on page 0",
@@ -147,38 +144,31 @@ fun CatsColumn(
             }
         }
 
+        if (firstPageError != null) {
+            item {
+                Text(
+                    text = "First: " + stringResource(id = firstPageError),
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .clickable(onClick = onRetryClick)
+                )
+            }
+        }
+
         items(cats, Cat::id) { cat -> if (cat != null) CustomCard(catId = cat.id) }
 
-        if (cats.loadState.append is LoadState.Loading) {
+        if (newPageLoading) {
             item { CircularProgressIndicatorRow() }
         }
 
-        // invoked when we have no data on initial load
-        if (cats.loadState.refresh is LoadState.Error) {
-            val errorState = cats.loadState.refresh as LoadState.Error
-            val stringRes = (errorState.error as PagingException).stringRes
+        if (currentPageError != null) {
             item {
                 Text(
-                    text = stringResource(stringRes),
-                    modifier = Modifier.clickable(onClick = cats::retry)
+                    text = stringResource(id = currentPageError),
+                    modifier = Modifier.padding(top = 10.dp).clickable(onClick = onRetryClick)
                 )
-                Text(text = "retry refresh!")
             }
         }
-
-        // invoked when we have no data on page 2,3 etc.
-        if (cats.loadState.append is LoadState.Error) {
-            val errorState = cats.loadState.append as LoadState.Error
-            val stringRes = (errorState.error as PagingException).stringRes
-            item {
-                Text(
-                    text = stringResource(stringRes),
-                    modifier = Modifier.clickable(onClick = cats::retry)
-                )
-                Text(text = "retry append!")
-            }
-        }
-
     }
 }
 

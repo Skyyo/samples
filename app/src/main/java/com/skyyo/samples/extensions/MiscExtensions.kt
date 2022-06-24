@@ -6,15 +6,17 @@ import android.net.Uri
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.suspendCoroutine
 
 inline fun <T> tryOrNull(f: () -> T) =
     try {
@@ -68,4 +70,33 @@ fun Context.goAppPermissions() {
         data = Uri.parse("package:${applicationContext.packageName}")
     }
     startActivity(intent)
+}
+
+inline fun <reified T : Any> Flow<PagingData<T>>.toLazyPagingItems(): LazyPagingItems<T> {
+    val constructor = LazyPagingItems::class.java.constructors.first { it.parameterCount == 1 && it.parameterTypes[0] == Flow::class.java }
+    constructor.isAccessible = true
+    return constructor.newInstance(this) as LazyPagingItems<T>
+}
+
+@Composable
+inline fun <reified T: Any> LazyPagingItems<T>.collect(): LazyPagingItems<T> {
+    val items = this
+    val methods = LazyPagingItems::class.java.declaredMethods
+    val collectPagingDataMethod = methods.first { it.name.contains("collectPagingData") }
+    collectPagingDataMethod.isAccessible = true
+    LaunchedEffect(items) {
+        suspendCoroutine<Unit> {
+            collectPagingDataMethod.invoke(items, it)
+        }
+    }
+
+    val collectLoadStateMethod = methods.first { it.name.contains("collectLoadState") }
+    collectLoadStateMethod.isAccessible = true
+    LaunchedEffect(items) {
+        suspendCoroutine<Unit> {
+            collectLoadStateMethod.invoke(items, it)
+        }
+    }
+
+    return items
 }

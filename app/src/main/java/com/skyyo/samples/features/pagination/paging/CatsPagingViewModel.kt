@@ -1,12 +1,16 @@
 package com.skyyo.samples.features.pagination.paging
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
+import androidx.paging.LoadState
 import androidx.paging.cachedIn
+import androidx.paging.compose.LazyPagingItems
 import com.skyyo.samples.application.models.Cat
+import com.skyyo.samples.extensions.toLazyPagingItems
 import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.utils.NavigationDispatcher
@@ -14,7 +18,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -29,13 +32,24 @@ class CatsPagingViewModel @Inject constructor(
     private val catsRepository: CatsRepositoryPaging
 ) : ViewModel() {
 
-    //TODO add sample of passing lambda to the GamesSource to listen to events from ViewModel layer?
-    // bad Paging library api design forces us to emit events from view layer, or I've missed something.
-
     val query = handle.getLiveData("query", "")
-    val cats: Flow<PagingData<Cat>> = query.asFlow()
+    val cats: LazyPagingItems<Cat> = query.asFlow()
         .flatMapLatest { catsRepository.getCatsPaging(it) }
-        .cachedIn(viewModelScope)
+        .cachedIn(viewModelScope).toLazyPagingItems()
+    val isRefreshInProgress: State<Boolean>
+        get() = derivedStateOf { cats.loadState.refresh is LoadState.Loading }
+    val firstPageError: State<Int?>
+        get() = derivedStateOf {
+            val firstPageError = cats.loadState.refresh as? LoadState.Error
+            (firstPageError?.error as PagingException?)?.stringRes
+        }
+    val currentPageError: State<Int?>
+        get() = derivedStateOf {
+            val currentPageError = cats.loadState.append as? LoadState.Error
+            (currentPageError?.error as PagingException?)?.stringRes
+        }
+    val newPageLoading: State<Boolean>
+        get() = derivedStateOf { cats.loadState.append is LoadState.Loading }
 
     private val _events = Channel<CatsScreenEvent>()
     val events = _events.receiveAsFlow()
@@ -46,15 +60,11 @@ class CatsPagingViewModel @Inject constructor(
         }
     }
 
-    fun onSwipeToRefresh() {
-        viewModelScope.launch(Dispatchers.Default) {
-            _events.send(CatsScreenEvent.RefreshList)
-        }
+    fun refresh() {
+        cats.refresh()
     }
 
-    fun onCatsLoadingError(exception: PagingException) {
-        viewModelScope.launch(Dispatchers.Default) {
-            _events.send(CatsScreenEvent.ShowToast(exception.stringRes))
-        }
+    fun onRetryClick() {
+        cats.retry()
     }
 }
