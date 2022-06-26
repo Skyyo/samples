@@ -54,6 +54,7 @@ import com.skyyo.samples.features.parallaxEffect.ParallaxEffectScreen
 import com.skyyo.samples.features.pdfViewer.PdfViewerScreen
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
 import com.skyyo.samples.features.scanQR.QrScreen
+import com.skyyo.samples.features.scanQrNoPermissions.QrNoPermissionsScreen
 import com.skyyo.samples.features.scrollAnimation1.ScrollAnimation1Screen
 import com.skyyo.samples.features.sharedViewModel.ProfileSharedViewModel
 import com.skyyo.samples.features.sharedViewModel.confirmProfile.EditProfileConfirmationScreen
@@ -147,6 +148,7 @@ fun PopulatedNavHost(
         }
     }
     composable(Destination.QrCodeScanning.route) { QrScreen() }
+    composable(Destination.QrNoPermissions.route) { QrNoPermissionsScreen() }
     composable(Destination.ScrollAnimation1.route) { ScrollAnimation1Screen() }
     composable(Destination.Snackbar.route) { SnackbarScreen() }
     composable(Destination.Snap.route) { SnapScreen() }

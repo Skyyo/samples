@@ -192,6 +192,10 @@ fun Camera(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goQrScanning
     ) { Text(text = "scan qr code with ML kit") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goQrScanningWithoutPermissions
+    ) { Text(text = "scan qr code without permissions") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 
