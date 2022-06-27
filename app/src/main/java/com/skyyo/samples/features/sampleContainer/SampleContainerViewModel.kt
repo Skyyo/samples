@@ -192,4 +192,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goDragAndDrop() = navigationDispatcher.emit {
         it.navigate(Destination.DragAndDrop.route)
     }
+
+    fun goHealthConnect() = navigationDispatcher.emit {
+        it.navigate(Destination.HealthConnect.route)
+    }
 }
