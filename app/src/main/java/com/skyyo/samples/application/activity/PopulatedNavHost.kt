@@ -167,6 +167,7 @@ fun PopulatedNavHost(
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
     composable(Destination.PdfViewer.route) { PdfViewerScreen() }
+    composable(Destination.HealthConnect.route) { HealthConnectScreen() }
     composable(Destination.DragAndDrop.route) { DragAndDropScreen() }
     composable(
         route = Destination.PrivacyPolicy.route,
