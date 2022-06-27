@@ -24,7 +24,6 @@ import com.skyyo.samples.application.persistance.DataStoreManager
 import com.skyyo.samples.theme.IgdbBrowserTheme
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -41,7 +40,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyEdgeToEdge()
-
         //TODO can be optimized. Shouldn't be used if we don't allow for manual theme switching,
         // unless we force light theme
         val savedTheme = runBlocking { dataStoreManager.getAppTheme() }
