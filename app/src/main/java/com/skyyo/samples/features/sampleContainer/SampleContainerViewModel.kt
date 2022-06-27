@@ -189,6 +189,14 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.PdfViewer.route)
     }
 
+    fun goDragAndDrop() = navigationDispatcher.emit {
+        it.navigate(Destination.DragAndDrop.route)
+    }
+
+    fun goHealthConnect() = navigationDispatcher.emit {
+        it.navigate(Destination.HealthConnect.route)
+    }
+
     fun goImagePicker() = navigationDispatcher.emit {
         it.navigate(Destination.ImagePicker.route)
     }

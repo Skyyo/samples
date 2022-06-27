@@ -22,12 +22,12 @@ Keyboard
 
 Miscellaneous
 - We can't drop usage of liveData completely since we can't return stateFlow from the savedStateHandle, also it is still needed for scenarios which cover flow being observed with flatMapLatest ( as a typical scenario for searching by query ). Latter [issue](https://github.com/Kotlin/kotlinx.coroutines/issues/2223)
-- drag & drop feature. [possible workaround](https://stackoverflow.com/questions/64913067/reorder-lazycolumn-items-with-drag-drop), [library](https://github.com/aclassen/ComposeReorderable)
 - there is no out of the box support for scroll bars as of August 19, 2021. [Sample for simple cases](https://stackoverflow.com/questions/66341823/jetpack-compose-scrollbars/68056586#68056586)
 - bottomSheet destination is not preserved by default when navigating to new destination and coming back. [Workaround](https://medium.com/@theapache64/saving-bottomsheets-state-%EF%B8%8F-d9426cafbcbb)
 - no way to create nested sticky headers. Workaround imo is changing design or making one lvl of the headers as a composable that animates text changes.
 - Fling breaks on skipped frames. [issue](https://issuetracker.google.com/issues/190788866)
 - Need to find an alternative to onboarding guides from the view system like these libraries provided: [onboardingFlow](https://github.com/MrIceman/onboardingflow),[TapTargetView](https://github.com/KeepSafe/TapTargetView),[Spotlight](https://github.com/TakuSemba/Spotlight)
+- Health connect permission resolving issue - https://issuetracker.google.com/issues/233239418
 
 # Limitations
 - There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)

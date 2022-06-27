@@ -8,20 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk = 33
-    // There are some issues after migrating from Tiramisu to sdk 33
-    // https://issuetracker.google.com/issues/236055503
-    // to test app on android 13 use "preview" versions
-    // compileSdkPreview = "TiramisuPrivacySandbox"
-    // compileSdkPreview = "Tiramisu"
+    compileSdk 33
 
     defaultConfig {
         applicationId 'com.skyyo.samples'
-        minSdk 23
-        targetSdk = 33
-        // to test app on android 13 use "preview" versions
-        // targetSdkPreview = "TiramisuPrivacySandbox"
-        // compileSdkPreview = "Tiramisu"
+        minSdk 26
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -148,6 +140,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     implementation "dev.chrisbanes.snapper:snapper:0.2.0"
+    implementation "androidx.health:health-connect-client:1.0.0-alpha02"
     implementation "androidx.navigation:navigation-fragment-ktx:2.5.0-alpha02"
     implementation "androidx.navigation:navigation-ui-ktx:2.5.0-alpha02"
 }

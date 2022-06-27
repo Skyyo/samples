@@ -58,6 +58,9 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goPdfViewer) {
             Text(text = "pdf viewer")
         }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goHealthConnect) {
+            Text(text = "health connect")
+        }
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goImagePicker) {
             Text(text = "android 13 image picker")
         }
@@ -163,6 +166,9 @@ fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
     }
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goNoticeableScrollableRow) {
         Text(text = "noticeable scrollable row")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goDragAndDrop) {
+        Text(text = "drag and drop")
     }
     Spacer(modifier = Modifier.height(16.dp))
 }

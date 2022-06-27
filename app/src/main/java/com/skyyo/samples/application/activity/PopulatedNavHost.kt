@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.navDeepLink
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
@@ -24,6 +25,7 @@ import com.skyyo.samples.features.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.samples.features.cameraX.CameraXScreen
 import com.skyyo.samples.features.customView.CustomViewScreen
 import com.skyyo.samples.features.dominantColor.DominantColorScreen
+import com.skyyo.samples.features.dragAndDrop.DragAndDropScreen
 import com.skyyo.samples.features.exoPlayer.columnAutoplay.ExoPlayerColumnAutoplayScreen
 import com.skyyo.samples.features.exoPlayer.columnDynamicThumb.ExoPlayerColumnDynamicThumbScreen
 import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexedScreen
@@ -31,6 +33,7 @@ import com.skyyo.samples.features.exoPlayer.columnReference.ExoPlayerColumnRefer
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
+import com.skyyo.samples.features.healthConnect.HealthConnectScreen
 import com.skyyo.samples.features.imagePicker.ImagePicker
 import com.skyyo.samples.features.infiniteViewPager.InfiniteViewPagerScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
@@ -166,6 +169,18 @@ fun PopulatedNavHost(
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
     composable(Destination.PdfViewer.route) { PdfViewerScreen() }
+    composable(Destination.HealthConnect.route) { HealthConnectScreen() }
+    composable(Destination.DragAndDrop.route) { DragAndDropScreen() }
+    composable(
+        route = Destination.PrivacyPolicy.route,
+        deepLinks = listOf(
+            navDeepLink {
+                action = "androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE"
+            }
+        )
+    ) {
+        PdfViewerScreen()
+    }
     composable(Destination.ImagePicker.route) { ImagePicker() }
     composable(Destination.LanguagePicker.route) { LanguagePickerScreen() }
 }

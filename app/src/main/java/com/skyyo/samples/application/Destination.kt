@@ -57,6 +57,9 @@ sealed class Destination(val route: String) {
     object DominantColor : Destination("dominantColor")
     object Zoomable : Destination("zoomable")
     object PdfViewer : Destination("pdfViewer")
+    object HealthConnect: Destination("healthConnect")
+    object PrivacyPolicy: Destination("privacyPolicy")
+    object DragAndDrop: Destination("dragAndDrop")
     object ImagePicker : Destination("imagePicker")
     object LanguagePicker: Destination("languagePicker")
 }
