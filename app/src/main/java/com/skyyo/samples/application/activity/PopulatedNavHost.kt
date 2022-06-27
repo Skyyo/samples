@@ -16,6 +16,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.ProfileGraph
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
+import com.skyyo.samples.features.autofill.AutofillScreen
 import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScreen
@@ -55,6 +56,7 @@ import com.skyyo.samples.features.parallaxEffect.ParallaxEffectScreen
 import com.skyyo.samples.features.pdfViewer.PdfViewerScreen
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
 import com.skyyo.samples.features.scanQR.QrScreen
+import com.skyyo.samples.features.scanQrNoPermissions.QrNoPermissionsScreen
 import com.skyyo.samples.features.scrollAnimation1.ScrollAnimation1Screen
 import com.skyyo.samples.features.sharedViewModel.ProfileSharedViewModel
 import com.skyyo.samples.features.sharedViewModel.confirmProfile.EditProfileConfirmationScreen
@@ -64,6 +66,7 @@ import com.skyyo.samples.features.snackbar.SnackbarScreen
 import com.skyyo.samples.features.snap.SnapScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
+import com.skyyo.samples.features.verticalPagerWithFling.VideoPagerWithFlingScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
 import com.skyyo.samples.features.zoomable.ZoomableScreen
 
@@ -125,6 +128,7 @@ fun PopulatedNavHost(
     composable(Destination.ParallaxEffect.route) { ParallaxEffectScreen() }
     composable(Destination.CustomView.route) { CustomViewScreen() }
     composable(Destination.MarqueeText.route) { MarqueeTextScreen() }
+    composable(Destination.Autofill.route) { AutofillScreen() }
     navigation(
         route = ProfileGraph.route,
         startDestination = ProfileGraph.Profile.route
@@ -146,6 +150,7 @@ fun PopulatedNavHost(
         }
     }
     composable(Destination.QrCodeScanning.route) { QrScreen() }
+    composable(Destination.QrNoPermissions.route) { QrNoPermissionsScreen() }
     composable(Destination.ScrollAnimation1.route) { ScrollAnimation1Screen() }
     composable(Destination.Snackbar.route) { SnackbarScreen() }
     composable(Destination.Snap.route) { SnapScreen() }
@@ -157,6 +162,7 @@ fun PopulatedNavHost(
     composable(Destination.ExoPlayerColumnIndexed.route) { ExoPlayerColumnIndexedScreen() }
     composable(Destination.ExoPlayerColumnAutoplay.route) { ExoPlayerColumnAutoplayScreen() }
     composable(Destination.ExoPlayerColumnDynamicThumb.route) { ExoPlayerColumnDynamicThumbScreen() }
+    composable(Destination.VerticalPagerWithFling.route) { VideoPagerWithFlingScreen() }
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
     composable(Destination.PdfViewer.route) { PdfViewerScreen() }

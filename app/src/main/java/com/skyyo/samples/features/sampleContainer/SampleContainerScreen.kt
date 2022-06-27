@@ -137,6 +137,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goMarqueeText
     ) { Text(text = "marquee text") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goAutofill
+    ) { Text(text = "autofill") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 
@@ -194,6 +198,10 @@ fun Camera(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goQrScanning
     ) { Text(text = "scan qr code with ML kit") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goQrScanningWithoutPermissions
+    ) { Text(text = "scan qr code without permissions") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 
@@ -216,6 +224,10 @@ fun ExoPlayerSamples(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goExoPlayerColumnDynamicThumb
     ) { Text(text = "dynamic thumbnails") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goVerticalPagerWithFling
+    ) { Text(text = "vertical pager with fling") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 

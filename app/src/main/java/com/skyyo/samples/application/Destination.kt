@@ -26,6 +26,7 @@ sealed class Destination(val route: String) {
     object Table : Destination("table")
     object CustomView : Destination("customViewScreen")
     object MarqueeText: Destination("marqueeText")
+    object Autofill: Destination("autofill")
     object DogFeed : Destination("dogFeed")
     object DogDetails : Destination("dogDetails/{dogId}") {
         fun createRoute(dogId: String) = "dogDetails/$dogId"
@@ -37,6 +38,7 @@ sealed class Destination(val route: String) {
     object CatDetails : Destination("catDetails")
     object CatContacts : Destination("catContacts")
     object QrCodeScanning : Destination("qrCodeScanning")
+    object QrNoPermissions : Destination("qrCodeNoPermissions")
     object ScrollAnimation1 : Destination("scrollAnimation1")
     object Snackbar : Destination("snack")
     object Snap: Destination("snap")
@@ -51,6 +53,7 @@ sealed class Destination(val route: String) {
     object ExoPlayerColumnIndexed : Destination("exoPlayerColumnIndexed")
     object ExoPlayerColumnAutoplay : Destination("exoPlayerColumnAutoplay")
     object ExoPlayerColumnDynamicThumb : Destination("exoPlayerColumnDynamicThumb")
+    object VerticalPagerWithFling : Destination("videopager")
     object DominantColor : Destination("dominantColor")
     object Zoomable : Destination("zoomable")
     object PdfViewer : Destination("pdfViewer")

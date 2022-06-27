@@ -113,12 +113,20 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.MarqueeText.route)
     }
 
+    fun goAutofill() = navigationDispatcher.emit {
+        it.navigate(Destination.Autofill.route)
+    }
+
     fun goHiltComposeSharedViewModel() = navigationDispatcher.emit {
         it.navigate(ProfileGraph.Profile.route)
     }
 
     fun goQrScanning() = navigationDispatcher.emit {
         it.navigate(Destination.QrCodeScanning.route)
+    }
+
+    fun goQrScanningWithoutPermissions() = navigationDispatcher.emit {
+        it.navigate(Destination.QrNoPermissions.route)
     }
 
     fun goScrollAnimation1() = navigationDispatcher.emit {
@@ -163,6 +171,10 @@ class SampleContainerViewModel @Inject constructor(
 
     fun goExoPlayerColumnDynamicThumb() = navigationDispatcher.emit {
         it.navigate(Destination.ExoPlayerColumnDynamicThumb.route)
+    }
+
+    fun goVerticalPagerWithFling() = navigationDispatcher.emit {
+        it.navigate(Destination.VerticalPagerWithFling.route)
     }
 
     fun goDominantColor() = navigationDispatcher.emit {

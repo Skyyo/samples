@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyEdgeToEdge()
-
         //TODO can be optimized. Shouldn't be used if we don't allow for manual theme switching,
         // unless we force light theme
         val savedTheme = runBlocking { dataStoreManager.getAppTheme() }
