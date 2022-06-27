@@ -62,7 +62,7 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
             Text(text = "health connect")
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goImagePicker) {
-            Text(text = "android 13 image picker")
+            Text(text = "image picker without permissions")
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goLanguagePicker) {
             Text(text = "language picker")

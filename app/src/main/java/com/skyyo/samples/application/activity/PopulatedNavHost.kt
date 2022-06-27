@@ -34,7 +34,7 @@ import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
 import com.skyyo.samples.features.healthConnect.HealthConnectScreen
-import com.skyyo.samples.features.imagePicker.ImagePicker
+import com.skyyo.samples.features.imagePicker.ImagePickerScreen
 import com.skyyo.samples.features.infiniteViewPager.InfiniteViewPagerScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
@@ -181,6 +181,6 @@ fun PopulatedNavHost(
     ) {
         PdfViewerScreen()
     }
-    composable(Destination.ImagePicker.route) { ImagePicker() }
+    composable(Destination.ImagePicker.route) { ImagePickerScreen() }
     composable(Destination.LanguagePicker.route) { LanguagePickerScreen() }
 }
