@@ -59,6 +59,7 @@ sealed class Destination(val route: String) {
     object PdfViewer : Destination("pdfViewer")
     object HealthConnect: Destination("healthConnect")
     object PrivacyPolicy: Destination("privacyPolicy")
+    object DragAndDrop: Destination("dragAndDrop")
 }
 
 sealed class ProfileGraph(val route: String) {

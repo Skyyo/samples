@@ -25,6 +25,7 @@ import com.skyyo.samples.features.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.samples.features.cameraX.CameraXScreen
 import com.skyyo.samples.features.customView.CustomViewScreen
 import com.skyyo.samples.features.dominantColor.DominantColorScreen
+import com.skyyo.samples.features.dragAndDrop.DragAndDropScreen
 import com.skyyo.samples.features.exoPlayer.columnAutoplay.ExoPlayerColumnAutoplayScreen
 import com.skyyo.samples.features.exoPlayer.columnDynamicThumb.ExoPlayerColumnDynamicThumbScreen
 import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexedScreen
@@ -166,7 +167,7 @@ fun PopulatedNavHost(
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
     composable(Destination.PdfViewer.route) { PdfViewerScreen() }
-    composable(Destination.HealthConnect.route) { HealthConnectScreen() }
+    composable(Destination.DragAndDrop.route) { DragAndDropScreen() }
     composable(
         route = Destination.PrivacyPolicy.route,
         deepLinks = listOf(
