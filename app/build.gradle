@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
 
     defaultConfig {
         applicationId 'com.skyyo.samples'
-        minSdk 23
+        minSdk 26
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -139,5 +139,5 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     implementation "dev.chrisbanes.snapper:snapper:0.2.0"
-
+    implementation "androidx.health:health-connect-client:1.0.0-alpha02"
 }
