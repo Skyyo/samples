@@ -47,7 +47,6 @@ android {
         useIR = true
     }
     buildFeatures {
-        viewBinding true
         compose true
     }
     composeOptions {
@@ -141,6 +140,4 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     implementation "dev.chrisbanes.snapper:snapper:0.2.0"
     implementation "androidx.health:health-connect-client:1.0.0-alpha02"
-    implementation "androidx.navigation:navigation-fragment-ktx:2.5.0-alpha02"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.0-alpha02"
 }
