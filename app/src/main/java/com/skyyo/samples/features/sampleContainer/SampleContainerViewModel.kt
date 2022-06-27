@@ -196,4 +196,12 @@ class SampleContainerViewModel @Inject constructor(
     fun goHealthConnect() = navigationDispatcher.emit {
         it.navigate(Destination.HealthConnect.route)
     }
+
+    fun goImagePicker() = navigationDispatcher.emit {
+        it.navigate(Destination.ImagePicker.route)
+    }
+
+    fun goLanguagePicker() = navigationDispatcher.emit {
+        it.navigate(Destination.LanguagePicker.route)
+    }
 }

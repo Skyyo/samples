@@ -60,6 +60,8 @@ sealed class Destination(val route: String) {
     object HealthConnect: Destination("healthConnect")
     object PrivacyPolicy: Destination("privacyPolicy")
     object DragAndDrop: Destination("dragAndDrop")
+    object ImagePicker : Destination("imagePicker")
+    object LanguagePicker: Destination("languagePicker")
 }
 
 sealed class ProfileGraph(val route: String) {

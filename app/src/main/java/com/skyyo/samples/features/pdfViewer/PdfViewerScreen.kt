@@ -139,9 +139,8 @@ fun PdfViewerScreen(viewModel: PdfViewerViewModel = hiltViewModel()) {
 fun ChoosePdfButton(viewModel: PdfViewerViewModel) {
     val chooseFileRequester = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
-        onResult = {
-            viewModel.uri.value = it
-        })
+        onResult = viewModel::onUriChanged
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()

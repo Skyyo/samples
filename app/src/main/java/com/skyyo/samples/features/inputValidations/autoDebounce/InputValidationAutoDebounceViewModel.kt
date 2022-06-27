@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.R
-import com.skyyo.samples.extensions.getStateFlow
 import com.skyyo.samples.features.inputValidations.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,16 +21,16 @@ class InputValidationAutoDebounceViewModel @Inject constructor(
     private val handle: SavedStateHandle
 ) : ViewModel() {
 
-    val name = handle.getStateFlow(viewModelScope, "name", InputWrapper())
-    val creditCardNumber = handle.getStateFlow(viewModelScope, "creditCardNumber", InputWrapper())
+    val name = handle.getStateFlow("name", InputWrapper())
+    val creditCardNumber = handle.getStateFlow("creditCardNumber", InputWrapper())
     val areInputsValid = combine(name, creditCardNumber) { name, cardNumber ->
         name.value.isNotEmpty() && name.errorId == null &&
                 cardNumber.value.isNotEmpty() && cardNumber.errorId == null
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
-    private var focusedTextField = handle.get("focusedTextField") ?: FocusedTextFieldKey.NAME
+    private var focusedTextField = handle["focusedTextField"] ?: FocusedTextFieldKey.NAME
         set(value) {
             field = value
-            handle.set("focusedTextField", value)
+            handle["focusedTextField"] = value
         }
 
     private val _events = Channel<ScreenEvent>()
@@ -51,22 +50,24 @@ class InputValidationAutoDebounceViewModel @Inject constructor(
                         is UserInputEvent.Name -> {
                             when (InputValidator.getNameErrorIdOrNull(event.input)) {
                                 null -> {
-                                    name.value =
+                                    handle["name"] =
                                         name.value.copy(value = event.input, errorId = null)
                                 }
-                                else -> name.value = name.value.copy(value = event.input)
+                                else -> handle["name"] = name.value.copy(value = event.input)
                             }
                         }
                         is UserInputEvent.CreditCard -> {
                             when (InputValidator.getCardNumberErrorIdOrNull(event.input)) {
                                 null -> {
-                                    creditCardNumber.value = creditCardNumber.value.copy(
+                                    handle["creditCardNumber"] = creditCardNumber.value.copy(
                                         value = event.input,
                                         errorId = null
                                     )
                                 }
-                                else -> creditCardNumber.value =
-                                    creditCardNumber.value.copy(value = event.input)
+                                else -> {
+                                    handle["creditCardNumber"] =
+                                        creditCardNumber.value.copy(value = event.input)
+                                }
                             }
                         }
                     }
@@ -76,11 +77,12 @@ class InputValidationAutoDebounceViewModel @Inject constructor(
                     when (event) {
                         is UserInputEvent.Name -> {
                             val errorId = InputValidator.getNameErrorIdOrNull(event.input)
-                            name.value = name.value.copy(errorId = errorId)
+                            handle["name"] = name.value.copy(errorId = errorId)
                         }
                         is UserInputEvent.CreditCard -> {
                             val errorId = InputValidator.getCardNumberErrorIdOrNull(event.input)
-                            creditCardNumber.value = creditCardNumber.value.copy(errorId = errorId)
+                            handle["creditCardNumber"] =
+                                creditCardNumber.value.copy(errorId = errorId)
                         }
                     }
                 }
@@ -132,8 +134,8 @@ class InputValidationAutoDebounceViewModel @Inject constructor(
     }
 
     private fun displayInputErrors(inputErrors: InputErrors) {
-        name.value = name.value.copy(errorId = inputErrors.nameErrorId)
-        creditCardNumber.value = creditCardNumber.value.copy(errorId = inputErrors.cardErrorId)
+        handle["name"] = name.value.copy(errorId = inputErrors.nameErrorId)
+        handle["creditCardNumber"] = creditCardNumber.value.copy(errorId = inputErrors.cardErrorId)
     }
 
     private suspend fun clearFocusAndHideKeyboard() {
