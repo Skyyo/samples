@@ -203,7 +203,6 @@ private fun rememberHealthConnectPermissionState(
     val coroutineScope = rememberCoroutineScope()
 
     key(mutablePermission.permission) {
-        //TODO it always return empty list
         val launcher = rememberLauncherForActivityResult(
             HealthDataRequestPermissions()
         ) {
