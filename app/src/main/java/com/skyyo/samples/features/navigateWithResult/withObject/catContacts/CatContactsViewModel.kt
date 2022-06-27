@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.models.Dog
-import com.skyyo.samples.extensions.observeBackStackStateHandle
+import com.skyyo.samples.extensions.getBackStackStateHandle
 import com.skyyo.samples.features.navigateWithResult.withObject.catFeed.CAT_KEY
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ class CatContactsViewModel @Inject constructor(
     private lateinit var catFeedHandle: SavedStateHandle
 
     init {
-        navigationDispatcher.observeBackStackStateHandle(Destination.CatFeed.route) {
+        navigationDispatcher.getBackStackStateHandle(Destination.CatFeed.route) {
             catFeedHandle = it
         }
     }

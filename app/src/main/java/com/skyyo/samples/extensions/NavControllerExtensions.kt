@@ -9,26 +9,33 @@ import com.skyyo.samples.utils.NavigationDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-fun NavigationDispatcher.observeBackStackStateHandle(
+fun NavigationDispatcher.getBackStackStateHandle(
     destinationId: Int?,
     observer: (SavedStateHandle) -> Unit
 ) = emit {
-    val savedStateHandle = when(destinationId) {
+    val savedStateHandle = when (destinationId) {
         null -> it.previousBackStackEntry!!.savedStateHandle
         else -> it.getBackStackEntry(destinationId).savedStateHandle
     }
     observer(savedStateHandle)
 }
 
-fun NavigationDispatcher.observeBackStackStateHandle(
+fun NavigationDispatcher.getBackStackStateHandle(
     destinationId: String?,
     observer: (SavedStateHandle) -> Unit
 ) = emit {
-    val savedStateHandle = when(destinationId) {
+    val savedStateHandle = when (destinationId) {
         null -> it.previousBackStackEntry!!.savedStateHandle
         else -> it.getBackStackEntry(destinationId).savedStateHandle
     }
     observer(savedStateHandle)
+}
+
+fun NavController.getBackStackStateHandle(destinationId: String?): SavedStateHandle {
+    return when (destinationId) {
+        null -> previousBackStackEntry!!.savedStateHandle
+        else -> getBackStackEntry(destinationId).savedStateHandle
+    }
 }
 
 fun <T> NavigationDispatcher.observeNavigationResult(
@@ -38,9 +45,10 @@ fun <T> NavigationDispatcher.observeNavigationResult(
     observer: (T) -> Unit,
 ) = emit { navController ->
     coroutineScope.launch {
-        navController.currentBackStackEntry!!.savedStateHandle.getStateFlow(key, initialValue).collect {
-            observer(it)
-        }
+        navController.currentBackStackEntry!!.savedStateHandle.getStateFlow(key, initialValue)
+            .collect {
+                observer(it)
+            }
     }
 }
 
