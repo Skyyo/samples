@@ -3,6 +3,7 @@ package com.skyyo.samples.features.customView
 import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
+import android.os.Build
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
@@ -12,11 +13,14 @@ import android.window.OnBackInvokedDispatcher
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Switch
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
@@ -27,10 +31,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.os.BuildCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import com.google.accompanist.insets.statusBarsPadding
+import kotlinx.coroutines.*
 import kotlin.math.roundToInt
 
 @Composable
@@ -46,7 +50,10 @@ fun CustomViewScreen(viewModel: CustomViewVM = hiltViewModel()) {
         CustomProgressCircle(sliderValue)
         CustomProgressCircle2(sliderValue)
 
-        Switch(checked = doubleBackPressWithCustomView, onCheckedChange = {doubleBackPressWithCustomView = it})
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Test 2x back press with old views", modifier = Modifier.padding(end = 10.dp))
+            Switch(checked = doubleBackPressWithCustomView, onCheckedChange = {doubleBackPressWithCustomView = it})
+        }
 
         if (doubleBackPressWithCustomView) {
             val lifecycleOwner = LocalLifecycleOwner.current
@@ -160,34 +167,48 @@ fun Triangle(sliderValue: Float) {
     }
 }
 
+private typealias OnToastVisibilityChangedCallback = (isToastVisible: Boolean) -> Unit
+
+private const val TOAST_LENGTH = 3000L
+
+@OptIn(DelicateCoroutinesApi::class)
+private fun Toast.showWithCallback(callback: OnToastVisibilityChangedCallback) {
+    callback(true)
+    show()
+    GlobalScope.launch(Dispatchers.IO) {
+        delay(TOAST_LENGTH)
+        cancelWithCallback(callback)
+    }
+}
+
+private fun Toast.cancelWithCallback(callback: OnToastVisibilityChangedCallback) {
+    callback(false)
+    cancel()
+}
+
 @Composable
 private fun DoubleBackPressComposable(doubleBackPressAction: () -> Unit) {
     var previousBackPressTime by remember { mutableStateOf(0L) }
     val context = LocalContext.current
     var isToastVisible by remember { mutableStateOf(false) }
-    val toast: Toast = remember {
-        Toast.makeText(context, "Press back one more time to continue", Toast.LENGTH_LONG).apply {
-            addCallback(object : Toast.Callback() {
-                override fun onToastHidden() {
-                    super.onToastHidden()
-                    isToastVisible = false
-                }
-
-                override fun onToastShown() {
-                    super.onToastShown()
-                    isToastVisible = true
-                }
-            })
+    val toastCallback = remember {
+        object: OnToastVisibilityChangedCallback {
+            override fun invoke(isToastVisibleNew: Boolean) {
+                isToastVisible = isToastVisibleNew
+            }
         }
+    }
+    val toast: Toast = remember {
+        Toast.makeText(context, "Press back one more time to continue", Toast.LENGTH_LONG)
     }
     BackHandler {
         val newBackPressTime = System.currentTimeMillis()
-        previousBackPressTime = if (previousBackPressTime != 0L && newBackPressTime - previousBackPressTime < 5000L) {
+        previousBackPressTime = if (previousBackPressTime != 0L && newBackPressTime - previousBackPressTime < TOAST_LENGTH) {
             doubleBackPressAction()
-            toast.cancel()
+            toast.cancelWithCallback(toastCallback)
             0L
         } else {
-            if (!isToastVisible) toast.show()
+            if (!isToastVisible) toast.showWithCallback(toastCallback)
             newBackPressTime
         }
     }
@@ -200,6 +221,7 @@ class DoubleBackPressView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ): View(context, attrs, defStyleAttr) {
 
+    @RequiresApi(33)
     private fun getBackInvokedDispatcher() = (context as Activity).onBackInvokedDispatcher
 
     private val onBackClickAction: () -> Unit = {
@@ -224,19 +246,12 @@ class DoubleBackPressView @JvmOverloads constructor(
     private var doublePressActionShouldBeInvoked = false
     private var isToastVisible = false
 
-    private val toast: Toast = Toast.makeText(context, "Press back one more time to continue", Toast.LENGTH_LONG).apply {
-        addCallback(object: Toast.Callback() {
-            override fun onToastHidden() {
-                super.onToastHidden()
-                isToastVisible = false
-            }
-
-            override fun onToastShown() {
-                super.onToastShown()
-                isToastVisible = true
-            }
-        })
+    private val toastCallback = object: OnToastVisibilityChangedCallback {
+        override fun invoke(isToastVisibleNew: Boolean) {
+            isToastVisible = isToastVisibleNew
+        }
     }
+    private val toast: Toast = Toast.makeText(context, "Press back one more time to continue", Toast.LENGTH_LONG)
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -261,14 +276,14 @@ class DoubleBackPressView @JvmOverloads constructor(
 
     private fun prepareToInterceptOnBackCalls() {
         val newBackPressTime = System.currentTimeMillis()
-        if (previousBackPressTime != 0L && newBackPressTime - previousBackPressTime < 5000L) {
+        if (previousBackPressTime != 0L && newBackPressTime - previousBackPressTime < TOAST_LENGTH) {
             doublePressActionShouldBeInvoked = true
             previousBackPressTime = 0L
         } else {
             doublePressActionShouldBeInvoked = false
             previousBackPressTime = newBackPressTime
         }
-        if (!isToastVisible) toast.show()
+        if (!isToastVisible) toast.showWithCallback(toastCallback)
     }
 
     fun setDoubleBackPressAction(doubleBackPressAction: () -> Unit) {
@@ -276,7 +291,7 @@ class DoubleBackPressView @JvmOverloads constructor(
     }
 
     fun setLifecycleOwner(composeLifecycleOwner: LifecycleOwner) {
-        if (!BuildCompat.isAtLeastT()) {
+        if (Build.VERSION.SDK_INT < 33) {
             val backDispatcher = (context as ComponentActivity).onBackPressedDispatcher
             backDispatcher.addCallback(composeLifecycleOwner, onBackPressedCallback)
         }
@@ -288,7 +303,7 @@ class DoubleBackPressView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        if (BuildCompat.isAtLeastT()) {
+        if (Build.VERSION.SDK_INT >= 33) {
             getBackInvokedDispatcher().registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_OVERLAY,
                 onBackInvokedCallback
@@ -300,8 +315,8 @@ class DoubleBackPressView @JvmOverloads constructor(
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        toast.cancel()
-        if (BuildCompat.isAtLeastT()) {
+        toast.cancelWithCallback(toastCallback)
+        if (Build.VERSION.SDK_INT >= 33) {
             getBackInvokedDispatcher().unregisterOnBackInvokedCallback(onBackInvokedCallback)
         } else {
             onBackPressedCallback.isEnabled = false
