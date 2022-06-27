@@ -14,12 +14,10 @@ import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.extensions.getStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -29,7 +27,6 @@ class HealthConnectViewModel @Inject constructor(
     val application: Application,
 ): ViewModel() {
     private val healthConnectClient by lazy { HealthConnectClient.getOrCreate(application.applicationContext) }
-    val events = Channel<HealthConnectEvent>(Channel.UNLIMITED)
     val permissions = setOf(
         Permission.createReadPermission(Steps::class),
         Permission.createWritePermission(Steps::class),
@@ -41,10 +38,10 @@ class HealthConnectViewModel @Inject constructor(
     val localStepsCanBeRead = lastWrittenRecordUid.map { it != null }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
     val accumulated3rdPartySteps = handle.getStateFlow(viewModelScope, "3rdPartySteps", 0L)
+    val areAllPermissionsGranted = handle.getStateFlow(viewModelScope, "areAllPermissionsGranted", false)
 
     suspend fun checkPermissions() {
-        val areAllPermissionsGranted = healthConnectClient.hasAllPermissions(permissions)
-        events.send(HealthConnectEvent.PermissionsStatus(areAllPermissionsGranted))
+        areAllPermissionsGranted.value = healthConnectClient.hasAllPermissions(permissions)
     }
 
     /**

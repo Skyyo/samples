@@ -21,13 +21,11 @@ import androidx.health.connect.client.permission.HealthDataRequestPermissions
 import androidx.health.connect.client.permission.Permission
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.skyyo.samples.utils.OnClick
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,22 +38,9 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
     val localStepsCanBeRead by viewModel.localStepsCanBeRead.collectAsState()
     val accumulated3rdPartySteps by viewModel.accumulated3rdPartySteps.collectAsState()
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
-    val events = remember(viewModel.events) {
-        viewModel.events.receiveAsFlow().flowWithLifecycle(localLifecycle, Lifecycle.State.RESUMED)
-    }
 
     val healthConnectPermissionState = rememberHealthConnectPermissionState(permissions, viewModel::checkPermissions)
-    var areAllPermissionsGranted by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        events.collect { healthConnectEvent ->
-            when(healthConnectEvent) {
-                is HealthConnectEvent.PermissionsStatus -> {
-                    areAllPermissionsGranted = healthConnectEvent.areAllPermissionsGranted
-                }
-            }
-        }
-    }
+    val areAllPermissionsGranted by viewModel.areAllPermissionsGranted.collectAsState()
 
     LaunchedEffect(Unit) {
         callbackFlow {
