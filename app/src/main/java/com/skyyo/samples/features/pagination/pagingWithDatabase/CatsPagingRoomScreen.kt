@@ -126,7 +126,7 @@ fun CatsColumn(
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.systemBars,
             applyTop = true,
-            applyBottom = false,
+            applyBottom = true,
             additionalStart = 16.dp,
             additionalEnd = 16.dp,
             additionalBottom = 8.dp

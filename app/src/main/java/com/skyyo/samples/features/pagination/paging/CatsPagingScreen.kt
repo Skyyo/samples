@@ -21,6 +21,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -117,7 +118,15 @@ fun CatsColumn(
 ) {
     LazyColumn(
         state = listState,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.systemBars,
+            applyTop = true,
+            applyBottom = true,
+            additionalStart = 16.dp,
+            additionalEnd = 16.dp,
+            additionalBottom = 8.dp
+        )
     ) {
         //refreshing on page 0
         if (isRefreshInProgress) {
