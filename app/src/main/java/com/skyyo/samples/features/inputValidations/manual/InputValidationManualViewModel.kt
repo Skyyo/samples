@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.R
-import com.skyyo.samples.extensions.getStateFlow
 import com.skyyo.samples.features.inputValidations.FocusedTextFieldKey
 import com.skyyo.samples.features.inputValidations.InputErrors
 import com.skyyo.samples.features.inputValidations.InputValidator
@@ -19,17 +18,18 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class FormValidationManualViewModel @Inject constructor(private val handle: SavedStateHandle) :
-    ViewModel() {
+class FormValidationManualViewModel @Inject constructor(
+    private val handle: SavedStateHandle
+) : ViewModel() {
 
-    val name = handle.getStateFlow(viewModelScope, "name", "")
-    val nameErrorId = handle.getStateFlow<Int?>(viewModelScope, "nameErrorId", null)
-    val creditCardNumber = handle.getStateFlow(viewModelScope, "ccNumber", "")
-    val creditCardNumberErrorId = handle.getStateFlow<Int?>(viewModelScope, "ccNumberError", null)
-    private var focusedTextField = handle.get("focusedTextField") ?: FocusedTextFieldKey.NAME
+    val name = handle.getStateFlow("name", "")
+    val nameErrorId = handle.getStateFlow<Int?>("nameErrorId", null)
+    val creditCardNumber = handle.getStateFlow("ccNumber", "")
+    val creditCardNumberErrorId = handle.getStateFlow<Int?>("ccNumberError", null)
+    private var focusedTextField = handle["focusedTextField"] ?: FocusedTextFieldKey.NAME
         set(value) {
             field = value
-            handle.set("focusedTextField", value)
+            handle["focusedTextField"] = value
         }
 
     private val _events = Channel<ScreenEvent>()
@@ -40,13 +40,13 @@ class FormValidationManualViewModel @Inject constructor(private val handle: Save
     }
 
     fun onNameEntered(input: String) {
-        name.value = input
-        nameErrorId.value = null
+        handle["name"] = input
+        handle["nameErrorId"] = null
     }
 
     fun onCardNumberEntered(input: String) {
-        creditCardNumber.value = input
-        creditCardNumberErrorId.value = null
+        handle["ccNumber"] = input
+        handle["ccNumberError"] = null
     }
 
     fun onTextFieldFocusChanged(key: FocusedTextFieldKey, isFocused: Boolean) {
@@ -82,8 +82,8 @@ class FormValidationManualViewModel @Inject constructor(private val handle: Save
     }
 
     private fun displayInputErrors(inputErrors: InputErrors) {
-        nameErrorId.value = inputErrors.nameErrorId
-        creditCardNumberErrorId.value = inputErrors.cardErrorId
+        handle["nameErrorId"] = inputErrors.nameErrorId
+        handle["ccNumberError"] = inputErrors.cardErrorId
     }
 
     private suspend fun clearFocusAndHideKeyboard() {

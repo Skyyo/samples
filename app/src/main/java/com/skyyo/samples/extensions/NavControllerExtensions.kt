@@ -2,27 +2,55 @@ package com.skyyo.samples.extensions
 
 import android.os.Bundle
 import androidx.core.net.toUri
-import androidx.lifecycle.asFlow
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.*
 import com.skyyo.samples.application.Destination
+import com.skyyo.samples.utils.NavigationDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-//sets value to previous savedStateHandle unless route is specified
-fun <T> NavController.setNavigationResult(route: String? = null, key: String, result: T) {
-    if (route == null) {
-        previousBackStackEntry?.savedStateHandle?.set(key, result)
-    } else {
-        getBackStackEntry(route).savedStateHandle.set(key, result)
+fun NavigationDispatcher.getBackStackStateHandle(
+    destinationId: Int?,
+    observer: (SavedStateHandle) -> Unit
+) = emit {
+    val savedStateHandle = when (destinationId) {
+        null -> it.previousBackStackEntry!!.savedStateHandle
+        else -> it.getBackStackEntry(destinationId).savedStateHandle
+    }
+    observer(savedStateHandle)
+}
+
+fun NavigationDispatcher.getBackStackStateHandle(
+    destinationId: String?,
+    observer: (SavedStateHandle) -> Unit
+) = emit {
+    val savedStateHandle = when (destinationId) {
+        null -> it.previousBackStackEntry!!.savedStateHandle
+        else -> it.getBackStackEntry(destinationId).savedStateHandle
+    }
+    observer(savedStateHandle)
+}
+
+fun NavController.getBackStackStateHandle(destinationId: String?): SavedStateHandle {
+    return when (destinationId) {
+        null -> previousBackStackEntry!!.savedStateHandle
+        else -> getBackStackEntry(destinationId).savedStateHandle
     }
 }
 
-fun <T> NavController.getNavigationResult(key: String) =
-    currentBackStackEntry?.savedStateHandle?.get<T>(key)
-
-fun <T> NavController.observeNavigationResultLiveData(key: String) =
-    currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)
-
-fun <T> NavController.observeNavigationResult(key: String) =
-    currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.asFlow()
+fun <T> NavigationDispatcher.observeNavigationResult(
+    coroutineScope: CoroutineScope,
+    key: String,
+    initialValue: T,
+    observer: (T) -> Unit,
+) = emit { navController ->
+    coroutineScope.launch {
+        navController.currentBackStackEntry!!.savedStateHandle.getStateFlow(key, initialValue)
+            .collect {
+                observer(it)
+            }
+    }
+}
 
 fun NavController.navigateWithObject(
     route: String,

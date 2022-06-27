@@ -26,8 +26,9 @@ class DataStoreManager @Inject constructor(@ApplicationContext context: Context)
         }
     }
 
-    suspend fun getAppTheme(): String =
-        dataStore.data.first()[PreferencesKeys.APP_THEME] ?: THEME_AUTO
+    suspend fun getAppTheme(): String {
+        return dataStore.data.first()[PreferencesKeys.APP_THEME] ?: THEME_AUTO
+    }
 
     private object PreferencesKeys {
         val APP_THEME = stringPreferencesKey("appTheme")

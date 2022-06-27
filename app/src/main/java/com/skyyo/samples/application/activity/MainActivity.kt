@@ -1,8 +1,8 @@
 package com.skyyo.samples.application.activity
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.DisposableEffect
@@ -28,7 +28,7 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var dataStoreManager: DataStoreManager
@@ -76,6 +76,8 @@ class MainActivity : ComponentActivity() {
             }
 
             IgdbBrowserTheme(savedTheme) {
+                //accompanist window insets not working well with in-app language change library
+                //shouldn't be an issue, as we already adopted native insets, and this works fine
                 ProvideWindowInsets {
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {
