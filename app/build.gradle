@@ -129,11 +129,14 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:1.0.2"
     implementation 'androidx.camera:camera-view:1.0.0-alpha32'
 
-    implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:17.0.0'
+
+    implementation 'com.google.android.gms:play-services-code-scanner:16.0.0-beta1'
+    implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:18.0.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
 
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "dev.chrisbanes.snapper:snapper:0.2.1"
+
 
     debugImplementation "com.github.YarikSOffice.Venom:venom:0.5.0"
     releaseImplementation "com.github.YarikSOffice.Venom:venom-no-op:0.5.0"
