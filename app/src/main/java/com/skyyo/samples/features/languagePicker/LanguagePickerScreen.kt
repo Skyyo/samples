@@ -14,15 +14,13 @@ import androidx.core.os.LocaleListCompat
 import com.skyyo.samples.extensions.FixInAppLanguageSwitchLayoutDirection
 import java.util.*
 
-const val SUPPORTED_LANGUAGES = "en,ja,iw,uk"
-
 //so we don't waste time on splitting SUPPORTED_LANGUAGES by comma
 val SUPPORTED_LANGUAGES_ARRAY: Array<String> = arrayOf("en", "ja", "iw", "uk")
 
 @Composable
 fun LanguagePickerScreen() = FixInAppLanguageSwitchLayoutDirection {
     val locales = remember { getSupportedLocales() }
-    val currentLocale = remember { getCurrentLocale()?.toString() ?: "System default" }
+    val currentLocale = remember { getCurrentLocale() }
 
     Column(
         modifier = Modifier
@@ -31,18 +29,18 @@ fun LanguagePickerScreen() = FixInAppLanguageSwitchLayoutDirection {
             .padding(32.dp)
     ) {
         Text(
-            text = "Current language: $currentLocale",
+            text = "Current language: ${currentLocale?.language ?: "System language"}",
             modifier = Modifier.padding(top = 10.dp)
         )
-        repeat(locales.size() + 1) { index ->
-            val language = if (index == 0) "System default" else "${locales[index - 1]}"
+        repeat(locales.size + 1) { index ->
+            val language = if (index == 0) null else locales[index - 1]
             key(index) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = language == currentLocale,
+                        selected = language?.language == currentLocale?.language,
                         onClick = { setLocale(language) }
                     )
-                    Text(text = language, modifier = Modifier.padding(start = 10.dp))
+                    Text(text = language?.language ?: "System language", modifier = Modifier.padding(start = 10.dp))
                 }
             }
         }
@@ -50,18 +48,22 @@ fun LanguagePickerScreen() = FixInAppLanguageSwitchLayoutDirection {
     }
 }
 
-private fun setLocale(language: String) {
-    val languageToSet = if (language == "System default") null else language
-    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageToSet))
+private fun setLocale(locale: Locale?) {
+    if (locale == null) {
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.getEmptyLocaleList())
+    } else {
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(locale))
+    }
 }
 
 private fun getCurrentLocale(): Locale? {
-    return AppCompatDelegate.getApplicationLocales().getFirstMatch(SUPPORTED_LANGUAGES_ARRAY)
-//    return getSystemService(LocaleManager::class.java).applicationLocales.getFirstMatch(
-//        SUPPORTED_LANGUAGES_ARRAY
-//    )
+    val currentLanguageTag = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    return when {
+        currentLanguageTag.isEmpty() -> null
+        else -> Locale.forLanguageTag(currentLanguageTag)
+    }
 }
 
-private fun getSupportedLocales(): LocaleListCompat {
-    return LocaleListCompat.forLanguageTags(SUPPORTED_LANGUAGES)
+private fun getSupportedLocales(): List<Locale> {
+    return SUPPORTED_LANGUAGES_ARRAY.map { Locale.forLanguageTag(it) }
 }

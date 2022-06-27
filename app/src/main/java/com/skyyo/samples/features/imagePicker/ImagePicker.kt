@@ -2,6 +2,7 @@ package com.skyyo.samples.features.imagePicker
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.READ_MEDIA_IMAGES
+import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -31,7 +32,7 @@ fun ImagePicker() {
         Log.d("ImagePicker", "Multiple image uri's: $it")
     }
     val permissionState =
-        if (BuildCompat.isAtLeastT()) {
+        if (Build.VERSION.SDK_INT >= 33) {
             rememberPermissionState(permission = READ_MEDIA_IMAGES)
         } else {
             rememberPermissionState(permission = READ_EXTERNAL_STORAGE)

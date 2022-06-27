@@ -11,7 +11,6 @@ import androidx.health.connect.client.time.TimeRangeFilter
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyyo.samples.extensions.getStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,9 +20,15 @@ import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
+private const val LAST_WRITTEN_RECORD_UID_KEY = "lastWrittenRecordUid"
+private const val STEPS_WRITTEN_KEY = "stepsWritten"
+private const val STEPS_READ_KEY = "stepsRead"
+private const val THIRD_PARTY_STEPS_KEY = "3rdPartySteps"
+private const val ARE_ALL_PERMISSIONS_GRANTED_KEY = "areAllPermissionsGranted"
+
 @HiltViewModel
 class HealthConnectViewModel @Inject constructor(
-    handle: SavedStateHandle,
+    private val handle: SavedStateHandle,
     val application: Application,
 ): ViewModel() {
     private val healthConnectClient by lazy { HealthConnectClient.getOrCreate(application.applicationContext) }
@@ -32,16 +37,16 @@ class HealthConnectViewModel @Inject constructor(
         Permission.createWritePermission(Steps::class),
         Permission.createReadPermission(ActivitySession::class)
     )
-    private val lastWrittenRecordUid = handle.getStateFlow<String?>(viewModelScope, "lastWrittenRecordUid", null)
-    val stepsWritten = handle.getStateFlow(viewModelScope, "stepsWritten", 1L)
-    val stepsRead = handle.getStateFlow<Long?>(viewModelScope, "stepsRead", null)
+    private val lastWrittenRecordUid = handle.getStateFlow<String?>(LAST_WRITTEN_RECORD_UID_KEY, null)
+    val stepsWritten = handle.getStateFlow(STEPS_WRITTEN_KEY, 1L)
+    val stepsRead = handle.getStateFlow<Long?>(STEPS_READ_KEY, null)
     val localStepsCanBeRead = lastWrittenRecordUid.map { it != null }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
-    val accumulated3rdPartySteps = handle.getStateFlow(viewModelScope, "3rdPartySteps", 0L)
-    val areAllPermissionsGranted = handle.getStateFlow(viewModelScope, "areAllPermissionsGranted", false)
+    val accumulated3rdPartySteps = handle.getStateFlow(THIRD_PARTY_STEPS_KEY, 0L)
+    val areAllPermissionsGranted = handle.getStateFlow( ARE_ALL_PERMISSIONS_GRANTED_KEY, false)
 
     suspend fun checkPermissions() {
-        areAllPermissionsGranted.value = healthConnectClient.hasAllPermissions(permissions)
+        handle[ARE_ALL_PERMISSIONS_GRANTED_KEY] = healthConnectClient.hasAllPermissions(permissions)
     }
 
     /**
@@ -57,14 +62,14 @@ class HealthConnectViewModel @Inject constructor(
     }
 
     fun writeSteps() = viewModelScope.launch(Dispatchers.IO) {
-        lastWrittenRecordUid.value = healthConnectClient.writeSteps(stepsWritten.value)
-        stepsWritten.value++
+        handle[LAST_WRITTEN_RECORD_UID_KEY] = healthConnectClient.writeSteps(stepsWritten.value)
+        handle[STEPS_WRITTEN_KEY] = stepsWritten.value + 1
     }
 
     fun readSteps() = viewModelScope.launch(Dispatchers.IO) {
         val recordUid = lastWrittenRecordUid.value
         if (recordUid != null) {
-            stepsRead.value = healthConnectClient.readSteps(recordUid)
+            handle[STEPS_READ_KEY] = healthConnectClient.readSteps(recordUid)
         }
     }
 
@@ -88,13 +93,13 @@ class HealthConnectViewModel @Inject constructor(
                 dataOriginFilter = dataOriginFilter
             )
             val aggregateData = healthConnectClient.aggregate(aggregateRequest)
-            accumulated3rdPartySteps.value = aggregateData[Steps.COUNT_TOTAL] ?: 0L
+            handle[THIRD_PARTY_STEPS_KEY] = aggregateData[Steps.COUNT_TOTAL] ?: 0L
         } catch (e: IllegalArgumentException) {
             //activity session uid is empty or null
-            accumulated3rdPartySteps.value = 0L
+            handle[THIRD_PARTY_STEPS_KEY] = 0L
         } catch (e: RemoteException) {
             //activity session uid not exists
-            accumulated3rdPartySteps.value = 0L
+            handle[THIRD_PARTY_STEPS_KEY] = 0L
         }
     }
 
