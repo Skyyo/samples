@@ -16,5 +16,4 @@ fun CatContactsScreen(viewModel: CatContactsViewModel = hiltViewModel()) {
             Text(text = "Cat contacts: ${viewModel.cat.name} go back")
         }
     }
-
 }

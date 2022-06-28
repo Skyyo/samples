@@ -96,7 +96,6 @@ fun CatsScreen(viewModel: CatsViewModel = hiltViewModel()) {
             )
         }
     }
-
 }
 
 @Composable

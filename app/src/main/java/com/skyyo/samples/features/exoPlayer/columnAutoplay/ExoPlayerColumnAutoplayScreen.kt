@@ -94,7 +94,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
 }
 
 private fun LazyListState.playingItem(videos: List<VideoItem>): VideoItem? {
-    if (layoutInfo.visibleItemsInfo.isNullOrEmpty() || videos.isEmpty()) return null
+    if (layoutInfo.visibleItemsInfo.isEmpty() || videos.isEmpty()) return null
     val layoutInfo = layoutInfo
     val visibleItems = layoutInfo.visibleItemsInfo
     val lastItem = visibleItems.last()
@@ -104,7 +104,7 @@ private fun LazyListState.playingItem(videos: List<VideoItem>): VideoItem? {
     val totalOffset = layoutInfo.viewportEndOffset
     val lastItemVisible = lastItem.index == videos.size - 1 && totalOffset - itemOffset >= itemSize
     val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
-    val centerItems = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
+    val centerItems = visibleItems.sortedBy { abs(it.offset + it.size / 2 - midPoint) }
 
     return when {
         firstItemVisible -> videos.first()

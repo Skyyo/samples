@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.max
 
+@Suppress("LongMethod")
 @ExperimentalPagerApi
 @Composable
 fun ViewPagerScreen() {
@@ -48,6 +49,9 @@ fun ViewPagerScreen() {
         ),
         animationSpec = tween(durationMillis = 250, easing = LinearEasing)
     )
+    val indicatorShape = remember {
+        RoundedCornerShape(percent = 50)
+    }
 
     LaunchedEffect(pagerState) {
         snapshotFlow {
@@ -69,7 +73,7 @@ fun ViewPagerScreen() {
                 TabRowDefaults.Indicator(
                     modifier = Modifier
                         .scrollableTabIndicatorOffset(pagerState, tabPositions)
-                        .clip(RoundedCornerShape(50)),
+                        .clip(indicatorShape),
                     height = 2.dp
                 )
             },
@@ -105,7 +109,8 @@ fun ViewPagerScreen() {
                     page = page,
                     offset = 0.dp.value,
                     backgroundColor = backgroundColor,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(0) } })
+                    onClick = { scope.launch { pagerState.animateScrollToPage(0) } }
+                )
 //                PagerCard(
 //                    pageOffset = this@HorizontalPager.calculateCurrentOffsetForPage(page).absoluteValue,
 //                    page = page,

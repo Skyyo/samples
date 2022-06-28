@@ -24,7 +24,7 @@ class QrCodeAnalyzer(private val qrCode: (String) -> Unit) : ImageAnalysis.Analy
                 .addOnSuccessListener { qrCodes ->
                     for (qrCode in qrCodes) {
                         qrCode(qrCode.rawValue ?: "")
-                        //scanner.close()
+                        // scanner.close()
                     }
                 }
                 .addOnFailureListener {}

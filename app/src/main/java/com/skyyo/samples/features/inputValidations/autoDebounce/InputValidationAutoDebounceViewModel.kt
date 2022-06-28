@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class InputValidationAutoDebounceViewModel @Inject constructor(
@@ -25,7 +24,7 @@ class InputValidationAutoDebounceViewModel @Inject constructor(
     val creditCardNumber = handle.getStateFlow("creditCardNumber", InputWrapper())
     val areInputsValid = combine(name, creditCardNumber) { name, cardNumber ->
         name.value.isNotEmpty() && name.errorId == null &&
-                cardNumber.value.isNotEmpty() && cardNumber.errorId == null
+            cardNumber.value.isNotEmpty() && cardNumber.errorId == null
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
     private var focusedTextField = handle["focusedTextField"] ?: FocusedTextFieldKey.NAME
         set(value) {
@@ -72,7 +71,7 @@ class InputValidationAutoDebounceViewModel @Inject constructor(
                         }
                     }
                 }
-                .debounce(350)
+                .debounce(timeoutMillis = 350)
                 .collect { event ->
                     when (event) {
                         is UserInputEvent.Name -> {
@@ -147,9 +146,8 @@ class InputValidationAutoDebounceViewModel @Inject constructor(
     private fun focusOnLastSelectedTextField() {
         viewModelScope.launch(Dispatchers.Default) {
             _events.send(ScreenEvent.RequestFocus(focusedTextField))
-            delay(250)
+            delay(timeMillis = 250)
             _events.send(ScreenEvent.UpdateKeyboard(true))
         }
     }
 }
-

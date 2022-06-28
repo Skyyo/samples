@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyEdgeToEdge()
-        //TODO can be optimized. Shouldn't be used if we don't allow for manual theme switching,
+        // TODO can be optimized. Shouldn't be used if we don't allow for manual theme switching,
         // unless we force light theme
         val savedTheme = runBlocking { dataStoreManager.getAppTheme() }
 
@@ -76,8 +76,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             IgdbBrowserTheme(savedTheme) {
-                //accompanist window insets not working well with in-app language change library
-                //shouldn't be an issue, as we already adopted native insets, and this works fine
+                // accompanist window insets not working well with in-app language change library
+                // shouldn't be an issue, as we already adopted native insets, and this works fine
                 ProvideWindowInsets {
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {
@@ -93,9 +93,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 }
-

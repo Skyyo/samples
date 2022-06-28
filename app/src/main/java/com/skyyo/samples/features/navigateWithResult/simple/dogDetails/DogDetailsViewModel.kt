@@ -18,5 +18,4 @@ class DogDetailsViewModel @Inject constructor(
     fun goContacts() = navigationDispatcher.emit {
         it.navigate(Destination.DogContacts.createRoute("3333"))
     }
-
 }

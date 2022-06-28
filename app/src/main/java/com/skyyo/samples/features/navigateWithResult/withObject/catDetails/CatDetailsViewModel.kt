@@ -24,5 +24,4 @@ class CatDetailsViewModel @Inject constructor(
             arguments = bundleOf("cat" to cat)
         )
     }
-
 }

@@ -112,4 +112,3 @@ private fun LazyListState.visibleAreaContainsItem(
         layoutInfo.visibleItemsInfo.map { videos[it.index] }.contains(currentlyPlayedVideoItem)
     }
 }
-

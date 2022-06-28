@@ -14,7 +14,7 @@ import androidx.core.os.LocaleListCompat
 import com.skyyo.samples.extensions.FixInAppLanguageSwitchLayoutDirection
 import java.util.*
 
-//so we don't waste time on splitting SUPPORTED_LANGUAGES by comma
+// so we don't waste time on splitting SUPPORTED_LANGUAGES by comma
 val SUPPORTED_LANGUAGES_ARRAY: Array<String> = arrayOf("en", "ja", "iw", "uk")
 
 @Composable
@@ -44,7 +44,6 @@ fun LanguagePickerScreen() = FixInAppLanguageSwitchLayoutDirection {
                 }
             }
         }
-
     }
 }
 

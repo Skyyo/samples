@@ -2,7 +2,6 @@ package com.skyyo.samples.features.exoPlayer.common
 
 import androidx.compose.runtime.Immutable
 
-
 @Immutable
 data class VideoItemImmutable(
     val id: Int,

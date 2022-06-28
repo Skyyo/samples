@@ -73,12 +73,17 @@ import com.skyyo.samples.features.verticalPagerWithFling.VideoPagerWithFlingScre
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
 import com.skyyo.samples.features.zoomable.ZoomableScreen
 
+const val TRANSITION_DURATION_LONG = 1000
+const val TRANSITION_DURATION_SHORT = 350
+
 @OptIn(
     ExperimentalAnimationApi::class,
     ExperimentalMaterialNavigationApi::class,
     ExperimentalMaterialApi::class,
     ExperimentalPagerApi::class
 )
+
+@Suppress("LongMethod")
 @Composable
 fun PopulatedNavHost(
     startDestination: String,
@@ -86,8 +91,8 @@ fun PopulatedNavHost(
 ) = AnimatedNavHost(
     navController = navController,
     startDestination = startDestination,
-    enterTransition = { fadeIn(animationSpec = tween(350)) },
-    exitTransition = { fadeOut(animationSpec = tween(350)) }
+    enterTransition = { fadeIn(animationSpec = tween(TRANSITION_DURATION_SHORT)) },
+    exitTransition = { fadeOut(animationSpec = tween(TRANSITION_DURATION_SHORT)) }
 ) {
     composable(Destination.SampleContainer.route) { SampleContainerScreen() }
     composable(Destination.Cats.route) { CatsScreen() }
@@ -109,19 +114,21 @@ fun PopulatedNavHost(
     composable(Destination.CatFeed.route) { CatFeedScreen() }
     composable(Destination.CatDetails.route) { CatDetailsScreen() }
     composable(Destination.CatContacts.route) { CatContactsScreen() }
-    composable(Destination.InputValidationManual.route,
+    composable(
+        Destination.InputValidationManual.route,
         enterTransition = {
-            slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(400))
+            slideInHorizontally(initialOffsetX = { TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
         },
         exitTransition = {
-            slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(400))
+            slideOutHorizontally(targetOffsetX = { -TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
         },
         popEnterTransition = {
-            slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(400))
+            slideInHorizontally(initialOffsetX = { -TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
         },
         popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(400))
-        }) { InputValidationManualScreen() }
+            slideOutHorizontally(targetOffsetX = { TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
+        }
+    ) { InputValidationManualScreen() }
     composable(Destination.InputValidationAuto.route) { InputValidationAutoScreen() }
     composable(Destination.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
     composable(Destination.AppBarElevation.route) { AppBarElevation() }

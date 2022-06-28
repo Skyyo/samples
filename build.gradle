@@ -1,12 +1,12 @@
 buildscript {
     ext {
-        compose_version = '1.2.0-alpha06'
-        kotlin_version = '1.6.10'
-        lifecycle_version = '2.4.0'
+        kotlin_version = '1.6.21'
+        compose_version = '1.2.0-beta03'
+        lifecycle_version = '2.5.0-rc01'
         moshi_version = '1.13.0'
         retrofit_version = '2.9.0'
-        hilt_version = '2.40.1'
-        room_version = '2.4.0'
+        hilt_version = '2.41'
+        room_version = '2.4.2'
         accompanist_version = "0.22.0-rc"
     }
     repositories {
@@ -15,12 +15,19 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:7.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
 }
-
+allprojects {
+//    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+//        kotlinOptions {
+//            allWarningsAsErrors = true
+//            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+//        }
+//    }
+}
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

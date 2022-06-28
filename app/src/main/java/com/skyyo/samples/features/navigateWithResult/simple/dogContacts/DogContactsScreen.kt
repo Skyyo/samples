@@ -16,5 +16,4 @@ fun DogContactsScreen(viewModel: DogContactsViewModel = hiltViewModel()) {
             Text(text = "Dog contacts: ${viewModel.dogId} go back")
         }
     }
-
 }

@@ -72,7 +72,7 @@ fun NavController.navigateWithObject(
     }
 }
 
-//popUpToRoute - should always be the start destination of the bottomBar, not app
+// popUpToRoute - should always be the start destination of the bottomBar, not app
 fun NavController.navigateToRootDestination(
     route: String,
     popUpToRoute: String = Destination.Tab1.route

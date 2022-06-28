@@ -127,10 +127,11 @@ fun UIelements(viewModel: SampleContainerViewModel) {
     ) { Text(text = "table") }
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCustomView) {
         Text(
-            text = "custom view", style = LocalTextStyle.current.copy(
+            text = "custom view",
+            style = LocalTextStyle.current.copy(
                 shadow = Shadow(
                     color = Color.Red,
-                    offset = Offset(4f, 4f),
+                    offset = Offset(x = 4f, y = 4f),
                     blurRadius = 8f
                 )
             )

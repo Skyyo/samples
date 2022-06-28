@@ -20,7 +20,7 @@ class CatFeedViewModel @Inject constructor(
     private val handle: SavedStateHandle,
 ) : ViewModel() {
 
-    //this is the result from CatContacts screen
+    // this is the result from CatContacts screen
     val cat = handle.getStateFlow<Dog?>(CAT_KEY, null)
 
     init {
@@ -36,8 +36,7 @@ class CatFeedViewModel @Inject constructor(
     fun goCatDetails() = navigationDispatcher.emit {
         it.navigateWithObject(
             route = Destination.CatDetails.route,
-            arguments = bundleOf(CAT_KEY to Dog(99, "Kit"))
+            arguments = bundleOf(CAT_KEY to Dog(id = 99, name = "Kit"))
         )
     }
-
 }

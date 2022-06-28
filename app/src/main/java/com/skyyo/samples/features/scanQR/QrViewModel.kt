@@ -14,7 +14,7 @@ class QrViewModel @Inject constructor(
     var isProcessingAllowed = true
 
     fun onQrCodeRecognized(qrCode: String) {
-        //handle the multiple events here by using a boolean, closing the scanner etc
+        // handle the multiple events here by using a boolean, closing the scanner etc
         // remember to set isProcessingAllowed to true if needed, eg. in onResume()
         if (!isProcessingAllowed) return
         isProcessingAllowed = false

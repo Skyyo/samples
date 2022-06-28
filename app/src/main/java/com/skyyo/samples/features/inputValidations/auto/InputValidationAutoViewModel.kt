@@ -19,17 +19,16 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class InputValidationAutoViewModel @Inject constructor(
     private val handle: SavedStateHandle
 ) : ViewModel() {
 
-    val name = handle.getStateFlow( "name", InputWrapper())
-    val creditCardNumber = handle.getStateFlow( "creditCardNumber", InputWrapper())
+    val name = handle.getStateFlow("name", InputWrapper())
+    val creditCardNumber = handle.getStateFlow("creditCardNumber", InputWrapper())
     val areInputsValid = combine(name, creditCardNumber) { name, cardNumber ->
         name.value.isNotEmpty() && name.errorId == null &&
-                cardNumber.value.isNotEmpty() && cardNumber.errorId == null
+            cardNumber.value.isNotEmpty() && cardNumber.errorId == null
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
     private var focusedTextField = handle.get("focusedTextField") ?: FocusedTextFieldKey.NAME
         set(value) {
@@ -81,9 +80,8 @@ class InputValidationAutoViewModel @Inject constructor(
     private fun focusOnLastSelectedTextField() {
         viewModelScope.launch(Dispatchers.Default) {
             _events.send(ScreenEvent.RequestFocus(focusedTextField))
-            delay(250)
+            delay(timeMillis = 250)
             _events.send(ScreenEvent.UpdateKeyboard(true))
         }
     }
 }
-

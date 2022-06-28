@@ -3,17 +3,18 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
+    id 'org.jlleitschuh.gradle.ktlint' version '10.3.0'
+    id 'io.gitlab.arturbosch.detekt' version '1.21.0-RC1'
     id 'dagger.hilt.android.plugin'
-
 }
 
 android {
-    compileSdk 33
+    compileSdk 32
 
     defaultConfig {
         applicationId 'com.skyyo.samples'
         minSdk 26
-        targetSdk 33
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -43,7 +44,7 @@ android {
     compileOptions.coreLibraryDesugaringEnabled = true
 
     kotlinOptions {
-        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
+        freeCompilerArgs += ["-opt-in=kotlin.RequiresOptIn"]
         useIR = true
     }
     buildFeatures {
@@ -53,7 +54,22 @@ android {
         kotlinCompilerExtensionVersion compose_version
     }
 }
-
+detekt {
+    config = files("$rootDir/.detekt/config.yml")
+}
+ktlint {
+    verbose = true
+    android = true
+    outputToConsole = true
+    outputColorName = "RED"
+    ignoreFailures = false
+    enableExperimentalRules = false
+    disabledRules = ["no-wildcard-imports", "max-line-length", "import-ordering"]
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
+    }
+}
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 

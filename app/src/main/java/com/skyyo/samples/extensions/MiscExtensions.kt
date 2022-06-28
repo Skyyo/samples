@@ -48,7 +48,7 @@ fun Context.goAppPermissions() {
 @Composable
 fun FixInAppLanguageSwitchLayoutDirection(content: @Composable () -> Unit) {
     val appLocale = AppCompatDelegate.getApplicationLocales().getFirstMatch(SUPPORTED_LANGUAGES_ARRAY) ?: LocalConfiguration.current.locale
-    val appLocaleDirection = when(appLocale.layoutDirection) {
+    val appLocaleDirection = when (appLocale.layoutDirection) {
         View.LAYOUT_DIRECTION_RTL -> LayoutDirection.Rtl
         else -> LayoutDirection.Ltr
     }

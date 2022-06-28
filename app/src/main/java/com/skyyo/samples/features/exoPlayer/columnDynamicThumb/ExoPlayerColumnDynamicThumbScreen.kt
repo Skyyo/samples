@@ -28,7 +28,6 @@ import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexed
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 import kotlinx.coroutines.flow.collect
 
-
 @Composable
 fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -130,5 +129,3 @@ private fun LazyListState.visibleAreaContainsItem(
             .contains(videos[currentlyPlayedIndex])
     }
 }
-
-

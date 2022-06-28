@@ -21,6 +21,3 @@ fun CatFeedScreen(viewModel: CatFeedViewModel1 = hiltViewModel()) {
         Text(text = "cat name: ${cat.value?.name}")
     }
 }
-
-
-

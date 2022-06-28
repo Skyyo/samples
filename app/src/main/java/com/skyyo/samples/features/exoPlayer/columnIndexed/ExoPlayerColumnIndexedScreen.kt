@@ -23,7 +23,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 import kotlinx.coroutines.flow.collect
 
-
 @Composable
 fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -114,5 +113,3 @@ private fun LazyListState.visibleAreaContainsItem(
             .contains(videos[currentlyPlayedIndex])
     }
 }
-
-

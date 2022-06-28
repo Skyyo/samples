@@ -105,7 +105,11 @@ fun <T> Modifier.dragContainer(dragDropState: DragDropState<T>): Modifier {
     }
 }
 
-fun <T> LazyListScope.dragItems(dragDropState: DragDropState<T>, key: (T) -> Any, content: @Composable (item: T, modifier: Modifier, isDragging: Boolean) -> Unit) {
+fun <T> LazyListScope.dragItems(
+    dragDropState: DragDropState<T>,
+    key: (T) -> Any,
+    content: @Composable (item: T, modifier: Modifier, isDragging: Boolean) -> Unit
+) {
     item(key = null) { Spacer(modifier = Modifier) }
     itemsIndexed(dragDropState.lazyListItems, key = { _, item -> key(item) }) { index, item ->
         DraggableItem(
@@ -145,7 +149,7 @@ class DragDropState<T> internal constructor(
     internal fun onDragStart(offset: Offset) {
         state.layoutInfo.visibleItemsInfo
             .firstOrNull { item ->
-                offset.y.toInt() in item.offset..(item.offset + item.size)
+                offset.y.toInt() in item.offset..item.offset + item.size
             }?.also {
                 draggingItemIndex = it.index
                 draggingItemInitialOffset = it.offset
@@ -185,7 +189,7 @@ class DragDropState<T> internal constructor(
 
         val targetItem = state.layoutInfo.visibleItemsInfo.find { item ->
             middleOffset.toInt() in item.offset..item.offsetEnd &&
-                    draggingItem.index != item.index && item.index != 0
+                draggingItem.index != item.index && item.index != 0
         }
         if (targetItem != null) {
             val scrollToIndex = if (targetItem.index == state.firstVisibleItemIndex) {
@@ -227,7 +231,7 @@ class DragDropState<T> internal constructor(
         get() = this.offset + this.size
 
     var lazyListItems: List<T> by mutableStateOf(data)
-    private set
+        private set
 }
 
 @OptIn(ExperimentalFoundationApi::class)

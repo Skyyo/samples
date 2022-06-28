@@ -1,6 +1,5 @@
 package com.skyyo.samples.features.zoomable
 
-
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.*
 import androidx.compose.runtime.*
@@ -76,7 +75,7 @@ class ZoomableState(
         set(value) {
             if (field != value) {
                 field = value
-                scale = scale  // Make sure scale is in range
+                scale = scale // Make sure scale is in range
             }
         }
 
@@ -88,7 +87,7 @@ class ZoomableState(
         set(value) {
             if (field != value) {
                 field = value
-                scale = scale  // Make sure scale is in range
+                scale = scale // Make sure scale is in range
             }
         }
 
@@ -107,7 +106,7 @@ class ZoomableState(
     @get:FloatRange(from = 0.0, to = 1.0)
     val dismissDragProgress: Float
         get() = if (size.height == 0) 0f else
-            abs(dismissDragAbsoluteOffsetY) / (size.height * DismissDragThreshold)
+            abs(dismissDragAbsoluteOffsetY) / (size.height * DISMISS_DRAG_THRESHOLD)
 
     private val velocityTracker = VelocityTracker()
     private var _scale by mutableStateOf(initialScale)
@@ -126,12 +125,12 @@ class ZoomableState(
             val maxOffset = childSize.height
             return if (maxOffset == 0f) 0f else {
                 val progress = (dismissDragAbsoluteOffsetY / maxOffset).coerceIn(-1f, 1f)
-                childSize.height / DismissDragResistanceFactor * sin(progress * PI.toFloat() / 2)
+                childSize.height / DISMISS_DRAG_RESISTANCE_FACTOR * sin(progress * PI.toFloat() / 2)
             }
         }
 
     internal val shouldDismiss: Boolean
-        get() = abs(dismissDragAbsoluteOffsetY) > size.height * DismissDragThreshold
+        get() = abs(dismissDragAbsoluteOffsetY) > size.height * DISMISS_DRAG_THRESHOLD
 
     internal var size = IntSize.Zero
         set(value) {
@@ -350,8 +349,8 @@ class ZoomableState(
     }
 }
 
-internal const val DismissDragResistanceFactor = 2f
-internal const val DismissDragThreshold = 0.25f
+private const val DISMISS_DRAG_RESISTANCE_FACTOR = 2f
+private const val DISMISS_DRAG_THRESHOLD = 0.25f
 
 object ZoomableDefaults {
     /**

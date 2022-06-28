@@ -62,7 +62,8 @@ fun InfiniteViewPagerScreen() {
                     page = currentPage,
                     offset = 0.dp.value,
                     backgroundColor = backgroundColor,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(INFINITE_PAGER_INITIAL_PAGE) } })
+                    onClick = { scope.launch { pagerState.animateScrollToPage(INFINITE_PAGER_INITIAL_PAGE) } }
+                )
             }
         }
         HorizontalInfinitePagerIndicator(

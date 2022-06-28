@@ -115,7 +115,6 @@ fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
             )
         }
     }
-
 }
 
 @Composable
@@ -135,7 +134,7 @@ fun CatsColumn(
             additionalBottom = 8.dp
         )
     ) {
-        //refreshing on page 0
+        // refreshing on page 0
         if (cats.loadState.refresh is LoadState.Loading) {
             item {
                 Text(
@@ -178,7 +177,5 @@ fun CatsColumn(
                 Text(text = "retry append!")
             }
         }
-
     }
 }
-

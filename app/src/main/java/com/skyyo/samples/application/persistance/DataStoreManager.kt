@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 val Context.getDataStore: DataStore<Preferences> by preferencesDataStore(name = "templateDataStore")
 
 @Singleton

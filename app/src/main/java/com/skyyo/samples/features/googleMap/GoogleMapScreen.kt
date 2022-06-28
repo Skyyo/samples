@@ -109,7 +109,6 @@ fun GoogleMapScreen(viewModel: GoogleMapViewModel = hiltViewModel()) {
     }
 
     AndroidView({ mapView })
-
 }
 
 suspend fun observePoints(

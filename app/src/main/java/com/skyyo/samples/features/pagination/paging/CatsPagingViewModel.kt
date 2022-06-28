@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class CatsPagingViewModel @Inject constructor(
@@ -29,7 +28,7 @@ class CatsPagingViewModel @Inject constructor(
     private val catsRepository: CatsRepositoryPaging
 ) : ViewModel() {
 
-    //TODO add sample of passing lambda to the GamesSource to listen to events from ViewModel layer?
+    // TODO add sample of passing lambda to the GamesSource to listen to events from ViewModel layer?
     // bad Paging library api design forces us to emit events from view layer, or I've missed something.
 
     val query = handle.getLiveData("query", "")

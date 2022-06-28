@@ -16,9 +16,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class FormValidationManualViewModel @Inject constructor(
+class InputValidationManualViewModel @Inject constructor(
     private val handle: SavedStateHandle
 ) : ViewModel() {
 
@@ -95,9 +94,8 @@ class FormValidationManualViewModel @Inject constructor(
     private fun focusOnLastSelectedTextField() {
         viewModelScope.launch(Dispatchers.Default) {
             _events.send(ScreenEvent.RequestFocus(focusedTextField))
-            delay(250)
+            delay(timeMillis = 250)
             _events.send(ScreenEvent.UpdateKeyboard(true))
         }
     }
 }
-

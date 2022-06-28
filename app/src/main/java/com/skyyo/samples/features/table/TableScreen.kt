@@ -25,9 +25,6 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 
-
-data class Person(val name: String, val age: Int, val isActive: Boolean, val email: String)
-
 @Composable
 fun TableScreen() {
     val people = remember {
@@ -140,4 +137,3 @@ fun <T> Table(
         }
     }
 }
-

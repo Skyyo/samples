@@ -54,10 +54,12 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
         }
     }
 
-    Box(modifier = Modifier
-        .statusBarsPadding()
-        .navigationBarsPadding()
-        .padding(vertical = 20.dp)) {
+    Box(
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(vertical = 20.dp)
+    ) {
         when {
             !isHealthConnectAvailable -> InstallHealthConnect()
             else -> {
@@ -148,7 +150,7 @@ fun StepsTracker(
             TextField(
                 modifier = Modifier.padding(start = 10.dp),
                 value = thirdPartySessionUid,
-                onValueChange = { thirdPartySessionUid = it}
+                onValueChange = { thirdPartySessionUid = it }
             )
 
             Button(modifier = Modifier.padding(start = 10.dp), onClick = { onReadThirdPartyClick(thirdPartySessionUid) }) {

@@ -34,5 +34,4 @@ interface CatsDao {
 
     @Query("DELETE FROM cats_table")
     suspend fun clearAll()
-
 }

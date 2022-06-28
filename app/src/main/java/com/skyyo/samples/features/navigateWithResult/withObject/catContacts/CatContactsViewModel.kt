@@ -29,5 +29,4 @@ class CatContactsViewModel @Inject constructor(
         catFeedHandle[CAT_KEY] = cat
         it.popBackStack(Destination.CatFeed.route, false)
     }
-
 }

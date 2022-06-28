@@ -26,6 +26,7 @@ import kotlin.math.min
 private const val FAST_FLING_THRESHOLD = 9
 private const val MAX_FLING_DISTANCE = 15
 
+@Suppress("MagicNumber")
 @Composable
 fun SnapScreen() {
     Column(
@@ -36,11 +37,16 @@ fun SnapScreen() {
         SnapTo1LazyRow()
 
         var snapItemsCount by remember { mutableStateOf(5) }
-        TextField(value = snapItemsCount.toString(), onValueChange = { snapItemsCount =
-            if (it.isEmpty()) 5 else it.toInt() }, keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done
-        ))
+        TextField(
+            value = snapItemsCount.toString(), onValueChange = {
+                snapItemsCount =
+                    if (it.isEmpty()) 5 else it.toInt()
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            )
+        )
         SnapToNLazyRow(snapItemsCount)
     }
 }
@@ -59,7 +65,10 @@ fun SnapTo1LazyRow() {
             snapOffsetForItem = SnapOffsets.Start
         )
     ) {
-        items(50, { it }) { SnapItem(it, 1) }
+        items(
+            count = 50,
+            { it }
+        ) { SnapItem(it, snapItemsCount = 1) }
     }
 }
 
@@ -92,7 +101,7 @@ fun SnapToNLazyRow(snapItemsCount: Int) {
             lazyListState = listState,
             endContentPadding = contentPadding.calculateEndPadding(LayoutDirection.Ltr),
             snapOffsetForItem = SnapOffsets.Start,
-            snapIndex = { layout,startIndex, targetIndex ->
+            snapIndex = { layout, startIndex, targetIndex ->
                 run {
                     val totalItemsCount = layout.totalItemsCount
                     var indexOfFirstItemInGroup = targetIndex.firstItemInGroup(totalItemsCount, snapItemsCount)
@@ -119,10 +128,10 @@ fun SnapToNLazyRow(snapItemsCount: Int) {
             },
         ),
     ) {
-        items(50, { it }) { SnapItem(it, snapItemsCount) }
+        items(count = 50, { it }) { SnapItem(it, snapItemsCount) }
     }
 }
 
 private fun Int.firstItemInGroup(totalItemsCount: Int, itemsInGroup: Int): Int {
-    return (min(max(this, 0) / itemsInGroup, totalItemsCount / itemsInGroup)) * itemsInGroup
+    return min(max(this, 0) / itemsInGroup, totalItemsCount / itemsInGroup) * itemsInGroup
 }

@@ -31,7 +31,9 @@ import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputValidationAutoDebounceScreen(viewModel: InputValidationAutoDebounceViewModel = hiltViewModel()) {
+fun InputValidationAutoDebounceScreen(
+    viewModel: InputValidationAutoDebounceViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val focusManager = LocalFocusManager.current
@@ -118,5 +120,4 @@ fun InputValidationAutoDebounceScreen(viewModel: InputValidationAutoDebounceView
             Text(text = "Continue")
         }
     }
-
 }

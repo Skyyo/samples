@@ -42,7 +42,7 @@ fun CustomDecoratedTextField(
             .width(200.dp)
             .height(56.dp)
             .background(Color.LightGray)
-            .onFocusEvent { color.value = (if (it.isFocused) White else Gray) },
+            .onFocusEvent { color.value = if (it.isFocused) White else Gray },
     ) {
         BasicTextField(
             modifier = Modifier

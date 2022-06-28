@@ -30,7 +30,7 @@ private const val ARE_ALL_PERMISSIONS_GRANTED_KEY = "areAllPermissionsGranted"
 class HealthConnectViewModel @Inject constructor(
     private val handle: SavedStateHandle,
     val application: Application,
-): ViewModel() {
+) : ViewModel() {
     private val healthConnectClient by lazy { HealthConnectClient.getOrCreate(application.applicationContext) }
     val permissions = setOf(
         Permission.createReadPermission(Steps::class),
@@ -43,7 +43,7 @@ class HealthConnectViewModel @Inject constructor(
     val localStepsCanBeRead = lastWrittenRecordUid.map { it != null }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
     val accumulated3rdPartySteps = handle.getStateFlow(THIRD_PARTY_STEPS_KEY, 0L)
-    val areAllPermissionsGranted = handle.getStateFlow( ARE_ALL_PERMISSIONS_GRANTED_KEY, false)
+    val areAllPermissionsGranted = handle.getStateFlow(ARE_ALL_PERMISSIONS_GRANTED_KEY, false)
 
     suspend fun checkPermissions() {
         handle[ARE_ALL_PERMISSIONS_GRANTED_KEY] = healthConnectClient.hasAllPermissions(permissions)
@@ -95,10 +95,10 @@ class HealthConnectViewModel @Inject constructor(
             val aggregateData = healthConnectClient.aggregate(aggregateRequest)
             handle[THIRD_PARTY_STEPS_KEY] = aggregateData[Steps.COUNT_TOTAL] ?: 0L
         } catch (e: IllegalArgumentException) {
-            //activity session uid is empty or null
+            // activity session uid is empty or null
             handle[THIRD_PARTY_STEPS_KEY] = 0L
         } catch (e: RemoteException) {
-            //activity session uid not exists
+            // activity session uid not exists
             handle[THIRD_PARTY_STEPS_KEY] = 0L
         }
     }

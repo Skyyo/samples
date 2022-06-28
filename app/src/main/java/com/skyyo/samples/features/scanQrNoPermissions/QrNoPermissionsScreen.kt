@@ -2,7 +2,6 @@ package com.skyyo.samples.features.scanQrNoPermissions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
@@ -39,9 +38,6 @@ fun QrNoPermissionsScreen() {
                     scanResult = e.message ?: "error undefined"
                 }
         }) {
-
         }
     }
-
-
 }

@@ -21,6 +21,3 @@ fun DogFeedScreen(viewModel: DogFeedViewModel = hiltViewModel()) {
         Text(text = "dog status: ${dog.value}")
     }
 }
-
-
-

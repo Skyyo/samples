@@ -64,7 +64,8 @@ fun VideoCardIndexed(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(72.dp)
-                    .clickable { onClick() })
+                    .clickable { onClick() }
+            )
         }
         Text(
             text = "${videoItem.id}",

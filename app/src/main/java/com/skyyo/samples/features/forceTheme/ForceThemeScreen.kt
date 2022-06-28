@@ -41,7 +41,8 @@ fun ForceThemeScreen(viewModel: ForceThemeViewModel = hiltViewModel()) {
     Column(
         Modifier
             .fillMaxSize()
-            .statusBarsPadding()) {
+            .statusBarsPadding()
+    ) {
         Text(text = "Force Theme")
         Button(onClick = { viewModel.setAppTheme(THEME_LIGHT) }) {
             Text(text = "light")
@@ -54,5 +55,3 @@ fun ForceThemeScreen(viewModel: ForceThemeViewModel = hiltViewModel()) {
         }
     }
 }
-
-

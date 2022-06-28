@@ -70,7 +70,7 @@ fun CatCard(catId: String?) {
     /* To avoid this https://github.com/Skyyo/samples/pull/15#pullrequestreview-787405549
     we should limit size of Card or Image, so they couldn't fill all height while fetching image **/
     Card(
-        modifier = Modifier.fillMaxWidth().aspectRatio(.85f),
+        modifier = Modifier.fillMaxWidth().aspectRatio(ratio = .85f),
         backgroundColor = MaterialTheme.colors.primary
     ) {
         Column {

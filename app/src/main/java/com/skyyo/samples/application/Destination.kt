@@ -25,8 +25,8 @@ sealed class Destination(val route: String) {
     object Otp : Destination("otp")
     object Table : Destination("table")
     object CustomView : Destination("customViewScreen")
-    object MarqueeText: Destination("marqueeText")
-    object Autofill: Destination("autofill")
+    object MarqueeText : Destination("marqueeText")
+    object Autofill : Destination("autofill")
     object DogFeed : Destination("dogFeed")
     object DogDetails : Destination("dogDetails/{dogId}") {
         fun createRoute(dogId: String) = "dogDetails/$dogId"
@@ -41,14 +41,14 @@ sealed class Destination(val route: String) {
     object QrNoPermissions : Destination("qrCodeNoPermissions")
     object ScrollAnimation1 : Destination("scrollAnimation1")
     object Snackbar : Destination("snack")
-    object Snap: Destination("snap")
+    object Snap : Destination("snap")
     object BottomBar : Destination("bottomBar")
     object Drawer : Destination("drawer")
     object Tab1 : Destination("tab1")
     object Tab2 : Destination("tab2")
     object Tab3 : Destination("tab3")
     object GradientScroll : Destination("gradientScroll")
-    object NoticeableScrollableRow: Destination("noticeableScrollableRow")
+    object NoticeableScrollableRow : Destination("noticeableScrollableRow")
     object ExoPlayerColumnReference : Destination("exoPlayerColumnRef")
     object ExoPlayerColumnIndexed : Destination("exoPlayerColumnIndexed")
     object ExoPlayerColumnAutoplay : Destination("exoPlayerColumnAutoplay")
@@ -57,11 +57,11 @@ sealed class Destination(val route: String) {
     object DominantColor : Destination("dominantColor")
     object Zoomable : Destination("zoomable")
     object PdfViewer : Destination("pdfViewer")
-    object HealthConnect: Destination("healthConnect")
-    object PrivacyPolicy: Destination("privacyPolicy")
-    object DragAndDrop: Destination("dragAndDrop")
+    object HealthConnect : Destination("healthConnect")
+    object PrivacyPolicy : Destination("privacyPolicy")
+    object DragAndDrop : Destination("dragAndDrop")
     object ImagePicker : Destination("imagePicker")
-    object LanguagePicker: Destination("languagePicker")
+    object LanguagePicker : Destination("languagePicker")
 }
 
 sealed class ProfileGraph(val route: String) {

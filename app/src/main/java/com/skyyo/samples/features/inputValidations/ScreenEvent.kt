@@ -2,7 +2,6 @@ package com.skyyo.samples.features.inputValidations
 
 import androidx.compose.ui.focus.FocusDirection
 
-
 sealed class ScreenEvent {
     class ShowToast(val messageId: Int) : ScreenEvent()
     class UpdateKeyboard(val show: Boolean) : ScreenEvent()
