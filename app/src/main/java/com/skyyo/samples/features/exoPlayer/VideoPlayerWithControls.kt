@@ -23,6 +23,7 @@ fun VideoPlayerWithControls(exoPlayer: ExoPlayer) {
         val layout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null)
         val playerView = (layout.findViewById(R.id.playerView) as PlayerView).apply {
             player = exoPlayer
+            setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
         }
         layout.findViewById<ImageButton>(R.id.exo_pause).setOnClickListener { exoPlayer.pause() }
         layout.findViewById<ImageButton>(R.id.exo_play).setOnClickListener { exoPlayer.play() }
@@ -30,5 +31,8 @@ fun VideoPlayerWithControls(exoPlayer: ExoPlayer) {
         playerView
     }
 
-    AndroidView({ playerView }, Modifier.height(256.dp).background(Color.Black))
+    AndroidView({ playerView },
+        Modifier
+            .height(256.dp)
+            .background(Color.Black))
 }

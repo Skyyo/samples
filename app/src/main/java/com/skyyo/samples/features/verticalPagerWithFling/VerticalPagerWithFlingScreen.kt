@@ -49,7 +49,8 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
         }
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(videos) {
+        if (videos.isEmpty()) return@LaunchedEffect
         snapshotFlow {
             pagerState.currentPage
         }.collect { itemIndex ->

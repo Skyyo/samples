@@ -15,6 +15,7 @@ fun FullscreenVideoPlayer(exoPlayer: ExoPlayer) {
     val context = LocalContext.current
     val playerView = remember {
         PlayerView(context).apply {
+            setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
             useController = false
             resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
             player = exoPlayer
