@@ -143,10 +143,13 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-code-scanner:16.0.0-beta1'
     implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:18.0.0'
-    implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
+
+    implementation "androidx.media3:media3-exoplayer:1.0.0-beta01"
+    implementation "androidx.media3:media3-ui:1.0.0-beta01"
+    implementation "androidx.media3:media3-exoplayer-hls:1.0.0-beta01"
+    implementation "androidx.media3:media3-datasource-okhttp:1.0.0-beta01"
 
     implementation "androidx.palette:palette-ktx:1.0.0"
-    implementation "dev.chrisbanes.snapper:snapper:0.2.1"
 
 
     debugImplementation "com.github.YarikSOffice.Venom:venom:0.5.0"

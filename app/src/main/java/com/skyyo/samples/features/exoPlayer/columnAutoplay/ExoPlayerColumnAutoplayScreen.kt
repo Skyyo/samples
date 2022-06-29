@@ -16,12 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
-import kotlinx.coroutines.flow.collect
 import kotlin.math.abs
 
 @Composable
@@ -29,7 +28,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val listState = rememberLazyListState()
-    val exoPlayer = remember { SimpleExoPlayer.Builder(context).build() }
+    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
     val videos by viewModel.videos.observeAsState(listOf())
     val playingVideoItem = remember { mutableStateOf(videos.firstOrNull()) }
 

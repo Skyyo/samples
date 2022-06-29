@@ -6,15 +6,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-import com.google.android.exoplayer2.ui.StyledPlayerView
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.AspectRatioFrameLayout
+import androidx.media3.ui.PlayerView
 
 @Composable
 fun FullscreenVideoPlayer(exoPlayer: ExoPlayer) {
     val context = LocalContext.current
-    val styledPlayerView = remember {
-        StyledPlayerView(context).apply {
+    val playerView = remember {
+        PlayerView(context).apply {
             useController = false
             resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
             player = exoPlayer
@@ -22,7 +22,7 @@ fun FullscreenVideoPlayer(exoPlayer: ExoPlayer) {
     }
 
     AndroidView(
-        factory = { styledPlayerView },
+        factory = { playerView },
         modifier = Modifier.fillMaxSize()
     )
 }

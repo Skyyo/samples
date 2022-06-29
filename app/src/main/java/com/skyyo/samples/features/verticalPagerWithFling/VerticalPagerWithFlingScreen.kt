@@ -1,39 +1,31 @@
 package com.skyyo.samples.features.verticalPagerWithFling
 
-import android.util.Log
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
-import com.skyyo.samples.features.exoPlayer.common.VideoItem
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.VerticalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.skyyo.samples.features.verticalPagerWithFling.composables.AutoPlayVideoCard
-import dev.chrisbanes.snapper.ExperimentalSnapperApi
-import dev.chrisbanes.snapper.SnapOffsets
-import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-private const val MAX_ITEM_FLING = 1
-
-@OptIn(ExperimentalSnapperApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val videos by viewModel.videos.observeAsState(listOf())
+    val pagerState = rememberPagerState(pageCount = videos.size)
+
     val playingVideoItem = remember { mutableStateOf(videos.firstOrNull()) }
     val playingVideoIndex = remember { mutableStateOf<Int?>(null) }
     val videoPlaybackStateChangedListener = remember {
@@ -42,8 +34,10 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
                 super.onPlaybackStateChanged(playbackState)
                 if (playbackState == Player.STATE_ENDED) {
                     playingVideoIndex.value?.let { index ->
-                        Log.d("vitalik", index.toString())
-                        coroutineScope.launch { listState.animateScrollToItem(index + 1) }
+                        val nextIndex = index + 1
+                        if (nextIndex < videos.size) {
+                            coroutineScope.launch { pagerState.animateScrollToPage(index + 1) }
+                        }
                     }
                 }
             }
@@ -57,7 +51,7 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
 
     LaunchedEffect(Unit) {
         snapshotFlow {
-            listState.firstVisibleItemIndex
+            pagerState.currentPage
         }.collect { itemIndex ->
             playingVideoIndex.value = itemIndex
             playingVideoItem.value = videos[itemIndex]
@@ -91,20 +85,10 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
         }
     }
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        state = listState,
-        flingBehavior = rememberSnapperFlingBehavior(
-            lazyListState = listState,
-            snapOffsetForItem = SnapOffsets.Center,
-            snapIndex = { _, startIndex, targetIndex ->
-                targetIndex.coerceIn(startIndex - MAX_ITEM_FLING, startIndex + MAX_ITEM_FLING)
-            }
-        )
-    ) {
-        items(videos, VideoItem::id) { video ->
+    VerticalPager(state = pagerState) { page ->
+        key(page) {
+            val video = videos[page]
             AutoPlayVideoCard(
-                modifier = Modifier.fillParentMaxSize(),
                 videoItem = video,
                 exoPlayer = exoPlayer,
                 isPlaying = video.id == playingVideoItem.value?.id,

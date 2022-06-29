@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.google.android.exoplayer2.ExoPlayer
+import androidx.media3.exoplayer.ExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
 
 @Composable

@@ -15,6 +15,7 @@ class VerticalPagerWithFlingViewModel @Inject constructor() : ViewModel() {
         populateListWithFakeData()
     }
 
+    @Suppress("LongMethod")
     private fun populateListWithFakeData() {
         val testVideos = listOf(
             VideoItem(
@@ -67,6 +68,33 @@ class VerticalPagerWithFlingViewModel @Inject constructor() : ViewModel() {
                 "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
                 "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg"
             ),
+        )
+        val testVideosHlsApple = listOf(
+            VideoItem(
+                1,
+                "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8",
+                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg"
+            ),
+            VideoItem(
+                2,
+                "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8",
+                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
+            ),
+            VideoItem(
+                3,
+                "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8",
+                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
+            ),
+            VideoItem(
+                4,
+                "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
+                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg"
+            ),
+            VideoItem(
+                5,
+                "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/gear0/prog_index.m3u8",
+                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg"
+            )
         )
         videos.postValue(testVideos)
     }

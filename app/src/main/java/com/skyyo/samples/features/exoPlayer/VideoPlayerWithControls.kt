@@ -12,12 +12,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.PlayerView
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import com.skyyo.samples.R
 
 @Composable
-fun VideoPlayerWithControls(exoPlayer: SimpleExoPlayer) {
+fun VideoPlayerWithControls(exoPlayer: ExoPlayer) {
     val context = LocalContext.current
     val playerView = remember {
         val layout = LayoutInflater.from(context).inflate(R.layout.video_player_auto, null)
