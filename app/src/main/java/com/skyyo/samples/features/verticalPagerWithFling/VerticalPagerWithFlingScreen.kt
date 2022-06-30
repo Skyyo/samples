@@ -14,7 +14,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.skyyo.samples.features.verticalPagerWithFling.composables.AutoPlayVideoCard
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
@@ -25,27 +24,24 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
     val coroutineScope = rememberCoroutineScope()
     val videos by viewModel.videos.observeAsState(listOf())
     val pagerState = rememberPagerState(pageCount = videos.size)
-
-    val playingVideoItem = remember { mutableStateOf(videos.firstOrNull()) }
-    val playingVideoIndex = remember { mutableStateOf<Int?>(null) }
-    val videoPlaybackStateChangedListener = remember {
-        object : Player.Listener {
-            override fun onPlaybackStateChanged(playbackState: Int) {
-                super.onPlaybackStateChanged(playbackState)
-                if (playbackState == Player.STATE_ENDED) {
-                    playingVideoIndex.value?.let { index ->
-                        val nextIndex = index + 1
-                        if (nextIndex < videos.size) {
-                            coroutineScope.launch { pagerState.animateScrollToPage(index + 1) }
+    var playingVideoItem by remember(videos) { mutableStateOf(videos.firstOrNull()) }
+    val exoPlayer = remember(videos) {
+        ExoPlayer.Builder(context).build().apply {
+            playWhenReady = true
+            addListener(object : Player.Listener {
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    super.onPlaybackStateChanged(playbackState)
+                    if (playbackState == Player.STATE_ENDED) {
+                        val playingVideoIndex = videos.indexOfFirst { it == playingVideoItem }
+                        if (playingVideoIndex != -1) {
+                            val nextIndex = playingVideoIndex + 1
+                            if (nextIndex < videos.size) {
+                                coroutineScope.launch { pagerState.animateScrollToPage(playingVideoIndex + 1) }
+                            }
                         }
                     }
                 }
-            }
-        }
-    }
-    val exoPlayer = remember {
-        ExoPlayer.Builder(context).build().also {
-            it.addListener(videoPlaybackStateChangedListener)
+            })
         }
     }
 
@@ -54,28 +50,24 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
         snapshotFlow {
             pagerState.currentPage
         }.collect { itemIndex ->
-            playingVideoIndex.value = itemIndex
-            playingVideoItem.value = videos[itemIndex]
+            playingVideoItem = videos[itemIndex]
+            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
+            exoPlayer.prepare()
         }
     }
 
-    LaunchedEffect(playingVideoItem.value) {
+    SideEffect {
         // is null only upon entering the screen
-        if (playingVideoItem.value == null) {
-            exoPlayer.pause()
-        } else {
-            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem.value!!.mediaUrl))
-            exoPlayer.prepare()
-            exoPlayer.playWhenReady = true
-        }
+        if (playingVideoItem == null) exoPlayer.pause()
     }
 
     DisposableEffect(exoPlayer) {
         val lifecycleObserver = LifecycleEventObserver { _, event ->
-            if (playingVideoItem.value == null) return@LifecycleEventObserver
-            when (event) {
-                Lifecycle.Event.ON_START -> exoPlayer.play()
-                Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+            if (playingVideoItem != null) {
+                when (event) {
+                    Lifecycle.Event.ON_START -> exoPlayer.play()
+                    Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+                }
             }
         }
 
@@ -87,13 +79,11 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
     }
 
     VerticalPager(state = pagerState) { page ->
-        key(page) {
-            val video = videos[page]
-            AutoPlayVideoCard(
-                videoItem = video,
-                exoPlayer = exoPlayer,
-                isPlaying = video.id == playingVideoItem.value?.id,
-            )
-        }
+        val video = videos[page]
+        AutoPlayVideoCard(
+            videoItem = video,
+            exoPlayer = exoPlayer,
+            isPlaying = video.id == playingVideoItem?.id,
+        )
     }
 }

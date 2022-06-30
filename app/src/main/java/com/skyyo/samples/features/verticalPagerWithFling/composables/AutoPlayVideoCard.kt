@@ -23,9 +23,8 @@ fun AutoPlayVideoCard(
         modifier = modifier.background(Color.Black),
         contentAlignment = Alignment.Center
     ) {
-        if (isPlaying) {
-            FullscreenVideoPlayer(exoPlayer)
-        } else {
+        FullscreenVideoPlayer(if (isPlaying) exoPlayer else null)
+        if (!isPlaying) {
             FullscreenVideoThumbnail(videoItem.thumbnail)
         }
         Text(
