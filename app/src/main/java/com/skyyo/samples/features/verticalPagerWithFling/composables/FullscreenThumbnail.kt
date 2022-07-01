@@ -5,23 +5,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import com.skyyo.samples.utils.rememberFilePainter
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun FullscreenVideoThumbnail(url: String) {
+fun FullscreenVideoThumbnail(filePath: String) {
     Image(
-        painter = rememberImagePainter(data = url, builder = {
-            crossfade(true)
-            size(width = 512, height = 512)
-        }),
+        painter = rememberFilePainter(filePath = filePath),
         contentDescription = null,
-        modifier = Modifier
-            // this can be optimized to prevent overdraw. Should be shown only
-            // when loading is in progress
-//            .background(Color.Black)
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Crop
     )
 }

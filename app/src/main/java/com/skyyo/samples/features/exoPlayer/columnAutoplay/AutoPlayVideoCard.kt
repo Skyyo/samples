@@ -35,7 +35,7 @@ fun AutoPlayVideoCard(
         if (isPlaying) {
             VideoPlayerWithControls(exoPlayer)
         } else {
-            VideoThumbnail(videoItem.thumbnail)
+            VideoThumbnail(videoItem.thumbnailFilePath)
         }
         Text(
             text = "${videoItem.id}",

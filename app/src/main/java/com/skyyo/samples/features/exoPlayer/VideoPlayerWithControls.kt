@@ -31,8 +31,10 @@ fun VideoPlayerWithControls(exoPlayer: ExoPlayer) {
         playerView
     }
 
-    AndroidView({ playerView },
+    AndroidView(
+        { playerView },
         Modifier
             .height(256.dp)
-            .background(Color.Black))
+            .background(Color.Black)
+    )
 }

@@ -51,7 +51,7 @@ fun VideoCardReference(
                 }
             }
         } else {
-            VideoThumbnail(videoItem.thumbnail)
+            VideoThumbnail(videoItem.thumbnailFilePath)
         }
         if (if (isPlayerUiVisible.value) true else !isPlaying) {
             Icon(

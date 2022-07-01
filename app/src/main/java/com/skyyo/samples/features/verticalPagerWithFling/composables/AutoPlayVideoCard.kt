@@ -1,9 +1,8 @@
 package com.skyyo.samples.features.verticalPagerWithFling.composables
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,15 +16,16 @@ fun AutoPlayVideoCard(
     modifier: Modifier = Modifier,
     videoItem: VideoItem,
     isPlaying: Boolean,
+    isFirstFrameRendered: Boolean,
     exoPlayer: ExoPlayer,
 ) {
     Box(
-        modifier = modifier.background(Color.Black),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         FullscreenVideoPlayer(if (isPlaying) exoPlayer else null)
-        if (!isPlaying) {
-            FullscreenVideoThumbnail(videoItem.thumbnail)
+        if (!isFirstFrameRendered) {
+            FullscreenVideoThumbnail(videoItem.thumbnailFilePath)
         }
         Text(
             modifier = Modifier.align(Alignment.Center),
