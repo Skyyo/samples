@@ -8,6 +8,7 @@ buildscript {
         hilt_version = '2.41'
         room_version = '2.4.2'
         accompanist_version = "0.22.0-rc"
+        media3_version = "1.0.0-beta01"
     }
     repositories {
         google()

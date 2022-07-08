@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                     ModalBottomSheetLayout(bottomSheetNavigator) {
                         Scaffold {
                             PopulatedNavHost(
-                                startDestination = Destination.SampleContainer.route,
+                                startDestination = Destination.VerticalPagerWithFling.route,
                                 navController = navController
                             )
                         }

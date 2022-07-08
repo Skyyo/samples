@@ -20,7 +20,7 @@ inline fun <T> tryOrNull(f: () -> T) =
     try {
         f()
     } catch (e: Exception) {
-        log("exception: $e")
+        // log("exception: $e")
         null
     }
 

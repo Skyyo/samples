@@ -144,10 +144,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-code-scanner:16.0.0-beta1'
     implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:18.0.0'
 
-    implementation "androidx.media3:media3-exoplayer:1.0.0-beta01"
-    implementation "androidx.media3:media3-ui:1.0.0-beta01"
-    implementation "androidx.media3:media3-exoplayer-hls:1.0.0-beta01"
-    implementation "androidx.media3:media3-datasource-okhttp:1.0.0-beta01"
+    implementation "androidx.media3:media3-exoplayer:$media3_version"
+    implementation "androidx.media3:media3-ui:$media3_version"
+    implementation "androidx.media3:media3-exoplayer-hls:$media3_version"
+//    implementation "androidx.media3:media3-datasource-okhttp:$media3_version"
+    implementation "androidx.media3:media3-datasource-cronet:$media3_version"
+
 
     implementation "androidx.palette:palette-ktx:1.0.0"
 
