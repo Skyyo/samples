@@ -133,65 +133,87 @@ fun CacheThumbnails(videos: List<VideoItem>, backgroundColor: Color, content: @C
             resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
         }
     }
-    var indexToCache by remember(videos) { mutableStateOf(0) }
     val exoPlayer = remember(videos) {
         ExoPlayer.Builder(context).build().apply {
             playWhenReady = true
             volume = 0f
+
             addListener(object : Player.Listener {
-                override fun onRenderedFirstFrame() {
-                    super.onRenderedFirstFrame()
-                    pause()
-                    coroutineScope.launch(Dispatchers.IO) {
-                        val videoView = playerView.videoSurfaceView!!
-                        val bitmapWidth = videoView.width
-                        val bitmapHeight = videoView.height
+                private var currentMediaItem: MediaItem ?= null
+                private var indexToCache = 0
+                private var expectedMediaItem: MediaItem = MediaItem.fromUri(videos[indexToCache].mediaUrl)
+                private var currentPlaybackState = Player.STATE_IDLE
 
-                        val isBitmapRendered: Boolean
-                        var bitmapToCache = when(videoView) {
-                            is TextureView -> {
-                                isBitmapRendered = true
-                                withContext(Dispatchers.Main) { videoView.getBitmap(bitmapWidth, bitmapHeight)!! }
-                            }
-                            else -> {
-                                isBitmapRendered = false
-                                Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.RGB_565)
-                            }
-                        }
+                override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                    super.onMediaItemTransition(mediaItem, reason)
+                    if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_PLAYLIST_CHANGED) {
+                        currentMediaItem = mediaItem
+                    }
+                }
 
-                        if (!isBitmapRendered) {
-                            val surfaceView = videoView as? SurfaceView
-                            if (surfaceView != null) {
-                                try {
-                                    bitmapToCache = copyPixels(surfaceView, bitmapToCache)
-                                } catch (e: CopyFailedException) {
-                                    Log.e("Oops", e.pixelCopyErrorCode.toString())
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    super.onPlaybackStateChanged(playbackState)
+                    currentPlaybackState = playbackState
+                }
+
+                override fun onEvents(player: Player, events: Player.Events) {
+                    super.onEvents(player, events)
+                    if (events.contains(Player.EVENT_RENDERED_FIRST_FRAME) && currentMediaItem?.localConfiguration?.uri == expectedMediaItem.localConfiguration?.uri) {
+                        pause()
+                    } else if (events.contains(Player.EVENT_PLAYBACK_STATE_CHANGED) && currentPlaybackState == Player.STATE_READY) {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            val videoView = playerView.videoSurfaceView!!
+                            val bitmapWidth = videoView.width
+                            val bitmapHeight = videoView.height
+
+                            val isBitmapRendered: Boolean
+                            var bitmapToCache = when(videoView) {
+                                is TextureView -> {
+                                    isBitmapRendered = true
+                                    withContext(Dispatchers.Main) { videoView.getBitmap(bitmapWidth, bitmapHeight)!! }
+                                }
+                                else -> {
+                                    isBitmapRendered = false
+                                    Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.RGB_565)
                                 }
                             }
-                        }
 
-                        cacheThumbnail(context, bitmapToCache, videos[indexToCache])
+                            if (!isBitmapRendered) {
+                                val surfaceView = videoView as? SurfaceView
+                                if (surfaceView != null) {
+                                    try {
+                                        bitmapToCache = copyPixels(surfaceView, bitmapToCache)
+                                    } catch (e: CopyFailedException) {
+                                        Log.e("Oops", e.pixelCopyErrorCode.toString())
+                                    }
+                                }
+                            }
 
-                        withContext(Dispatchers.Main) {
-                            when (indexToCache) {
-                                videos.size - 1 -> isThumbnailsCachingCompleted = true
-                                else -> indexToCache++
+                            cacheThumbnail(context, bitmapToCache, videos[indexToCache])
+
+                            withContext(Dispatchers.Main) {
+                                when (indexToCache) {
+                                    videos.size - 1 -> isThumbnailsCachingCompleted = true
+                                    else -> {
+                                        indexToCache++
+                                        expectedMediaItem = MediaItem.fromUri(videos[indexToCache].mediaUrl)
+                                        setMediaItem(expectedMediaItem)
+                                        prepare()
+                                    }
+                                }
                             }
                         }
                     }
                 }
             })
+            setMediaItem(MediaItem.fromUri(videos[0].mediaUrl))
+            prepare()
         }
     }
 
     DisposableEffect(exoPlayer) {
         playerView.player = exoPlayer
         onDispose { playerView.player = null }
-    }
-
-    LaunchedEffect(indexToCache) {
-        exoPlayer.setMediaItem(MediaItem.fromUri(videos[indexToCache].mediaUrl))
-        exoPlayer.prepare()
     }
 
     when (isThumbnailsCachingCompleted) {
