@@ -22,11 +22,13 @@ fun AndroidViewAutocompleteDropdownWithOutsideFiltering(
         ArrayAdapter(context, android.R.layout.simple_list_item_1, suggestions)
     }
     val textInputLayout = remember {
-        (TextInputLayout.inflate(
-            context,
-            R.layout.text_input_field,
-            null
-        ) as TextInputLayout).also { til ->
+        (
+            TextInputLayout.inflate(
+                context,
+                R.layout.text_input_field,
+                null
+            ) as TextInputLayout
+            ).also { til ->
             (til.editText as AutoCompleteTextView).setOnItemClickListener { _, _, index, _ ->
                 onSelect(index)
             }

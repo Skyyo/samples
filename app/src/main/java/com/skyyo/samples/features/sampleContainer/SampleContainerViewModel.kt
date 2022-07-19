@@ -111,11 +111,11 @@ class SampleContainerViewModel @Inject constructor(
     fun goMarqueeText() = navigationDispatcher.emit {
         it.navigate(Destination.MarqueeText.route)
     }
-    
+
     fun goAutofill() = navigationDispatcher.emit {
         it.navigate(Destination.Autofill.route)
     }
-    
+
     fun goAutoComplete() = navigationDispatcher.emit {
         it.navigate(Destination.AutoComplete.route)
     }

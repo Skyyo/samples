@@ -19,9 +19,9 @@ class AutoCompleteViewModel @Inject constructor(
 ) : ViewModel() {
 
     val countries = provideCountries()
-    val query = handle.getStateFlow( QUERY, "")
-    val suggestions = handle.getStateFlow( SUGGESTIONS, countries)
-    val isExpanded = handle.getStateFlow( IS_EXPANDED, false)
+    val query = handle.getStateFlow(QUERY, "")
+    val suggestions = handle.getStateFlow(SUGGESTIONS, countries)
+    val isExpanded = handle.getStateFlow(IS_EXPANDED, false)
 
     fun onCountryEntered(input: String) {
         handle[QUERY] = input
