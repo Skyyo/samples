@@ -51,10 +51,10 @@ import kotlinx.coroutines.coroutineScope
 import java.util.*
 import kotlin.math.roundToInt
 
-private const val InTransitionDuration = 120
-private const val OutTransitionDuration = 75
-private val MenuElevation = 8.dp
-private val DropdownMenuVerticalPadding = 8.dp
+private const val IN_TRANSITION_DURATION = 120
+private const val OUT_TRANSITION_DURATION = 75
+private val MENU_ELEVATION = 8.dp
+private val DROPDOWN_MENU_VERTICAL_PADDING = 8.dp
 
 @Composable
 fun CustomDropdownMenuContent(
@@ -69,13 +69,13 @@ fun CustomDropdownMenuContent(
         transitionSpec = {
             if (false isTransitioningTo true) {
                 tween(
-                    durationMillis = InTransitionDuration,
+                    durationMillis = IN_TRANSITION_DURATION,
                     easing = LinearOutSlowInEasing
                 )
             } else {
                 tween(
                     durationMillis = 1,
-                    delayMillis = OutTransitionDuration - 1
+                    delayMillis = OUT_TRANSITION_DURATION - 1
                 )
             }
         },
@@ -88,7 +88,7 @@ fun CustomDropdownMenuContent(
             if (false isTransitioningTo true) {
                 tween(durationMillis = 30)
             } else {
-                tween(durationMillis = OutTransitionDuration)
+                tween(durationMillis = OUT_TRANSITION_DURATION)
             }
         },
         label = "FloatAnimation",
@@ -102,10 +102,10 @@ fun CustomDropdownMenuContent(
             this.alpha = alpha
             transformOrigin = transformOriginState.value
         },
-        elevation = MenuElevation
+        elevation = MENU_ELEVATION
     ) {
         LazyColumn(
-            modifier = modifier.padding(vertical = DropdownMenuVerticalPadding),
+            modifier = modifier.padding(vertical = DROPDOWN_MENU_VERTICAL_PADDING),
             state = scrollState,
             content = content,
         )
@@ -203,7 +203,7 @@ internal data class CustomDropdownMenuPositionProvider(
         val toCenter = anchorBounds.top - popupContentSize.height / 2
         val toDisplayBottom = windowSize.height - popupContentSize.height
         val y = sequenceOf(toBottom, toTop, toCenter, toDisplayBottom).firstOrNull {
-                    it + popupContentSize.height <= windowSize.height
+            it + popupContentSize.height <= windowSize.height
         } ?: toTop
 
         onPositionCalculated(
@@ -223,10 +223,12 @@ internal fun calculateTransformOrigin(
         menuBounds.right <= parentBounds.left -> 1f
         menuBounds.width == 0 -> 0f
         else -> {
-            val intersectionCenter = (kotlin.math.max(
-                parentBounds.left,
-                menuBounds.left
-            ) + kotlin.math.min(parentBounds.right, menuBounds.right)) / 2
+            val intersectionCenter = (
+                kotlin.math.max(
+                    parentBounds.left,
+                    menuBounds.left
+                ) + kotlin.math.min(parentBounds.right, menuBounds.right)
+                ) / 2
             (intersectionCenter - menuBounds.left).toFloat() / menuBounds.width
         }
     }
@@ -235,10 +237,12 @@ internal fun calculateTransformOrigin(
         menuBounds.bottom <= parentBounds.top -> 1f
         menuBounds.height == 0 -> 0f
         else -> {
-            val intersectionCenter = (kotlin.math.max(
-                parentBounds.top,
-                menuBounds.top
-            ) + kotlin.math.min(parentBounds.bottom, menuBounds.bottom)) / 2
+            val intersectionCenter = (
+                kotlin.math.max(
+                    parentBounds.top,
+                    menuBounds.top
+                ) + kotlin.math.min(parentBounds.bottom, menuBounds.bottom)
+                ) / 2
             (intersectionCenter - menuBounds.top).toFloat() / menuBounds.height
         }
     }
@@ -614,23 +618,29 @@ private class PopupLayout(
      * Taken from PopupWindow
      */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode == KeyEvent.KEYCODE_BACK) {
-            if (keyDispatcherState == null) {
-                return super.dispatchKeyEvent(event)
-            }
-            if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
+        return when (event.keyCode) {
+            KeyEvent.KEYCODE_BACK -> obtainKeyCodeBackEvent(event)
+            else -> super.dispatchKeyEvent(event)
+        }
+    }
+
+    private fun obtainKeyCodeBackEvent(event: KeyEvent): Boolean {
+        return when {
+            keyDispatcherState == null -> super.dispatchKeyEvent(event)
+            event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0 -> {
                 val state = keyDispatcherState
                 state?.startTracking(event, this)
-                return true
-            } else if (event.action == KeyEvent.ACTION_UP) {
+                true
+            }
+            event.action == KeyEvent.ACTION_UP -> {
                 val state = keyDispatcherState
                 if (state != null && state.isTracking(event) && !event.isCanceled) {
                     onDismissRequest?.invoke()
-                    return true
-                }
+                    true
+                } else super.dispatchKeyEvent(event)
             }
+            else -> super.dispatchKeyEvent(event)
         }
-        return super.dispatchKeyEvent(event)
     }
 
     fun updateParameters(
@@ -692,16 +702,7 @@ private class PopupLayout(
         // matter whether we return true or false as some upper layer decides on whether the
         // event is propagated to other windows or not. So for focusable the event is consumed but
         // for not focusable it is propagated to other windows.
-        if (((event.action == MotionEvent.ACTION_DOWN) &&
-                    (
-                            (event.x < 0) ||
-                                    (event.x >= width) ||
-                                    (event.y < 0) ||
-                                    (event.y >= height)
-                            )
-                    ) ||
-            event.action == MotionEvent.ACTION_OUTSIDE
-        ) {
+        if (onTouchEventCondition(event)) {
             val parentBounds = parentBounds
             val shouldDismiss = parentBounds == null || dismissOnOutsideClick(
                 if (event.x != 0f || event.y != 0f) {
@@ -718,6 +719,13 @@ private class PopupLayout(
             }
         }
         return super.onTouchEvent(event)
+    }
+
+    private fun onTouchEventCondition(event: MotionEvent): Boolean {
+        val isActionDown = event.action == MotionEvent.ACTION_DOWN
+        val isActionOutside = event.action == MotionEvent.ACTION_OUTSIDE
+        val isRightCoordinates = event.x < 0 || event.x >= width || event.y < 0 || event.y >= height
+        return isActionDown && isRightCoordinates || isActionOutside
     }
 
     override fun setLayoutDirection(layoutDirection: Int) {
@@ -744,8 +752,8 @@ private class PopupLayout(
 
             // Flags specific to exposed dropdown menu.
             flags = WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
-                    WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
             softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
 
             type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL
