@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package com.skyyo.samples.features.customView
 
 import androidx.compose.foundation.Canvas
@@ -14,9 +16,7 @@ import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
-import java.lang.Math.round
 import kotlin.math.roundToInt
-
 
 @Composable
 fun CustomViewScreen() {
@@ -42,7 +42,7 @@ fun CustomProgressCircle2(sliderValue: Float) {
             startAngle = 120f,
             sweepAngle = 300f,
             useCenter = false,
-            style = Stroke(35f, cap = StrokeCap.Round)
+            style = Stroke(width = 35f, cap = StrokeCap.Round)
         )
 
         val convertedValue = sliderValue * 300
@@ -52,7 +52,7 @@ fun CustomProgressCircle2(sliderValue: Float) {
             startAngle = 120f,
             sweepAngle = convertedValue,
             useCenter = false,
-            style = Stroke(35f, cap = StrokeCap.Round)
+            style = Stroke(width = 35f, cap = StrokeCap.Round)
         )
 
         drawIntoCanvas {
@@ -62,9 +62,9 @@ fun CustomProgressCircle2(sliderValue: Float) {
                 textSize = 55f
                 textAlign = android.graphics.Paint.Align.CENTER
             }
-            //TODO this should be replaced by one of the compose API's in future
+            // TODO this should be replaced by one of the compose API's in future
             it.nativeCanvas.drawText(
-                "${(sliderValue * 100).roundToInt().toInt()}%",
+                "${(sliderValue * 100).roundToInt()}%",
                 size.width / 2,
                 size.height / 2,
                 paint
@@ -83,7 +83,7 @@ fun CustomProgressCircle(sliderValue: Float) {
         drawCircle(
             SolidColor(Color.LightGray),
             size.width / 2,
-            style = Stroke(35f)
+            style = Stroke(width = 35f)
         )
         val convertedValue = sliderValue * 360
         drawArc(
@@ -91,7 +91,7 @@ fun CustomProgressCircle(sliderValue: Float) {
             startAngle = -90f,
             sweepAngle = convertedValue,
             useCenter = false,
-            style = Stroke(35f)
+            style = Stroke(width = 35f)
         )
     }
 }
@@ -123,6 +123,5 @@ fun Triangle(sliderValue: Float) {
                 )
             )
         }
-
     }
 }

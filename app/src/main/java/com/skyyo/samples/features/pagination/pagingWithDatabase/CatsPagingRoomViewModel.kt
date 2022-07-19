@@ -8,7 +8,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.skyyo.samples.application.models.Cat
-import com.skyyo.samples.extensions.log
 import com.skyyo.samples.features.pagination.common.CatsScreenEvent
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.utils.NavigationDispatcher
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalPagingApi::class)

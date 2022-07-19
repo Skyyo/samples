@@ -8,7 +8,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-
+const val CODE_200 = 200
 @ViewModelScoped
 class CatsRepositoryWithDatabase @Inject constructor(
     private val calls: CatCalls,
@@ -20,7 +20,7 @@ class CatsRepositoryWithDatabase @Inject constructor(
     suspend fun getCats(limit: Int, offset: Int): CatsRoomResult {
         val response = tryOrNull { calls.getCats(offset, limit) }
         return when {
-            response?.code() == 200 -> {
+            response?.code() == CODE_200 -> {
                 val cats = response.body()!!
                 if (offset == 0) dao.deleteAndInsertCats(cats) else dao.insertCats(cats)
                 CatsRoomResult.Success(lastPageReached = cats.size != limit)

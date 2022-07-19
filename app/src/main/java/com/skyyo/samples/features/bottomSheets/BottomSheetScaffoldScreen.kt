@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
-
 /**
  * can be used both as modal & persistent sheet,
  * just not fit for destinations
@@ -41,7 +40,7 @@ fun BottomSheetScaffoldScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.8f)
+                    .fillMaxHeight(fraction = 0.8f)
                     .statusBarsPadding()
                     .background(MaterialTheme.colors.primary)
                     .graphicsLayer(alpha = currentFraction),
@@ -67,7 +66,6 @@ fun BottomSheetScaffoldScreen() {
         },
         sheetPeekHeight = 56.dp
     ) {
-
     }
 }
 
@@ -85,5 +83,3 @@ val BottomSheetScaffoldState.currentFraction: Float
             else -> 1f - fraction
         }
     }
-
-

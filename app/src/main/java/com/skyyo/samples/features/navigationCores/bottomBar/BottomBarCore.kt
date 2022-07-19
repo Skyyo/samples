@@ -54,13 +54,12 @@ fun BottomBarCore(
         }
     }
 
-
     Box {
         AnimatedNavHost(
             navController = navController,
             startDestination = startDestination,
-            enterTransition = { fadeIn(animationSpec = tween(350)) },
-            exitTransition = { fadeOut(animationSpec = tween(350)) },
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 350)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 350)) },
             modifier = Modifier.padding(0.dp)
         ) {
 
@@ -79,7 +78,6 @@ fun BottomBarCore(
                 })
                 Tab3Screen()
             }
-
         }
         AnimatedBottomBar(
             Modifier.align(Alignment.BottomCenter),
@@ -87,12 +85,10 @@ fun BottomBarCore(
             selectedTab.value,
             isBottomBarVisible.value
         ) { index, route ->
-            //this means we're already on the selected tab
+            // this means we're already on the selected tab
             if (index == selectedTab.value) return@AnimatedBottomBar
             selectedTab.value = index
             navController.navigateToRootDestination(route)
         }
-
     }
-
 }

@@ -10,12 +10,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ForceThemeViewModel @Inject constructor(
     private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
-
 
     private val _events = Channel<Boolean>(Channel.UNLIMITED)
     val events = _events.receiveAsFlow()

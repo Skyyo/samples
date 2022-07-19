@@ -58,6 +58,7 @@ fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
     }
 }
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Otp(

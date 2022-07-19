@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
-
+import com.skyyo.samples.extensions.FixInAppLanguageSwitchLayoutDirection
 
 @Composable
-fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel()) {
+fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel()) = FixInAppLanguageSwitchLayoutDirection {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,6 +57,15 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goPdfViewer) {
             Text(text = "pdf viewer")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goHealthConnect) {
+            Text(text = "health connect")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goImagePicker) {
+            Text(text = "image picker without permissions")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goLanguagePicker) {
+            Text(text = "language picker")
         }
     }
 }
@@ -118,10 +127,11 @@ fun UIelements(viewModel: SampleContainerViewModel) {
     ) { Text(text = "table") }
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCustomView) {
         Text(
-            text = "custom view", style = LocalTextStyle.current.copy(
+            text = "custom view",
+            style = LocalTextStyle.current.copy(
                 shadow = Shadow(
                     color = Color.Red,
-                    offset = Offset(4f, 4f),
+                    offset = Offset(x = 4f, y = 4f),
                     blurRadius = 8f
                 )
             )
@@ -162,6 +172,9 @@ fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goNoticeableScrollableRow) {
         Text(text = "noticeable scrollable row")
     }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goDragAndDrop) {
+        Text(text = "drag and drop")
+    }
     Spacer(modifier = Modifier.height(16.dp))
 }
 
@@ -196,6 +209,10 @@ fun Camera(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goQrScanning
     ) { Text(text = "scan qr code with ML kit") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goQrScanningWithoutPermissions
+    ) { Text(text = "scan qr code without permissions") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 
@@ -218,6 +235,10 @@ fun ExoPlayerSamples(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goExoPlayerColumnDynamicThumb
     ) { Text(text = "dynamic thumbnails") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goVerticalPagerWithFling
+    ) { Text(text = "vertical pager with fling") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 

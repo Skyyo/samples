@@ -40,16 +40,18 @@ fun CustomCard(catId: String) {
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 56.dp)
         ) {
-            Image(painter = rememberImagePainter(
-                data = "https://placekitten.com/g/200/300",
-                builder = {
-                    transformations(CircleCropTransformation())
-                }
-            ),
+            Image(
+                painter = rememberImagePainter(
+                    data = "https://placekitten.com/g/200/300",
+                    builder = {
+                        transformations(CircleCropTransformation())
+                    }
+                ),
                 contentDescription = null,
                 modifier = Modifier
                     .size(56.dp)
-                    .padding(horizontal = 8.dp))
+                    .padding(horizontal = 8.dp)
+            )
             Text(catId, modifier = Modifier.align(Alignment.CenterVertically))
         }
     }

@@ -118,5 +118,4 @@ fun InputValidationAutoScreen(viewModel: InputValidationAutoViewModel = hiltView
             Text(text = "Continue")
         }
     }
-
 }

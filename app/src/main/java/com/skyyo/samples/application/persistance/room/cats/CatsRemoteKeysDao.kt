@@ -8,7 +8,6 @@ import androidx.room.Query
 @Dao
 interface CatsRemoteKeysDao {
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(remoteKey: List<CatsRemoteKeys>)
 
@@ -17,5 +16,4 @@ interface CatsRemoteKeysDao {
 
     @Query("DELETE FROM cats_remote_keys")
     suspend fun deleteRemoteKeys()
-
 }

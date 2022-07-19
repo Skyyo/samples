@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AutofillScreen() {
@@ -57,6 +58,7 @@ fun AutofillScreen() {
             AutofillType.CreditCardExpirationDay,
         )
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

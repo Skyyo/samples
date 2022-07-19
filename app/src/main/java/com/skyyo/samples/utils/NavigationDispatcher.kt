@@ -14,6 +14,4 @@ class NavigationDispatcher @Inject constructor() {
     val emitter = _emitter.receiveAsFlow()
 
     fun emit(navigationEvent: NavigationEvent) = _emitter.trySend(navigationEvent)
-
-
 }

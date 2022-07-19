@@ -86,8 +86,8 @@ fun CameraXScreen(viewModel: CameraXViewModel = hiltViewModel()) {
         },
         permissionNotAvailableContent = {
             Button(onClick = { context.goAppPermissions() }, Modifier.systemBarsPadding(true)) {
-                Text(text = "Add camera permission from app Settings")
-            }
+            Text(text = "Add camera permission from app Settings")
+        }
         }
     ) {
         Box {
@@ -109,7 +109,8 @@ fun CameraXScreen(viewModel: CameraXViewModel = hiltViewModel()) {
                         }
                         isFlashlightOn = !isFlashlightOn
                     }
-                    .align(BottomStart))
+                    .align(BottomStart)
+            )
             ToggleFlashlightButton(
                 isFlashlightOn = isFlashlightOn,
                 modifier = Modifier
@@ -120,7 +121,8 @@ fun CameraXScreen(viewModel: CameraXViewModel = hiltViewModel()) {
                     .clickable {
                         isAlwaysOnFlashLightEnabled = !isAlwaysOnFlashLightEnabled
                     }
-                    .align(BottomEnd))
+                    .align(BottomEnd)
+            )
             LastPictureThumbnail(
                 uri = lastTakenPictureUri,
                 modifier = Modifier
@@ -130,12 +132,14 @@ fun CameraXScreen(viewModel: CameraXViewModel = hiltViewModel()) {
                     .statusBarsPadding()
                     .align(TopStart)
             )
-            TakePictureButton(Modifier
-                .navigationBarsPadding()
-                .size(76.dp)
-                .clip(RoundedCornerShape(76.dp))
-                .clickable { takePhoto(imageCapture, context, viewModel, cameraExecutor) }
-                .align(BottomCenter))
+            TakePictureButton(
+                Modifier
+                    .navigationBarsPadding()
+                    .size(76.dp)
+                    .clip(RoundedCornerShape(76.dp))
+                    .clickable { takePhoto(imageCapture, context, viewModel, cameraExecutor) }
+                    .align(BottomCenter)
+            )
         }
     }
 }
@@ -215,7 +219,7 @@ fun LastPictureThumbnail(
     uri: Uri?,
     modifier: Modifier = Modifier,
 ) {
-    Crossfade(targetState = uri, animationSpec = tween(500)) { imageUri ->
+    Crossfade(targetState = uri, animationSpec = tween(durationMillis = 500)) { imageUri ->
         val painter = rememberImagePainter(
             data = imageUri,
             builder = {
@@ -245,14 +249,16 @@ private fun takePhoto(
     val photoFile = File(outputDirectory, "${System.currentTimeMillis()}test.jpg")
     val options = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
-    imageCapture.takePicture(options, cameraExecutor, object : ImageCapture.OnImageSavedCallback {
-        override fun onError(exc: ImageCaptureException) {
-            context.toast("Failed: ${exc.message}")
-        }
+    imageCapture.takePicture(
+        options, cameraExecutor,
+        object : ImageCapture.OnImageSavedCallback {
+            override fun onError(exc: ImageCaptureException) {
+                context.toast("Failed: ${exc.message}")
+            }
 
-        override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-            viewModel.onPictureTaken(output.savedUri ?: Uri.fromFile(photoFile))
+            override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                viewModel.onPictureTaken(output.savedUri ?: Uri.fromFile(photoFile))
+            }
         }
-    })
+    )
 }
-

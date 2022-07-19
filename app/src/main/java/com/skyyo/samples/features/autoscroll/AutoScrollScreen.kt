@@ -2,7 +2,6 @@ package com.skyyo.samples.features.autoscroll
 
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.*
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.delay
-
 
 private const val DELAY_BETWEEN_SCROLL_MS = 8L
 private const val SCROLL_DX = 1f
@@ -43,7 +41,6 @@ fun AutoScrollScreen() {
             ) { Text("Item $index") }
         }
     }
-
 }
 
 fun LazyListScope.infinityItems(
@@ -56,7 +53,7 @@ fun LazyListScope.infinityItems(
 }
 
 private tailrec suspend fun autoScroll(lazyListState: LazyListState) {
-    //TODO add tracking if user touches the list, and always relaunch autoScroll when he's moving
+    // TODO add tracking if user touches the list, and always relaunch autoScroll when he's moving
     // the finger away
     lazyListState.scroll(MutatePriority.PreventUserInput) {
         scrollBy(SCROLL_DX)
@@ -65,5 +62,3 @@ private tailrec suspend fun autoScroll(lazyListState: LazyListState) {
 
     autoScroll(lazyListState)
 }
-
-

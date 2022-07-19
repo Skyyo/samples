@@ -14,5 +14,4 @@ class Application : Application() {
             start()
         }
     }
-
 }

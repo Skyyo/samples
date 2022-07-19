@@ -16,7 +16,7 @@ fun VideoThumbnail(url: String) {
     Image(
         painter = rememberImagePainter(data = url, builder = {
             crossfade(true)
-            size(512, 512)
+            size(width = 512, height = 512)
         }),
         contentDescription = null,
         modifier = Modifier

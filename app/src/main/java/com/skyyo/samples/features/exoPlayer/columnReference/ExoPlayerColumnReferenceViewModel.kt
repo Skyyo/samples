@@ -6,7 +6,6 @@ import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ExoPlayerColumnReferenceViewModel @Inject constructor() : ViewModel() {
 
@@ -95,5 +94,4 @@ class ExoPlayerColumnReferenceViewModel @Inject constructor() : ViewModel() {
             }
         }
     }
-
 }

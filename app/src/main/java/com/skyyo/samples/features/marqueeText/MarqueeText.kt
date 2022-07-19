@@ -30,15 +30,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.delay
 
-enum class ScrollDirection { Forward, Backward }
 const val SPACING_NONE = 0
 const val SPACING_LARGE = 1
 const val SPACING_MEDIUM = 2
 const val SPACING_SMALL = 3
 
-private enum class MarqueeComponents { MainText, NextText, EdgesGradient }
-private data class TextLayoutInfo(val textWidth: Int, val containerWidth: Int)
-
+@Suppress("LongMethod")
 @Composable
 fun MarqueeText(
     text: String,
@@ -182,7 +179,6 @@ fun MarqueeText(
                     endColor = Color.Transparent
                 )
             }
-
         }
 
         layout(
@@ -219,5 +215,5 @@ private fun SubcomposeMeasureScope.measureSubcompose(
     measureConstraints: Constraints,
     content: @Composable () -> Unit
 ): Placeable {
-    return  subcompose(subcomposeSlotId, content).first().measure(measureConstraints)
+    return subcompose(subcomposeSlotId, content).first().measure(measureConstraints)
 }

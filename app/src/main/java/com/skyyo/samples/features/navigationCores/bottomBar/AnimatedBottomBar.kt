@@ -27,7 +27,6 @@ private const val COLLAPSE_ANIMATION_DURATION = 300
 private const val FADE_IN_ANIMATION_DURATION = 350
 private const val FADE_OUT_ANIMATION_DURATION = 300
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedBottomBar(
     modifier: Modifier = Modifier,
@@ -56,12 +55,14 @@ fun AnimatedBottomBar(
     val enterSlide = remember {
         slideIn(
             animationSpec = tween(EXPAND_ANIMATION_DURATION),
-            initialOffset = { with(density) { IntOffset(0, 56.dp.roundToPx()) } })
+            initialOffset = { with(density) { IntOffset(0, 56.dp.roundToPx()) } }
+        )
     }
     val exitSlide = remember {
         slideOut(
             animationSpec = tween(COLLAPSE_ANIMATION_DURATION),
-            targetOffset = { with(density) { IntOffset(0, 56.dp.roundToPx()) } })
+            targetOffset = { with(density) { IntOffset(0, 56.dp.roundToPx()) } }
+        )
     }
 
     return AnimatedVisibility(

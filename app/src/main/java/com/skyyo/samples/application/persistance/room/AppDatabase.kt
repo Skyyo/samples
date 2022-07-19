@@ -20,5 +20,4 @@ import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeysDao
 abstract class AppDatabase : RoomDatabase() {
     abstract fun catsDao(): CatsDao
     abstract fun catsRemoteKeysDao(): CatsRemoteKeysDao
-
 }

@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Samples</string>
     <string name="map">Map</string>
-    <string name="dog_feed">Dog feed</string>
     <string name="profile">Profile</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="profile_confirmation">Profile Confirmation</string>
@@ -19,4 +18,9 @@
     <string name="please_grant_storage_permission">Please\ngrant storage permission to open PDF file</string>
     <string name="please_grant_storage_permission_from_settings">Please grant storage permission from application settings</string>
     <string name="error_otp_wrong">Otp is wrong</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="menu_first_tab">First tab</string>
+    <string name="menu_second_tab">Second tab</string>
+    <string name="change_language">Change language</string>
 </resources>

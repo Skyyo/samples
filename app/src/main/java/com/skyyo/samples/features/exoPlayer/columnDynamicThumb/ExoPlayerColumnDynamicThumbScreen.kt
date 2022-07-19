@@ -16,25 +16,23 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import coil.ImageLoader
 import coil.decode.VideoFrameDecoder
 import coil.fetch.VideoFrameFileFetcher
 import coil.fetch.VideoFrameUriFetcher
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexedViewModel
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
-import kotlinx.coroutines.flow.collect
-
 
 @Composable
 fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val exoPlayer = remember(context) { SimpleExoPlayer.Builder(context).build() }
+    val exoPlayer = remember(context) { ExoPlayer.Builder(context).build() }
     val listState = rememberLazyListState()
     // can / should? be provided by dagger if used in multiple places
     val imageLoader = remember {
@@ -130,5 +128,3 @@ private fun LazyListState.visibleAreaContainsItem(
             .contains(videos[currentlyPlayedIndex])
     }
 }
-
-

@@ -13,13 +13,12 @@ import com.google.accompanist.insets.systemBarsPadding
 @Composable
 fun BottomSheetScreen() {
     val list = arrayListOf<Int>()
-    repeat(200) { list += it }
+    repeat(times = 200) { list += it }
 
     LazyColumn(Modifier.systemBarsPadding()) {
-        itemsIndexed(list) { index, launch ->
-            Text(text = "Bottom Sheet Screen")
+        itemsIndexed(list) { index, _ ->
+            Text(text = "Bottom Sheet Screen $index")
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
-

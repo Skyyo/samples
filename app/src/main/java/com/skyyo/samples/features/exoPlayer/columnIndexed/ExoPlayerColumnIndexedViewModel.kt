@@ -6,7 +6,6 @@ import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ExoPlayerColumnIndexedViewModel @Inject constructor() : ViewModel() {
 

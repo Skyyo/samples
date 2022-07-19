@@ -139,9 +139,8 @@ fun PdfViewerScreen(viewModel: PdfViewerViewModel = hiltViewModel()) {
 fun ChoosePdfButton(viewModel: PdfViewerViewModel) {
     val chooseFileRequester = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
-        onResult = {
-            viewModel.uri.value = it
-        })
+        onResult = viewModel::onUriChanged
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -204,7 +203,6 @@ fun PdfPageItem(bitmap: Bitmap?) {
     }
 }
 
-
 fun generatePageBitmap(renderer: PdfRenderer, page: Int, pdfQuality: PdfQuality): Bitmap {
     val openedPage = renderer.openPage(page)
     val bitmapNew = Bitmap.createBitmap(
@@ -216,7 +214,7 @@ fun generatePageBitmap(renderer: PdfRenderer, page: Int, pdfQuality: PdfQuality)
         bitmapNew,
         null,
         null,
-        when(pdfQuality) {
+        when (pdfQuality) {
             PdfQuality.ENHANCED -> PdfRenderer.Page.RENDER_MODE_FOR_PRINT
             else -> PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY
         }

@@ -40,19 +40,26 @@ private fun Item(width: Dp) {
     Row(
         Modifier
             .width(width)
-            .height(30.dp)) {
-        Spacer(modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight()
-            .background(Teal200))
-        Spacer(modifier = Modifier
-            .width(1.dp)
-            .fillMaxHeight()
-            .background(Purple200))
-        Spacer(modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight()
-            .background(Teal200))
+            .height(30.dp)
+    ) {
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .background(Teal200)
+        )
+        Spacer(
+            modifier = Modifier
+                .width(1.dp)
+                .fillMaxHeight()
+                .background(Purple200)
+        )
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .background(Teal200)
+        )
     }
 }
 

@@ -6,7 +6,6 @@ import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ExoPlayerColumnAutoplayViewModel @Inject constructor() : ViewModel() {
 
@@ -71,5 +70,4 @@ class ExoPlayerColumnAutoplayViewModel @Inject constructor() : ViewModel() {
         )
         videos.postValue(testVideos)
     }
-
 }

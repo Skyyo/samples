@@ -1,3 +1,4 @@
+@file:Suppress("ReturnCount")
 package com.skyyo.samples.utils
 
 import androidx.compose.ui.text.AnnotatedString

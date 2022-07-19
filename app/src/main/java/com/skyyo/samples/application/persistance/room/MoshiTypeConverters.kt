@@ -29,6 +29,4 @@ object MoshiTypeConverters {
     @JvmStatic
     @ToJson
     fun toCat(json: String): Cat? = moshi.adapter(Cat::class.java).fromJson(json)
-
-
 }

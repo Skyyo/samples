@@ -21,11 +21,15 @@ fun DrawerItem(title: String, selected: Boolean, onClick: () -> Unit) {
         selected -> android.R.color.holo_blue_light
         else -> android.R.color.transparent
     }
+    val shape = remember {
+        RoundedCornerShape(topEndPercent = 50, bottomEndPercent = 50)
+    }
+
     Text(
         modifier = Modifier
-            .fillMaxWidth(0.9f)
-            .clip(RoundedCornerShape(topEndPercent = 50, bottomEndPercent = 50))
-            .clickable(onClick = { onClick() })
+            .fillMaxWidth(fraction = 0.9f)
+            .clip(shape)
+            .clickable(onClick = onClick)
             .background(colorResource(id = backgroundColourId))
             .padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
         text = title,

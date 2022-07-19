@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.google.android.exoplayer2.SimpleExoPlayer
+import androidx.media3.exoplayer.ExoPlayer
 import com.skyyo.samples.R
 import com.skyyo.samples.features.exoPlayer.VideoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
@@ -30,7 +30,7 @@ fun VideoCardReference(
     modifier: Modifier = Modifier,
     videoItem: VideoItem,
     isPlaying: Boolean,
-    exoPlayer: SimpleExoPlayer,
+    exoPlayer: ExoPlayer,
     onClick: OnClick
 ) {
     val isPlayerUiVisible = remember { mutableStateOf(false) }
@@ -60,7 +60,8 @@ fun VideoCardReference(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(72.dp)
-                    .clickable { onClick() })
+                    .clickable { onClick() }
+            )
         }
         Text(
             text = "${videoItem.id}",

@@ -1,6 +1,5 @@
 package com.skyyo.samples.features.zoomable
 
-
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -80,8 +79,8 @@ fun Zoomable(
                 layout(width, height) {
                     placeable.placeWithLayer(
                         state.translationX.roundToInt() - state.boundOffset.x,
-                        state.translationY.roundToInt() - state.boundOffset.y
-                                + state.dismissDragOffsetY.roundToInt()
+                        state.translationY.roundToInt() - state.boundOffset.y +
+                            state.dismissDragOffsetY.roundToInt()
                     )
                 }
             }

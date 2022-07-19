@@ -6,7 +6,6 @@ import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ScrollAnimation1ViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher
@@ -15,7 +14,7 @@ class ScrollAnimation1ViewModel @Inject constructor(
     val text = MutableLiveData(mutableListOf<String>())
 
     init {
-        repeat(10) {
+        repeat(times = 10) {
             text.value!!.add("awdawdawdawdadawdwadawdawdad awdawdawawwadawwda awdwawadwdwadadw adawdadwdwawdawd awdwadadwwaddwdawdaw")
         }
     }

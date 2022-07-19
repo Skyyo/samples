@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.navDeepLink
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
@@ -25,6 +26,7 @@ import com.skyyo.samples.features.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.samples.features.cameraX.CameraXScreen
 import com.skyyo.samples.features.customView.CustomViewScreen
 import com.skyyo.samples.features.dominantColor.DominantColorScreen
+import com.skyyo.samples.features.dragAndDrop.DragAndDropScreen
 import com.skyyo.samples.features.exoPlayer.columnAutoplay.ExoPlayerColumnAutoplayScreen
 import com.skyyo.samples.features.exoPlayer.columnDynamicThumb.ExoPlayerColumnDynamicThumbScreen
 import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexedScreen
@@ -32,10 +34,13 @@ import com.skyyo.samples.features.exoPlayer.columnReference.ExoPlayerColumnRefer
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
 import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
+import com.skyyo.samples.features.healthConnect.HealthConnectScreen
+import com.skyyo.samples.features.imagePicker.ImagePickerScreen
 import com.skyyo.samples.features.infiniteViewPager.InfiniteViewPagerScreen
 import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScreen
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
+import com.skyyo.samples.features.languagePicker.LanguagePickerScreen
 import com.skyyo.samples.features.marqueeText.MarqueeTextScreen
 import com.skyyo.samples.features.navigateWithResult.simple.dogContacts.DogContactsScreen
 import com.skyyo.samples.features.navigateWithResult.simple.dogDetails.DogDetailsScreen
@@ -55,6 +60,7 @@ import com.skyyo.samples.features.parallaxEffect.ParallaxEffectScreen
 import com.skyyo.samples.features.pdfViewer.PdfViewerScreen
 import com.skyyo.samples.features.sampleContainer.SampleContainerScreen
 import com.skyyo.samples.features.scanQR.QrScreen
+import com.skyyo.samples.features.scanQrNoPermissions.QrNoPermissionsScreen
 import com.skyyo.samples.features.scrollAnimation1.ScrollAnimation1Screen
 import com.skyyo.samples.features.sharedViewModel.ProfileSharedViewModel
 import com.skyyo.samples.features.sharedViewModel.confirmProfile.EditProfileConfirmationScreen
@@ -64,8 +70,12 @@ import com.skyyo.samples.features.snackbar.SnackbarScreen
 import com.skyyo.samples.features.snap.SnapScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
+import com.skyyo.samples.features.verticalPagerWithFling.VideoPagerWithFlingScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
 import com.skyyo.samples.features.zoomable.ZoomableScreen
+
+const val TRANSITION_DURATION_LONG = 1000
+const val TRANSITION_DURATION_SHORT = 350
 
 @OptIn(
     ExperimentalAnimationApi::class,
@@ -73,6 +83,8 @@ import com.skyyo.samples.features.zoomable.ZoomableScreen
     ExperimentalMaterialApi::class,
     ExperimentalPagerApi::class
 )
+
+@Suppress("LongMethod")
 @Composable
 fun PopulatedNavHost(
     startDestination: String,
@@ -80,8 +92,8 @@ fun PopulatedNavHost(
 ) = AnimatedNavHost(
     navController = navController,
     startDestination = startDestination,
-    enterTransition = { fadeIn(animationSpec = tween(350)) },
-    exitTransition = { fadeOut(animationSpec = tween(350)) }
+    enterTransition = { fadeIn(animationSpec = tween(TRANSITION_DURATION_SHORT)) },
+    exitTransition = { fadeOut(animationSpec = tween(TRANSITION_DURATION_SHORT)) }
 ) {
     composable(Destination.SampleContainer.route) { SampleContainerScreen() }
     composable(Destination.Cats.route) { CatsScreen() }
@@ -103,19 +115,21 @@ fun PopulatedNavHost(
     composable(Destination.CatFeed.route) { CatFeedScreen() }
     composable(Destination.CatDetails.route) { CatDetailsScreen() }
     composable(Destination.CatContacts.route) { CatContactsScreen() }
-    composable(Destination.InputValidationManual.route,
+    composable(
+        Destination.InputValidationManual.route,
         enterTransition = {
-            slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(400))
+            slideInHorizontally(initialOffsetX = { TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
         },
         exitTransition = {
-            slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(400))
+            slideOutHorizontally(targetOffsetX = { -TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
         },
         popEnterTransition = {
-            slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(400))
+            slideInHorizontally(initialOffsetX = { -TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
         },
         popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(400))
-        }) { InputValidationManualScreen() }
+            slideOutHorizontally(targetOffsetX = { TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
+        }
+    ) { InputValidationManualScreen() }
     composable(Destination.InputValidationAuto.route) { InputValidationAutoScreen() }
     composable(Destination.InputValidationDebounce.route) { InputValidationAutoDebounceScreen() }
     composable(Destination.AppBarElevation.route) { AppBarElevation() }
@@ -148,6 +162,7 @@ fun PopulatedNavHost(
         }
     }
     composable(Destination.QrCodeScanning.route) { QrScreen() }
+    composable(Destination.QrNoPermissions.route) { QrNoPermissionsScreen() }
     composable(Destination.ScrollAnimation1.route) { ScrollAnimation1Screen() }
     composable(Destination.Snackbar.route) { SnackbarScreen() }
     composable(Destination.Snap.route) { SnapScreen() }
@@ -159,7 +174,22 @@ fun PopulatedNavHost(
     composable(Destination.ExoPlayerColumnIndexed.route) { ExoPlayerColumnIndexedScreen() }
     composable(Destination.ExoPlayerColumnAutoplay.route) { ExoPlayerColumnAutoplayScreen() }
     composable(Destination.ExoPlayerColumnDynamicThumb.route) { ExoPlayerColumnDynamicThumbScreen() }
+    composable(Destination.VerticalPagerWithFling.route) { VideoPagerWithFlingScreen() }
     composable(Destination.DominantColor.route) { DominantColorScreen() }
     composable(Destination.Zoomable.route) { ZoomableScreen() }
     composable(Destination.PdfViewer.route) { PdfViewerScreen() }
+    composable(Destination.HealthConnect.route) { HealthConnectScreen() }
+    composable(Destination.DragAndDrop.route) { DragAndDropScreen() }
+    composable(
+        route = Destination.PrivacyPolicy.route,
+        deepLinks = listOf(
+            navDeepLink {
+                action = "androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE"
+            }
+        )
+    ) {
+        PdfViewerScreen()
+    }
+    composable(Destination.ImagePicker.route) { ImagePickerScreen() }
+    composable(Destination.LanguagePicker.route) { LanguagePickerScreen() }
 }
