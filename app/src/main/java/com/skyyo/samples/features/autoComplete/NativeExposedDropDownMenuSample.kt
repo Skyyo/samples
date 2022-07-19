@@ -1,16 +1,63 @@
 package com.skyyo.samples.features.autoComplete
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun NativeExposedDropDownMenuSample(modifier: Modifier = Modifier, countries: List<String>) {
+fun AutocompleteDropdownWithFilteringInside(
+    modifier: Modifier = Modifier,
+    countries: List<String>,
+) {
+    val coroutineScope = rememberCoroutineScope()
     var expanded by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
+    val defaultLocale = remember { Locale.getDefault() }
+    val lowerCaseSearchQuery = remember(query) { query.lowercase(defaultLocale) }
     var suggestions by remember { mutableStateOf(countries) }
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val keyboardOptions = remember {
+        KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
+    }
+    val keyboardActions = remember {
+        KeyboardActions(
+            onNext = {
+                expanded = false
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            }
+        )
+    }
+
+    LaunchedEffect(lowerCaseSearchQuery) {
+        coroutineScope.launch {
+            withContext(Dispatchers.Default) {
+                suggestions = when (lowerCaseSearchQuery.isEmpty()) {
+                    true -> countries
+                    false -> {
+                        countries.filter { country ->
+                            country.lowercase(defaultLocale).startsWith(lowerCaseSearchQuery) && country != query
+                        }
+                    }
+                }
+                expanded = true
+            }
+        }
+    }
 
     ExposedDropdownMenuBox(
         modifier = modifier,
@@ -19,18 +66,11 @@ fun NativeExposedDropDownMenuSample(modifier: Modifier = Modifier, countries: Li
             expanded = !expanded
         }
     ) {
-        TextField(
+        OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = query,
             onValueChange = {
                 query = it
-                suggestions = if (it.isEmpty()) countries
-                else {
-                    val filteredList = countries.filter { country ->
-                        country.lowercase().startsWith(query.lowercase()) && country != query
-                    }
-                    filteredList
-                }
             },
             label = { Text("Label") },
             trailingIcon = {
@@ -38,6 +78,8 @@ fun NativeExposedDropDownMenuSample(modifier: Modifier = Modifier, countries: Li
                     expanded = expanded
                 )
             },
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions
         )
         ExposedDropdownMenu(
             expanded = expanded,

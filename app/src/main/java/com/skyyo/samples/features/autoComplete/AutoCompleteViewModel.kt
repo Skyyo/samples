@@ -3,28 +3,31 @@ package com.skyyo.samples.features.autoComplete
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyyo.samples.extensions.getStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
+private const val QUERY = "query"
+private const val SUGGESTIONS = "suggestions"
+private const val IS_EXPANDED = "isExpanded"
+
 @HiltViewModel
 class AutoCompleteViewModel @Inject constructor(
-    handle: SavedStateHandle
+    private val handle: SavedStateHandle
 ) : ViewModel() {
 
     val countries = provideCountries()
-    val query = handle.getStateFlow(viewModelScope, "query", "")
-    val suggestions = handle.getStateFlow(viewModelScope, "suggestions", countries)
-    val isExpanded = handle.getStateFlow(viewModelScope, "isExpanded", false)
+    val query = handle.getStateFlow( QUERY, "")
+    val suggestions = handle.getStateFlow( SUGGESTIONS, countries)
+    val isExpanded = handle.getStateFlow( IS_EXPANDED, false)
 
     fun onCountryEntered(input: String) {
-        query.value = input
+        handle[QUERY] = input
 
         viewModelScope.launch(Dispatchers.Default) {
-            suggestions.value = if (input.isEmpty()) {
+            handle[SUGGESTIONS] = if (input.isEmpty()) {
                 countries.also { onExpandedChange(false) }
             } else {
                 val filteredList = countries.filter { country ->
@@ -38,11 +41,11 @@ class AutoCompleteViewModel @Inject constructor(
     }
 
     fun onExpandedChange(value: Boolean) {
-        isExpanded.value = value
+        handle[IS_EXPANDED] = value
     }
 
     fun onCountrySelected(value: String) {
-        query.value = value
+        handle[QUERY] = value
     }
 
     fun onExpandedFieldClick() {

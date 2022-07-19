@@ -25,20 +25,20 @@ fun AutoCompleteScreen(
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "AndroidView")
-        AndroidViewTextFieldWithDropDownSample(
+        AndroidViewAutocompleteDropdownWithOutsideFiltering(
             modifier = Modifier.fillMaxWidth(),
             suggestions = viewModel.countries,
             selectedValue = "",
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Native exposed dropdown menu")
-        NativeExposedDropDownMenuSample(
+        AutocompleteDropdownWithFilteringInside(
             modifier = Modifier.fillMaxWidth(),
-            countries = viewModel.countries
+            countries = viewModel.countries,
         )
         Spacer(modifier = Modifier.height(60.dp))
         Text(text = "Custom exposed dropdown menu")
-        CustomExposedDropdownMenuSample(
+        AutocompleteDropdownWithOutsideFiltering(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),
@@ -52,7 +52,7 @@ fun AutoCompleteScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "AndroidView")
-        AndroidViewTextFieldWithDropDownSample(
+        AndroidViewAutocompleteDropdownWithOutsideFiltering(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),

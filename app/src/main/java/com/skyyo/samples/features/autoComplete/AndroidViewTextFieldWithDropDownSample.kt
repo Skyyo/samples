@@ -11,7 +11,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.skyyo.samples.R
 
 @Composable
-fun AndroidViewTextFieldWithDropDownSample(
+fun AndroidViewAutocompleteDropdownWithOutsideFiltering(
     modifier: Modifier = Modifier,
     suggestions: List<String>,
     selectedValue: String = "",
@@ -32,14 +32,14 @@ fun AndroidViewTextFieldWithDropDownSample(
             }
         }
     }
-    val autoCompleteTextView = remember { textInputLayout.editText as? AutoCompleteTextView }
+    val autoCompleteTextView = remember { textInputLayout.editText as AutoCompleteTextView }
 
     AndroidView(
         modifier = modifier,
         factory = { textInputLayout },
         update = {
-            autoCompleteTextView?.setAdapter(adapter)
-            autoCompleteTextView?.setText(selectedValue, false)
+            autoCompleteTextView.setAdapter(adapter)
+            autoCompleteTextView.setText(selectedValue, false)
         },
     )
 }
