@@ -67,6 +67,9 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goLanguagePicker) {
             Text(text = "language picker")
         }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCardRecognition) {
+            Text(text = "card recognition")
+        }
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGooglePay) {
             Text(text = "google pay")
         }

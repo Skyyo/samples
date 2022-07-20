@@ -23,6 +23,7 @@ import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScreen
 import com.skyyo.samples.features.bottomSheets.ModalBottomSheetScreen
 import com.skyyo.samples.features.cameraX.CameraXScreen
+import com.skyyo.samples.features.cardRecognition.CardRecognitionScreen
 import com.skyyo.samples.features.customView.CustomViewScreen
 import com.skyyo.samples.features.dominantColor.DominantColorScreen
 import com.skyyo.samples.features.dragAndDrop.DragAndDropScreen
@@ -32,7 +33,7 @@ import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexed
 import com.skyyo.samples.features.exoPlayer.columnReference.ExoPlayerColumnReferenceScreen
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
-import com.skyyo.samples.features.googlePayAndCardRecognition.GooglePayAndCardRecognitionScreen
+import com.skyyo.samples.features.googlePay.GooglePayScreen
 import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
 import com.skyyo.samples.features.healthConnect.HealthConnectScreen
 import com.skyyo.samples.features.imagePicker.ImagePickerScreen
@@ -191,5 +192,6 @@ fun PopulatedNavHost(
     }
     composable(Destination.ImagePicker.route) { ImagePickerScreen() }
     composable(Destination.LanguagePicker.route) { LanguagePickerScreen() }
-    composable(Destination.GooglePay.route) { GooglePayAndCardRecognitionScreen() }
+    composable(Destination.CardRecognition.route) { CardRecognitionScreen() }
+    composable(Destination.GooglePay.route) { GooglePayScreen() }
 }

@@ -1,12 +1,5 @@
-package com.skyyo.samples.features.googlePayAndCardRecognition
+package com.skyyo.samples.features.googlePay
 
-import android.app.Activity
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -27,27 +20,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
-import com.google.android.gms.wallet.PaymentCardRecognitionResult
 import com.skyyo.samples.R
 import com.skyyo.samples.extensions.getEnclosingActivity
 
 @Composable
-fun GooglePayAndCardRecognitionScreen(viewModel: GooglePayViewModel = hiltViewModel()) {
+fun GooglePayScreen(viewModel: GooglePayViewModel = hiltViewModel()) {
     val context = LocalContext.current
-    val cardRecognitionLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartIntentSenderForResult()) {
-        viewModel.getCardRecognitionIntent()
-        when (it.resultCode) {
-            Activity.RESULT_OK -> {
-                handlePaymentCardRecognitionSuccess(context, PaymentCardRecognitionResult.getFromIntent(it.data!!)!!)
-            }
-            Activity.RESULT_CANCELED -> {
-                Toast.makeText(context, "card recognition canceled", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
     val activity = context.getEnclosingActivity()
-    val cardRecognitionIntent by viewModel.cardRecognitionPendingIntent.collectAsState()
-    val isCardRecognitionSupported by viewModel.isCardRecognitionSupported.collectAsState()
     val isWalletSupported by viewModel.isWalletSupported.collectAsState()
     val passData1 by viewModel.passData1.collectAsState()
     val passData2 by viewModel.passData2.collectAsState()
@@ -58,15 +37,6 @@ fun GooglePayAndCardRecognitionScreen(viewModel: GooglePayViewModel = hiltViewMo
             .navigationBarsPadding()
             .padding(20.dp)
     ) {
-        if (isCardRecognitionSupported) {
-            Button(
-                modifier = Modifier.padding(bottom = 20.dp),
-                onClick = { cardRecognitionLauncher.launch(IntentSenderRequest.Builder(cardRecognitionIntent!!.intentSender).build()) }
-            ) {
-                Text(text = "scan card")
-            }
-        }
-
         if (isWalletSupported) {
             val titleTextStyle = remember { TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W700) }
             val inputsTextStyle = remember { TextStyle(fontSize = 15.sp, fontWeight = FontWeight.W500) }
@@ -108,17 +78,8 @@ fun GooglePayAndCardRecognitionScreen(viewModel: GooglePayViewModel = hiltViewMo
                 style = hintTextStyle,
                 modifier = Modifier.padding(top = 10.dp)
             )
+        } else {
+            Text(text = "Your device doesn't support google wallet. Show alternatives methods to save passes")
         }
     }
-}
-
-private fun handlePaymentCardRecognitionSuccess(
-    context: Context,
-    cardRecognitionResult: PaymentCardRecognitionResult
-) {
-    val creditCardExpirationDate = cardRecognitionResult.creditCardExpirationDate
-    val expirationDate = creditCardExpirationDate?.let { "%02d/%d".format(it.month, it.year) }
-    val cardResultText = "PAN: ${cardRecognitionResult.pan}\nExpiration date: $expirationDate"
-    Log.e("Recognition", cardResultText)
-    Toast.makeText(context, cardResultText, Toast.LENGTH_LONG).show()
 }

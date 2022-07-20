@@ -62,6 +62,7 @@ sealed class Destination(val route: String) {
     object DragAndDrop : Destination("dragAndDrop")
     object ImagePicker : Destination("imagePicker")
     object LanguagePicker : Destination("languagePicker")
+    object CardRecognition : Destination("cardRecognition")
     object GooglePay : Destination("googlePay")
 }
 

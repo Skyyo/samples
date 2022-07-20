@@ -1,25 +1,18 @@
-package com.skyyo.samples.features.googlePayAndCardRecognition
+package com.skyyo.samples.features.googlePay
 
 import android.app.Activity
 import android.app.Application
-import android.app.PendingIntent
-import android.content.Context
 import androidx.lifecycle.*
 import com.google.android.gms.pay.Pay
 import com.google.android.gms.pay.PayApiAvailabilityStatus
 import com.google.android.gms.pay.PayClient
-import com.google.android.gms.wallet.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import java.util.*
 import javax.inject.Inject
 
 private const val IS_GOOGLE_WALLET_SUPPORTED_KEY = "isGoogleWalletSupported"
 private const val PASS_DATA1_KEY = "walletData1"
 private const val PASS_DATA2_KEY = "walletData2"
-private const val CARD_RECOGNITION_INTENT_KEY = "cardRecognitionIntent"
 
 @HiltViewModel
 class GooglePayViewModel @Inject constructor(
@@ -28,38 +21,13 @@ class GooglePayViewModel @Inject constructor(
 ) : ViewModel() {
     // We can handle "save to wallet" result only from activity (https://issuetracker.google.com/issues/239603300)
     private val saveToWalletRequestCode = 1
-
-    private val paymentsClient: PaymentsClient = createPaymentsClient(application)
     private val walletClient: PayClient = Pay.getClient(application)
     val isWalletSupported = handle.getStateFlow(IS_GOOGLE_WALLET_SUPPORTED_KEY, false)
     val passData1 = handle.getStateFlow(PASS_DATA1_KEY, "0")
     val passData2 = handle.getStateFlow(PASS_DATA2_KEY, "0")
-    val cardRecognitionPendingIntent = handle.getStateFlow<PendingIntent?>(CARD_RECOGNITION_INTENT_KEY, null)
-    val isCardRecognitionSupported = cardRecognitionPendingIntent.map { it != null }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
 
     init {
-        getCardRecognitionIntent()
         checkIfWalletIsSupported()
-    }
-
-    private fun createPaymentsClient(context: Context): PaymentsClient {
-        // card recognition return mocked data on test environment, use ENVIRONMENT_PRODUCTION for testing with real cards
-        val walletOptions = Wallet.WalletOptions.Builder()
-            .setEnvironment(WalletConstants.ENVIRONMENT_TEST)
-            .build()
-
-        return Wallet.getPaymentsClient(context, walletOptions)
-    }
-
-    fun getCardRecognitionIntent() {
-        val request = PaymentCardRecognitionIntentRequest.getDefaultInstance()
-        paymentsClient
-            .getPaymentCardRecognitionIntent(request)
-            .addOnSuccessListener { intentResponse ->
-                handle[CARD_RECOGNITION_INTENT_KEY] = intentResponse.paymentCardRecognitionPendingIntent
-            }
-            .addOnFailureListener { _ -> handle[CARD_RECOGNITION_INTENT_KEY] = null }
     }
 
     private fun checkIfWalletIsSupported() {
