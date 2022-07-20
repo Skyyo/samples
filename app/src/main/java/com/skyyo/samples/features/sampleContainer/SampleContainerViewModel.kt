@@ -203,4 +203,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goLanguagePicker() = navigationDispatcher.emit {
         it.navigate(Destination.LanguagePicker.route)
     }
+
+    fun goGooglePay() = navigationDispatcher.emit {
+        it.navigate(Destination.GooglePay.route)
+    }
 }

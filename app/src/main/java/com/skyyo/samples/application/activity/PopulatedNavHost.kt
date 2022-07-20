@@ -32,6 +32,7 @@ import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexed
 import com.skyyo.samples.features.exoPlayer.columnReference.ExoPlayerColumnReferenceScreen
 import com.skyyo.samples.features.forceTheme.ForceThemeScreen
 import com.skyyo.samples.features.googleMap.GoogleMapScreen
+import com.skyyo.samples.features.googlePayAndCardRecognition.GooglePayAndCardRecognitionScreen
 import com.skyyo.samples.features.gradientScroll.GradientScrollScreen
 import com.skyyo.samples.features.healthConnect.HealthConnectScreen
 import com.skyyo.samples.features.imagePicker.ImagePickerScreen
@@ -190,4 +191,5 @@ fun PopulatedNavHost(
     }
     composable(Destination.ImagePicker.route) { ImagePickerScreen() }
     composable(Destination.LanguagePicker.route) { LanguagePickerScreen() }
+    composable(Destination.GooglePay.route) { GooglePayAndCardRecognitionScreen() }
 }
