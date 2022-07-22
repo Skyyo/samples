@@ -30,6 +30,7 @@ Miscellaneous
 - Need to find an alternative to onboarding guides from the view system like these libraries provided: [onboardingFlow](https://github.com/MrIceman/onboardingflow),[TapTargetView](https://github.com/KeepSafe/TapTargetView),[Spotlight](https://github.com/TakuSemba/Spotlight)
 - Health connect permission resolving [issue](https://issuetracker.google.com/issues/233239418)
 - Language picker has issue on Android 12 [issue](https://issuetracker.google.com/issues/236538894)
+- We can handle "save to wallet" result only from activity (https://issuetracker.google.com/issues/239603300)
 
 # Limitations
 - There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)

@@ -1,6 +1,8 @@
 package com.skyyo.samples.extensions
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -54,5 +56,17 @@ fun FixInAppLanguageSwitchLayoutDirection(content: @Composable () -> Unit) {
     }
     CompositionLocalProvider(LocalLayoutDirection provides appLocaleDirection) {
         content()
+    }
+}
+
+fun Context.getEnclosingActivity(): Activity = when (val tempContext = this) {
+    is Activity -> tempContext
+    else -> {
+        val contextWrapper = this as ContextWrapper
+        var activityContext = contextWrapper.baseContext
+        while (activityContext !is Activity) {
+            activityContext = (activityContext as ContextWrapper).baseContext
+        }
+        activityContext
     }
 }
