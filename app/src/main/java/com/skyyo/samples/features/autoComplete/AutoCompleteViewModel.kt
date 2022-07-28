@@ -15,7 +15,7 @@ private const val IS_EXPANDED = "isExpanded"
 
 @HiltViewModel
 class AutoCompleteViewModel @Inject constructor(
-    private val handle: SavedStateHandle
+    private val handle: SavedStateHandle,
 ) : ViewModel() {
 
     val countries = provideCountries()
@@ -25,18 +25,18 @@ class AutoCompleteViewModel @Inject constructor(
 
     fun onCountryEntered(input: String) {
         handle[QUERY] = input
-
         viewModelScope.launch(Dispatchers.Default) {
-            handle[SUGGESTIONS] = if (input.isEmpty()) {
-                countries.also { onExpandedChange(false) }
-            } else {
-                val filteredList = countries.filter { country ->
-                    country
-                        .lowercase()
-                        .startsWith(input.lowercase()) && country != input
+            handle[SUGGESTIONS] = when {
+                input.isEmpty() -> countries
+                else -> {
+                    countries.filter { country ->
+                        country
+                            .lowercase()
+                            .startsWith(input.lowercase()) && country != input
+                    }
                 }
-                filteredList.also { onExpandedChange(true) }
             }
+            onExpandedChange(true)
         }
     }
 

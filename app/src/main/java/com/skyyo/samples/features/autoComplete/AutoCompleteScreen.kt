@@ -20,7 +20,7 @@ fun AutoCompleteScreen(
     Column(
         Modifier
             .fillMaxSize()
-            .padding(top = 32.dp, start = 16.dp, end = 16.dp),
+            .padding(top = 50.dp, start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(16.dp))
@@ -49,15 +49,6 @@ fun AutoCompleteScreen(
             suggestions = suggestions.value,
             expanded = isExpanded.value,
             query = query.value,
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "AndroidView")
-        AndroidViewAutocompleteDropdownWithOutsideFiltering(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp),
-            suggestions = viewModel.countries,
-            selectedValue = "",
         )
     }
 }
