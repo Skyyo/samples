@@ -116,6 +116,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.Autofill.route)
     }
 
+    fun goAutoComplete() = navigationDispatcher.emit {
+        it.navigate(Destination.AutoComplete.route)
+    }
+
     fun goHiltComposeSharedViewModel() = navigationDispatcher.emit {
         it.navigate(ProfileGraph.Profile.route)
     }

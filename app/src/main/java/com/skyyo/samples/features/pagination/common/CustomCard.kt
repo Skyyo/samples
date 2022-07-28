@@ -1,30 +1,21 @@
 package com.skyyo.samples.features.pagination.common
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.Purple500
 import com.skyyo.samples.theme.Shapes
-import com.skyyo.samples.theme.White
-import com.skyyo.samples.utils.OnClick
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun CustomCard(catId: String) {
     Card(
@@ -53,30 +44,6 @@ fun CustomCard(catId: String) {
                     .padding(horizontal = 8.dp)
             )
             Text(catId, modifier = Modifier.align(Alignment.CenterVertically))
-        }
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun FadingFab(
-    modifier: Modifier = Modifier,
-    isListScrolled: Boolean,
-    onclick: OnClick
-) {
-    AnimatedVisibility(
-        enter = fadeIn(),
-        exit = fadeOut(),
-        visible = isListScrolled,
-        modifier = modifier
-
-    ) {
-        FloatingActionButton(
-            onClick = onclick,
-            modifier = Modifier.size(48.dp),
-            backgroundColor = DarkGray
-        ) {
-            Icon(Icons.Filled.ArrowUpward, contentDescription = null, tint = White)
         }
     }
 }
