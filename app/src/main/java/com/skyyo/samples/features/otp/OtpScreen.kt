@@ -1,17 +1,18 @@
 package com.skyyo.samples.features.otp
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.key.*
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -25,10 +26,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.text.isDigitsOnly
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.skyyo.samples.features.inputValidations.InputWrapper
 import com.skyyo.samples.features.inputValidations.OnValueChange
+import com.skyyo.samples.features.otp.composables.OtpCharTextField
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.Error
 import com.skyyo.samples.theme.Teal200
@@ -78,74 +79,79 @@ fun Otp(
             mutableStateOf(TextFieldValue(text = text, selection = TextRange(text.length)))
         }
     }
+    var lastFocusedTextFieldIndex by remember { mutableStateOf(-1) }
+    val borderColors = remember(lastFocusedTextFieldIndex, input.errorId) {
+        (0 until otpLength).map { currentChar ->
+            when {
+                input.errorId != null -> Error
+                currentChar == lastFocusedTextFieldIndex -> Teal200
+                else -> DarkGray
+            }
+        }.toMutableList()
+    }
 
     Column(modifier) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Row {
                 repeat(otpLength) { index ->
                     if (index != 0) Spacer(modifier = Modifier.width(12.dp))
+                    val borderStroke =
+                        remember(borderColors[index]) { BorderStroke(2.dp, borderColors[index]) }
+                    val focusRequester = remember(focusRequesters, index) { focusRequesters[index] }
+                    val previousFocusRequester = remember(focusRequesters, index) {
+                        if (index != 0) focusRequesters[index - 1] else null
+                    }
+                    val nextFocusRequester = remember(focusRequesters, codeArray, index) {
+                        val nextEmptyIndex =
+                            codeArray.indices.firstOrNull { codeArray[it].value.text == "" }
+                        val shiftCurrentSymbolToNextEmptyTextField =
+                            nextEmptyIndex != null && nextEmptyIndex <= index && nextEmptyIndex + 1 < codeArray.size
+                        when {
+                            nextEmptyIndex == null -> null
+                            shiftCurrentSymbolToNextEmptyTextField -> focusRequesters[nextEmptyIndex + 1]
+                            else -> focusRequesters[nextEmptyIndex]
+                        }
+                    }
 
-                    OutlinedTextField(
+                    OtpCharTextField(
                         value = codeArray[index].value,
-                        onValueChange = { newTextFieldValue ->
-                            val newText = newTextFieldValue.text
-                            if (newText.isDigitsOnly()) {
-                                codeArray[index].value = codeArray[index].value.copy(text = if (newText.isNotEmpty()) newText.last().toString() else newText)
-                                if (codeArray[index].value.text != "") {
-                                    val nextEmptyIndex = codeArray.indices.firstOrNull { codeArray[it].value.text == "" }
-                                    val shiftCurrentSymbolToStart = nextEmptyIndex != null && nextEmptyIndex < index
-                                    if (nextEmptyIndex != null) {
-                                        val nextSymbolRequester = if (shiftCurrentSymbolToStart) {
-                                            focusRequesters[nextEmptyIndex + 1]
-                                        } else {
-                                            focusRequesters[nextEmptyIndex]
-                                        }
-                                        nextSymbolRequester.requestFocus()
-                                    }
-                                }
-                                onOtpValueChange(codeArray.joinToString(separator = "") { it.value.text })
-                            }
+                        cursorBrushColor = remember { SolidColor(DarkGray) },
+                        borderStroke = borderStroke,
+                        onCharChanged = { currentChar ->
+                            codeArray[index].value = codeArray[index].value.copy(text = currentChar)
+                            val prevOrNextFocusRequester =
+                                if (currentChar.isEmpty()) previousFocusRequester else nextFocusRequester
+                            prevOrNextFocusRequester?.requestFocus()
+                            onOtpValueChange(codeArray.joinToString(separator = "") { it.value.text })
                         },
-                        modifier = Modifier
-                            .size(48.dp, 56.dp)
-                            .focusRequester(focusRequesters[index])
-                            .onPreviewKeyEvent {
-                                if (it.type == KeyEventType.KeyDown && it.key == Key.Backspace) {
-                                    if (codeArray[index].value.text.isNotEmpty()) {
-                                        codeArray[index].value =
-                                            codeArray[index].value.copy(text = "")
-                                        onOtpValueChange(codeArray.joinToString(separator = "") { it.value.text })
-                                    }
-                                    if (index != 0) focusRequesters[index - 1].requestFocus()
-                                    true
-                                } else {
-                                    false
+                        keyboardOptions = remember {
+                            KeyboardOptions(
+                                autoCorrect = false,
+                                imeAction = ImeAction.Done,
+                                keyboardType = KeyboardType.Number
+                            )
+                        },
+                        keyboardActions = remember {
+                            KeyboardActions(
+                                onDone = {
+                                    onImeKeyAction()
+                                    keyboardController?.hide()
                                 }
-                            },
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            imeAction = ImeAction.Done,
-                            keyboardType = KeyboardType.Number
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                onImeKeyAction()
-                                keyboardController?.hide()
-                            }
-                        ),
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            color = DarkGray,
-                            textAlign = TextAlign.Center
-                        ),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = Teal200,
-                            textColor = DarkGray,
-                            cursorColor = DarkGray,
-                            errorBorderColor = Error
-                        ),
-                        isError = input.errorId != null
+                            )
+                        },
+                        textStyle = remember {
+                            TextStyle(
+                                fontSize = 16.sp,
+                                color = DarkGray,
+                                textAlign = TextAlign.Center
+                            )
+                        },
+                        focusRequester = focusRequester,
+                        onFocused = { isFocused ->
+                            if (isFocused) lastFocusedTextFieldIndex = index
+                            borderColors[index] = getBorderColor(input, isFocused)
+                        },
+                        shape = remember { RoundedCornerShape(8.dp) },
                     )
                 }
             }
@@ -160,4 +166,13 @@ fun Otp(
             )
         }
     }
+}
+
+private fun getBorderColor(
+    input: InputWrapper,
+    isFocused: Boolean
+) = when {
+    input.errorId != null -> Error
+    isFocused -> Teal200
+    else -> DarkGray
 }
