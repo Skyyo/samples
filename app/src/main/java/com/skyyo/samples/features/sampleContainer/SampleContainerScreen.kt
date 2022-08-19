@@ -151,6 +151,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goAutofill
     ) { Text(text = "autofill") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goAutoComplete
+    ) { Text(text = "autoComplete") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 
