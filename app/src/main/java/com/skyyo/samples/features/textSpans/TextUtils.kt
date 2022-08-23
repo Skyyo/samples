@@ -24,8 +24,8 @@ fun Path.buildSquigglesFor(
     bottomOffset: TextUnit = 1.sp
 ) = density.run {
     val twoPi = Math.PI * 2
-    val lineStart = box.left + (width.toPx() / 2)
-    val lineEnd = box.right - (width.toPx() / 2)
+    val lineStart = box.left + width.toPx() / 2
+    val lineEnd = box.right - width.toPx() / 2
     val lineBottom = box.bottom + bottomOffset.toPx()
 
     val segmentWidth = waveLength.toPx() / SEGMENTS_PER_WAVELENGTH
@@ -34,7 +34,7 @@ fun Path.buildSquigglesFor(
     var pointX = lineStart
     fastMapRange(0, numOfPoints) { point ->
         val proportionOfWavelength = (pointX - lineStart) / waveLength.toPx()
-        val radiansX = proportionOfWavelength * twoPi + (twoPi * waveOffset)
+        val radiansX = proportionOfWavelength * twoPi + twoPi * waveOffset
         val offsetY = lineBottom + (sin(radiansX) * amplitude.toPx()).toFloat()
 
         when (point) {
@@ -58,9 +58,9 @@ fun TextLayoutResult.getBoundingBoxes(
     val endLineNum = getLineForOffset(endOffset)
 
     if (flattenForFullParagraphs) {
-        val isFullParagraph = (startLineNum != endLineNum)
-                && getLineStart(startLineNum) == startOffset
-                && multiParagraph.getLineEnd(endLineNum, visibleEnd = true) == endOffset
+        val isFullParagraph = startLineNum != endLineNum &&
+            getLineStart(startLineNum) == startOffset &&
+            multiParagraph.getLineEnd(endLineNum, visibleEnd = true) == endOffset
 
         if (isFullParagraph) {
             return listOf(
