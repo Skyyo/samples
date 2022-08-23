@@ -110,3 +110,12 @@ internal inline fun <R> fastMapRange(
     }
     return destination
 }
+
+@OptIn(ExperimentalContracts::class)
+internal inline fun <T> List<T>.fastForEachIndexed(action: (index: Int, T) -> Unit) {
+    contract { callsInPlace(action) }
+    for (index in indices) {
+        val item = get(index)
+        action(index, item)
+    }
+}

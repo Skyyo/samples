@@ -6,14 +6,20 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skyyo.samples.features.textSpans.buildSquigglesFor
+import com.skyyo.samples.features.textSpans.fastForEachIndexed
 import com.skyyo.samples.features.textSpans.getBoundingBoxes
 
 @Composable
@@ -155,12 +161,76 @@ fun SquiggleUnderlineText(
             val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
             onDraw.value = {
                 for (bound in textBounds) {
-                    val path = Path().also { it.buildSquigglesFor(bound, density) }
+                    val path = Path().apply { buildSquigglesFor(bound, density) }
                     drawPath(
                         color = Color.Green,
                         path = path,
                         style = pathStyle
                     )
+                }
+            }
+        }
+    )
+}
+
+data class SimplePaddingValues(val horizontal: Dp, val vertical: Dp)
+
+@Composable
+fun HighlightedText(
+    modifier: Modifier = Modifier,
+    text: AnnotatedString,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    cornerRadius: CornerRadius,
+    highlightColor: Color,
+    highlightBorderColor: Color? = null,
+    highlightBorderWidth: Dp = 2.dp,
+    padding: SimplePaddingValues = remember {
+        SimplePaddingValues(
+            horizontal = 0.dp,
+            vertical = 0.dp
+        )
+    },
+) {
+    val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
+    Text(
+        modifier = modifier.drawBehind { onDraw.value(this) },
+        text = text,
+        fontSize = fontSize,
+        lineHeight = lineHeight,
+        onTextLayout = { layoutResult ->
+            val annotation = text.getStringAnnotations("squiggles", 0, text.length).first()
+            val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
+            onDraw.value = {
+                textBounds.fastForEachIndexed { index, bound ->
+                    val path = Path().apply {
+                        addRoundRect(
+                            RoundRect(
+                                rect = bound.copy(
+                                    left = bound.left - padding.horizontal.toPx(),
+                                    right = bound.right + padding.horizontal.toPx(),
+                                    top = bound.top - padding.vertical.toPx(),
+                                    bottom = bound.bottom + padding.vertical.toPx()
+                                ),
+                                topLeft = if (index == 0) cornerRadius else CornerRadius.Zero,
+                                bottomLeft = if (index == 0) cornerRadius else CornerRadius.Zero,
+                                topRight = if (index == textBounds.lastIndex) cornerRadius else CornerRadius.Zero,
+                                bottomRight = if (index == textBounds.lastIndex) cornerRadius else CornerRadius.Zero
+                            )
+                        )
+                    }
+                    drawPath(
+                        path = path,
+                        color = highlightColor,
+                        style = Fill
+                    )
+                    if (highlightBorderColor != null) {
+                        drawPath(
+                            path = path,
+                            color = highlightBorderColor,
+                            style = Stroke(width = highlightBorderWidth.toPx())
+                        )
+                    }
                 }
             }
         }
