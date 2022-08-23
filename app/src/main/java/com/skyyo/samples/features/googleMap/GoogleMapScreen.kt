@@ -34,7 +34,6 @@ import com.skyyo.samples.R
 import com.skyyo.samples.theme.mapStyle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

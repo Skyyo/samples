@@ -14,7 +14,6 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalAutofill
 import androidx.compose.ui.platform.LocalAutofillTree
-import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun Modifier.autofill(
@@ -44,11 +43,10 @@ fun Modifier.autofill(
         )
     }
 
-    remember(hasFocus, value) {
-        if (hasFocus && value.isEmpty()) {
-            autofill?.requestAutofillForNode(autofillNode)
-        } else {
-            autofill?.cancelAutofillForNode(autofillNode)
+    SideEffect {
+        when {
+            hasFocus && value.isEmpty() -> autofill?.requestAutofillForNode(autofillNode)
+            else -> autofill?.cancelAutofillForNode(autofillNode)
         }
     }
 

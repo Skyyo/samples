@@ -21,7 +21,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {

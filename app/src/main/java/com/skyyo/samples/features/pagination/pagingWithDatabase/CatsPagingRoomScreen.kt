@@ -1,6 +1,5 @@
 package com.skyyo.samples.features.pagination.pagingWithDatabase
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,9 +39,7 @@ import com.skyyo.samples.features.pagination.common.FadingFab
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
-import kotlinx.coroutines.flow.collect
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
     val context = LocalContext.current

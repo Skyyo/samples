@@ -184,13 +184,13 @@ private suspend fun PointerInputScope.detectDragGestures(
                 val drag = if (state.isZooming) {
                     if (startDragImmediately()) down else {
                         awaitTouchSlopOrCancellation(down.id) { change, over ->
-                            change.consumePositionChange()
+                            if (change.positionChange() != Offset.Zero) change.consume()
                             overSlop = over
                         }
                     }
                 } else {
                     awaitVerticalTouchSlopOrCancellation(down.id) { change, over ->
-                        change.consumePositionChange()
+                        if (change.positionChange() != Offset.Zero) change.consume()
                         overSlop = Offset(0f, over)
                     }
                 }
@@ -200,7 +200,7 @@ private suspend fun PointerInputScope.detectDragGestures(
                     if (
                         !drag(drag.id) {
                             onDrag(it, it.positionChange())
-                            it.consumePositionChange()
+                            if (it.positionChange() != Offset.Zero) it.consume()
                         }
                     ) {
                         onDragCancel()
@@ -228,7 +228,7 @@ private suspend fun PointerInputScope.detectTransformGestures(
             onGestureStart()
             do {
                 val event = awaitPointerEvent()
-                val canceled = event.changes.fastAny { it.positionChangeConsumed() }
+                val canceled = event.changes.fastAny { it.isConsumed }
                 if (!canceled) {
                     val zoomChange = event.calculateZoom()
                     val panChange = event.calculatePan()
@@ -238,7 +238,7 @@ private suspend fun PointerInputScope.detectTransformGestures(
                     }
                     event.changes.fastForEach {
                         if (it.positionChanged()) {
-                            it.consumeAllChanges()
+                            it.consume()
                         }
                     }
                 }

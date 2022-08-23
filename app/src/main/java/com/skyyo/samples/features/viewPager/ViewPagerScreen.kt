@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.lerp
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.*
 import com.skyyo.samples.extensions.log
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.max

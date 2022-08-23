@@ -15,7 +15,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.insets.statusBarsPadding
 import com.skyyo.samples.application.activity.MainActivity
-import kotlinx.coroutines.flow.collect
 
 const val THEME_LIGHT = "light"
 const val THEME_DARK = "dark"

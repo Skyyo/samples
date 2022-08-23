@@ -1,7 +1,6 @@
 package com.skyyo.samples.features.pagination.common
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
@@ -57,7 +56,6 @@ fun CustomCard(catId: String) {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun FadingFab(
     modifier: Modifier = Modifier,

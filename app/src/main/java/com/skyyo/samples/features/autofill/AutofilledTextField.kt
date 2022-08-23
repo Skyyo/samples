@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalAutofill
 import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -57,11 +56,10 @@ fun AutoFilledTextField(
         )
     }
 
-    remember(hasFocus, value) {
-        if (hasFocus && value.isEmpty()) {
-            autofill?.requestAutofillForNode(autofillNode)
-        } else {
-            autofill?.cancelAutofillForNode(autofillNode)
+    SideEffect {
+        when {
+            hasFocus && value.isEmpty() -> autofill?.requestAutofillForNode(autofillNode)
+            else -> autofill?.cancelAutofillForNode(autofillNode)
         }
     }
 

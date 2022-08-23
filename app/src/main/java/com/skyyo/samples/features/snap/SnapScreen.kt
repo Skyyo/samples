@@ -19,7 +19,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.systemBarsPadding
 import com.skyyo.samples.R
-import dev.chrisbanes.snapper.*
+import dev.chrisbanes.snapper.ExperimentalSnapperApi
+import dev.chrisbanes.snapper.SnapOffsets
+import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlin.math.max
 import kotlin.math.min
 
