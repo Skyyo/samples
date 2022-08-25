@@ -32,6 +32,7 @@ Miscellaneous
 - Language picker has issue on Android 12 [issue](https://issuetracker.google.com/issues/236538894)
 - We can handle "save to wallet" result only from activity (https://issuetracker.google.com/issues/239603300)
 - Autocomplete [issue](https://issuetracker.google.com/u/1/issues/242575301)
+- Custom text spans need additional API for proper RTL & BiDi support [issue](https://issuetracker.google.com/u/1/issues/237289433)
 
 # Limitations
 - There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)

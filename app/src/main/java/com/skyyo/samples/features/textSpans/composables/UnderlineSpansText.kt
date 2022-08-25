@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -32,6 +33,7 @@ fun AnimatedSquiggleWavelengthUnderlineText(
 ) {
     val density = LocalDensity.current
     val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
+    val path = remember { Path() }
     val animationProgress by rememberInfiniteTransition().animateFloat(
         initialValue = 0f,
         targetValue = 1f,
@@ -44,23 +46,29 @@ fun AnimatedSquiggleWavelengthUnderlineText(
     val incorrectWaveLength = with(density) { 120.sp.toPx() }
     val waveLengthPx by animateFloatAsState(targetValue = if (isCorrect) correctWaveLength else incorrectWaveLength)
     val pathColor by animateColorAsState(targetValue = if (isCorrect) Color.Green else Color.Red)
-    val pathStyle = Stroke(
-        width = with(density) { 2.sp.toPx() },
-        join = StrokeJoin.Round,
-        cap = StrokeCap.Round,
-        pathEffect = PathEffect.cornerPathEffect(radius = waveLengthPx), // For slightly smoother waves.
-    )
+    val pathEffect =
+        remember { PathEffect.cornerPathEffect(radius = waveLengthPx) } // For slightly smoother waves. }
+    val pathStyle = remember {
+        Stroke(
+            width = with(density) { 2.sp.toPx() },
+            join = StrokeJoin.Round,
+            cap = StrokeCap.Round,
+            pathEffect = pathEffect
+        )
+    }
+    val annotation =
+        remember(text) { text.getStringAnnotations("squiggles", 0, text.length).first() }
     Text(
         modifier = modifier.drawBehind { onDraw.value(this) },
         text = text,
         fontSize = fontSize,
         lineHeight = lineHeight,
         onTextLayout = { layoutResult ->
-            val annotation = text.getStringAnnotations("squiggles", 0, text.length).first()
             val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
             onDraw.value = {
                 for (bound in textBounds) {
-                    val path = Path().apply {
+                    path.apply {
+                        reset()
                         buildSquigglesFor(
                             box = bound,
                             density = density,
@@ -90,6 +98,7 @@ fun AnimatedSquiggleUnderlineText(
 ) {
     val density = LocalDensity.current
     val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
+    val path = remember { Path() }
     val animationProgress by rememberInfiniteTransition().animateFloat(
         initialValue = 0f,
         targetValue = 1f,
@@ -98,31 +107,36 @@ fun AnimatedSquiggleUnderlineText(
             repeatMode = RepeatMode.Restart
         )
     )
-    val pathStyle = Stroke(
-        width = with(density) { underlineWidth.toPx() },
-        join = StrokeJoin.Round,
-        cap = StrokeCap.Round,
-        pathEffect = PathEffect.cornerPathEffect(radius = with(density) { waveLength.toPx() }), // For slightly smoother waves.
-    )
+    val pathEffect =
+        remember { PathEffect.cornerPathEffect(radius = with(density) { waveLength.toPx() }) } // For slightly smoother waves.
+    val pathStyle = remember {
+        Stroke(
+            width = with(density) { underlineWidth.toPx() },
+            join = StrokeJoin.Round,
+            cap = StrokeCap.Round,
+            pathEffect = pathEffect
+        )
+    }
+    val annotation =
+        remember(text) { text.getStringAnnotations("squiggles", 0, text.length).first() }
     Text(
         modifier = modifier.drawBehind { onDraw.value(this) },
         text = text,
         fontSize = fontSize,
         lineHeight = lineHeight,
         onTextLayout = { layoutResult ->
-            val annotation = text.getStringAnnotations("squiggles", 0, text.length).first()
             val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
             onDraw.value = {
                 for (bound in textBounds) {
-                    val path =
-                        Path().apply {
-                            buildSquigglesFor(
-                                box = bound,
-                                density = density,
-                                waveOffset = animationProgress,
-                                waveLength = waveLength
-                            )
-                        }
+                    path.apply {
+                        reset()
+                        buildSquigglesFor(
+                            box = bound,
+                            density = density,
+                            waveOffset = animationProgress,
+                            waveLength = waveLength
+                        )
+                    }
                     drawPath(
                         color = Color.Green,
                         path = path,
@@ -145,23 +159,32 @@ fun SquiggleUnderlineText(
 ) {
     val density = LocalDensity.current
     val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
-    val pathStyle = Stroke(
-        width = with(density) { underlineWidth.toPx() },
-        join = StrokeJoin.Round,
-        cap = StrokeCap.Round,
-        pathEffect = PathEffect.cornerPathEffect(radius = with(density) { waveLength.toPx() }), // For slightly smoother waves.
-    )
+    val path = remember { Path() }
+    val pathEffect =
+        remember { PathEffect.cornerPathEffect(radius = with(density) { waveLength.toPx() }) } // For slightly smoother waves.
+    val pathStyle = remember {
+        Stroke(
+            width = with(density) { underlineWidth.toPx() },
+            join = StrokeJoin.Round,
+            cap = StrokeCap.Round,
+            pathEffect = pathEffect
+        )
+    }
+    val annotation =
+        remember(text) { text.getStringAnnotations("squiggles", 0, text.length).first() }
     Text(
         modifier = modifier.drawBehind { onDraw.value(this) },
         text = text,
         fontSize = fontSize,
         lineHeight = lineHeight,
         onTextLayout = { layoutResult ->
-            val annotation = text.getStringAnnotations("squiggles", 0, text.length).first()
             val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
             onDraw.value = {
                 for (bound in textBounds) {
-                    val path = Path().apply { buildSquigglesFor(bound, density) }
+                    path.apply {
+                        reset()
+                        buildSquigglesFor(bound, density)
+                    }
                     drawPath(
                         color = Color.Green,
                         path = path,
@@ -193,17 +216,22 @@ fun HighlightedText(
     },
 ) {
     val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
+    val path = remember { Path() }
+    val highlightBorderWidthPx = with(LocalDensity.current) { highlightBorderWidth.toPx() }
+    val highlightBorderStroke = remember { Stroke(width = highlightBorderWidthPx) }
+    val annotation =
+        remember(text) { text.getStringAnnotations("squiggles", 0, text.length).first() }
     Text(
         modifier = modifier.drawBehind { onDraw.value(this) },
         text = text,
         fontSize = fontSize,
         lineHeight = lineHeight,
         onTextLayout = { layoutResult ->
-            val annotation = text.getStringAnnotations("squiggles", 0, text.length).first()
             val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
             onDraw.value = {
                 textBounds.fastForEachIndexed { index, bound ->
-                    val path = Path().apply {
+                    path.apply {
+                        reset()
                         addRoundRect(
                             RoundRect(
                                 rect = bound.copy(
@@ -228,9 +256,42 @@ fun HighlightedText(
                         drawPath(
                             path = path,
                             color = highlightBorderColor,
-                            style = Stroke(width = highlightBorderWidth.toPx())
+                            style = highlightBorderStroke
                         )
                     }
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun UnderlinedText(
+    modifier: Modifier = Modifier,
+    text: AnnotatedString,
+    underlineWidth: TextUnit = 2.sp,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    lineHeight: TextUnit = TextUnit.Unspecified
+) {
+    val underlineWidthPxHalf = with(LocalDensity.current) { underlineWidth.toPx() / 2 }
+    val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
+    val annotation =
+        remember(text) { text.getStringAnnotations("squiggles", 0, text.length).first() }
+    Text(
+        modifier = modifier.drawBehind { onDraw.value(this) },
+        text = text,
+        fontSize = fontSize,
+        lineHeight = lineHeight,
+        onTextLayout = { layoutResult ->
+            val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
+            onDraw.value = {
+                for (bound in textBounds) {
+                    drawLine(
+                        color = Color.Green,
+                        start = Offset(bound.left, bound.bottom + underlineWidthPxHalf),
+                        end = Offset(bound.right, bound.bottom + underlineWidthPxHalf),
+                        strokeWidth = underlineWidth.toPx()
+                    )
                 }
             }
         }

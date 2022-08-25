@@ -15,6 +15,7 @@ import com.skyyo.samples.features.textSpans.composables.*
 
 private const val CORNER_RADIUS_VALUE = 20f
 
+// done using https://saket.me/compose-custom-text-spans/ and https://github.com/saket/ExtendedSpans
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun TextSpansScreen() {
@@ -25,14 +26,17 @@ fun TextSpansScreen() {
             .background(color = Color.White)
             .systemBarsPadding()
             .padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = remember { Arrangement.spacedBy(20.dp) }
     ) {
-        val text = buildAnnotatedString {
-            append("Where is the proud pirate? ")
-            withAnnotation("squiggles", annotation = "ignored") {
-                withStyle(SpanStyle(color = Color.Magenta)) {
-                    append("The rough shipmate fiery fights the dagger.")
+        val text = remember {
+            buildAnnotatedString {
+                append("Where is the proud pirate? ")
+                withAnnotation("squiggles", annotation = "ignored") {
+                    withStyle(SpanStyle(color = Color.Magenta)) {
+                        append("The rough shipmate fiery fights the dagger.")
+                    }
                 }
+                append(" Belay! Pieces o' yellow fever are forever dead.")
             }
         }
         SquiggleUnderlineText(text = text, fontSize = 24.sp, lineHeight = 30.sp)
@@ -51,7 +55,10 @@ fun TextSpansScreen() {
             cornerRadius = remember { CornerRadius(CORNER_RADIUS_VALUE, CORNER_RADIUS_VALUE) },
             highlightColor = Color.Cyan,
             highlightBorderColor = Color.DarkGray,
-            padding = SimplePaddingValues(horizontal = 2.dp, vertical = 2.dp)
+            padding = remember { SimplePaddingValues(horizontal = 2.dp, vertical = 2.dp) },
+            fontSize = 24.sp,
+            lineHeight = 30.sp
         )
+        UnderlinedText(text = text, fontSize = 24.sp, lineHeight = 30.sp)
     }
 }
