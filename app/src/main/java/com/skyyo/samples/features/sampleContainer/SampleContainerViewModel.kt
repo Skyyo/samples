@@ -211,4 +211,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goGooglePay() = navigationDispatcher.emit {
         it.navigate(Destination.GooglePay.route)
     }
+
+    fun goTextSpans() = navigationDispatcher.emit {
+        it.navigate(Destination.TextSpans.route)
+    }
 }

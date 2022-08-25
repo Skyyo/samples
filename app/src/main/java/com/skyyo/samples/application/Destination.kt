@@ -64,6 +64,7 @@ sealed class Destination(val route: String) {
     object LanguagePicker : Destination("languagePicker")
     object CardRecognition : Destination("cardRecognition")
     object GooglePay : Destination("googlePay")
+    object TextSpans : Destination("textSpans")
 }
 
 sealed class ProfileGraph(val route: String) {
