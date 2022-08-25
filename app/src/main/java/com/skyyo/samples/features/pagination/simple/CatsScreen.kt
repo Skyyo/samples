@@ -59,6 +59,7 @@ fun CatsScreen(viewModel: CatsViewModel = hiltViewModel()) {
             when (event) {
                 is CatsScreenEvent.ShowToast -> context.toast(event.messageId)
                 is CatsScreenEvent.ScrollToTop -> listState.animateScrollToItem(0)
+                else -> {}
             }
         }
     }

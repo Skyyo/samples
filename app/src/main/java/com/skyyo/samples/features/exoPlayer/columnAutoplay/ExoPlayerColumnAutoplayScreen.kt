@@ -59,6 +59,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
             when (event) {
                 Lifecycle.Event.ON_START -> exoPlayer.play()
                 Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+                else -> {}
             }
         }
 

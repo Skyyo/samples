@@ -37,7 +37,7 @@ fun BottomBarCore(
     val selectedTab = rememberSaveable { mutableStateOf(0) }
 
     DisposableEffect(Unit) {
-        val callback = NavController.OnDestinationChangedListener { _, destination, args ->
+        val callback = NavController.OnDestinationChangedListener { _, destination, _ ->
             when (destination.route) {
                 Destination.Tab3.route -> {
                     systemUiController.statusBarDarkContentEnabled = false

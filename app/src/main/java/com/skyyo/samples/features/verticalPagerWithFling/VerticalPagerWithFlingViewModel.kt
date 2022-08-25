@@ -17,7 +17,7 @@ class VerticalPagerWithFlingViewModel @Inject constructor() : ViewModel() {
 
     @Suppress("LongMethod")
     private fun populateListWithFakeData() {
-        val testVideos = listOf(
+        listOf(
             VideoItem(
                 1,
                 "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",

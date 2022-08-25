@@ -130,6 +130,7 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
             when (event) {
                 Lifecycle.Event.ON_START -> exoPlayer.play()
                 Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+                else -> {}
             }
         }
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
@@ -207,6 +208,7 @@ private fun DisposableEffectScope.observeLifecycleEvents(
         when (event) {
             Lifecycle.Event.ON_START -> exoPlayer.play()
             Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+            else -> {}
         }
     }
     lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
