@@ -15,7 +15,7 @@ class VerticalPagerWithFlingViewModel @Inject constructor() : ViewModel() {
         populateListWithFakeData()
     }
 
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "MagicNumber")
     private fun populateListWithFakeData() {
         listOf(
             VideoItem(
