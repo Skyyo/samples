@@ -39,6 +39,7 @@ import com.skyyo.samples.features.pagination.common.FadingFab
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
+import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
 fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
@@ -54,7 +55,7 @@ fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
     val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
 
     val events = remember(viewModel.events, lifecycleOwner) {
-        viewModel.events.flowWithLifecycle(
+        viewModel.events.receiveAsFlow().flowWithLifecycle(
             lifecycleOwner.lifecycle,
             Lifecycle.State.STARTED
         )

@@ -31,6 +31,7 @@ import com.skyyo.samples.features.pagination.common.CustomCard
 import com.skyyo.samples.features.pagination.common.FadingFab
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
+import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
 fun CatsRoomScreen(viewModel: CatsRoomViewModel = hiltViewModel()) {
@@ -45,14 +46,14 @@ fun CatsRoomScreen(viewModel: CatsRoomViewModel = hiltViewModel()) {
     val listState = rememberLazyListState()
     val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
     val events = remember(viewModel.events, lifecycleOwner) {
-        viewModel.events.flowWithLifecycle(
+        viewModel.events.receiveAsFlow().flowWithLifecycle(
             lifecycleOwner.lifecycle,
             Lifecycle.State.STARTED
         )
     }
-
     val cats by viewModel.cats.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val isLastPageReached by viewModel.isLastPageReached.collectAsState()
 
     LaunchedEffect(Unit) {
         events.collect { event ->
@@ -81,7 +82,7 @@ fun CatsRoomScreen(viewModel: CatsRoomViewModel = hiltViewModel()) {
             CatsColumn(
                 listState = listState,
                 cats = cats,
-                isLastPageReached = viewModel.isLastPageReached,
+                isLastPageReached = isLastPageReached,
                 onLastItemVisible = viewModel::getCats
             )
             FadingFab(

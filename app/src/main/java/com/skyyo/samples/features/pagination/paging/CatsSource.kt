@@ -2,11 +2,11 @@ package com.skyyo.samples.features.pagination.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.skyyo.samples.application.CODE_200
 import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.application.network.calls.CatCalls
 import com.skyyo.samples.extensions.tryOrNull
 import com.skyyo.samples.features.pagination.common.PagingException
-import com.skyyo.samples.features.pagination.simpleWithDatabase.CODE_200
 
 private const val START_PAGE = 0
 

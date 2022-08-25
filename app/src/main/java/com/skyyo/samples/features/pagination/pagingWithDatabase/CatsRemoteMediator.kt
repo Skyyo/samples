@@ -5,6 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.skyyo.samples.application.CODE_200
 import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.application.network.calls.CatCalls
 import com.skyyo.samples.application.persistance.room.AppDatabase
@@ -14,7 +15,6 @@ import com.skyyo.samples.application.persistance.room.cats.CatsRemoteKeysDao
 import com.skyyo.samples.extensions.tryOrNull
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.features.pagination.paging.PAGE_INITIAL_LIMIT
-import com.skyyo.samples.features.pagination.simpleWithDatabase.CODE_200
 
 private const val START_PAGE = 0
 
