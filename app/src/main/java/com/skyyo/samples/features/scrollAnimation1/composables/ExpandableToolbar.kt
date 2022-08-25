@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.skyyo.samples.features.scrollAnimation1.EXPANDED_TOOLBAR_HEIGHT
 import com.skyyo.samples.features.scrollAnimation1.PADDING
@@ -48,6 +49,7 @@ fun ExpandableToolbar(
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun ToolbarBackground(state: Int) {
     Crossfade(targetState = state) { toolbarState ->

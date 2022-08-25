@@ -53,7 +53,7 @@ class CacheModule(context: Context) {
         val downloader = HlsDownloader(mediaItem, cacheDataSourceFactory)
         withContext(Dispatchers.IO) {
             try {
-                downloader.download { _, bytesDownloaded, percent ->
+                downloader.download { _, bytesDownloaded, _ ->
                     if (bytesDownloaded >= PRE_CACHE_AMOUNT) {
 //                        log("video precached at $percent%")
                         downloader.cancel()

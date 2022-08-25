@@ -39,7 +39,6 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
     var playingVideoItem by remember { mutableStateOf(videos.firstOrNull()) }
     var playingVideoIndex by remember { mutableStateOf<Int?>(null) }
     var isFirstFrameRendered by remember { mutableStateOf(false) }
-
     val pagerState = rememberPagerState(pageCount = videos.size)
     var bufferingTime by remember { mutableStateOf(System.currentTimeMillis()) }
 
@@ -130,6 +129,7 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
             when (event) {
                 Lifecycle.Event.ON_START -> exoPlayer.play()
                 Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+                else -> {}
             }
         }
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
@@ -155,9 +155,7 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
             exoPlayer = exoPlayer,
             isThumbnailVisible = isThumbnailVisible,
             isPlaying = video.id == playingVideoItem?.id,
-            onClick = {
-                playingVideoItem = if (playingVideoItem == video) null else video
-            }
+            onClick = { playingVideoItem = if (playingVideoItem == video) null else video }
         )
     }
 }
@@ -207,6 +205,7 @@ private fun DisposableEffectScope.observeLifecycleEvents(
         when (event) {
             Lifecycle.Event.ON_START -> exoPlayer.play()
             Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+            else -> {}
         }
     }
     lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
