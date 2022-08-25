@@ -20,24 +20,24 @@ jobs:
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck --continue
-#  lint_job:
-#    runs-on: ubuntu-latest
-#    continue-on-error: true
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Restore Cache
-#        uses: actions/cache@v2
-#        with:
-#          path: |
-#            ~/.gradle/caches
-#            ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-#          restore-keys: |
-#            ${{ runner.os }}-gradle-
-#
-#      - name: run lint check
-#        run: ./gradlew lintDebug
+  lint_job:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: run lint check
+        run: ./gradlew lintDebug
   detekt_job:
     runs-on: ubuntu-latest
     continue-on-error: true
