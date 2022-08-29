@@ -138,9 +138,7 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
             exoPlayer = exoPlayer,
             isThumbnailVisible = isThumbnailVisible,
             isPlaying = video.id == playingVideoItem?.id,
-            onClick = {
-                playingVideoItem = if (playingVideoItem == video) null else video
-            }
+            onClick = { playingVideoItem = if (playingVideoItem == video) null else video }
         )
     }
 }

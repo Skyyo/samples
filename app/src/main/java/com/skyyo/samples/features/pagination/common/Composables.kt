@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.skyyo.samples.theme.DarkGray
@@ -24,6 +25,7 @@ import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.theme.White
 import com.skyyo.samples.utils.OnClick
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun CustomCard(catId: String) {
     Card(

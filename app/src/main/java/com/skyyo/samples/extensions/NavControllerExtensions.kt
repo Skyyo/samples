@@ -52,6 +52,7 @@ fun <T> NavigationDispatcher.observeNavigationResult(
     }
 }
 
+@Suppress("RestrictedApi")
 fun NavController.navigateWithObject(
     route: String,
     navOptions: NavOptions? = null,

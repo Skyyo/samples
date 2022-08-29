@@ -22,12 +22,12 @@ buildscript {
     }
 }
 allprojects {
-//    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-//        kotlinOptions {
-//            allWarningsAsErrors = true
-//            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
-//        }
-//    }
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            allWarningsAsErrors = true
+            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+        }
+    }
 }
 task clean(type: Delete) {
     delete rootProject.buildDir

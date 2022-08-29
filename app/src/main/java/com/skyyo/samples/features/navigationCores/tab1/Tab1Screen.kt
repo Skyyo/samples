@@ -8,10 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun Tab1Screen(viewModel: Tab1ViewModel = hiltViewModel()) {
+fun Tab1Screen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
