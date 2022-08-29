@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -28,15 +27,15 @@ fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel 
     val lifecycleOwner = LocalLifecycleOwner.current
     val exoPlayer = remember { ExoPlayer.Builder(context).build() }
     val listState = rememberLazyListState()
-    val videos by viewModel.videos.observeAsState(listOf())
-    val playingVideoItem by viewModel.currentlyPlayingItem.observeAsState()
-    val isPlayingItemVisible = remember { mutableStateOf(false) }
+    val videos by viewModel.videos.collectAsState()
+    val playingVideoItem by viewModel.currentlyPlayingItem.collectAsState()
+    var isPlayingItemVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         snapshotFlow {
             listState.visibleAreaContainsItem(playingVideoItem, videos)
         }.collect { isVisible ->
-            isPlayingItemVisible.value = isVisible
+            isPlayingItemVisible = isVisible
         }
     }
 
@@ -53,8 +52,8 @@ fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel 
         }
     }
 
-    LaunchedEffect(isPlayingItemVisible.value) {
-        if (!isPlayingItemVisible.value && playingVideoItem != null) {
+    LaunchedEffect(isPlayingItemVisible) {
+        if (!isPlayingItemVisible && playingVideoItem != null) {
             viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingVideoItem)
         }
     }

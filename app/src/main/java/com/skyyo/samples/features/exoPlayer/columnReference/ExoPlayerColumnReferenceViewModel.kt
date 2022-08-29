@@ -1,16 +1,17 @@
 package com.skyyo.samples.features.exoPlayer.columnReference
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
 class ExoPlayerColumnReferenceViewModel @Inject constructor() : ViewModel() {
 
-    val videos = MutableLiveData<List<VideoItem>>()
-    val currentlyPlayingItem = MutableLiveData<VideoItem?>()
+    val videos = MutableStateFlow<List<VideoItem>>(listOf())
+    val currentlyPlayingItem = MutableStateFlow<VideoItem?>(null)
 
     init {
         populateListWithFakeData()
@@ -69,28 +70,28 @@ class ExoPlayerColumnReferenceViewModel @Inject constructor() : ViewModel() {
                 "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg"
             ),
         )
-        videos.postValue(testVideos)
+        videos.value = testVideos
     }
 
     fun onPlayVideoClick(playbackPosition: Long, item: VideoItem?) {
         when (currentlyPlayingItem.value) {
             // video is not playing at the moment
-            null -> currentlyPlayingItem.postValue(item)
+            null -> currentlyPlayingItem.update { item }
             // this video is already playing
             item -> {
-                currentlyPlayingItem.postValue(null)
-                videos.value = videos.value!!.toMutableList().also { list ->
+                currentlyPlayingItem.update { null }
+                videos.value = videos.value.toMutableList().also { list ->
                     list.find { it == item }?.lastPlayedPosition = playbackPosition
                 }
             }
             // video is playing, and we're requesting new video to play
             else -> {
-                videos.value = videos.value!!.toMutableList().also { list ->
+                videos.value = videos.value.toMutableList().also { list ->
                     list.find {
                         it == currentlyPlayingItem.value
                     }?.lastPlayedPosition = playbackPosition
                 }
-                currentlyPlayingItem.postValue(item)
+                currentlyPlayingItem.update { item }
             }
         }
     }

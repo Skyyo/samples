@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +31,7 @@ fun VideoCardReference(
     exoPlayer: ExoPlayer,
     onClick: OnClick
 ) {
-    val isPlayerUiVisible = remember { mutableStateOf(false) }
+    var isPlayerUiVisible by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -44,16 +42,12 @@ fun VideoCardReference(
     ) {
         if (isPlaying) {
             VideoPlayer(exoPlayer) { uiVisible ->
-                if (isPlayerUiVisible.value) {
-                    isPlayerUiVisible.value = uiVisible
-                } else {
-                    isPlayerUiVisible.value = true
-                }
+                isPlayerUiVisible = if (isPlayerUiVisible) uiVisible else true
             }
         } else {
             VideoThumbnail(videoItem.thumbnail)
         }
-        if (if (isPlayerUiVisible.value) true else !isPlaying) {
+        if (if (isPlayerUiVisible) true else !isPlaying) {
             Icon(
                 painter = painterResource(if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play),
                 contentDescription = "",

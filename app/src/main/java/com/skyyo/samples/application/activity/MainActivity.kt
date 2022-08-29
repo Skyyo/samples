@@ -1,6 +1,5 @@
 package com.skyyo.samples.application.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -37,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var navigationDispatcher: NavigationDispatcher
 
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

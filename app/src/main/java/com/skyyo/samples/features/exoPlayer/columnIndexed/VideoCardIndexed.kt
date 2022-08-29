@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,8 +33,8 @@ fun VideoCardIndexed(
     exoPlayer: ExoPlayer,
     onClick: OnClick
 ) {
-    val isPlayerUiVisible = remember { mutableStateOf(false) }
-    val isPlayButtonVisible = if (isPlayerUiVisible.value) true else !isPlaying
+    var isPlayerUiVisible by remember { mutableStateOf(false) }
+    val isPlayButtonVisible = if (isPlayerUiVisible) true else !isPlaying
 
     Box(
         modifier = modifier
@@ -47,11 +45,7 @@ fun VideoCardIndexed(
     ) {
         if (isPlaying) {
             VideoPlayer(exoPlayer) { uiVisible ->
-                if (isPlayerUiVisible.value) {
-                    isPlayerUiVisible.value = uiVisible
-                } else {
-                    isPlayerUiVisible.value = true
-                }
+                isPlayerUiVisible = if (isPlayerUiVisible) uiVisible else true
             }
         } else {
             VideoThumbnail(videoItem.thumbnail)
@@ -63,7 +57,7 @@ fun VideoCardIndexed(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(72.dp)
-                    .clickable { onClick() }
+                    .clickable(onClick = onClick)
             )
         }
         Text(

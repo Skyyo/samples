@@ -30,10 +30,10 @@ class InputValidationAutoViewModel @Inject constructor(
         name.value.isNotEmpty() && name.errorId == null &&
             cardNumber.value.isNotEmpty() && cardNumber.errorId == null
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
-    private var focusedTextField = handle.get("focusedTextField") ?: FocusedTextFieldKey.NAME
+    private var focusedTextField = handle["focusedTextField"] ?: FocusedTextFieldKey.NAME
         set(value) {
             field = value
-            handle.set("focusedTextField", value)
+            handle["focusedTextField"] = value
         }
 
     private val _events = Channel<ScreenEvent>()

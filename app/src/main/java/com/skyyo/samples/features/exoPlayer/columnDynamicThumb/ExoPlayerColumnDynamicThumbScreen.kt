@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -45,15 +44,15 @@ fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel
             .build()
     }
 
-    val videos by viewModel.videos.observeAsState(listOf())
-    val playingItemIndex by viewModel.currentlyPlayingIndex.observeAsState()
-    val isCurrentItemVisible = remember { mutableStateOf(false) }
+    val videos by viewModel.videos.collectAsState()
+    val playingItemIndex by viewModel.currentlyPlayingIndex.collectAsState()
+    var isCurrentItemVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         snapshotFlow {
             listState.visibleAreaContainsItem(playingItemIndex, videos)
         }.collect { isVisible ->
-            isCurrentItemVisible.value = isVisible
+            isCurrentItemVisible = isVisible
         }
     }
 
@@ -68,8 +67,8 @@ fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel
         }
     }
 
-    LaunchedEffect(isCurrentItemVisible.value) {
-        if (!isCurrentItemVisible.value && playingItemIndex != null) {
+    LaunchedEffect(isCurrentItemVisible) {
+        if (!isCurrentItemVisible && playingItemIndex != null) {
             viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingItemIndex!!)
         }
     }

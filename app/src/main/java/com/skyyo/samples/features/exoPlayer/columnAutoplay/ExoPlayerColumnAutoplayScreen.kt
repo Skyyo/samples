@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -29,25 +28,25 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
     val lifecycleOwner = LocalLifecycleOwner.current
     val listState = rememberLazyListState()
     val exoPlayer = remember { ExoPlayer.Builder(context).build() }
-    val videos by viewModel.videos.observeAsState(listOf())
-    val playingVideoItem = remember { mutableStateOf(videos.firstOrNull()) }
+    val videos by viewModel.videos.collectAsState()
+    var playingVideoItem by remember { mutableStateOf(videos.firstOrNull()) }
 
     LaunchedEffect(Unit) {
         snapshotFlow {
             listState.playingItem(videos)
         }.collect { videoItem ->
-            playingVideoItem.value = videoItem
+            playingVideoItem = videoItem
         }
     }
 
-    LaunchedEffect(playingVideoItem.value) {
+    LaunchedEffect(playingVideoItem) {
         // is null only upon entering the screen
-        if (playingVideoItem.value == null) {
+        if (playingVideoItem == null) {
             exoPlayer.pause()
         } else {
             // move playWhenReady to exoPlayer initialization if you don't
             // want to play next video automatically
-            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem.value!!.mediaUrl))
+            exoPlayer.setMediaItem(MediaItem.fromUri(playingVideoItem!!.mediaUrl))
             exoPlayer.prepare()
             exoPlayer.playWhenReady = true
         }
@@ -55,7 +54,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
 
     DisposableEffect(exoPlayer) {
         val lifecycleObserver = LifecycleEventObserver { _, event ->
-            if (playingVideoItem.value == null) return@LifecycleEventObserver
+            if (playingVideoItem == null) return@LifecycleEventObserver
             when (event) {
                 Lifecycle.Event.ON_START -> exoPlayer.play()
                 Lifecycle.Event.ON_STOP -> exoPlayer.pause()
@@ -87,7 +86,7 @@ fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = 
             AutoPlayVideoCard(
                 videoItem = video,
                 exoPlayer = exoPlayer,
-                isPlaying = video.id == playingVideoItem.value?.id,
+                isPlaying = video.id == playingVideoItem?.id,
             )
         }
     }
