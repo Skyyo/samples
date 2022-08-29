@@ -63,6 +63,7 @@ fun InputValidationManualScreen(viewModel: InputValidationManualViewModel = hilt
                     when (event.textFieldKey) {
                         FocusedTextFieldKey.NAME -> nameFocusRequester.requestFocus()
                         FocusedTextFieldKey.CREDIT_CARD_NUMBER -> creditCardNumberFocusRequester.requestFocus()
+                        else -> {}
                     }
                 }
                 is ScreenEvent.MoveFocus -> focusManager.moveFocus(event.direction)

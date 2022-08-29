@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             DisposableEffect(navController) {
-                val callback = NavController.OnDestinationChangedListener { _, destination, args ->
+                val callback = NavController.OnDestinationChangedListener { _, destination, _ ->
                     when (destination.route) {
                         Destination.SampleContainer.route -> {
                         }
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 ProvideWindowInsets {
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {
-                        Scaffold {
+                        Surface {
                             PopulatedNavHost(
                                 startDestination = Destination.SampleContainer.route,
                                 navController = navController

@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.verticalPagerWithFling
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -23,10 +24,7 @@ import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.skyyo.samples.extensions.log
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -34,15 +32,12 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val coroutineScope = rememberCoroutineScope()
-
     val videos by viewModel.videos.observeAsState(listOf())
     var playingVideoItem by remember { mutableStateOf(videos.firstOrNull()) }
     var playingVideoIndex by remember { mutableStateOf<Int?>(null) }
     var isFirstFrameRendered by remember { mutableStateOf(false) }
-
     val pagerState = rememberPagerState(pageCount = videos.size)
     var bufferingTime by remember { mutableStateOf(System.currentTimeMillis()) }
-
     val playerEventsListener = remember {
         object : Player.Listener {
 
@@ -51,6 +46,7 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
                 super.onRenderedFirstFrame()
             }
 
+            @SuppressLint("SwitchIntDef")
             override fun onPlaybackStateChanged(playbackState: Int) {
                 when (playbackState) {
                     Player.STATE_READY -> {
@@ -82,21 +78,7 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
         // TODO ensure coroutine errors won't cancel other downloads
         // TODO move to VM layer with injection
 
-        // pre caching all videos
-        launch {
-            videos.map { videoItem ->
-                async {
-                    if (!isActive) return@async
-                    val mediaItem = MediaItem.Builder()
-                        .setUri(videoItem.mediaUrl)
-                        .setMimeType(MimeTypes.APPLICATION_M3U8)
-                        .build()
-                    if (!cacheModule.isUriCached(videoItem.mediaUrl)) {
-                        cacheModule.preCacheUri(mediaItem)
-                    }
-                }
-            }.awaitAll()
-        }
+        preCacheVideos(videos, cacheModule)
 
         snapshotFlow {
             pagerState.currentPage
@@ -130,6 +112,7 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
             when (event) {
                 Lifecycle.Event.ON_START -> exoPlayer.play()
                 Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+                else -> {}
             }
         }
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
@@ -159,6 +142,23 @@ fun VideoPagerWithFlingScreen(viewModel: VerticalPagerWithFlingViewModel = hiltV
                 playingVideoItem = if (playingVideoItem == video) null else video
             }
         )
+    }
+}
+
+private fun CoroutineScope.preCacheVideos(videos: List<VideoItem>, cacheModule: CacheModule) {
+    launch {
+        videos.map { videoItem ->
+            async {
+                if (!isActive) return@async
+                val mediaItem = MediaItem.Builder()
+                    .setUri(videoItem.mediaUrl)
+                    .setMimeType(MimeTypes.APPLICATION_M3U8)
+                    .build()
+                if (!cacheModule.isUriCached(videoItem.mediaUrl)) {
+                    cacheModule.preCacheUri(mediaItem)
+                }
+            }
+        }.awaitAll()
     }
 }
 
@@ -207,6 +207,7 @@ private fun DisposableEffectScope.observeLifecycleEvents(
         when (event) {
             Lifecycle.Event.ON_START -> exoPlayer.play()
             Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+            else -> {}
         }
     }
     lifecycleOwner.lifecycle.addObserver(lifecycleObserver)

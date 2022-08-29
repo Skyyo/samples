@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.palette.graphics.Palette
 import coil.Coil
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import coil.request.SuccessResult
@@ -65,6 +66,7 @@ fun DominantColorScreen(viewModel: DominantColorViewModel = hiltViewModel()) {
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun CatCard(catId: String?) {
     /* To avoid this https://github.com/Skyyo/samples/pull/15#pullrequestreview-787405549
