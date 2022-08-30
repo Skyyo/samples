@@ -17,10 +17,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
+import coil.ComponentRegistry
 import coil.ImageLoader
 import coil.decode.VideoFrameDecoder
-import coil.fetch.VideoFrameFileFetcher
-import coil.fetch.VideoFrameUriFetcher
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.skyyo.samples.features.exoPlayer.columnIndexed.ExoPlayerColumnIndexedViewModel
@@ -36,11 +35,9 @@ fun ExoPlayerColumnDynamicThumbScreen(viewModel: ExoPlayerColumnIndexedViewModel
     // can / should? be provided by dagger if used in multiple places
     val imageLoader = remember {
         ImageLoader.Builder(context)
-            .componentRegistry {
-                add(VideoFrameFileFetcher(context))
-                add(VideoFrameUriFetcher(context))
-                add(VideoFrameDecoder(context))
-            }
+            .components(fun ComponentRegistry.Builder.() {
+                add(VideoFrameDecoder.Factory())
+            })
             .build()
     }
 
