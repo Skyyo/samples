@@ -27,7 +27,7 @@ private const val TEXT_FIELD_BOTTOM_UNSET = -1f
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BaseLazyColumn(
+fun ImeAwareLazyColumn(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = remember { PaddingValues(0.dp) },
     state: LazyListState = rememberLazyListState(),

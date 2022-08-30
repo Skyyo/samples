@@ -7,13 +7,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.systemBarsPadding
-import com.skyyo.samples.common.composables.BaseLazyColumn
+import com.skyyo.samples.common.composables.ImeAwareLazyColumn
 
 @Composable
-fun LazyColumnScreen() {
+fun ImeAwareLazyColumnScreen() {
     val texts = remember { Array(30) { it.toString() }.toList().toMutableStateList() }
 
-    BaseLazyColumn(
+    ImeAwareLazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding(),
