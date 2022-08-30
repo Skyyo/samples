@@ -1,6 +1,9 @@
 package com.skyyo.samples.extensions
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.*
@@ -83,4 +86,10 @@ fun NavController.navigateToRootDestination(
         launchSingleTop = true
         restoreState = true
     }
+}
+
+@Composable
+@SuppressLint("UnrememberedGetBackStackEntry")
+fun NavController.rememberBackStackEntry(key: String) = remember(key) {
+    getBackStackEntry(key)
 }

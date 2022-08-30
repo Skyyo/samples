@@ -65,6 +65,7 @@ sealed class Destination(val route: String) {
     object CardRecognition : Destination("cardRecognition")
     object GooglePay : Destination("googlePay")
     object TextSpans : Destination("textSpans")
+    object ImeAwareLazyColumn : Destination("imeAwareLazyColumn")
 }
 
 sealed class ProfileGraph(val route: String) {

@@ -4,7 +4,6 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.navDeepLink
@@ -16,6 +15,7 @@ import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.ProfileGraph
+import com.skyyo.samples.extensions.rememberBackStackEntry
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
 import com.skyyo.samples.features.autofill.AutofillScreen
 import com.skyyo.samples.features.autoscroll.AutoScrollScreen
@@ -42,6 +42,7 @@ import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScree
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
 import com.skyyo.samples.features.languagePicker.LanguagePickerScreen
+import com.skyyo.samples.features.lazyColumnWithTextFields.ImeAwareLazyColumnScreen
 import com.skyyo.samples.features.marqueeText.MarqueeTextScreen
 import com.skyyo.samples.features.navigateWithResult.simple.dogContacts.DogContactsScreen
 import com.skyyo.samples.features.navigateWithResult.simple.dogDetails.DogDetailsScreen
@@ -148,16 +149,12 @@ fun PopulatedNavHost(
     ) {
         composable(ProfileGraph.Profile.route) { ProfileScreen() }
         composable(ProfileGraph.EditProfile.route) {
-            val rootGraphBackStackEntry = remember {
-                navController.getBackStackEntry(ProfileGraph.Profile.route)
-            }
+            val rootGraphBackStackEntry = navController.rememberBackStackEntry(ProfileGraph.Profile.route)
             val navGraphViewModel: ProfileSharedViewModel = hiltViewModel(rootGraphBackStackEntry)
             EditProfileScreen(navGraphViewModel)
         }
         composable(ProfileGraph.ConfirmProfile.route) {
-            val rootGraphBackStackEntry = remember {
-                navController.getBackStackEntry(ProfileGraph.Profile.route)
-            }
+            val rootGraphBackStackEntry = navController.rememberBackStackEntry(ProfileGraph.Profile.route)
             val navGraphViewModel: ProfileSharedViewModel = hiltViewModel(rootGraphBackStackEntry)
             EditProfileConfirmationScreen(navGraphViewModel)
         }
@@ -196,4 +193,5 @@ fun PopulatedNavHost(
     composable(Destination.CardRecognition.route) { CardRecognitionScreen() }
     composable(Destination.GooglePay.route) { GooglePayScreen() }
     composable(Destination.TextSpans.route) { TextSpansScreen() }
+    composable(Destination.ImeAwareLazyColumn.route) { ImeAwareLazyColumnScreen() }
 }
