@@ -42,6 +42,7 @@ import com.skyyo.samples.features.inputValidations.auto.InputValidationAutoScree
 import com.skyyo.samples.features.inputValidations.autoDebounce.InputValidationAutoDebounceScreen
 import com.skyyo.samples.features.inputValidations.manual.InputValidationManualScreen
 import com.skyyo.samples.features.languagePicker.LanguagePickerScreen
+import com.skyyo.samples.features.lazyColumnWithTextFields.LazyColumnScreen
 import com.skyyo.samples.features.marqueeText.MarqueeTextScreen
 import com.skyyo.samples.features.navigateWithResult.simple.dogContacts.DogContactsScreen
 import com.skyyo.samples.features.navigateWithResult.simple.dogDetails.DogDetailsScreen
@@ -196,4 +197,5 @@ fun PopulatedNavHost(
     composable(Destination.CardRecognition.route) { CardRecognitionScreen() }
     composable(Destination.GooglePay.route) { GooglePayScreen() }
     composable(Destination.TextSpans.route) { TextSpansScreen() }
+    composable(Destination.LazyColumn.route) { LazyColumnScreen() }
 }

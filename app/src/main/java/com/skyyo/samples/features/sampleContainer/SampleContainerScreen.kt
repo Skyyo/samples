@@ -155,6 +155,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goAutofill
     ) { Text(text = "autofill") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goLazyColumn
+    ) { Text(text = "lazy column") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 

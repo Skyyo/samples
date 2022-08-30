@@ -215,4 +215,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goTextSpans() = navigationDispatcher.emit {
         it.navigate(Destination.TextSpans.route)
     }
+
+    fun goLazyColumn() = navigationDispatcher.emit {
+        it.navigate(Destination.LazyColumn.route)
+    }
 }
