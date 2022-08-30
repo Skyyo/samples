@@ -12,7 +12,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.skyyo.samples.features.scrollAnimation1.EXPANDED_TOOLBAR_HEIGHT
 import com.skyyo.samples.features.scrollAnimation1.PADDING
 import com.skyyo.samples.features.scrollAnimation1.TOOLBAR_EXPANDED
@@ -57,9 +57,7 @@ private fun ToolbarBackground(state: Int) {
             TOOLBAR_EXPANDED -> {
                 Image(
                     modifier = Modifier.fillMaxSize(),
-                    painter = rememberImagePainter(
-                        data = "https://cataas.com/cat"
-                    ),
+                    painter = rememberAsyncImagePainter("https://cataas.com/cat"),
                     contentDescription = "",
                     contentScale = ContentScale.Crop
                 )

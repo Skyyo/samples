@@ -5,7 +5,10 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -17,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.health.connect.client.HealthConnectClient
-import androidx.health.connect.client.permission.HealthDataRequestPermissions
 import androidx.health.connect.client.permission.Permission
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -33,13 +35,15 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
     val context = LocalContext.current
     var isHealthConnectAvailable by remember { mutableStateOf(false) }
     val permissions = viewModel.permissions
+    val healthClient = viewModel.healthConnectClient
     val stepsWritten by viewModel.stepsWritten.collectAsState()
     val stepsRead by viewModel.stepsRead.collectAsState()
     val localStepsCanBeRead by viewModel.localStepsCanBeRead.collectAsState()
     val accumulated3rdPartySteps by viewModel.accumulated3rdPartySteps.collectAsState()
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
-    val healthConnectPermissionState = rememberHealthConnectPermissionState(permissions, viewModel::checkPermissions)
+    val healthConnectPermissionState =
+        rememberHealthConnectPermissionState(healthClient, permissions, viewModel::checkPermissions)
     val areAllPermissionsGranted by viewModel.areAllPermissionsGranted.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -102,7 +106,12 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
 fun InstallHealthConnect() {
     val context = LocalContext.current
     Button(onClick = {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.apps.healthdata")))
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=com.google.android.apps.healthdata")
+            )
+        )
     }) {
         Text(text = "Install health connect app")
     }
@@ -153,7 +162,10 @@ fun StepsTracker(
                 onValueChange = { thirdPartySessionUid = it }
             )
 
-            Button(modifier = Modifier.padding(start = 10.dp), onClick = { onReadThirdPartyClick(thirdPartySessionUid) }) {
+            Button(
+                modifier = Modifier.padding(start = 10.dp),
+                onClick = { onReadThirdPartyClick(thirdPartySessionUid) }
+            ) {
                 Text(text = "Read 3rd party steps")
             }
         }
@@ -181,6 +193,7 @@ class HealthConnectPermissionState(
 
 @Composable
 private fun rememberHealthConnectPermissionState(
+    healthClient: HealthConnectClient,
     permissions: Set<Permission>,
     checkPermissions: suspend () -> Unit
 ): HealthConnectPermissionState {
@@ -191,7 +204,7 @@ private fun rememberHealthConnectPermissionState(
 
     key(mutablePermission.permission) {
         val launcher = rememberLauncherForActivityResult(
-            HealthDataRequestPermissions()
+            healthClient.permissionController.createRequestPermissionActivityContract()
         ) {
             coroutineScope.launch { checkPermissions() }
         }

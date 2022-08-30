@@ -22,7 +22,8 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import com.skyyo.samples.utils.OnClick
 
@@ -90,11 +91,15 @@ private fun FullscreenVideoPlayer(exoPlayer: ExoPlayer) {
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun FullscreenVideoThumbnail(url: String) {
+    val context = LocalContext.current
     Image(
-        painter = rememberImagePainter(data = url, builder = {
-            crossfade(true)
-            size(width = 1080, height = 1980)
-        }),
+        painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(context)
+                .data(url)
+                .crossfade(true)
+                .size(width = 1080, height = 1980)
+                .build()
+        ),
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Crop

@@ -15,9 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.Purple500
@@ -25,9 +26,9 @@ import com.skyyo.samples.theme.Shapes
 import com.skyyo.samples.theme.White
 import com.skyyo.samples.utils.OnClick
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun CustomCard(catId: String) {
+    val context = LocalContext.current
     Card(
         backgroundColor = Purple500,
         modifier = Modifier
@@ -42,11 +43,11 @@ fun CustomCard(catId: String) {
                 .defaultMinSize(minHeight = 56.dp)
         ) {
             Image(
-                painter = rememberImagePainter(
-                    data = "https://placekitten.com/g/200/300",
-                    builder = {
-                        transformations(CircleCropTransformation())
-                    }
+                painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(context)
+                        .data("https://placekitten.com/g/200/300")
+                        .transformations(CircleCropTransformation())
+                        .build()
                 ),
                 contentDescription = null,
                 modifier = Modifier

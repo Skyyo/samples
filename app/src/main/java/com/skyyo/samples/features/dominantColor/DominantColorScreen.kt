@@ -7,11 +7,13 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
@@ -27,7 +29,6 @@ import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import coil.size.Scale
-import coil.transform.CircleCropTransformation
 import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -75,16 +76,12 @@ fun CatCard(catId: String?) {
     ) {
         Column {
             Image(
-                painter = rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current)
-                        .data(data = "https://cataas.com/cat/$catId").apply(block = fun ImageRequest.Builder.() {
-                            transformations(CircleCropTransformation())
-                        }).build()
-                ),
+                painter = rememberAsyncImagePainter("https://cataas.com/cat/$catId"),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(24.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clip(CircleShape),
                 contentScale = ContentScale.Crop
             )
             Text(catId.orEmpty())

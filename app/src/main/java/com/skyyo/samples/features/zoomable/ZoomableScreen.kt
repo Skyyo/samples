@@ -7,19 +7,25 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
-import coil.size.OriginalSize
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ZoomableScreen() {
+    val context = LocalContext.current
     Zoomable {
-        val painter = rememberImagePainter(
-            data = "https://cataas.com/cat?type=or"
-        ) { size(OriginalSize) }
-        if (painter.state is ImagePainter.State.Success) {
+        val painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(context)
+                .data("https://cataas.com/cat?type=or")
+                .size(Size.ORIGINAL)
+                .build()
+        )
+        if (painter.state is AsyncImagePainter.State.Success) {
             val size = painter.intrinsicSize
             Image(
                 painter = painter, contentDescription = "",
