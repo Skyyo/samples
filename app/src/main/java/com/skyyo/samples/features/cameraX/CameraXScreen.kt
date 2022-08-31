@@ -36,7 +36,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
@@ -212,7 +211,6 @@ fun ToggleFlashlightButton(isFlashlightOn: Boolean, modifier: Modifier = Modifie
     )
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun LastPictureThumbnail(
     uri: Uri?,
