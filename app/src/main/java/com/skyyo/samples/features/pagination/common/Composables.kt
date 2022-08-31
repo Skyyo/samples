@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -28,7 +30,6 @@ import com.skyyo.samples.utils.OnClick
 
 @Composable
 fun CustomCard(catId: String) {
-    val context = LocalContext.current
     Card(
         backgroundColor = Purple500,
         modifier = Modifier
@@ -43,16 +44,14 @@ fun CustomCard(catId: String) {
                 .defaultMinSize(minHeight = 56.dp)
         ) {
             Image(
-                painter = rememberAsyncImagePainter(
-                    ImageRequest.Builder(context)
-                        .data("https://placekitten.com/g/200/300")
-                        .transformations(CircleCropTransformation())
-                        .build()
-                ),
+                painter = rememberAsyncImagePainter("https://placekitten.com/g/200/300"),
                 contentDescription = null,
                 modifier = Modifier
                     .size(56.dp)
                     .padding(horizontal = 8.dp)
+                    .aspectRatio(1f)
+                    .clip(CircleShape),
+                contentScale = ContentScale.FillWidth
             )
             Text(catId, modifier = Modifier.align(Alignment.CenterVertically))
         }

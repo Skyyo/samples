@@ -81,8 +81,9 @@ fun CatCard(catId: String?) {
                 modifier = Modifier
                     .padding(24.dp)
                     .fillMaxWidth()
+                    .aspectRatio(1f)
                     .clip(CircleShape),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.FillBounds
             )
             Text(catId.orEmpty())
         }
