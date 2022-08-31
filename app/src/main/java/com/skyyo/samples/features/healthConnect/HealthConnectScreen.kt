@@ -35,7 +35,7 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
     val context = LocalContext.current
     var isHealthConnectAvailable by remember { mutableStateOf(false) }
     val permissions = viewModel.permissions
-    val healthClient = viewModel.healthConnectClient
+    val healthClient by viewModel.healthConnectClient
     val stepsWritten by viewModel.stepsWritten.collectAsState()
     val stepsRead by viewModel.stepsRead.collectAsState()
     val localStepsCanBeRead by viewModel.localStepsCanBeRead.collectAsState()
@@ -54,7 +54,10 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
             close()
         }.collect { isHealthConnectAvailableNew ->
             isHealthConnectAvailable = isHealthConnectAvailableNew
-            if (isHealthConnectAvailableNew) viewModel.checkPermissions()
+            if (isHealthConnectAvailableNew) {
+                viewModel.initializeHealthConnectClient()
+                viewModel.checkPermissions()
+            }
         }
     }
 
@@ -193,15 +196,15 @@ class HealthConnectPermissionState(
 
 @Composable
 private fun rememberHealthConnectPermissionState(
-    healthClient: HealthConnectClient,
+    healthClient: HealthConnectClient?,
     permissions: Set<Permission>,
     checkPermissions: suspend () -> Unit
 ): HealthConnectPermissionState {
     val mutablePermission: HealthConnectPermissionState = remember(permissions) {
         HealthConnectPermissionState(permissions)
     }
+    if (healthClient == null) return mutablePermission
     val coroutineScope = rememberCoroutineScope()
-
     key(mutablePermission.permission) {
         val launcher = rememberLauncherForActivityResult(
             healthClient.permissionController.createRequestPermissionActivityContract()

@@ -2,6 +2,7 @@ package com.skyyo.samples.features.healthConnect
 
 import android.app.Application
 import android.os.RemoteException
+import androidx.compose.runtime.mutableStateOf
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.Permission
 import androidx.health.connect.client.records.*
@@ -30,13 +31,14 @@ class HealthConnectViewModel @Inject constructor(
     private val handle: SavedStateHandle,
     val application: Application,
 ) : ViewModel() {
-    val healthConnectClient = HealthConnectClient.getOrCreate(application.applicationContext)
+    val healthConnectClient = mutableStateOf<HealthConnectClient?>(null)
     val permissions = setOf(
         Permission.createReadPermission(StepsRecord::class),
         Permission.createWritePermission(StepsRecord::class),
         Permission.createReadPermission(ExerciseSessionRecord::class)
     )
-    private val lastWrittenRecordUid = handle.getStateFlow<String?>(LAST_WRITTEN_RECORD_UID_KEY, null)
+    private val lastWrittenRecordUid =
+        handle.getStateFlow<String?>(LAST_WRITTEN_RECORD_UID_KEY, null)
     val stepsWritten = handle.getStateFlow(STEPS_WRITTEN_KEY, 1L)
     val stepsRead = handle.getStateFlow<Long?>(STEPS_READ_KEY, null)
     val localStepsCanBeRead = lastWrittenRecordUid.map { it != null }
@@ -44,8 +46,14 @@ class HealthConnectViewModel @Inject constructor(
     val accumulated3rdPartySteps = handle.getStateFlow(THIRD_PARTY_STEPS_KEY, 0L)
     val areAllPermissionsGranted = handle.getStateFlow(ARE_ALL_PERMISSIONS_GRANTED_KEY, false)
 
+    fun initializeHealthConnectClient() {
+        healthConnectClient.value = HealthConnectClient.getOrCreate(application.applicationContext)
+    }
+
     suspend fun checkPermissions() {
-        handle[ARE_ALL_PERMISSIONS_GRANTED_KEY] = healthConnectClient.hasAllPermissions(permissions)
+        healthConnectClient.value?.let {
+            handle[ARE_ALL_PERMISSIONS_GRANTED_KEY] = it.hasAllPermissions(permissions)
+        }
     }
 
     /**
@@ -61,44 +69,50 @@ class HealthConnectViewModel @Inject constructor(
     }
 
     fun writeSteps() = viewModelScope.launch(Dispatchers.IO) {
-        handle[LAST_WRITTEN_RECORD_UID_KEY] = healthConnectClient.writeSteps(stepsWritten.value)
-        handle[STEPS_WRITTEN_KEY] = stepsWritten.value + 1
+        healthConnectClient.value?.let {
+            handle[LAST_WRITTEN_RECORD_UID_KEY] = it.writeSteps(stepsWritten.value)
+            handle[STEPS_WRITTEN_KEY] = stepsWritten.value + 1
+        }
     }
 
     fun readSteps() = viewModelScope.launch(Dispatchers.IO) {
-        val recordUid = lastWrittenRecordUid.value
-        if (recordUid != null) {
-            handle[STEPS_READ_KEY] = healthConnectClient.readSteps(recordUid)
+        healthConnectClient.value?.let {
+            val recordUid = lastWrittenRecordUid.value
+            if (recordUid != null) {
+                handle[STEPS_READ_KEY] = it.readSteps(recordUid)
+            }
         }
     }
 
     fun read3rdPartySteps(exerciseSessionUid: String) = viewModelScope.launch(Dispatchers.IO) {
-        try {
-            val activitySession =
-                healthConnectClient.readRecord(ExerciseSessionRecord::class, exerciseSessionUid)
-            // Use the start time and end time from the session, for reading raw and aggregate data.
-            val timeRangeFilter = TimeRangeFilter.between(
-                startTime = activitySession.record.startTime,
-                endTime = activitySession.record.endTime
-            )
-            val aggregateDataTypes = setOf(StepsRecord.COUNT_TOTAL)
-            // Limit the data read to just the application that wrote the session. This may or may not
-            // be desirable depending on the use case: In some cases, it may be useful to combine with
-            // data written by other apps.
-            val dataOriginFilter = setOf(activitySession.record.metadata.dataOrigin)
-            val aggregateRequest = AggregateRequest(
-                metrics = aggregateDataTypes,
-                timeRangeFilter = timeRangeFilter,
-                dataOriginFilter = dataOriginFilter
-            )
-            val aggregateData = healthConnectClient.aggregate(aggregateRequest)
-            handle[THIRD_PARTY_STEPS_KEY] = aggregateData[StepsRecord.COUNT_TOTAL] ?: 0L
-        } catch (e: IllegalArgumentException) {
-            // activity session uid is empty or null
-            handle[THIRD_PARTY_STEPS_KEY] = 0L
-        } catch (e: RemoteException) {
-            // activity session uid not exists
-            handle[THIRD_PARTY_STEPS_KEY] = 0L
+        healthConnectClient.value?.let { client ->
+            try {
+                val activitySession =
+                    client.readRecord(ExerciseSessionRecord::class, exerciseSessionUid)
+                // Use the start time and end time from the session, for reading raw and aggregate data.
+                val timeRangeFilter = TimeRangeFilter.between(
+                    startTime = activitySession.record.startTime,
+                    endTime = activitySession.record.endTime
+                )
+                val aggregateDataTypes = setOf(StepsRecord.COUNT_TOTAL)
+                // Limit the data read to just the application that wrote the session. This may or may not
+                // be desirable depending on the use case: In some cases, it may be useful to combine with
+                // data written by other apps.
+                val dataOriginFilter = setOf(activitySession.record.metadata.dataOrigin)
+                val aggregateRequest = AggregateRequest(
+                    metrics = aggregateDataTypes,
+                    timeRangeFilter = timeRangeFilter,
+                    dataOriginFilter = dataOriginFilter
+                )
+                val aggregateData = client.aggregate(aggregateRequest)
+                handle[THIRD_PARTY_STEPS_KEY] = aggregateData[StepsRecord.COUNT_TOTAL] ?: 0L
+            } catch (e: IllegalArgumentException) {
+                // activity session uid is empty or null
+                handle[THIRD_PARTY_STEPS_KEY] = 0L
+            } catch (e: RemoteException) {
+                // activity session uid not exists
+                handle[THIRD_PARTY_STEPS_KEY] = 0L
+            }
         }
     }
 
