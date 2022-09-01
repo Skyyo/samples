@@ -2,7 +2,6 @@ package com.skyyo.samples.features.healthConnect
 
 import android.app.Application
 import android.os.RemoteException
-import androidx.compose.runtime.mutableStateOf
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.Permission
 import androidx.health.connect.client.records.*
@@ -31,7 +30,8 @@ class HealthConnectViewModel @Inject constructor(
     private val handle: SavedStateHandle,
     val application: Application,
 ) : ViewModel() {
-    val healthConnectClient = mutableStateOf<HealthConnectClient?>(null)
+
+    var healthConnectClient: HealthConnectClient? = null
     val permissions = setOf(
         Permission.createReadPermission(StepsRecord::class),
         Permission.createWritePermission(StepsRecord::class),
@@ -47,13 +47,11 @@ class HealthConnectViewModel @Inject constructor(
     val areAllPermissionsGranted = handle.getStateFlow(ARE_ALL_PERMISSIONS_GRANTED_KEY, false)
 
     fun initializeHealthConnectClient() {
-        healthConnectClient.value = HealthConnectClient.getOrCreate(application.applicationContext)
+        healthConnectClient = HealthConnectClient.getOrCreate(application.applicationContext)
     }
 
     suspend fun checkPermissions() {
-        healthConnectClient.value?.let {
-            handle[ARE_ALL_PERMISSIONS_GRANTED_KEY] = it.hasAllPermissions(permissions)
-        }
+        handle[ARE_ALL_PERMISSIONS_GRANTED_KEY] = healthConnectClient?.hasAllPermissions(permissions)
     }
 
     /**
@@ -69,69 +67,63 @@ class HealthConnectViewModel @Inject constructor(
     }
 
     fun writeSteps() = viewModelScope.launch(Dispatchers.IO) {
-        healthConnectClient.value?.let {
-            handle[LAST_WRITTEN_RECORD_UID_KEY] = it.writeSteps(stepsWritten.value)
-            handle[STEPS_WRITTEN_KEY] = stepsWritten.value + 1
-        }
+        handle[LAST_WRITTEN_RECORD_UID_KEY] = healthConnectClient!!.writeSteps(stepsWritten.value)
+        handle[STEPS_WRITTEN_KEY] = stepsWritten.value + 1
     }
 
     fun readSteps() = viewModelScope.launch(Dispatchers.IO) {
-        healthConnectClient.value?.let {
-            val recordUid = lastWrittenRecordUid.value
-            if (recordUid != null) {
-                handle[STEPS_READ_KEY] = it.readSteps(recordUid)
-            }
+        val recordUid = lastWrittenRecordUid.value
+        if (recordUid != null) {
+            handle[STEPS_READ_KEY] = healthConnectClient!!.readSteps(recordUid)
         }
     }
 
     fun read3rdPartySteps(exerciseSessionUid: String) = viewModelScope.launch(Dispatchers.IO) {
-        healthConnectClient.value?.let { client ->
-            try {
-                val activitySession =
-                    client.readRecord(ExerciseSessionRecord::class, exerciseSessionUid)
-                // Use the start time and end time from the session, for reading raw and aggregate data.
-                val timeRangeFilter = TimeRangeFilter.between(
-                    startTime = activitySession.record.startTime,
-                    endTime = activitySession.record.endTime
-                )
-                val aggregateDataTypes = setOf(StepsRecord.COUNT_TOTAL)
-                // Limit the data read to just the application that wrote the session. This may or may not
-                // be desirable depending on the use case: In some cases, it may be useful to combine with
-                // data written by other apps.
-                val dataOriginFilter = setOf(activitySession.record.metadata.dataOrigin)
-                val aggregateRequest = AggregateRequest(
-                    metrics = aggregateDataTypes,
-                    timeRangeFilter = timeRangeFilter,
-                    dataOriginFilter = dataOriginFilter
-                )
-                val aggregateData = client.aggregate(aggregateRequest)
-                handle[THIRD_PARTY_STEPS_KEY] = aggregateData[StepsRecord.COUNT_TOTAL] ?: 0L
-            } catch (e: IllegalArgumentException) {
-                // activity session uid is empty or null
-                handle[THIRD_PARTY_STEPS_KEY] = 0L
-            } catch (e: RemoteException) {
-                // activity session uid not exists
-                handle[THIRD_PARTY_STEPS_KEY] = 0L
-            }
+        try {
+            val activitySession =
+                healthConnectClient!!.readRecord(ExerciseSessionRecord::class, exerciseSessionUid)
+            // Use the start time and end time from the session, for reading raw and aggregate data.
+            val timeRangeFilter = TimeRangeFilter.between(
+                startTime = activitySession.record.startTime,
+                endTime = activitySession.record.endTime
+            )
+            val aggregateDataTypes = setOf(StepsRecord.COUNT_TOTAL)
+            // Limit the data read to just the application that wrote the session. This may or may not
+            // be desirable depending on the use case: In some cases, it may be useful to combine with
+            // data written by other apps.
+            val dataOriginFilter = setOf(activitySession.record.metadata.dataOrigin)
+            val aggregateRequest = AggregateRequest(
+                metrics = aggregateDataTypes,
+                timeRangeFilter = timeRangeFilter,
+                dataOriginFilter = dataOriginFilter
+            )
+            val aggregateData = healthConnectClient!!.aggregate(aggregateRequest)
+            handle[THIRD_PARTY_STEPS_KEY] = aggregateData[StepsRecord.COUNT_TOTAL] ?: 0L
+        } catch (e: IllegalArgumentException) {
+            // activity session uid is empty or null
+            handle[THIRD_PARTY_STEPS_KEY] = 0L
+        } catch (e: RemoteException) {
+            // activity session uid not exists
+            handle[THIRD_PARTY_STEPS_KEY] = 0L
         }
     }
+}
 
-    private suspend fun HealthConnectClient.writeSteps(count: Long): String {
-        val records = mutableListOf<Record>()
-        val now = ZonedDateTime.now()
-        records.add(
-            StepsRecord(
-                count = count,
-                startTime = now.minusHours(2).toInstant(),
-                startZoneOffset = now.offset,
-                endTime = now.toInstant(),
-                endZoneOffset = now.offset
-            )
+private suspend fun HealthConnectClient.writeSteps(count: Long): String {
+    val records = mutableListOf<Record>()
+    val now = ZonedDateTime.now()
+    records.add(
+        StepsRecord(
+            count = count,
+            startTime = now.minusHours(2).toInstant(),
+            startZoneOffset = now.offset,
+            endTime = now.toInstant(),
+            endZoneOffset = now.offset
         )
-        return insertRecords(records).recordUidsList[0]
-    }
+    )
+    return insertRecords(records).recordUidsList[0]
+}
 
-    private suspend fun HealthConnectClient.readSteps(recordUid: String): Long {
-        return readRecord(StepsRecord::class, recordUid).record.count
-    }
+private suspend fun HealthConnectClient.readSteps(recordUid: String): Long {
+    return readRecord(StepsRecord::class, recordUid).record.count
 }

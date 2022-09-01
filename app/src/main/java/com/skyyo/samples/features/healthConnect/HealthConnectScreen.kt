@@ -35,7 +35,6 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
     val context = LocalContext.current
     var isHealthConnectAvailable by remember { mutableStateOf(false) }
     val permissions = viewModel.permissions
-    val healthClient by viewModel.healthConnectClient
     val stepsWritten by viewModel.stepsWritten.collectAsState()
     val stepsRead by viewModel.stepsRead.collectAsState()
     val localStepsCanBeRead by viewModel.localStepsCanBeRead.collectAsState()
@@ -43,7 +42,7 @@ fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
     val healthConnectPermissionState =
-        rememberHealthConnectPermissionState(healthClient, permissions, viewModel::checkPermissions)
+        rememberHealthConnectPermissionState(viewModel.healthConnectClient, permissions, viewModel::checkPermissions)
     val areAllPermissionsGranted by viewModel.areAllPermissionsGranted.collectAsState()
 
     LaunchedEffect(Unit) {
