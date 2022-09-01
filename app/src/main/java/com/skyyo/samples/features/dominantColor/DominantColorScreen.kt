@@ -7,11 +7,13 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
@@ -22,13 +24,11 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.palette.graphics.Palette
-import coil.Coil
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import coil.size.Scale
-import coil.transform.CircleCropTransformation
 import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -66,7 +66,6 @@ fun DominantColorScreen(viewModel: DominantColorViewModel = hiltViewModel()) {
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun CatCard(catId: String?) {
     /* To avoid this https://github.com/Skyyo/samples/pull/15#pullrequestreview-787405549
@@ -77,15 +76,14 @@ fun CatCard(catId: String?) {
     ) {
         Column {
             Image(
-                painter = rememberImagePainter(
-                    data = "https://cataas.com/cat/$catId",
-                    builder = { transformations(CircleCropTransformation()) }
-                ),
+                painter = rememberAsyncImagePainter("https://cataas.com/cat/$catId"),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(24.dp)
-                    .fillMaxWidth(),
-                contentScale = ContentScale.Crop
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .clip(CircleShape),
+                contentScale = ContentScale.FillBounds
             )
             Text(catId.orEmpty())
         }
@@ -180,10 +178,10 @@ class DominantColorState(
     /**
      * Reset the color values to [defaultColor].
      */
-    fun reset() {
-        color = defaultColor
-        onColor = defaultColor
-    }
+//    fun reset() {
+//        color = defaultColor
+//        onColor = defaultColor
+//    }
 
     private suspend fun calculateSwatchesInImage(
         context: Context,
@@ -197,7 +195,7 @@ class DominantColorState(
             .allowHardware(false)
             .build()
 
-        val bitmap = when (val result = Coil.execute(r)) {
+        val bitmap = when (val result = context.imageLoader.execute(r)) {
             is SuccessResult -> result.drawable.toBitmap()
             else -> null
         }

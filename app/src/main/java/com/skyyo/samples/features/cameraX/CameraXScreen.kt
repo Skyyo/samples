@@ -36,9 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
-import coil.transform.RoundedCornersTransformation
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.insets.systemBarsPadding
@@ -213,23 +211,17 @@ fun ToggleFlashlightButton(isFlashlightOn: Boolean, modifier: Modifier = Modifie
     )
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun LastPictureThumbnail(
     uri: Uri?,
     modifier: Modifier = Modifier,
 ) {
     Crossfade(targetState = uri, animationSpec = tween(durationMillis = 500)) { imageUri ->
-        val painter = rememberImagePainter(
-            data = imageUri,
-            builder = {
-                transformations(RoundedCornersTransformation(16f))
-            }
-        )
+        val painter = rememberAsyncImagePainter(imageUri)
         Image(
             painter = painter,
             contentDescription = null,
-            modifier = modifier
+            modifier = modifier.clip(RoundedCornerShape(16.dp))
         )
     }
 }
