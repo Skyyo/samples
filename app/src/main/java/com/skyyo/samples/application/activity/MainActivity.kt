@@ -29,7 +29,7 @@ import com.skyyo.samples.theme.IgdbBrowserTheme
 import com.skyyo.samples.utils.AppLifecycleObserver
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
-import il.co.prepay.utils.eventDispatchers.UserIdlingSession
+import com.skyyo.samples.utils.eventDispatchers.UserIdlingSession
 import com.skyyo.samples.utils.eventDispatchers.UserIdlingSessionEventDispatcher
 import kotlinx.coroutines.*
 import java.util.*
