@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.sp
 import com.skyyo.samples.features.textGradient.composables.RunningGradientText
 import com.skyyo.samples.features.textGradient.composables.ShimmerGradientText
 
+// Taken from https://medium.com/androiddevelopers/animating-brush-text-coloring-in-compose-%EF%B8%8F-26ae99d9b402
 @Composable
 fun TextGradientScreen() {
     val sampleText = "Uniqueness is not inner in order, the mind, or over there, but everywhere. " +

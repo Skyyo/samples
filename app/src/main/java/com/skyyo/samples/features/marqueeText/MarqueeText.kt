@@ -202,7 +202,16 @@ private fun GradientEdge(
         modifier = Modifier
             .width(width)
             .fillMaxHeight()
-            .background(brush = Brush.horizontalGradient(listOf(startColor, endColor)))
+            .background(
+                brush = remember(startColor, endColor) {
+                    Brush.horizontalGradient(
+                        listOf(
+                            startColor,
+                            endColor
+                        )
+                    )
+                }
+            )
     )
 }
 
