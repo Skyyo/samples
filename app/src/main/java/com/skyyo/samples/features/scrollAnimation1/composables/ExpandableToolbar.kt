@@ -1,7 +1,6 @@
 package com.skyyo.samples.features.scrollAnimation1.composables
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -11,8 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.skyyo.samples.features.scrollAnimation1.EXPANDED_TOOLBAR_HEIGHT
 import com.skyyo.samples.features.scrollAnimation1.PADDING
 import com.skyyo.samples.features.scrollAnimation1.TOOLBAR_EXPANDED
@@ -49,15 +47,14 @@ fun ExpandableToolbar(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun ToolbarBackground(state: Int) {
     Crossfade(targetState = state) { toolbarState ->
         when (toolbarState) {
             TOOLBAR_EXPANDED -> {
-                Image(
+                AsyncImage(
                     modifier = Modifier.fillMaxSize(),
-                    painter = rememberAsyncImagePainter("https://cataas.com/cat"),
+                    model = "https://cataas.com/cat",
                     contentDescription = "",
                     contentScale = ContentScale.Crop
                 )

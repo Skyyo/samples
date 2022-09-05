@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -18,7 +16,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.plusAssign
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
@@ -80,17 +77,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             IgdbBrowserTheme(savedTheme) {
-                // accompanist window insets not working well with in-app language change library
-                // shouldn't be an issue, as we already adopted native insets, and this works fine
-                ProvideWindowInsets {
-                    // used only for the bottom sheet destinations
-                    ModalBottomSheetLayout(bottomSheetNavigator) {
-                        Surface(modifier = Modifier.fillMaxSize()) {
-                            PopulatedNavHost(
-                                startDestination = Destination.SampleContainer.route,
-                                navController = navController
-                            )
-                        }
+                // used only for the bottom sheet destinations
+                ModalBottomSheetLayout(bottomSheetNavigator) {
+                    Surface(modifier = Modifier.fillMaxSize()) {
+                        PopulatedNavHost(
+                            startDestination = Destination.SampleContainer.route,
+                            navController = navController
+                        )
                     }
                 }
             }

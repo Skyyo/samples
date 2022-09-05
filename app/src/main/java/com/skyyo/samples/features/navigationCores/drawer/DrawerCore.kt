@@ -6,6 +6,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -65,14 +66,17 @@ fun DrawerCore(
         drawerGesturesEnabled = scaffoldState.drawerState.let { it.isOpen && !it.isAnimationRunning },
         floatingActionButton = {
             if (isDrawerVisible.value) {
-                FloatingActionButton(onClick = {
-                    scope.launch {
-                        scaffoldState.drawerState.animateTo(
-                            DrawerValue.Open,
-                            animationSpec
-                        )
+                FloatingActionButton(
+                    modifier = Modifier.navigationBarsPadding(),
+                    onClick = {
+                        scope.launch {
+                            scaffoldState.drawerState.animateTo(
+                                DrawerValue.Open,
+                                animationSpec
+                            )
+                        }
                     }
-                }) {
+                ) {
                     Text(text = "open drawer")
                 }
             }

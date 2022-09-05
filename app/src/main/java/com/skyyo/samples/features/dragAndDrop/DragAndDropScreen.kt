@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -90,7 +88,6 @@ fun <T> rememberDragDropState(
     return state
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 fun <T> Modifier.dragContainer(dragDropState: DragDropState<T>): Modifier {
     return pointerInput(dragDropState) {
         detectDragGesturesAfterLongPress(

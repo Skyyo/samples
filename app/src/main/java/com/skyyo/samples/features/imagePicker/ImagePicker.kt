@@ -13,7 +13,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.ProvideWindowInsets
 
 @Composable
 fun ImagePickerScreen() {
@@ -25,22 +24,20 @@ fun ImagePickerScreen() {
         rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) {
             Log.d("ImagePicker", "Multiple image uri's: $it")
         }
-    ProvideWindowInsets {
-        Column(
-            Modifier
-                .systemBarsPadding()
-                .padding(20.dp)
-        ) {
-            Button(onClick = {
-                pickSingleImageRequest.launch(PickVisualMediaRequest(ImageOnly))
-            }) {
-                Text(text = "Pick single image")
-            }
-            Button(onClick = {
-                pickMultipleImagesRequest.launch(PickVisualMediaRequest(ImageOnly))
-            }) {
-                Text(text = "Pick multiple")
-            }
+    Column(
+        Modifier
+            .systemBarsPadding()
+            .padding(20.dp)
+    ) {
+        Button(onClick = {
+            pickSingleImageRequest.launch(PickVisualMediaRequest(ImageOnly))
+        }) {
+            Text(text = "Pick single image")
+        }
+        Button(onClick = {
+            pickMultipleImagesRequest.launch(PickVisualMediaRequest(ImageOnly))
+        }) {
+            Text(text = "Pick multiple")
         }
     }
 }

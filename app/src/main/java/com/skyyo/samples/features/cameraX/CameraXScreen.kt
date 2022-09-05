@@ -14,10 +14,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -37,9 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
-import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.statusBarsPadding
-import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
@@ -77,13 +71,13 @@ fun CameraXScreen(viewModel: CameraXViewModel = hiltViewModel()) {
         permissionNotGrantedContent = {
             Button(
                 onClick = { cameraPermissionState.launchPermissionRequest() },
-                Modifier.systemBarsPadding(true)
+                Modifier.systemBarsPadding()
             ) {
                 Text(text = "Add camera permission")
             }
         },
         permissionNotAvailableContent = {
-            Button(onClick = { context.goAppPermissions() }, Modifier.systemBarsPadding(true)) {
+            Button(onClick = { context.goAppPermissions() }, Modifier.systemBarsPadding()) {
             Text(text = "Add camera permission from app Settings")
         }
         }

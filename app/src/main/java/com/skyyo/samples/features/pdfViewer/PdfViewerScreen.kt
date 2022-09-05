@@ -27,8 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
@@ -54,85 +52,84 @@ fun PdfViewerScreen(viewModel: PdfViewerViewModel = hiltViewModel()) {
     val pdfRenderer by viewModel.pdfRenderer.collectAsState()
     val executor = remember { Executors.newSingleThreadExecutor().asCoroutineDispatcher() }
 
-    ProvideWindowInsets {
-        PermissionRequired(
-            permissionState = storagePermissionState,
-            permissionNotGrantedContent = {
-                StoragePermissionNotGrantedContent(
-                    R.string.please_grant_storage_permission,
-                    storagePermissionState::launchPermissionRequest
-                )
-            },
-            permissionNotAvailableContent = {
-                StoragePermissionNotGrantedContent(
-                    R.string.please_grant_storage_permission_from_settings,
-                    context::goAppPermissions
-                )
-            },
-            content = {
-                LaunchedEffect(uri) {
-                    if (uri != null) {
-                        launch(Dispatchers.IO) {
-                            val inputStream: InputStream? =
-                                context.contentResolver.openInputStream(uri!!)
-                            val file = File(context.filesDir, "pdf")
-                            file.writeBytes(inputStream!!.readBytes())
-                            inputStream.close()
-                            viewModel.pdfRenderer.value = PdfRenderer(
-                                ParcelFileDescriptor.open(
-                                    file,
-                                    ParcelFileDescriptor.MODE_READ_ONLY
-                                )
+    PermissionRequired(
+        permissionState = storagePermissionState,
+        permissionNotGrantedContent = {
+            StoragePermissionNotGrantedContent(
+                R.string.please_grant_storage_permission,
+                storagePermissionState::launchPermissionRequest
+            )
+        },
+        permissionNotAvailableContent = {
+            StoragePermissionNotGrantedContent(
+                R.string.please_grant_storage_permission_from_settings,
+                context::goAppPermissions
+            )
+        },
+        content = {
+            LaunchedEffect(uri) {
+                if (uri != null) {
+                    launch(Dispatchers.IO) {
+                        val inputStream: InputStream? =
+                            context.contentResolver.openInputStream(uri!!)
+                        val file = File(context.filesDir, "pdf")
+                        file.writeBytes(inputStream!!.readBytes())
+                        inputStream.close()
+                        viewModel.pdfRenderer.value = PdfRenderer(
+                            ParcelFileDescriptor.open(
+                                file,
+                                ParcelFileDescriptor.MODE_READ_ONLY
                             )
-                        }
+                        )
                     }
-                }
-                when {
-                    pdfRenderer != null -> {
-                        val zoomableState = rememberZoomableState()
-                        val lazyListState = rememberLazyListState()
-                        DisposableEffect(Unit) {
-                            onDispose {
-                                pdfRenderer!!.close()
-                            }
-                        }
-                        Zoomable(state = zoomableState) {
-                            LazyColumn(Modifier.statusBarsPadding(), state = lazyListState) {
-                                items(pdfRenderer!!.pageCount) { item ->
-                                    val pagesRange = lazyListState.firstVisibleItemIndex - 1..lazyListState.firstVisibleItemIndex + 1
-                                    val quality = when {
-                                        pagesRange.contains(item) && zoomableState.scale > 2 -> PdfQuality.ENHANCED
-                                        pagesRange.contains(item) && zoomableState.scale > 1.5 -> PdfQuality.NORMAL
-                                        else -> PdfQuality.FAST
-                                    }
-                                    val bitmap by produceState<Bitmap?>(
-                                        initialValue = null,
-                                        key1 = item,
-                                        key2 = quality
-                                    ) {
-                                        value = withContext(executor) {
-                                            generatePageBitmap(
-                                                pdfRenderer!!,
-                                                item,
-                                                quality
-                                            )
-                                        }
-                                    }
-                                    PdfPageItem(bitmap = bitmap)
-                                }
-                            }
-                        }
-                    }
-                    uri != null -> {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                        }
-                    }
-                    else -> ChoosePdfButton(viewModel)
                 }
             }
-        )
-    }
+            when {
+                pdfRenderer != null -> {
+                    val zoomableState = rememberZoomableState()
+                    val lazyListState = rememberLazyListState()
+                    DisposableEffect(Unit) {
+                        onDispose {
+                            pdfRenderer!!.close()
+                        }
+                    }
+                    Zoomable(state = zoomableState) {
+                        LazyColumn(Modifier.statusBarsPadding(), state = lazyListState) {
+                            items(pdfRenderer!!.pageCount) { item ->
+                                val pagesRange =
+                                    lazyListState.firstVisibleItemIndex - 1..lazyListState.firstVisibleItemIndex + 1
+                                val quality = when {
+                                    pagesRange.contains(item) && zoomableState.scale > 2 -> PdfQuality.ENHANCED
+                                    pagesRange.contains(item) && zoomableState.scale > 1.5 -> PdfQuality.NORMAL
+                                    else -> PdfQuality.FAST
+                                }
+                                val bitmap by produceState<Bitmap?>(
+                                    initialValue = null,
+                                    key1 = item,
+                                    key2 = quality
+                                ) {
+                                    value = withContext(executor) {
+                                        generatePageBitmap(
+                                            pdfRenderer!!,
+                                            item,
+                                            quality
+                                        )
+                                    }
+                                }
+                                PdfPageItem(bitmap = bitmap)
+                            }
+                        }
+                    }
+                }
+                uri != null -> {
+                    Box(Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
+                }
+                else -> ChoosePdfButton(viewModel)
+            }
+        }
+    )
 }
 
 @Composable
