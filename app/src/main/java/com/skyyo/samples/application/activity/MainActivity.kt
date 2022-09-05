@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
      * [userIdlingSessionTimer] variable represents a Timer which we start when the user signs in to the app.
      * When the method [onUserInteraction] is called, the [userIdlingSessionTimer] will be restarted.
      * If user is inactive for [SESSION_MAIN_TIME_SECONDS], the timer runs out and user
-     * observes the dialog.
+     * observes the result screen with additional time - [SESSION_EXTRA_TIME_SECONDS].
      */
     private var userIdlingSessionTimer: Timer? = null
 
