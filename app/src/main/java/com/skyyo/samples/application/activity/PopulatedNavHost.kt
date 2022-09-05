@@ -72,6 +72,7 @@ import com.skyyo.samples.features.snackbar.SnackbarScreen
 import com.skyyo.samples.features.snap.SnapScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
+import com.skyyo.samples.features.textGradient.TextGradientScreen
 import com.skyyo.samples.features.textSpans.TextSpansScreen
 import com.skyyo.samples.features.verticalPagerWithFling.VideoPagerWithFlingScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
@@ -194,4 +195,5 @@ fun PopulatedNavHost(
     composable(Destination.GooglePay.route) { GooglePayScreen() }
     composable(Destination.TextSpans.route) { TextSpansScreen() }
     composable(Destination.ImeAwareLazyColumn.route) { ImeAwareLazyColumnScreen() }
+    composable(Destination.TextGradient.route) { TextGradientScreen() }
 }

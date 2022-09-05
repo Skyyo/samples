@@ -169,14 +169,14 @@ fun MarqueeText(
             Row {
                 GradientEdge(
                     width = edgeGradientWidth,
-                    startColor = Color.Transparent,
-                    endColor = gradientEdgeColor
+                    startColor = gradientEdgeColor,
+                    endColor = Color.Transparent
                 )
                 Spacer(Modifier.weight(1f))
                 GradientEdge(
                     width = edgeGradientWidth,
-                    startColor = gradientEdgeColor,
-                    endColor = Color.Transparent
+                    startColor = Color.Transparent,
+                    endColor = gradientEdgeColor
                 )
             }
         }
@@ -203,9 +203,14 @@ private fun GradientEdge(
             .width(width)
             .fillMaxHeight()
             .background(
-                brush = Brush.horizontalGradient(
-                    0f to startColor, 1f to endColor,
-                )
+                brush = remember(startColor, endColor) {
+                    Brush.horizontalGradient(
+                        listOf(
+                            startColor,
+                            endColor
+                        )
+                    )
+                }
             )
     )
 }

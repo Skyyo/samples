@@ -7,6 +7,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
 import com.skyyo.samples.extensions.FixInAppLanguageSwitchLayoutDirection
+import com.skyyo.samples.features.textGradient.composables.RunningGradientText
 
 @Composable
 fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel()) = FixInAppLanguageSwitchLayoutDirection {
@@ -151,6 +153,20 @@ fun UIelements(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goTextSpans
     ) { Text(text = "text spans") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goTextGradient
+    ) {
+        val gradientNeonColors = remember {
+            listOf(
+                Color(0xFF000272),
+                Color(0xFF341677),
+                Color(0xFFA32F80),
+                Color(0xFFFF6363),
+            )
+        }
+        RunningGradientText(text = "text gradient", colors = gradientNeonColors)
+    }
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goAutofill
