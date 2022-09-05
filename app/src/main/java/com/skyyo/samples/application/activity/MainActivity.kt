@@ -89,12 +89,8 @@ class MainActivity : AppCompatActivity() {
                 val callback = NavController.OnDestinationChangedListener { _, destination, _ ->
                     when (destination.route) {
                         Destination.SampleContainer.route -> {
-                            clearUserIdlingSession()
                         }
                         else -> {
-                            if (destination.route != Destination.UserInteractionTrackingResult.route) {
-                                userIdlingSessionEventDispatcher.startSession()
-                            }
                         }
                     }
                 }
@@ -126,6 +122,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        startUserIdlingSession()
+    }
+
     private fun applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
@@ -134,7 +135,9 @@ class MainActivity : AppCompatActivity() {
         for (command in userIdlingSessionEventDispatcher.sessionEventEmitter) {
             when (command) {
                 UserIdlingSession.StopSession -> {
-                    goHome()
+                    if (isFinishing) return
+                    finish()
+                    startActivity(intent)
                 }
                 UserIdlingSession.StartSession -> {
                     startUserIdlingSession()
@@ -149,7 +152,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startUserIdlingSession() {
-        clearUserIdlingSession()
+        userIdlingSessionTimer?.cancel()
+        userIdlingSessionTimer?.purge()
+        userIdlingSessionTimer = Timer()
         userIdlingSessionTimer?.schedule(
             object : TimerTask() {
                 override fun run() {
@@ -158,12 +163,6 @@ class MainActivity : AppCompatActivity() {
             },
             SESSION_MAIN_TIME_SECONDS * MILLIS_IN_SECOND
         )
-    }
-
-    private fun clearUserIdlingSession() {
-        userIdlingSessionTimer?.cancel()
-        userIdlingSessionTimer?.purge()
-        userIdlingSessionTimer = Timer()
     }
 
     private fun onMaximumIdlingTimeReached() {
@@ -188,9 +187,5 @@ class MainActivity : AppCompatActivity() {
 
     private fun goUserInteractionTrackingResultScreen() {
         navigationDispatcher.emit { it.navigate(Destination.UserInteractionTrackingResult.route) }
-    }
-
-    private fun goHome() {
-        navigationDispatcher.emit { it.navigate(Destination.SampleContainer.route) }
     }
 }

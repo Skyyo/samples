@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.userInteractionTrackingResult
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.LinearProgressIndicator
@@ -21,6 +22,7 @@ fun UserInteractionTrackingResultScreen(
     viewModel: UserInteractionTrackingResultViewModel = hiltViewModel()
 ) {
     val areYouStillHereTime by viewModel.areYouStillHereTime.collectAsState()
+    BackHandler(true) {}
     Column(
         modifier = Modifier.padding(20.dp),
         verticalArrangement = Arrangement.Center,
@@ -39,11 +41,11 @@ fun UserInteractionTrackingResultScreen(
                 " Now you have $SESSION_EXTRA_TIME_SECONDS seconds to choose one of the following options",
             fontSize = 20.sp
         )
-        Button(modifier = Modifier.padding(top = 20.dp), onClick = viewModel::navigateUp) {
-            Text(text = "Go back")
+        Button(modifier = Modifier.padding(top = 20.dp), onClick = viewModel::onContinueClick) {
+            Text(text = "Continue")
         }
-        Button(modifier = Modifier.padding(top = 8.dp), onClick = viewModel::goHome) {
-            Text(text = "Go home")
+        Button(modifier = Modifier.padding(top = 8.dp), onClick = viewModel::onQuitClick) {
+            Text(text = "Quit")
         }
     }
 }
