@@ -3,7 +3,6 @@ package com.skyyo.samples.features.userInteractionTrackingResult
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.activity.MILLIS_IN_SECOND
 import com.skyyo.samples.application.activity.SESSION_EXTRA_TIME_SECONDS
 import com.skyyo.samples.utils.NavigationDispatcher
@@ -46,11 +45,16 @@ class UserInteractionTrackingResultViewModel @Inject constructor(
         }
     }
 
-    fun goHome() {
-        navigationDispatcher.emit { it.navigate(Destination.SampleContainer.route) }
+    fun onContinueClick() {
+        userIdlingSessionEventDispatcher.startSession()
+        goBack()
     }
 
-    fun navigateUp() {
-        navigationDispatcher.emit { it.navigateUp() }
+    fun onQuitClick() {
+        userIdlingSessionEventDispatcher.stopSession()
+    }
+
+    private fun goBack() {
+        navigationDispatcher.emit { it.popBackStack() }
     }
 }
