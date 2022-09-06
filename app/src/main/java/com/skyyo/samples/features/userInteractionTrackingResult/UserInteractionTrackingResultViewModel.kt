@@ -47,14 +47,10 @@ class UserInteractionTrackingResultViewModel @Inject constructor(
 
     fun onContinueClick() {
         userIdlingSessionEventDispatcher.startSession()
-        goBack()
+        navigationDispatcher.emit { it.popBackStack() }
     }
 
     fun onQuitClick() {
         userIdlingSessionEventDispatcher.stopSession()
-    }
-
-    private fun goBack() {
-        navigationDispatcher.emit { it.popBackStack() }
     }
 }
