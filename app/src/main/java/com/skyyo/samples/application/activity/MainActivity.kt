@@ -81,7 +81,6 @@ class MainActivity : AppCompatActivity() {
             }
             ProcessLifecycleOwner.get().lifecycle.addObserver(
                 AppLifecycleObserver(
-                    dataStoreManager = dataStoreManager,
                     onMaximumIdlingTimeInBackgroundReached = ::onMaximumIdlingTimeInBackgroundReached
                 )
             )
