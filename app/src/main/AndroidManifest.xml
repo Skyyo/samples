@@ -24,6 +24,10 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/full_backup_content"
         tools:targetApi="32">
+        <profileable
+            android:shell="true"
+            tools:targetApi="q" />
+
         <activity
             android:name="com.skyyo.samples.application.activity.MainActivity"
             android:exported="true"
@@ -43,6 +47,11 @@
             -->
             <intent-filter>
                 <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.skyyo.samples.OPEN_FEATURE"/>
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data

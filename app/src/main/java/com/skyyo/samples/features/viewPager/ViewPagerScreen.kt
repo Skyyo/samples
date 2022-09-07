@@ -13,12 +13,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CarRepair
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
@@ -28,6 +32,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.max
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
 @ExperimentalPagerApi
 @Composable
@@ -63,6 +68,7 @@ fun ViewPagerScreen() {
         Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .semantics { testTagsAsResourceId = true }
     ) {
         ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
@@ -100,7 +106,10 @@ fun ViewPagerScreen() {
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth()) { page ->
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth().testTag("horizontalPager")
+        ) { page ->
             key(page) {
                 PagerCard(
                     pageOffset = this@HorizontalPager.calculateCurrentOffsetForPage(page).absoluteValue,
@@ -150,7 +159,10 @@ fun ViewPagerScreen() {
 }
 
 @ExperimentalPagerApi
-fun Modifier.scrollableTabIndicatorOffset(pagerState: PagerState, tabPositions: List<TabPosition>): Modifier = composed {
+fun Modifier.scrollableTabIndicatorOffset(
+    pagerState: PagerState,
+    tabPositions: List<TabPosition>
+): Modifier = composed {
     // If there are no pages, nothing to show
     if (pagerState.pageCount == 0) return@composed this
 

@@ -40,6 +40,12 @@ android {
             minifyEnabled false
             buildConfigField "String", "BASE_URL", "\"https://cataas.com/api/\""
         }
+        benchmark {
+            initWith buildTypes.release
+            signingConfig signingConfigs.debug
+            matchingFallbacks = ['release']
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'benchmark-rules.pro'
+        }
     }
     compileOptions.coreLibraryDesugaringEnabled = true
 
