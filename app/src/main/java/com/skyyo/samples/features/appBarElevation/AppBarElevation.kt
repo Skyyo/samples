@@ -2,10 +2,7 @@ package com.skyyo.samples.features.appBarElevation
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -57,7 +54,11 @@ fun AppBarElevation() {
             },
             verticalArrangement = remember {
                 Arrangement.spacedBy(8.dp)
-            }
+            },
+            contentPadding = WindowInsets
+                .systemBars
+                .only(WindowInsetsSides.Bottom)
+                .asPaddingValues()
         ) {
             items(items) {
                 Text(

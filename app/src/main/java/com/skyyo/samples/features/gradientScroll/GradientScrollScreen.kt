@@ -2,9 +2,7 @@ package com.skyyo.samples.features.gradientScroll
 
 import android.animation.ArgbEvaluator
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
@@ -16,8 +14,6 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.skyyo.samples.theme.Shapes
 
 private val topColorArgb = Color(0xFF106CCF).toArgb()
@@ -38,14 +34,10 @@ fun GradientScrollScreen() {
             .onGloballyPositioned { coordinates ->
                 columnHeight = coordinates.size.height.toFloat()
             },
-        contentPadding = rememberInsetsPaddingValues(
-            insets = LocalWindowInsets.current.systemBars,
-            applyTop = true,
-            applyBottom = true,
-            additionalStart = 16.dp,
-            additionalEnd = 16.dp,
-            additionalBottom = 8.dp
-        )
+        contentPadding = WindowInsets.systemBars
+            .only(WindowInsetsSides.Vertical)
+            .add(WindowInsets(left = 16.dp, right = 16.dp, bottom = 8.dp))
+            .asPaddingValues()
     ) {
         itemsIndexed(messages, key = { index, _ -> index }) { _, chatMessage ->
             GradientMessage(

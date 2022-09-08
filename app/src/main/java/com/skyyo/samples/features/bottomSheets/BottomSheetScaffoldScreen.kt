@@ -2,17 +2,21 @@ package com.skyyo.samples.features.bottomSheets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
+
+private const val BOTTOM_SHEET_HEIGHT_FRACTION = .96f
 
 /**
  * can be used both as modal & persistent sheet,
@@ -33,38 +37,67 @@ fun BottomSheetScaffoldScreen() {
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
-        sheetShape = RoundedCornerShape(topStart = cornerRadius, topEnd = cornerRadius),
+        sheetShape = remember(cornerRadius) {
+            RoundedCornerShape(
+                topStart = cornerRadius,
+                topEnd = cornerRadius
+            )
+        },
         sheetContent = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(fraction = 0.8f)
-                    .statusBarsPadding()
+                    .fillMaxHeight(BOTTOM_SHEET_HEIGHT_FRACTION)
+                    .padding(top = 18.dp)
                     .background(MaterialTheme.colors.primary)
-                    .graphicsLayer(alpha = currentFraction),
-                verticalArrangement = Arrangement.Top,
+                    .padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                Text("fraction = $currentFraction")
-                Text("target = $targetValue")
-                Text("current = $currentValue")
-                Button(onClick = {
-                    coroutineScope.launch {
-                        if (scaffoldState.bottomSheetState.isCollapsed) {
-                            scaffoldState.bottomSheetState.expand()
-                        } else {
-                            scaffoldState.bottomSheetState.collapse()
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        coroutineScope.launch {
+                            if (scaffoldState.bottomSheetState.isCollapsed) {
+                                scaffoldState.bottomSheetState.expand()
+                            } else {
+                                scaffoldState.bottomSheetState.collapse()
+                            }
                         }
-                    }
-                }) {
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
+                ) {
                     Text(text = "Expand/Collapse Bottom Sheet")
+                }
+                val list = arrayListOf<Int>()
+                repeat(times = 200) { list += it }
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .graphicsLayer(alpha = currentFraction),
+                    contentPadding = WindowInsets.navigationBars.asPaddingValues()
+                ) {
+                    item {
+                        Text("fraction = $currentFraction")
+                        Text("target = $targetValue")
+                        Text(
+                            modifier = Modifier.padding(bottom = 20.dp),
+                            text = "current = $currentValue"
+                        )
+                    }
+                    itemsIndexed(list) { index, _ ->
+                        Text(text = "Bottom Sheet Screen $index")
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
         },
-        sheetPeekHeight = 86.dp
+        sheetPeekHeight = 120.dp
     ) {
-        Box(modifier = Modifier.fillMaxSize().background(color = Color.Gray))
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Gray)
+        )
     }
 }
 

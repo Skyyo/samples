@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -42,13 +40,12 @@ fun DragAndDropScreen() {
     )
 
     LazyColumn(
-        modifier = Modifier
-            .statusBarsPadding()
-            .dragContainer(dragDropState)
-            .navigationBarsPadding()
-            .padding(bottom = 20.dp),
+        modifier = Modifier.dragContainer(dragDropState),
         state = listState,
-        contentPadding = remember { PaddingValues(16.dp) },
+        contentPadding = WindowInsets.systemBars
+            .only(WindowInsetsSides.Vertical)
+            .add(WindowInsets(left = 16.dp, right = 16.dp))
+            .asPaddingValues(),
         verticalArrangement = remember { Arrangement.spacedBy(16.dp) }
     ) {
         dragItems(dragDropState = dragDropState, key = { it }) { item, modifier, isDragging ->
@@ -82,7 +79,8 @@ fun <T> rememberDragDropState(
     }
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
     val scrollEvents = remember(state) {
-        state.scrollChannel.receiveAsFlow().flowWithLifecycle(localLifecycle, Lifecycle.State.RESUMED)
+        state.scrollChannel.receiveAsFlow()
+            .flowWithLifecycle(localLifecycle, Lifecycle.State.RESUMED)
     }
     LaunchedEffect(scrollEvents) {
         scrollEvents.collect { lazyListState.scrollBy(it) }
@@ -90,7 +88,6 @@ fun <T> rememberDragDropState(
     return state
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 fun <T> Modifier.dragContainer(dragDropState: DragDropState<T>): Modifier {
     return pointerInput(dragDropState) {
         detectDragGesturesAfterLongPress(

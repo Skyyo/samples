@@ -1,9 +1,11 @@
 package com.skyyo.samples.features.marqueeText
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun MarqueeTextScreen() {

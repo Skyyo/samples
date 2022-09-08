@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.systemBarsPadding
 import com.skyyo.samples.extensions.FixInAppLanguageSwitchLayoutDirection
 import com.skyyo.samples.features.textGradient.composables.RunningGradientText
 

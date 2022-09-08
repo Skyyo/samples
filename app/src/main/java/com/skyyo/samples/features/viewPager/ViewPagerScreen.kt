@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.*
 import com.skyyo.samples.extensions.log
 import kotlinx.coroutines.launch

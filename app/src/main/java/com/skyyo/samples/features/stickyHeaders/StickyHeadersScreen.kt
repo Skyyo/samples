@@ -3,10 +3,7 @@ package com.skyyo.samples.features.stickyHeaders
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
@@ -15,9 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.accompanist.insets.statusBarsPadding
 import com.skyyo.samples.extensions.addVerticalScrollbar
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.Teal200
@@ -35,11 +29,7 @@ fun ListsScreen() {
         modifier = Modifier
             .fillMaxSize()
             .addVerticalScrollbar(listState),
-        contentPadding = rememberInsetsPaddingValues(
-            insets = LocalWindowInsets.current.systemBars,
-            applyTop = true,
-            applyBottom = false,
-        )
+        contentPadding = WindowInsets.systemBars.only(WindowInsetsSides.Vertical).asPaddingValues()
     ) {
         stickyHeader {
             Card(backgroundColor = Teal200) {
