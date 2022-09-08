@@ -54,7 +54,7 @@ fun InfiniteViewPagerScreen() {
     Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
         ) { page ->
             key(page) {
                 val currentPage = (page - INFINITE_PAGER_INITIAL_PAGE).floorMod(pages.size)

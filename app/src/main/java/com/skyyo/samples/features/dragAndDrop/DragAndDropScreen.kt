@@ -40,13 +40,12 @@ fun DragAndDropScreen() {
     )
 
     LazyColumn(
-        modifier = Modifier
-            .statusBarsPadding()
-            .dragContainer(dragDropState)
-            .navigationBarsPadding()
-            .padding(bottom = 20.dp),
+        modifier = Modifier.dragContainer(dragDropState),
         state = listState,
-        contentPadding = remember { PaddingValues(16.dp) },
+        contentPadding = WindowInsets.systemBars
+            .only(WindowInsetsSides.Vertical)
+            .add(WindowInsets(left = 16.dp, right = 16.dp))
+            .asPaddingValues(),
         verticalArrangement = remember { Arrangement.spacedBy(16.dp) }
     ) {
         dragItems(dragDropState = dragDropState, key = { it }) { item, modifier, isDragging ->
@@ -80,7 +79,8 @@ fun <T> rememberDragDropState(
     }
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
     val scrollEvents = remember(state) {
-        state.scrollChannel.receiveAsFlow().flowWithLifecycle(localLifecycle, Lifecycle.State.RESUMED)
+        state.scrollChannel.receiveAsFlow()
+            .flowWithLifecycle(localLifecycle, Lifecycle.State.RESUMED)
     }
     LaunchedEffect(scrollEvents) {
         scrollEvents.collect { lazyListState.scrollBy(it) }
