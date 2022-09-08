@@ -31,7 +31,7 @@ const val PADDING = 16
 fun ScrollAnimation1Screen(viewModel: ScrollAnimation1ViewModel = hiltViewModel()) {
     val density = LocalDensity.current
     val insetsNavigationBarsStatusBars = WindowInsets.navigationBars
-    val navigationBarHeight = with(density) { insetsNavigationBarsStatusBars.getBottom(density).toDp() }
+    val navigationBarHeight = remember { insetsNavigationBarsStatusBars.getBottom(density).dp }
     val toolbarState = remember { mutableStateOf(TOOLBAR_EXPANDED) }
     val toolbarHeightPx = with(density) {
         EXPANDED_TOOLBAR_HEIGHT.dp.roundToPx().toFloat()

@@ -43,9 +43,7 @@ fun CatsPagingRoomScreen(viewModel: CatsPagingRoomViewModel = hiltViewModel()) {
     val insetsStatusBars = WindowInsets.statusBars
     val density = LocalDensity.current
 
-    val insetTop: Dp = remember {
-        with(density) { insetsStatusBars.getTop(density).toDp() + 8.dp }
-    }
+    val insetTop: Dp = remember { insetsStatusBars.getTop(density).dp + 8.dp }
     val listState = rememberLazyListState()
     val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
 

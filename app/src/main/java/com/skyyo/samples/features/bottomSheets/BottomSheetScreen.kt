@@ -14,7 +14,7 @@ fun BottomSheetScreen() {
     repeat(times = 200) { list += it }
 
     LazyColumn(
-        modifier = Modifier.fillMaxWidth().padding(20.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
         contentPadding = WindowInsets.systemBars.asPaddingValues()
     ) {
         itemsIndexed(list) { index, _ ->
