@@ -33,7 +33,8 @@ Miscellaneous
 - We can handle "save to wallet" result only from activity (https://issuetracker.google.com/issues/239603300)
 - Autocomplete [issue](https://issuetracker.google.com/u/1/issues/242575301)
 - Custom text spans need additional API for proper RTL & BiDi support [issue](https://issuetracker.google.com/u/1/issues/237289433)
-- Use ImeAwareLazyColumn until compose LazyColumn ime overlap issue not fixed (https://issuetracker.google.com/issues/192043120#comment78) 
+- Use ImeAwareLazyColumn until compose LazyColumn ime overlap issue not fixed (https://issuetracker.google.com/issues/192043120#comment78)
+- At this point there is no ability to create instance of ContentDrawScope class, so we can't capture composable content into Bitmap, so glass blur sample will blur every composable in bounds of "blur composable", so "partial blurring" in Box will not work.
 
 # Limitations
 - There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)
