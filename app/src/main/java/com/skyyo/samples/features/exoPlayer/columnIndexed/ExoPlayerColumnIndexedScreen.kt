@@ -13,10 +13,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -25,8 +28,8 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
     val exoPlayer = remember(context) { ExoPlayer.Builder(context).build() }
     val listState = rememberLazyListState()
 
-    val videos by viewModel.videos.collectAsState()
-    val playingItemIndex by viewModel.currentlyPlayingIndex.collectAsState()
+    val videos by viewModel.videos.collectAsStateWithLifecycle()
+    val playingItemIndex by viewModel.currentlyPlayingIndex.collectAsStateWithLifecycle()
     var isCurrentItemVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

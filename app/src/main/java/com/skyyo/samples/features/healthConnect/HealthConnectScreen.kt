@@ -20,25 +20,28 @@ import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.Permission
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.skyyo.samples.utils.OnClick
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun HealthConnectScreen(viewModel: HealthConnectViewModel = hiltViewModel()) {
     val context = LocalContext.current
     var isHealthConnectAvailable by remember { mutableStateOf(false) }
     val permissions = viewModel.permissions
-    val stepsWritten by viewModel.stepsWritten.collectAsState()
-    val stepsRead by viewModel.stepsRead.collectAsState()
-    val localStepsCanBeRead by viewModel.localStepsCanBeRead.collectAsState()
-    val accumulated3rdPartySteps by viewModel.accumulated3rdPartySteps.collectAsState()
+    val stepsWritten by viewModel.stepsWritten.collectAsStateWithLifecycle()
+    val stepsRead by viewModel.stepsRead.collectAsStateWithLifecycle()
+    val localStepsCanBeRead by viewModel.localStepsCanBeRead.collectAsStateWithLifecycle()
+    val accumulated3rdPartySteps by viewModel.accumulated3rdPartySteps.collectAsStateWithLifecycle()
     val localLifecycle = LocalLifecycleOwner.current.lifecycle
 
     val healthConnectPermissionState =
         rememberHealthConnectPermissionState(viewModel.healthConnectClient, permissions, viewModel::checkPermissions)
-    val areAllPermissionsGranted by viewModel.areAllPermissionsGranted.collectAsState()
+    val areAllPermissionsGranted by viewModel.areAllPermissionsGranted.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         callbackFlow {

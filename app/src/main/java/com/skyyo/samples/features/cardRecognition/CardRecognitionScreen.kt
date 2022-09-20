@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -22,8 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.wallet.PaymentCardRecognitionResult
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun CardRecognitionScreen(viewModel: CardRecognitionViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -38,8 +40,8 @@ fun CardRecognitionScreen(viewModel: CardRecognitionViewModel = hiltViewModel())
             }
         }
     }
-    val cardRecognitionIntent by viewModel.cardRecognitionPendingIntent.collectAsState()
-    val isCardRecognitionSupported by viewModel.isCardRecognitionSupported.collectAsState()
+    val cardRecognitionIntent by viewModel.cardRecognitionPendingIntent.collectAsStateWithLifecycle()
+    val isCardRecognitionSupported by viewModel.isCardRecognitionSupported.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier

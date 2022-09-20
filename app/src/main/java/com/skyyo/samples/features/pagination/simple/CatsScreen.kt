@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -29,6 +31,7 @@ import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
 import kotlinx.coroutines.flow.receiveAsFlow
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun CatsScreen(viewModel: CatsViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -46,9 +49,9 @@ fun CatsScreen(viewModel: CatsViewModel = hiltViewModel()) {
         )
     }
 
-    val cats by viewModel.cats.collectAsState()
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
-    val isLastPageReached by viewModel.isLastPageReached.collectAsState()
+    val cats by viewModel.cats.collectAsStateWithLifecycle()
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val isLastPageReached by viewModel.isLastPageReached.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         events.collect { event ->

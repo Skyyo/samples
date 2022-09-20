@@ -27,6 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
@@ -43,13 +45,13 @@ import java.io.File
 import java.io.InputStream
 import java.util.concurrent.Executors
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 fun PdfViewerScreen(viewModel: PdfViewerViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val storagePermissionState = rememberPermissionState(Manifest.permission.READ_EXTERNAL_STORAGE)
-    val uri by viewModel.uri.collectAsState()
-    val pdfRenderer by viewModel.pdfRenderer.collectAsState()
+    val uri by viewModel.uri.collectAsStateWithLifecycle()
+    val pdfRenderer by viewModel.pdfRenderer.collectAsStateWithLifecycle()
     val executor = remember { Executors.newSingleThreadExecutor().asCoroutineDispatcher() }
 
     PermissionRequired(
