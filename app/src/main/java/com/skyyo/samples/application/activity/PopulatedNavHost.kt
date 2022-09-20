@@ -74,6 +74,7 @@ import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
 import com.skyyo.samples.features.textGradient.TextGradientScreen
 import com.skyyo.samples.features.textSpans.TextSpansScreen
+import com.skyyo.samples.features.userInteractionTracking.UserInteractionTrackingScreen
 import com.skyyo.samples.features.userInteractionTrackingResult.UserInteractionTrackingResultScreen
 import com.skyyo.samples.features.verticalPagerWithFling.VideoPagerWithFlingScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
@@ -197,5 +198,6 @@ fun PopulatedNavHost(
     composable(Destination.TextSpans.route) { TextSpansScreen() }
     composable(Destination.ImeAwareLazyColumn.route) { ImeAwareLazyColumnScreen() }
     composable(Destination.TextGradient.route) { TextGradientScreen() }
+    composable(Destination.UserInteractionTracking.route) { UserInteractionTrackingScreen() }
     composable(Destination.UserInteractionTrackingResult.route) { UserInteractionTrackingResultScreen() }
 }

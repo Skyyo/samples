@@ -36,8 +36,8 @@ import java.util.*
 import javax.inject.Inject
 
 const val MILLIS_IN_SECOND = 1000L
-const val SESSION_MAIN_TIME_SECONDS = 180
-const val SESSION_EXTRA_TIME_SECONDS = 60
+const val SESSION_MAIN_TIME_SECONDS = 10
+const val SESSION_EXTRA_TIME_SECONDS = 5
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -119,11 +119,6 @@ class MainActivity : AppCompatActivity() {
             }
             lifecycleScope.launchWhenResumed { observeUserIdlingSessionEvents() }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        startUserIdlingSession()
     }
 
     private fun applyEdgeToEdge() {
