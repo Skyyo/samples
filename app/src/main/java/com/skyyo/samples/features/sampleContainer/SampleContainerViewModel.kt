@@ -223,4 +223,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goImeAwareLazyColumn() = navigationDispatcher.emit {
         it.navigate(Destination.ImeAwareLazyColumn.route)
     }
+
+    fun goOneTap() = navigationDispatcher.emit {
+        it.navigate(Destination.OneTap.route)
+    }
 }

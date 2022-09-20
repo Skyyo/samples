@@ -67,6 +67,9 @@ sealed class Destination(val route: String) {
     object TextSpans : Destination("textSpans")
     object ImeAwareLazyColumn : Destination("imeAwareLazyColumn")
     object TextGradient : Destination("textGradient")
+    object OneTap : Destination("oneTap")
+    object OneTapSignUpFinish : Destination("oneTapSignUpFinish")
+    object OneTapAuthorised : Destination("oneTapAuthorised")
 }
 
 sealed class ProfileGraph(val route: String) {
