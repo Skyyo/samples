@@ -176,8 +176,8 @@ fun UIelements(viewModel: SampleContainerViewModel) {
     ) { Text(text = "ime aware lazy column") }
     Button(
         modifier = Modifier.fillMaxWidth(),
-        onClick = viewModel::goGlassBlur
-    ) { Text(text = "glass blur") }
+        onClick = viewModel::goBlur
+    ) { Text(text = "blur") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 

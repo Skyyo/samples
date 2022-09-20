@@ -224,7 +224,7 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.ImeAwareLazyColumn.route)
     }
 
-    fun goGlassBlur() = navigationDispatcher.emit {
-        it.navigate(Destination.GlassBlur.route)
+    fun goBlur() = navigationDispatcher.emit {
+        it.navigate(Destination.Blur.route)
     }
 }

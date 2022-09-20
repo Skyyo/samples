@@ -6,6 +6,8 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.RadioButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
@@ -22,6 +24,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.node.Ref
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -37,45 +40,68 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlin.math.max
+import androidx.compose.foundation.background as composeBackground
 
+private enum class BlurPurpose {
+    Overlay, Background
+}
 private class ImageResource(@DrawableRes val resourceId: Int, val filter: ColorFilter? = null)
 
 @Composable
-fun GlassBlurScreen() {
+fun BlurScreen() {
     val imageResources = remember { provideImageResources() }
+    val blurPurposes = remember { BlurPurpose.values().asList() }
+    var activePurpose by remember { mutableStateOf<BlurPurpose?>(null) }
     val rowArrangement = remember { Arrangement.spacedBy(20.dp) }
+    val columnArrangement = remember { Arrangement.spacedBy(20.dp) }
 
-    BoxWithConstraints(modifier = Modifier.fillMaxSize().systemBarsPadding()) {
-        Column(
-            modifier = Modifier
-                .background(Color.Cyan)
-                .align(Alignment.Center)
-                .padding(vertical = 20.dp, horizontal = 6.dp),
-            verticalArrangement = remember { Arrangement.spacedBy(20.dp) }
+    Column(Modifier.systemBarsPadding()) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            repeat(imageResources.size) { columnIndex ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = rowArrangement
-                ) {
-                    repeat(imageResources[columnIndex].size) { rowIndex ->
-                        val imageResource = imageResources[columnIndex][rowIndex]
-                        Image(
-                            modifier = Modifier.heightIn(max = 35.dp),
-                            painter = painterResource(id = imageResource.resourceId),
-                            contentDescription = "",
-                            colorFilter = imageResource.filter
-                        )
+            for (blurPurpose in blurPurposes) {
+                RadioButton(
+                    selected = activePurpose == blurPurpose,
+                    onClick = { activePurpose = blurPurpose }
+                )
+                Text(text = blurPurpose.name)
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+        }
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .background(Color.Cyan)
+                    .align(Alignment.Center)
+                    .padding(vertical = 20.dp, horizontal = 6.dp),
+                verticalArrangement = columnArrangement
+            ) {
+                repeat(imageResources.size) { columnIndex ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = rowArrangement
+                    ) {
+                        repeat(imageResources[columnIndex].size) { rowIndex ->
+                            val imageResource = imageResources[columnIndex][rowIndex]
+                            Image(
+                                modifier = Modifier.heightIn(max = 35.dp),
+                                painter = painterResource(id = imageResource.resourceId),
+                                contentDescription = "",
+                                colorFilter = imageResource.filter
+                            )
+                        }
                     }
                 }
             }
+            activePurpose?.let { BlurTarget(it) }
         }
-        GlassBlurTarget()
     }
 }
 
 @Composable
-fun BoxWithConstraintsScope.GlassBlurTarget(targetSize: Dp = 80.dp) {
+private fun BoxWithConstraintsScope.BlurTarget(blurPurpose: BlurPurpose, targetSize: Dp = 80.dp) {
     val draggableArea = remember {
         val minXOffset = 0.dp
         val minYOffset = 0.dp
@@ -84,13 +110,22 @@ fun BoxWithConstraintsScope.GlassBlurTarget(targetSize: Dp = 80.dp) {
         DpRect(minXOffset, minYOffset, maxXOffset, maxYOffset)
     }
     val size = remember(targetSize) { DpSize(targetSize, targetSize) }
+    val blurModifier = remember(blurPurpose) {
+        when (blurPurpose) {
+            BlurPurpose.Overlay -> Modifier.blurOverlay()
+            BlurPurpose.Background -> {
+                val backgroundColor = Color(0xCCF38E20)
+                Modifier.background(color = backgroundColor, blurRadius = Dp.Infinity)
+            }
+        }
+    }
 
     Spacer(
         modifier = Modifier
             .draggable(size, draggableArea)
             .size(targetSize)
             .border(1.dp, Color.Red)
-            .glassBlur()
+            .then(blurModifier)
     )
 }
 
@@ -129,7 +164,8 @@ private class OffsetSaver : Saver<DpOffset, Long> {
     }
 }
 
-private fun Modifier.glassBlur(radius: Int = 6) = composed {
+// Use it when you need to blur everything in it's area
+fun Modifier.blurOverlay(radius: Int = 10) = composed {
     val view = LocalView.current
     val bitmap = remember { Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888) }
     val canvas = remember { Canvas(bitmap) }
@@ -167,8 +203,53 @@ private fun Bitmap.cut(rect: Rect): Bitmap {
     return Bitmap.createBitmap(this, rect.left, rect.top, rect.width(), rect.height(), null, true)
 }
 
+// This is the most simplest implementation for Bitmap blurring.
+// There are few advanced. https://stackoverflow.com/a/10028267, https://github.com/android/renderscript-intrinsics-replacement-toolkit
+// Most likely there are even more blurring algorithms
 private fun Bitmap.blur(radius: Int = 4): Bitmap {
     return scale(width / radius, height / radius).scale(width, height)
+}
+
+fun Modifier.background(
+    color: Color,
+    shape: Shape = RectangleShape,
+    blurRadius: Dp = Dp.Unspecified
+) = composed {
+    when {
+        blurRadius.isUnspecified || blurRadius == 0.dp -> composeBackground(color, shape)
+        blurRadius.isFinite -> {
+            val density = LocalDensity.current
+            val radiusInPx = remember(blurRadius) {
+                density.run { blurRadius.toPx() }
+            }
+            val paint = remember(radiusInPx, color) {
+                android.graphics.Paint().also {
+                    it.maskFilter = BlurMaskFilter(radiusInPx, BlurMaskFilter.Blur.NORMAL)
+                    it.color = color.toArgb()
+                }
+            }
+            drawWithContent {
+                drawContext.canvas.nativeCanvas.drawRect(0f, 0f, size.width, size.height, paint)
+            }
+        }
+        else -> {
+            var radiusInPx by remember { mutableStateOf(0f) }
+            val paint = remember(radiusInPx, color) {
+                android.graphics.Paint().also {
+                    if (radiusInPx != 0f) {
+                        it.maskFilter = BlurMaskFilter(radiusInPx, BlurMaskFilter.Blur.NORMAL)
+                    }
+                    it.color = color.toArgb()
+                }
+            }
+
+            onGloballyPositioned {
+                radiusInPx = max(it.size.width, it.size.height) / 2f
+            }.drawWithContent {
+                drawContext.canvas.nativeCanvas.drawRect(0f, 0f, size.width, size.height, paint)
+            }
+        }
+    }
 }
 
 private fun provideImageResources(): List<List<ImageResource>> {
