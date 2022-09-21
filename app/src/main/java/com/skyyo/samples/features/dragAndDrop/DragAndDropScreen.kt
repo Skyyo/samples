@@ -144,9 +144,12 @@ class DragDropState<T> internal constructor(
         private set
 
     internal fun onDragStart(offset: Offset) {
+        val paddingAwareOffset = offset.copy(
+            y = offset.y + state.layoutInfo.viewportStartOffset
+        )
         state.layoutInfo.visibleItemsInfo
             .firstOrNull { item ->
-                offset.y.toInt() in item.offset..item.offset + item.size
+                paddingAwareOffset.y.toInt() in item.offset..item.offset + item.size
             }?.also {
                 draggingItemIndex = it.index
                 draggingItemInitialOffset = it.offset
