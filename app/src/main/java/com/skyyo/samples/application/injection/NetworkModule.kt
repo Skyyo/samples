@@ -2,6 +2,7 @@ package com.skyyo.samples.application.injection
 
 import com.skyyo.samples.BuildConfig
 import com.skyyo.samples.application.network.calls.CatCalls
+import com.skyyo.samples.application.network.calls.OneTapCalls
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
@@ -45,4 +46,8 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideCatsCalls(retrofit: Retrofit): CatCalls = retrofit.create(CatCalls::class.java)
+
+    @Singleton
+    @Provides
+    fun provideOneTapCalls(retrofit: Retrofit): OneTapCalls = retrofit.create(OneTapCalls::class.java)
 }

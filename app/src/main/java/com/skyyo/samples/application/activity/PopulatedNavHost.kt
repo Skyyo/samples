@@ -53,6 +53,9 @@ import com.skyyo.samples.features.navigateWithResult.withObject.catFeed.CatFeedS
 import com.skyyo.samples.features.navigationCores.bottomBar.BottomBarScreen
 import com.skyyo.samples.features.navigationCores.drawer.DrawerScreen
 import com.skyyo.samples.features.noticeableScrollableRow.NoticeableScrollableRowScreen
+import com.skyyo.samples.features.oneTap.CreateUserScreen
+import com.skyyo.samples.features.oneTap.OneTapScreen
+import com.skyyo.samples.features.oneTap.UserScreen
 import com.skyyo.samples.features.otp.OtpScreen
 import com.skyyo.samples.features.pagination.paging.CatsPagingScreen
 import com.skyyo.samples.features.pagination.pagingWithDatabase.CatsPagingRoomScreen
@@ -196,4 +199,7 @@ fun PopulatedNavHost(
     composable(Destination.TextSpans.route) { TextSpansScreen() }
     composable(Destination.ImeAwareLazyColumn.route) { ImeAwareLazyColumnScreen() }
     composable(Destination.TextGradient.route) { TextGradientScreen() }
+    composable(Destination.OneTap.route) { OneTapScreen() }
+    composable(Destination.OneTapAuthorised.route) { UserScreen() }
+    composable(Destination.OneTapSignUpFinish.route) { CreateUserScreen() }
 }
