@@ -35,21 +35,13 @@ fun OneTapScreen(viewModel: OneTapViewModel = hiltViewModel()) {
         }
     }
 
-    val signInClient = remember { Identity.getSignInClient(context) }
-    val signInLauncher = rememberLauncherForActivityResult(
+    val oneTapClient = remember { Identity.getSignInClient(context) }
+    val oneTapLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult()
     ) {
         when (it.resultCode) {
-            Activity.RESULT_OK -> viewModel.signInAccepted(signInClient, it.data)
-            Activity.RESULT_CANCELED -> viewModel.signInRejected()
-        }
-    }
-    val signUpLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult()
-    ) {
-        when (it.resultCode) {
-            Activity.RESULT_OK -> viewModel.signUpAccepted(signInClient, it.data)
-            Activity.RESULT_CANCELED -> viewModel.signUpRejected()
+            Activity.RESULT_OK -> viewModel.oneTapAccepted(oneTapClient, it.data)
+            Activity.RESULT_CANCELED -> viewModel.oneTapRejected()
         }
     }
     val isOneTapUiRejected by viewModel.isOneTapUiRejected.collectAsState()
@@ -57,22 +49,12 @@ fun OneTapScreen(viewModel: OneTapViewModel = hiltViewModel()) {
     LaunchedEffect(isOneTapUiRejected) {
         if (!isOneTapUiRejected) {
             try {
-                val signInResult = signInClient.beginSignIn(viewModel.signInRequest).await()
-                signInLauncher.launch(
+                val signInResult = oneTapClient.beginSignIn(viewModel.oneTapRequest).await()
+                oneTapLauncher.launch(
                     IntentSenderRequest.Builder(signInResult.pendingIntent.intentSender).build()
                 )
             } catch (e: Exception) {
-                // No saved credentials found. Launch the One Tap sign-up flow, or
-                // do nothing and continue presenting the signed-out UI.
-                try {
-                    val signUpResult = signInClient.beginSignIn(viewModel.signUpRequest).await()
-                    signUpLauncher.launch(
-                        IntentSenderRequest.Builder(signUpResult.pendingIntent.intentSender).build()
-                    )
-                } catch (e: Exception) {
-                    // No Google Accounts found. Just continue presenting the signed-out UI.
-                }
-                // Log.d(TAG, e.localizedMessage)
+                // No Google Accounts found. Just continue presenting the signed-out UI.
             }
         }
     }

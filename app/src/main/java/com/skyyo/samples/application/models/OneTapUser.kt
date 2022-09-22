@@ -6,8 +6,14 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-data class OneTapUser(val id: String, val name: String, val surname: String, val phone: String = "") : Parcelable {
+data class OneTapUser(
+    val id: String,
+    val name: String,
+    val surname: String,
+    val isCompleted: Boolean,
+    val phone: String = ""
+) : Parcelable {
     companion object {
-        val empty = OneTapUser(id = "", name = "", surname = "")
+        val empty = OneTapUser(id = "", name = "", surname = "", isCompleted = false)
     }
 }
