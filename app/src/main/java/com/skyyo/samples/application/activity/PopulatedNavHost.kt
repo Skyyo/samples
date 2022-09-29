@@ -1,6 +1,6 @@
 package com.skyyo.samples.application.activity
 
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -77,6 +77,8 @@ import com.skyyo.samples.features.snap.SnapScreen
 import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
 import com.skyyo.samples.features.textGradient.TextGradientScreen
+import com.skyyo.samples.features.textRecognition.cameraRecognition.CameraTextRecognitionScreen
+import com.skyyo.samples.features.textRecognition.imageRecognition.ImageTextRecognitionScreen
 import com.skyyo.samples.features.textSpans.TextSpansScreen
 import com.skyyo.samples.features.transparentBlur.BlurScreen
 import com.skyyo.samples.features.userInteractionTrackingResult.SessionTimeExpiredScreen
@@ -216,6 +218,8 @@ fun PopulatedNavHost(
     composable(Destination.TextSpans.route) { TextSpansScreen() }
     composable(Destination.ImeAwareLazyColumn.route) { ImeAwareLazyColumnScreen() }
     composable(Destination.TextGradient.route) { TextGradientScreen() }
+    composable(Destination.ImageTextRecognition.route) { ImageTextRecognitionScreen() }
+    composable(Destination.CameraTextRecognition.route) { CameraTextRecognitionScreen() }
     composable(Destination.Blur.route) { BlurScreen() }
     composable(Destination.SessionTimeExpired.route) { SessionTimeExpiredScreen() }
 }

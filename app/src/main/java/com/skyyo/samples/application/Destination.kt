@@ -67,6 +67,8 @@ sealed class Destination(val route: String) {
     object TextSpans : Destination("textSpans")
     object ImeAwareLazyColumn : Destination("imeAwareLazyColumn")
     object TextGradient : Destination("textGradient")
+    object ImageTextRecognition : Destination("imageTextRecognition")
+    object CameraTextRecognition : Destination("cameraTextRecognition")
     object Blur : Destination("blur")
     object SessionTimeExpired : Destination("sessionTimeExpired")
 }
