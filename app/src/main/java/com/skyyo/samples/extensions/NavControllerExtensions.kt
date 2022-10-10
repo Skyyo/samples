@@ -14,8 +14,9 @@ import kotlinx.coroutines.launch
 
 fun NavigationDispatcher.getBackStackStateHandle(
     destinationId: Int?,
+    withBottomBar: Boolean? = null,
     observer: (SavedStateHandle) -> Unit
-) = emit {
+) = emit(withBottomBar) {
     val savedStateHandle = when (destinationId) {
         null -> it.previousBackStackEntry!!.savedStateHandle
         else -> it.getBackStackEntry(destinationId).savedStateHandle
@@ -25,8 +26,9 @@ fun NavigationDispatcher.getBackStackStateHandle(
 
 fun NavigationDispatcher.getBackStackStateHandle(
     destinationId: String?,
+    withBottomBar: Boolean? = null,
     observer: (SavedStateHandle) -> Unit
-) = emit {
+) = emit(withBottomBar) {
     val savedStateHandle = when (destinationId) {
         null -> it.previousBackStackEntry!!.savedStateHandle
         else -> it.getBackStackEntry(destinationId).savedStateHandle
@@ -45,8 +47,9 @@ fun <T> NavigationDispatcher.observeNavigationResult(
     coroutineScope: CoroutineScope,
     key: String,
     initialValue: T,
+    withBottomBar: Boolean? = null,
     observer: (T) -> Unit,
-) = emit { navController ->
+) = emit(withBottomBar) { navController ->
     coroutineScope.launch {
         navController.currentBackStackEntry!!.savedStateHandle.getStateFlow(key, initialValue)
             .collect {
@@ -69,8 +72,10 @@ fun NavController.navigateWithObject(
     val deepLinkMatch = graph.matchDeepLink(routeLink)
     if (deepLinkMatch != null && arguments != null) {
         val destination = deepLinkMatch.destination
+        val args = deepLinkMatch.matchingArgs ?: Bundle()
+        args.putAll(arguments)
         val id = destination.id
-        navigate(id, arguments, navOptions, extras)
+        navigate(id, args, navOptions, extras)
     } else {
         navigate(route, navOptions, extras)
     }
@@ -79,12 +84,16 @@ fun NavController.navigateWithObject(
 // popUpToRoute - should always be the start destination of the bottomBar, not app
 fun NavController.navigateToRootDestination(
     route: String,
+    popInclusive: Boolean = false,
     popUpToRoute: String = Destination.Tab1.route
 ) {
     navigate(route) {
-        popUpTo(popUpToRoute) { saveState = true }
         launchSingleTop = true
         restoreState = true
+        popUpTo(popUpToRoute) {
+            saveState = true
+            inclusive = popInclusive
+        }
     }
 }
 

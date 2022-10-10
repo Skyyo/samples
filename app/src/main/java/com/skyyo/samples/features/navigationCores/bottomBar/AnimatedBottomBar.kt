@@ -25,6 +25,7 @@ private const val EXPAND_ANIMATION_DURATION = 300
 private const val COLLAPSE_ANIMATION_DURATION = 300
 private const val FADE_IN_ANIMATION_DURATION = 350
 private const val FADE_OUT_ANIMATION_DURATION = 300
+val BOTTOM_BAR_HEIGHT = 56.dp
 
 @Composable
 fun AnimatedBottomBar(
@@ -54,13 +55,13 @@ fun AnimatedBottomBar(
     val enterSlide = remember {
         slideIn(
             animationSpec = tween(EXPAND_ANIMATION_DURATION),
-            initialOffset = { with(density) { IntOffset(0, 56.dp.roundToPx()) } }
+            initialOffset = { with(density) { IntOffset(0, BOTTOM_BAR_HEIGHT.roundToPx()) } }
         )
     }
     val exitSlide = remember {
         slideOut(
             animationSpec = tween(COLLAPSE_ANIMATION_DURATION),
-            targetOffset = { with(density) { IntOffset(0, 56.dp.roundToPx()) } }
+            targetOffset = { with(density) { IntOffset(0, BOTTOM_BAR_HEIGHT.roundToPx()) } }
         )
     }
 
@@ -73,7 +74,7 @@ fun AnimatedBottomBar(
         BottomNavigation(
             backgroundColor = DarkGray,
             modifier = Modifier.windowInsetsBottomHeight(
-                WindowInsets.navigationBars.add(WindowInsets(bottom = 56.dp))
+                WindowInsets.navigationBars.add(WindowInsets(bottom = BOTTOM_BAR_HEIGHT))
             )
         ) {
             items.forEachIndexed { index, screen ->

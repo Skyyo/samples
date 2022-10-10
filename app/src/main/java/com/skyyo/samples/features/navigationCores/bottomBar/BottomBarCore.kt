@@ -1,26 +1,30 @@
 package com.skyyo.samples.features.navigationCores.bottomBar
 
-import androidx.activity.compose.BackHandler
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.*
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.extensions.navigateToRootDestination
+import com.skyyo.samples.features.navigateWithResult.simple.dogContacts.DogContactsScreen
+import com.skyyo.samples.features.navigateWithResult.simple.dogDetails.DogDetailsScreen
+import com.skyyo.samples.features.navigateWithResult.simple.dogFeed.DogFeedScreen
+import com.skyyo.samples.features.navigateWithResult.withObject.catContacts.CatContactsScreen
+import com.skyyo.samples.features.navigateWithResult.withObject.catDetails.CatDetailsScreen
+import com.skyyo.samples.features.navigateWithResult.withObject.catFeed.CatFeedScreen
 import com.skyyo.samples.features.navigationCores.tab1.Tab1Screen
 import com.skyyo.samples.features.navigationCores.tab2.Tab2Screen
 import com.skyyo.samples.features.navigationCores.tab3.Tab3Screen
@@ -32,6 +36,7 @@ fun BottomBarCore(
     startDestination: String,
     navController: NavHostController,
     systemUiController: SystemUiController,
+    viewModel: BottomBarViewModel = hiltViewModel()
 ) {
     val isBottomBarVisible = rememberSaveable { mutableStateOf(false) }
     val selectedTab = rememberSaveable { mutableStateOf(0) }
@@ -53,6 +58,18 @@ fun BottomBarCore(
             navController.removeOnDestinationChangedListener(callback)
         }
     }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val navigationDispatcher = viewModel.navigationDispatcher
+    val navigationEvents = remember(navigationDispatcher.bottomBarNavControllerEvents, lifecycleOwner) {
+        navigationDispatcher.bottomBarNavControllerEvents.flowWithLifecycle(
+            lifecycleOwner.lifecycle,
+            Lifecycle.State.STARTED
+        )
+    }
+
+    LaunchedEffect(Unit) {
+        navigationEvents.collect { event -> event(navController) }
+    }
 
     Box {
         AnimatedNavHost(
@@ -60,24 +77,17 @@ fun BottomBarCore(
             startDestination = startDestination,
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 350)) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 350)) },
-            modifier = Modifier.padding(0.dp)
+            modifier = Modifier.padding(bottom = if (isBottomBarVisible.value) BOTTOM_BAR_HEIGHT else 0.dp)
         ) {
-
             composable(Destination.Tab1.route) { Tab1Screen() }
-            composable(Destination.Tab2.route) {
-                BackHandler(onBack = {
-                    selectedTab.value = 0
-                    navController.navigateToRootDestination(Destination.Tab1.route)
-                })
-                Tab2Screen()
-            }
-            composable(Destination.Tab3.route) {
-                BackHandler(onBack = {
-                    selectedTab.value = 0
-                    navController.navigateToRootDestination(Destination.Tab1.route)
-                })
-                Tab3Screen()
-            }
+            composable(Destination.Tab2.route) { Tab2Screen(withBottomBar = true) }
+            composable(Destination.Tab3.route) { Tab3Screen(withBottomBar = true) }
+            composable(Destination.DogFeed.route) { DogFeedScreen() }
+            composable(Destination.DogDetails.route) { DogDetailsScreen() }
+            composable(Destination.DogContacts.route) { DogContactsScreen() }
+            composable(Destination.CatFeed.route) { CatFeedScreen() }
+            composable(Destination.CatDetails.route) { CatDetailsScreen() }
+            composable(Destination.CatContacts.route) { CatContactsScreen() }
         }
         AnimatedBottomBar(
             Modifier.align(Alignment.BottomCenter),
@@ -87,8 +97,13 @@ fun BottomBarCore(
         ) { index, route ->
             // this means we're already on the selected tab
             if (index == selectedTab.value) return@AnimatedBottomBar
+            val selectedRoute = bottomBarScreens[selectedTab.value]
             selectedTab.value = index
-            navController.navigateToRootDestination(route)
+            navController.navigateToRootDestination(
+                route = route,
+                popInclusive = true,
+                popUpToRoute = selectedRoute.route
+            )
         }
     }
 }

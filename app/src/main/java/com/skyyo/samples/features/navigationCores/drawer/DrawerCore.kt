@@ -117,14 +117,14 @@ fun DrawerCore(
                         selectedTab.value = 0
                         navController.navigateToRootDestination(Destination.Tab1.route)
                     })
-                    Tab2Screen()
+                    Tab2Screen(withBottomBar = false)
                 }
                 composable(Destination.Tab3.route) {
                     BackHandler(onBack = {
                         selectedTab.value = 0
                         navController.navigateToRootDestination(Destination.Tab1.route)
                     })
-                    Tab3Screen()
+                    Tab3Screen(withBottomBar = false)
                 }
             }
         }

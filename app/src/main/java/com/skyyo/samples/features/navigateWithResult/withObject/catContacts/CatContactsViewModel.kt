@@ -6,6 +6,7 @@ import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.models.Dog
 import com.skyyo.samples.extensions.getBackStackStateHandle
 import com.skyyo.samples.features.navigateWithResult.withObject.catFeed.CAT_KEY
+import com.skyyo.samples.features.navigationCores.bottomBar.WITH_BOTTOM_BAR_KEY
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,16 +17,17 @@ class CatContactsViewModel @Inject constructor(
     handle: SavedStateHandle,
 ) : ViewModel() {
 
+    private val withBottomBar = handle.get<Boolean>(WITH_BOTTOM_BAR_KEY)
     val cat: Dog = requireNotNull(handle["cat"])
     private lateinit var catFeedHandle: SavedStateHandle
 
     init {
-        navigationDispatcher.getBackStackStateHandle(Destination.CatFeed.route) {
+        navigationDispatcher.getBackStackStateHandle(Destination.CatFeed.route, withBottomBar) {
             catFeedHandle = it
         }
     }
 
-    fun popToCatFeed() = navigationDispatcher.emit {
+    fun popToCatFeed() = navigationDispatcher.emit(withBottomBar) {
         catFeedHandle[CAT_KEY] = cat
         it.popBackStack(Destination.CatFeed.route, false)
     }
