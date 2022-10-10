@@ -81,13 +81,24 @@ class MainActivity : AppCompatActivity() {
                 ModalBottomSheetLayout(bottomSheetNavigator) {
                     Surface(modifier = Modifier.fillMaxSize()) {
                         PopulatedNavHost(
-                            startDestination = Destination.SampleContainer.route,
+                            startDestination = provideStartDestination(),
                             navController = navController
                         )
                     }
                 }
             }
         }
+    }
+
+    // in real apps we will want always to use BottomBar as start destination
+    private fun provideStartDestination() = when {
+        intent.dataString.isDeepLink() -> Destination.BottomBar.route
+        else -> Destination.SampleContainer.route
+    }
+
+    private fun String?.isDeepLink(): Boolean {
+        if (this == null) return false
+        return startsWith("https://abrupt-tabby-medusaceratops.glitch.me/confirmEmail")
     }
 
     private fun applyEdgeToEdge() {

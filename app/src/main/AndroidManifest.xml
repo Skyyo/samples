@@ -48,6 +48,15 @@
             <meta-data
                 android:name="health_permissions"
                 android:resource="@array/health_permissions"/>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+                <data android:host="abrupt-tabby-medusaceratops.glitch.me" />
+                <data android:path="/confirmEmail" />
+            </intent-filter>
         </activity>
 
         <service

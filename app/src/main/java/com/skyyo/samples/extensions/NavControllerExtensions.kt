@@ -70,10 +70,10 @@ fun NavController.navigateWithObject(
         .build()
 
     val deepLinkMatch = graph.matchDeepLink(routeLink)
-    if (deepLinkMatch != null && arguments != null) {
+    if (deepLinkMatch != null) {
         val destination = deepLinkMatch.destination
         val args = deepLinkMatch.matchingArgs ?: Bundle()
-        args.putAll(arguments)
+        if (arguments != null) args.putAll(arguments)
         val id = destination.id
         navigate(id, args, navOptions, extras)
     } else {

@@ -22,7 +22,7 @@ fun BottomBarScreen() {
 
     BottomBarCore(
         bottomBarScreens = screens,
-        startDestination = Destination.Tab1.route,
+        startDestination = screens.first(),
         navController = navController,
         systemUiController = systemUiController
     )
