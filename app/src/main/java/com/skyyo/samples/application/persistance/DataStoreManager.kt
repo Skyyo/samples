@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.skyyo.samples.features.forceTheme.THEME_AUTO
@@ -30,14 +29,7 @@ class DataStoreManager @Inject constructor(@ApplicationContext context: Context)
         return dataStore.data.first()[PreferencesKeys.APP_THEME] ?: THEME_AUTO
     }
 
-    suspend fun goToBackgroundTime(): Long? = dataStore.data.first()[PreferencesKeys.GO_TO_BACKGROUND_TIME]
-
-    suspend fun saveGoToBackgroundTime(answer: Long) {
-        dataStore.edit { preferences -> preferences[PreferencesKeys.GO_TO_BACKGROUND_TIME] = answer }
-    }
-
     private object PreferencesKeys {
         val APP_THEME = stringPreferencesKey("appTheme")
-        val GO_TO_BACKGROUND_TIME = longPreferencesKey("goToBackgroundTime")
     }
 }

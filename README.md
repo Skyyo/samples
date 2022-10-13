@@ -76,6 +76,7 @@ There is a [library](https://github.com/canopas/Intro-showcase-view) which needs
 
 
 Uncategorized
+- Enhance ```user interaction tracking``` sample by adding tracking of continuous scroll
 - Draw / hide something using coordinates. Look into ```onGloballyPositioned``` modifier
 - How to do custom shaped ripples
 - Staggered grid example

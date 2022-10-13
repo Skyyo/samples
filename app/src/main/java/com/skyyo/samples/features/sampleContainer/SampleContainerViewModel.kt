@@ -225,6 +225,6 @@ class SampleContainerViewModel @Inject constructor(
     }
 
     fun goInteractionTracking() {
-        navigationDispatcher.emit { it.navigate(Destination.UserInteractionTracking.route) }
+        navigationDispatcher.emit { it.navigate(Destination.SessionTimeExpired.route) }
     }
 }

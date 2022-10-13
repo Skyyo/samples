@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -25,19 +24,14 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.persistance.DataStoreManager
+import com.skyyo.samples.extensions.log
+import com.skyyo.samples.features.userInteractionTrackingResult.IdlingSessionEvent
+import com.skyyo.samples.features.userInteractionTrackingResult.IdlingSessionManager
 import com.skyyo.samples.theme.IgdbBrowserTheme
-import com.skyyo.samples.utils.AppLifecycleObserver
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
-import com.skyyo.samples.utils.eventDispatchers.UserIdlingSession
-import com.skyyo.samples.utils.eventDispatchers.UserIdlingSessionEventDispatcher
-import kotlinx.coroutines.*
-import java.util.*
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-
-const val MILLIS_IN_SECOND = 1000L
-const val SESSION_MAIN_TIME_SECONDS = 10
-const val SESSION_EXTRA_TIME_SECONDS = 5
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -49,15 +43,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var navigationDispatcher: NavigationDispatcher
 
     @Inject
-    lateinit var userIdlingSessionEventDispatcher: UserIdlingSessionEventDispatcher
-
-    /**
-     * [userIdlingSessionTimer] variable represents a Timer which we start when the user signs in to the app.
-     * When the method [onUserInteraction] is called, the [userIdlingSessionTimer] will be restarted.
-     * If user is inactive for [SESSION_MAIN_TIME_SECONDS], the timer runs out and user
-     * observes the result screen with additional time - [SESSION_EXTRA_TIME_SECONDS].
-     */
-    private var userIdlingSessionTimer: Timer? = null
+    lateinit var idlingSessionManager: IdlingSessionManager
 
     @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,11 +65,7 @@ class MainActivity : AppCompatActivity() {
                     Lifecycle.State.STARTED
                 )
             }
-            ProcessLifecycleOwner.get().lifecycle.addObserver(
-                AppLifecycleObserver(
-                    onMaximumIdlingTimeInBackgroundReached = ::onMaximumIdlingTimeInBackgroundReached
-                )
-            )
+
             DisposableEffect(navController) {
                 val callback = NavController.OnDestinationChangedListener { _, destination, _ ->
                     when (destination.route) {
@@ -98,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                     navController.removeOnDestinationChangedListener(callback)
                 }
             }
+
             LaunchedEffect(Unit) {
                 navigationEvents.collect { event -> event(navController) }
             }
@@ -117,69 +100,38 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            lifecycleScope.launchWhenResumed { observeUserIdlingSessionEvents() }
+
+            lifecycleScope.launchWhenResumed { observeIdlingSessionEvents() }
         }
+        idlingSessionManager.startSession()
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        idlingSessionManager.startSession()
     }
 
     private fun applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
-    private suspend fun observeUserIdlingSessionEvents() {
-        for (command in userIdlingSessionEventDispatcher.sessionEventEmitter) {
-            when (command) {
-                UserIdlingSession.StopSession -> {
-                    if (isFinishing) return
-                    finish()
-                    startActivity(intent)
-                }
-                UserIdlingSession.StartSession -> {
-                    startUserIdlingSession()
+    private suspend fun observeIdlingSessionEvents() {
+        for (event in idlingSessionManager.eventDispatcher.eventEmitter) {
+            when (event) {
+                IdlingSessionEvent.StopSession -> goSessionExpiredScreen()
+                IdlingSessionEvent.StartSession -> {
+                    // we are starting it from Activity, so nothing to add here
                 }
             }
         }
     }
 
-    override fun onUserInteraction() {
-        super.onUserInteraction()
-        if (userIdlingSessionTimer != null) startUserIdlingSession()
-    }
-
-    private fun startUserIdlingSession() {
-        userIdlingSessionTimer?.cancel()
-        userIdlingSessionTimer?.purge()
-        userIdlingSessionTimer = Timer()
-        userIdlingSessionTimer?.schedule(
-            object : TimerTask() {
-                override fun run() {
-                    onMaximumIdlingTimeReached()
-                }
-            },
-            SESSION_MAIN_TIME_SECONDS * MILLIS_IN_SECOND
-        )
-    }
-
-    private fun onMaximumIdlingTimeReached() {
-        userIdlingSessionTimer = null
-        goUserInteractionTrackingResultScreen()
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun onMaximumIdlingTimeInBackgroundReached() {
+    private fun goSessionExpiredScreen() {
         navigationDispatcher.emit {
-            it.currentDestination?.route?.let { destination ->
-                @Suppress("GlobalCoroutineUsage")
-                GlobalScope.launch(Dispatchers.IO) {
-                    when (destination) {
-                        Destination.SampleContainer.route -> return@launch
-                        else -> userIdlingSessionEventDispatcher.stopSession()
-                    }
-                }
+            if (it.currentDestination?.route != Destination.SessionTimeExpired.route) {
+                log("goSessionExpiredScreen")
+                it.navigate(Destination.SessionTimeExpired.route)
             }
         }
-    }
-
-    private fun goUserInteractionTrackingResultScreen() {
-        navigationDispatcher.emit { it.navigate(Destination.UserInteractionTrackingResult.route) }
     }
 }

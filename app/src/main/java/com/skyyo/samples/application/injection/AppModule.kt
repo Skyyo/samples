@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.skyyo.samples.utils.eventDispatchers.UserIdlingSessionEventDispatcher
+import com.skyyo.samples.features.userInteractionTrackingResult.UserIdlingSessionEventDispatcher
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

@@ -67,8 +67,7 @@ sealed class Destination(val route: String) {
     object TextSpans : Destination("textSpans")
     object ImeAwareLazyColumn : Destination("imeAwareLazyColumn")
     object TextGradient : Destination("textGradient")
-    object UserInteractionTracking : Destination("userInteractionTracking")
-    object UserInteractionTrackingResult : Destination("userInteractionTrackingResult")
+    object SessionTimeExpired : Destination("sessionTimeExpired")
 }
 
 sealed class ProfileGraph(val route: String) {
