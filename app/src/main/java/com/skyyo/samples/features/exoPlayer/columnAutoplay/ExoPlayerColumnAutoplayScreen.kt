@@ -13,18 +13,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import kotlin.math.abs
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ExoPlayerColumnAutoplayScreen(viewModel: ExoPlayerColumnAutoplayViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val listState = rememberLazyListState()
     val exoPlayer = remember { ExoPlayer.Builder(context).build() }
-    val videos by viewModel.videos.collectAsState()
+    val videos by viewModel.videos.collectAsStateWithLifecycle()
     var playingVideoItem by remember { mutableStateOf(videos.firstOrNull()) }
 
     LaunchedEffect(Unit) {

@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.skyyo.samples.features.inputValidations.InputWrapper
 import com.skyyo.samples.features.inputValidations.OnValueChange
 import com.skyyo.samples.features.otp.composables.OtpCharTextField
@@ -35,9 +37,10 @@ import com.skyyo.samples.theme.Error
 import com.skyyo.samples.theme.Teal200
 import com.skyyo.samples.utils.OnKeyActionDone
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun OtpScreen(viewModel: OtpViewModel = hiltViewModel()) {
-    val input by viewModel.input.collectAsState()
+    val input by viewModel.input.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

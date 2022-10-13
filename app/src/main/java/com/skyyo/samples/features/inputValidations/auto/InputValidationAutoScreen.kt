@@ -20,6 +20,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.skyyo.samples.R
 import com.skyyo.samples.extensions.toast
@@ -28,7 +30,7 @@ import com.skyyo.samples.features.inputValidations.FocusedTextFieldKey
 import com.skyyo.samples.features.inputValidations.ScreenEvent
 import com.skyyo.samples.utils.creditCardFilter
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 fun InputValidationAutoScreen(viewModel: InputValidationAutoViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -43,9 +45,9 @@ fun InputValidationAutoScreen(viewModel: InputValidationAutoViewModel = hiltView
         )
     }
 
-    val name by viewModel.name.collectAsState()
-    val creditCardNumber by viewModel.creditCardNumber.collectAsState()
-    val areInputsValid by viewModel.areInputsValid.collectAsState()
+    val name by viewModel.name.collectAsStateWithLifecycle()
+    val creditCardNumber by viewModel.creditCardNumber.collectAsStateWithLifecycle()
+    val areInputsValid by viewModel.areInputsValid.collectAsStateWithLifecycle()
 
     val creditCardNumberFocusRequester = remember { FocusRequester() }
     val nameFocusRequester = remember { FocusRequester() }
