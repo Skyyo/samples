@@ -223,4 +223,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goImeAwareLazyColumn() = navigationDispatcher.emit {
         it.navigate(Destination.ImeAwareLazyColumn.route)
     }
+
+    fun goInteractionTracking() {
+        navigationDispatcher.emit { it.navigate(Destination.SessionTimeExpired.route) }
+    }
 }

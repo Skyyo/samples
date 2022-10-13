@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -22,6 +23,9 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.persistance.DataStoreManager
+import com.skyyo.samples.extensions.log
+import com.skyyo.samples.features.userInteractionTrackingResult.IdlingSessionEvent
+import com.skyyo.samples.features.userInteractionTrackingResult.IdlingSessionManager
 import com.skyyo.samples.theme.IgdbBrowserTheme
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +40,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var navigationDispatcher: NavigationDispatcher
+
+    @Inject
+    lateinit var idlingSessionManager: IdlingSessionManager
 
     @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                     navController.removeOnDestinationChangedListener(callback)
                 }
             }
+
             LaunchedEffect(Unit) {
                 navigationEvents.collect { event -> event(navController) }
             }
@@ -87,10 +95,38 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            lifecycleScope.launchWhenResumed { observeIdlingSessionEvents() }
         }
+        idlingSessionManager.startSession()
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        idlingSessionManager.startSession()
     }
 
     private fun applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
+
+    private suspend fun observeIdlingSessionEvents() {
+        for (event in idlingSessionManager.eventDispatcher.eventEmitter) {
+            when (event) {
+                IdlingSessionEvent.StopSession -> goSessionExpiredScreen()
+                IdlingSessionEvent.StartSession -> {
+                    // we are starting it from Activity, so nothing to add here
+                }
+            }
+        }
+    }
+
+    private fun goSessionExpiredScreen() {
+        navigationDispatcher.emit {
+            if (it.currentDestination?.route != Destination.SessionTimeExpired.route) {
+                log("goSessionExpiredScreen")
+                it.navigate(Destination.SessionTimeExpired.route)
+            }
+        }
     }
 }

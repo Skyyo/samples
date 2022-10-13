@@ -75,6 +75,7 @@ There is a [library](https://github.com/canopas/Intro-showcase-view) which needs
 
 Uncategorized
 - Need to find an alternative to onboarding guides from the view system like these libraries provided: [onboardingFlow](https://github.com/MrIceman/onboardingflow),[TapTargetView](https://github.com/KeepSafe/TapTargetView),[Spotlight](https://github.com/TakuSemba/Spotlight)
+- Enhance ```user interaction tracking``` sample by adding tracking of continuous scroll
 - Draw / hide something using coordinates. Look into ```onGloballyPositioned``` modifier
 - Staggered grid example
 - https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
