@@ -1,7 +1,11 @@
 package com.skyyo.samples.application.activity
 
-import androidx.compose.animation.*
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -74,6 +78,7 @@ import com.skyyo.samples.features.stickyHeaders.ListsScreen
 import com.skyyo.samples.features.table.TableScreen
 import com.skyyo.samples.features.textGradient.TextGradientScreen
 import com.skyyo.samples.features.textSpans.TextSpansScreen
+import com.skyyo.samples.features.transparentBlur.BlurScreen
 import com.skyyo.samples.features.userInteractionTrackingResult.SessionTimeExpiredScreen
 import com.skyyo.samples.features.verticalPagerWithFling.VideoPagerWithFlingScreen
 import com.skyyo.samples.features.viewPager.ViewPagerScreen
@@ -123,16 +128,28 @@ fun PopulatedNavHost(
     composable(
         Destination.InputValidationManual.route,
         enterTransition = {
-            slideInHorizontally(initialOffsetX = { TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
+            slideInHorizontally(
+                initialOffsetX = { TRANSITION_DURATION_LONG },
+                animationSpec = tween(TRANSITION_DURATION_LONG)
+            )
         },
         exitTransition = {
-            slideOutHorizontally(targetOffsetX = { -TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
+            slideOutHorizontally(
+                targetOffsetX = { -TRANSITION_DURATION_LONG },
+                animationSpec = tween(TRANSITION_DURATION_LONG)
+            )
         },
         popEnterTransition = {
-            slideInHorizontally(initialOffsetX = { -TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
+            slideInHorizontally(
+                initialOffsetX = { -TRANSITION_DURATION_LONG },
+                animationSpec = tween(TRANSITION_DURATION_LONG)
+            )
         },
         popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { TRANSITION_DURATION_LONG }, animationSpec = tween(TRANSITION_DURATION_LONG))
+            slideOutHorizontally(
+                targetOffsetX = { TRANSITION_DURATION_LONG },
+                animationSpec = tween(TRANSITION_DURATION_LONG)
+            )
         }
     ) { InputValidationManualScreen() }
     composable(Destination.InputValidationAuto.route) { InputValidationAutoScreen() }
@@ -151,12 +168,14 @@ fun PopulatedNavHost(
     ) {
         composable(ProfileGraph.Profile.route) { ProfileScreen() }
         composable(ProfileGraph.EditProfile.route) {
-            val rootGraphBackStackEntry = navController.rememberBackStackEntry(ProfileGraph.Profile.route)
+            val rootGraphBackStackEntry =
+                navController.rememberBackStackEntry(ProfileGraph.Profile.route)
             val navGraphViewModel: ProfileSharedViewModel = hiltViewModel(rootGraphBackStackEntry)
             EditProfileScreen(navGraphViewModel)
         }
         composable(ProfileGraph.ConfirmProfile.route) {
-            val rootGraphBackStackEntry = navController.rememberBackStackEntry(ProfileGraph.Profile.route)
+            val rootGraphBackStackEntry =
+                navController.rememberBackStackEntry(ProfileGraph.Profile.route)
             val navGraphViewModel: ProfileSharedViewModel = hiltViewModel(rootGraphBackStackEntry)
             EditProfileConfirmationScreen(navGraphViewModel)
         }
@@ -197,5 +216,6 @@ fun PopulatedNavHost(
     composable(Destination.TextSpans.route) { TextSpansScreen() }
     composable(Destination.ImeAwareLazyColumn.route) { ImeAwareLazyColumnScreen() }
     composable(Destination.TextGradient.route) { TextGradientScreen() }
+    composable(Destination.Blur.route) { BlurScreen() }
     composable(Destination.SessionTimeExpired.route) { SessionTimeExpiredScreen() }
 }

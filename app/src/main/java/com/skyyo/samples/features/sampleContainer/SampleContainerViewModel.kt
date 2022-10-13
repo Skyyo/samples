@@ -227,4 +227,8 @@ class SampleContainerViewModel @Inject constructor(
     fun goInteractionTracking() {
         navigationDispatcher.emit { it.navigate(Destination.SessionTimeExpired.route) }
     }
+
+    fun goBlur() = navigationDispatcher.emit {
+        it.navigate(Destination.Blur.route)
+    }
 }
