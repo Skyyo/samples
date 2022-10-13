@@ -11,7 +11,6 @@ Modal Drawer
 - can't peek to reveal, [issue](https://issuetracker.google.com/issues/167408603)
 
 Google Maps
-- [issue](https://github.com/googlemaps/android-maps-utils/issues/949)
 - [issue](https://issuetracker.google.com/issues/197880217)
   
 Icons
@@ -27,7 +26,6 @@ Miscellaneous
 - bottomSheet destination is not preserved by default when navigating to new destination and coming back. [Workaround](https://medium.com/@theapache64/saving-bottomsheets-state-%EF%B8%8F-d9426cafbcbb)
 - no way to create nested sticky headers. Workaround imo is changing design or making one lvl of the headers as a composable that animates text changes.
 - Fling breaks on skipped frames. [issue](https://issuetracker.google.com/issues/190788866)
-- Need to find an alternative to onboarding guides from the view system like these libraries provided: [onboardingFlow](https://github.com/MrIceman/onboardingflow),[TapTargetView](https://github.com/KeepSafe/TapTargetView),[Spotlight](https://github.com/TakuSemba/Spotlight)
 - Health connect permission resolving [issue](https://issuetracker.google.com/issues/233239418)
 - Language picker has issue on Android 12 [issue](https://issuetracker.google.com/issues/236538894)
 - We can handle "save to wallet" result only from activity (https://issuetracker.google.com/issues/239603300)
@@ -76,16 +74,15 @@ There is a [library](https://github.com/canopas/Intro-showcase-view) which needs
 
 
 Uncategorized
+- Need to find an alternative to onboarding guides from the view system like these libraries provided: [onboardingFlow](https://github.com/MrIceman/onboardingflow),[TapTargetView](https://github.com/KeepSafe/TapTargetView),[Spotlight](https://github.com/TakuSemba/Spotlight)
 - Enhance ```user interaction tracking``` sample by adding tracking of continuous scroll
 - Draw / hide something using coordinates. Look into ```onGloballyPositioned``` modifier
-- How to do custom shaped ripples
 - Staggered grid example
 - https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
 - draggable sample like [here](https://proandroiddev.com/jetpack-compose-calculator-ui-4dfa2ab9048e). Sample which allows to drag elements in 1 screen from top, right & bottom for example.
 - add reselect bottomBar tab listener and dispatch this event to the composable.
 - sample of how to handle exclusion of back gesture areas. Sample should contain a LazyRow, which has it's sides excluded from the system gesture invocation.
 - DownloadManager sample. Should cover all cases (internet connection loss, fresh boot etc, cancellation) Compare with WorkManager, and describe pros & cons.
-- [Baseline Profile](https://developer.android.com/studio/profile/baselineprofiles#creating-profile-rules). Measure the impact on dummy flows
 - check the issue with compose & svg's. Icons don't mirror?
   
 # License

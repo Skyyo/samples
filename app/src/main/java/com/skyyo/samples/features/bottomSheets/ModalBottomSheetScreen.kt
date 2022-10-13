@@ -1,8 +1,6 @@
 package com.skyyo.samples.features.bottomSheets
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
@@ -10,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
@@ -22,7 +19,10 @@ fun ModalBottomSheetScreen() {
     repeat(times = 200) { list += it }
     ModalBottomSheetLayout(
         sheetContent = {
-            LazyColumn(Modifier.statusBarsPadding()) {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                contentPadding = WindowInsets.systemBars.asPaddingValues()
+            ) {
                 itemsIndexed(list) { index, _ ->
                     Text(text = "Bottom Sheet Content $index")
                     Spacer(modifier = Modifier.height(8.dp))

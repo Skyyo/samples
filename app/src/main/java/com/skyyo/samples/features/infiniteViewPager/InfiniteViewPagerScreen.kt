@@ -3,17 +3,13 @@ package com.skyyo.samples.features.infiniteViewPager
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
@@ -58,7 +54,7 @@ fun InfiniteViewPagerScreen() {
     Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
         ) { page ->
             key(page) {
                 val currentPage = (page - INFINITE_PAGER_INITIAL_PAGE).floorMod(pages.size)

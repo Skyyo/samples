@@ -1,8 +1,6 @@
 package com.skyyo.samples.features.exoPlayer.columnIndexed
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -17,8 +15,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 
 @Composable
@@ -78,14 +74,10 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
     LazyColumn(
         state = listState,
         modifier = Modifier.fillMaxSize(),
-        contentPadding = rememberInsetsPaddingValues(
-            insets = LocalWindowInsets.current.systemBars,
-            applyTop = true,
-            applyBottom = true,
-            additionalStart = 16.dp,
-            additionalEnd = 16.dp,
-            additionalBottom = 8.dp
-        )
+        contentPadding = WindowInsets.systemBars
+            .only(WindowInsetsSides.Vertical)
+            .add(WindowInsets(left = 16.dp, right = 16.dp, bottom = 8.dp))
+            .asPaddingValues()
     ) {
         itemsIndexed(videos, { _, video -> video.id }) { index, video ->
             Spacer(modifier = Modifier.height(16.dp))

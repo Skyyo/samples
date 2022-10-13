@@ -10,7 +10,6 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.statusBarsPadding
 import com.skyyo.samples.theme.Purple200
 import com.skyyo.samples.theme.Teal200
 

@@ -1,7 +1,9 @@
 package com.skyyo.samples.features.scrollAnimation1
 
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,7 +18,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.LocalWindowInsets
 import com.skyyo.samples.features.scrollAnimation1.composables.ExpandableToolbar
 import com.skyyo.samples.features.scrollAnimation1.composables.ScrollingContent
 
@@ -28,13 +29,14 @@ const val PADDING = 16
 
 @Composable
 fun ScrollAnimation1Screen(viewModel: ScrollAnimation1ViewModel = hiltViewModel()) {
-    val insets = LocalWindowInsets.current
-    val navigationBarHeight = with(LocalDensity.current) { insets.navigationBars.bottom.toDp() }
+    val density = LocalDensity.current
+    val insetsNavigationBarsStatusBars = WindowInsets.navigationBars
+    val navigationBarHeight = remember { insetsNavigationBarsStatusBars.getBottom(density).dp }
     val toolbarState = remember { mutableStateOf(TOOLBAR_EXPANDED) }
-    val toolbarHeightPx = with(LocalDensity.current) {
+    val toolbarHeightPx = with(density) {
         EXPANDED_TOOLBAR_HEIGHT.dp.roundToPx().toFloat()
     }
-    val collapsedToolbarHeightPx = with(LocalDensity.current) {
+    val collapsedToolbarHeightPx = with(density) {
         COLLAPSED_TOOLBAR_HEIGHT.dp.roundToPx().toFloat()
     }
     val scrollState = rememberScrollState()
@@ -43,7 +45,7 @@ fun ScrollAnimation1Screen(viewModel: ScrollAnimation1ViewModel = hiltViewModel(
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val finalTopOffset =
-                    toolbarHeightPx - collapsedToolbarHeightPx - insets.statusBars.top
+                    toolbarHeightPx - collapsedToolbarHeightPx - insetsNavigationBarsStatusBars.getTop(density)
                 val newOffset = toolbarOffsetHeightPx.value + available.y
                 val delta = newOffset.coerceIn(-finalTopOffset, 0f)
                 when {

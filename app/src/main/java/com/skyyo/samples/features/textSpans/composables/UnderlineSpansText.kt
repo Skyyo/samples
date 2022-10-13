@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.textSpans.composables
 
+import android.graphics.Region
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.material.Text
@@ -19,8 +20,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastForEachIndexed
 import com.skyyo.samples.features.textSpans.buildSquigglesFor
-import com.skyyo.samples.features.textSpans.fastForEachIndexed
 import com.skyyo.samples.features.textSpans.getBoundingBoxes
 
 @Composable
@@ -34,6 +35,7 @@ fun AnimatedSquiggleWavelengthUnderlineText(
     val density = LocalDensity.current
     val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
     val path = remember { Path() }
+    val region = remember { Region() }
     val animationProgress by rememberInfiniteTransition().animateFloat(
         initialValue = 0f,
         targetValue = 1f,
@@ -64,7 +66,7 @@ fun AnimatedSquiggleWavelengthUnderlineText(
         fontSize = fontSize,
         lineHeight = lineHeight,
         onTextLayout = { layoutResult ->
-            val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
+            val textBounds = layoutResult.getBoundingBoxes(region, annotation.start, annotation.end)
             onDraw.value = {
                 for (bound in textBounds) {
                     path.apply {
@@ -99,6 +101,7 @@ fun AnimatedSquiggleUnderlineText(
     val density = LocalDensity.current
     val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
     val path = remember { Path() }
+    val region = remember { Region() }
     val animationProgress by rememberInfiniteTransition().animateFloat(
         initialValue = 0f,
         targetValue = 1f,
@@ -125,7 +128,7 @@ fun AnimatedSquiggleUnderlineText(
         fontSize = fontSize,
         lineHeight = lineHeight,
         onTextLayout = { layoutResult ->
-            val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
+            val textBounds = layoutResult.getBoundingBoxes(region, annotation.start, annotation.end)
             onDraw.value = {
                 for (bound in textBounds) {
                     path.apply {
@@ -160,6 +163,7 @@ fun SquiggleUnderlineText(
     val density = LocalDensity.current
     val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
     val path = remember { Path() }
+    val region = remember { Region() }
     val pathEffect =
         remember { PathEffect.cornerPathEffect(radius = with(density) { waveLength.toPx() }) } // For slightly smoother waves.
     val pathStyle = remember {
@@ -178,7 +182,7 @@ fun SquiggleUnderlineText(
         fontSize = fontSize,
         lineHeight = lineHeight,
         onTextLayout = { layoutResult ->
-            val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
+            val textBounds = layoutResult.getBoundingBoxes(region, annotation.start, annotation.end)
             onDraw.value = {
                 for (bound in textBounds) {
                     path.apply {
@@ -217,6 +221,7 @@ fun HighlightedText(
 ) {
     val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
     val path = remember { Path() }
+    val region = remember { Region() }
     val highlightBorderWidthPx = with(LocalDensity.current) { highlightBorderWidth.toPx() }
     val highlightBorderStroke = remember { Stroke(width = highlightBorderWidthPx) }
     val annotation =
@@ -227,7 +232,7 @@ fun HighlightedText(
         fontSize = fontSize,
         lineHeight = lineHeight,
         onTextLayout = { layoutResult ->
-            val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
+            val textBounds = layoutResult.getBoundingBoxes(region, annotation.start, annotation.end)
             onDraw.value = {
                 textBounds.fastForEachIndexed { index, bound ->
                     path.apply {
@@ -273,6 +278,7 @@ fun UnderlinedText(
     fontSize: TextUnit = TextUnit.Unspecified,
     lineHeight: TextUnit = TextUnit.Unspecified
 ) {
+    val region = remember { Region() }
     val underlineWidthPxHalf = with(LocalDensity.current) { underlineWidth.toPx() / 2 }
     val onDraw: MutableState<DrawScope.() -> Unit> = remember { mutableStateOf({}) }
     val annotation =
@@ -283,7 +289,7 @@ fun UnderlinedText(
         fontSize = fontSize,
         lineHeight = lineHeight,
         onTextLayout = { layoutResult ->
-            val textBounds = layoutResult.getBoundingBoxes(annotation.start, annotation.end)
+            val textBounds = layoutResult.getBoundingBoxes(region, annotation.start, annotation.end)
             onDraw.value = {
                 for (bound in textBounds) {
                     drawLine(

@@ -5,6 +5,7 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -18,8 +19,6 @@ import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.navigationBarsPadding
 import com.skyyo.samples.application.Destination
 
 private const val EXPAND_ANIMATION_DURATION = 300
@@ -73,7 +72,9 @@ fun AnimatedBottomBar(
     ) {
         BottomNavigation(
             backgroundColor = DarkGray,
-            modifier = Modifier.navigationBarsHeight(56.dp)
+            modifier = Modifier.windowInsetsBottomHeight(
+                WindowInsets.navigationBars.add(WindowInsets(bottom = 56.dp))
+            )
         ) {
             items.forEachIndexed { index, screen ->
                 BottomNavigationItem(
