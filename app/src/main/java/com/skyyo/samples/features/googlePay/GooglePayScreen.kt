@@ -10,7 +10,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,16 +23,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.skyyo.samples.R
 import com.skyyo.samples.extensions.getEnclosingActivity
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun GooglePayScreen(viewModel: GooglePayViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val activity = context.getEnclosingActivity()
-    val isWalletSupported by viewModel.isWalletSupported.collectAsState()
-    val passData1 by viewModel.passData1.collectAsState()
-    val passData2 by viewModel.passData2.collectAsState()
+    val isWalletSupported by viewModel.isWalletSupported.collectAsStateWithLifecycle()
+    val passData1 by viewModel.passData1.collectAsStateWithLifecycle()
+    val passData2 by viewModel.passData2.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier

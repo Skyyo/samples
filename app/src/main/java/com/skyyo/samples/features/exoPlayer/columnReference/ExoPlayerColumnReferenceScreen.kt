@@ -13,18 +13,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ExoPlayerColumnReferenceScreen(viewModel: ExoPlayerColumnReferenceViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val exoPlayer = remember { ExoPlayer.Builder(context).build() }
     val listState = rememberLazyListState()
-    val videos by viewModel.videos.collectAsState()
-    val playingVideoItem by viewModel.currentlyPlayingItem.collectAsState()
+    val videos by viewModel.videos.collectAsStateWithLifecycle()
+    val playingVideoItem by viewModel.currentlyPlayingItem.collectAsStateWithLifecycle()
     var isPlayingItemVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

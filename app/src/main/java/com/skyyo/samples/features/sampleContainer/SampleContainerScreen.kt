@@ -74,6 +74,9 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGooglePay) {
             Text(text = "google pay")
         }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goInteractionTracking) {
+            Text(text = "user interaction tracking result")
+        }
     }
 }
 
