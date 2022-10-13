@@ -46,6 +46,7 @@ import androidx.compose.foundation.background as composeBackground
 private enum class BlurPurpose {
     Overlay, Background
 }
+
 private class ImageResource(@DrawableRes val resourceId: Int, val filter: ColorFilter? = null)
 
 @Composable
@@ -53,21 +54,24 @@ fun BlurScreen() {
     val imageResources = remember { provideImageResources() }
     val blurPurposes = remember { BlurPurpose.values().asList() }
     var activePurpose by remember { mutableStateOf<BlurPurpose?>(null) }
-    val rowArrangement = remember { Arrangement.spacedBy(20.dp) }
-    val columnArrangement = remember { Arrangement.spacedBy(20.dp) }
+    val arrangement = Arrangement.spacedBy(20.dp)
 
     Column(Modifier.systemBarsPadding()) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             for (blurPurpose in blurPurposes) {
-                RadioButton(
-                    selected = activePurpose == blurPurpose,
-                    onClick = { activePurpose = blurPurpose }
-                )
-                Text(text = blurPurpose.name)
-                Spacer(modifier = Modifier.width(10.dp))
+                key(blurPurpose.name) {
+                    RadioButton(
+                        selected = activePurpose == blurPurpose,
+                        onClick = { activePurpose = blurPurpose }
+                    )
+                    Text(text = blurPurpose.name)
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
             }
         }
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
@@ -76,12 +80,12 @@ fun BlurScreen() {
                     .background(Color.Cyan)
                     .align(Alignment.Center)
                     .padding(vertical = 20.dp, horizontal = 6.dp),
-                verticalArrangement = columnArrangement
+                verticalArrangement = arrangement
             ) {
                 repeat(imageResources.size) { columnIndex ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = rowArrangement
+                        horizontalArrangement = arrangement
                     ) {
                         repeat(imageResources[columnIndex].size) { rowIndex ->
                             val imageResource = imageResources[columnIndex][rowIndex]
@@ -141,8 +145,14 @@ private fun Modifier.draggable(size: DpSize, draggableArea: DpRect) = composed {
             awaitPointerEventScope {
                 val down = awaitFirstDown(requireUnconsumed = false)
                 drag(down.id) {
-                    val xOffset = (it.position.x.toDp() - size.width / 2).coerceIn(draggableArea.left, draggableArea.right - size.width)
-                    val yOffset = (it.position.y.toDp() - size.height / 2).coerceIn(draggableArea.top, draggableArea.bottom - size.height)
+                    val xOffset = (it.position.x.toDp() - size.width / 2).coerceIn(
+                        draggableArea.left,
+                        draggableArea.right - size.width
+                    )
+                    val yOffset = (it.position.y.toDp() - size.height / 2).coerceIn(
+                        draggableArea.top,
+                        draggableArea.bottom - size.height
+                    )
                     offset = DpOffset(xOffset, yOffset)
                     if (it.positionChange() != Offset.Zero) it.consume()
                 }
@@ -232,6 +242,7 @@ fun Modifier.background(
                 drawContext.canvas.nativeCanvas.drawRect(0f, 0f, size.width, size.height, paint)
             }
         }
+
         else -> {
             var radiusInPx by remember { mutableStateOf(0f) }
             val paint = remember(radiusInPx, color) {
@@ -253,13 +264,37 @@ fun Modifier.background(
 }
 
 private fun provideImageResources(): List<List<ImageResource>> {
-    val drawableIdsForTint = listOf(R.drawable.android_adb, R.drawable.amu_bubble_mask, R.drawable.common_full_open_on_phone, R.drawable.ic_shotter, R.drawable.ic_flashlight_on, R.drawable.ic_pause)
+    val drawableIdsForTint = listOf(
+        R.drawable.android_adb,
+        R.drawable.amu_bubble_mask,
+        R.drawable.common_full_open_on_phone,
+        R.drawable.ic_shotter,
+        R.drawable.ic_flashlight_on,
+        R.drawable.ic_pause
+    )
     val filter = ColorFilter.tint(Color.Blue)
     return Array(3) { columnIndex ->
         when (columnIndex) {
-            0 -> listOf(R.drawable.android_adb, R.drawable.add_to_wallet, R.drawable.common_full_open_on_phone, R.drawable.ic_play)
-            1 -> listOf(R.drawable.googleg_standard_color_18, R.drawable.googleg_disabled_color_18, R.drawable.ic_100tb, R.drawable.venom_dead_robot)
-            else -> listOf(R.drawable.ic_flashlight_on, R.drawable.ic_flashlight_off, R.drawable.ic_location_pin, R.drawable.ic_pause)
+            0 -> listOf(
+                R.drawable.android_adb,
+                R.drawable.add_to_wallet,
+                R.drawable.common_full_open_on_phone,
+                R.drawable.ic_play
+            )
+
+            1 -> listOf(
+                R.drawable.googleg_standard_color_18,
+                R.drawable.googleg_disabled_color_18,
+                R.drawable.ic_100tb,
+                R.drawable.venom_dead_robot
+            )
+
+            else -> listOf(
+                R.drawable.ic_flashlight_on,
+                R.drawable.ic_flashlight_off,
+                R.drawable.ic_location_pin,
+                R.drawable.ic_pause
+            )
         }.map { ImageResource(it, if (drawableIdsForTint.contains(it)) filter else null) }
     }.toList()
 }
