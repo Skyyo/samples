@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -27,8 +28,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-enum class SignatureViewEvent { Save, Reset }
-
 @Composable
 fun SignatureViewScreen() {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -39,6 +38,7 @@ fun SignatureViewScreen() {
             .flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
     }
     val context = LocalContext.current
+    val stroke = remember { Stroke(10f) }
 
     fun saveMediaToStorage(bitmap: Bitmap, imageName: String = "bitmap"): Boolean {
         val saved: Boolean
@@ -65,7 +65,8 @@ fun SignatureViewScreen() {
             val image = File(imagesDir, "$imageName.png")
             fos = FileOutputStream(image)
         }
-        saved = bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos) == true
+        val quality = 100
+        saved = bitmap.compress(Bitmap.CompressFormat.PNG, quality, fos) == true
         fos?.flush()
         fos?.close()
         return saved
@@ -84,6 +85,7 @@ fun SignatureViewScreen() {
                 .align(CenterHorizontally)
                 .background(Color.White),
             events = signatureEventsFlow,
+            stroke = stroke,
             onBitmapSaved = {
                 saveMediaToStorage(it)
             }
@@ -103,5 +105,3 @@ fun SignatureViewScreen() {
         }
     }
 }
-
-

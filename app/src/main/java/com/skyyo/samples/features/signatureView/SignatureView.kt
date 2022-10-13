@@ -1,7 +1,6 @@
 package com.skyyo.samples.features.signatureView
 
 import android.graphics.Bitmap
-import android.os.Parcelable
 import android.view.MotionEvent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -20,22 +19,17 @@ import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.parcelize.Parcelize
 import kotlin.math.roundToInt
-
-@Parcelize
-data class MotionEventValue(val eventType: Int, val x: Float, val y: Float) : Parcelable
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignatureView(
     modifier: Modifier = Modifier,
-    stroke: Stroke = Stroke(10f),
+    stroke: Stroke,
     paintColor: Color = Color.Black,
     canvasColor: Color = Color.Transparent,
     events: Flow<SignatureViewEvent>,
-    onBitmapSaved: (bitmap: Bitmap) -> Unit
+    onBitmapSaved: (bitmap: Bitmap) -> Unit,
 ) {
     val viewBounds = remember { mutableStateOf(Rect.Zero) }
     val paint = remember {
@@ -66,8 +60,8 @@ fun SignatureView(
         events.collect { event ->
             when (event) {
                 SignatureViewEvent.Reset -> {
-                    motionEventValue.value = null
                     savedList.clear()
+                    motionEventValue.value = MotionEventValue(MotionEvent.ACTION_DOWN, 0.0f, 0.0f)
                 }
                 SignatureViewEvent.Save -> {
                     val bitmap = getBitmap()
@@ -88,11 +82,11 @@ fun SignatureView(
                 val value: MotionEventValue
                 when (it.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        value = MotionEventValue(it.action, x,y)
+                        value = MotionEventValue(it.action, x, y)
                         motionEventValue.value = value
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        value = MotionEventValue(it.action, x,y)
+                        value = MotionEventValue(it.action, x, y)
                         motionEventValue.value = value
                     }
                 }
