@@ -2,6 +2,7 @@ package com.skyyo.samples.features.pagination.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.skyyo.samples.application.CODE_200
 import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.application.network.calls.CatCalls
 import com.skyyo.samples.extensions.tryOrNull
@@ -25,14 +26,14 @@ class CatsSource(
             }
             else -> {
                 page = params.key!!
-                //offset = page * limit  use when PAGE_INITIAL_LIMIT == PAGE_LIMIT
+                // offset = page * limit  use when PAGE_INITIAL_LIMIT == PAGE_LIMIT
                 offset = PAGE_INITIAL_LIMIT + (page - 1) * limit
             }
         }
 
         val response = tryOrNull { catCalls.getCats(offset, limit) }
         return when {
-            response?.code() == 200 -> {
+            response?.code() == CODE_200 -> {
                 val cats = response.body()!!
                 val isLastPageReached = cats.size != limit
                 LoadResult.Page(

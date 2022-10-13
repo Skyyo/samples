@@ -14,18 +14,22 @@ import androidx.compose.material.icons.rounded.CarRepair
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.*
 import com.skyyo.samples.extensions.log
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
+import kotlin.math.max
 
+@Suppress("LongMethod")
 @ExperimentalPagerApi
 @Composable
 fun ViewPagerScreen() {
@@ -44,6 +48,9 @@ fun ViewPagerScreen() {
         ),
         animationSpec = tween(durationMillis = 250, easing = LinearEasing)
     )
+    val indicatorShape = remember {
+        RoundedCornerShape(percent = 50)
+    }
 
     LaunchedEffect(pagerState) {
         snapshotFlow {
@@ -64,8 +71,8 @@ fun ViewPagerScreen() {
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     modifier = Modifier
-                        .pagerTabIndicatorOffset(pagerState, tabPositions)
-                        .clip(RoundedCornerShape(50)),
+                        .scrollableTabIndicatorOffset(pagerState, tabPositions)
+                        .clip(indicatorShape),
                     height = 2.dp
                 )
             },
@@ -101,7 +108,8 @@ fun ViewPagerScreen() {
                     page = page,
                     offset = 0.dp.value,
                     backgroundColor = backgroundColor,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(0) } })
+                    onClick = { scope.launch { pagerState.animateScrollToPage(0) } }
+                )
 //                PagerCard(
 //                    pageOffset = this@HorizontalPager.calculateCurrentOffsetForPage(page).absoluteValue,
 //                    page = page,
@@ -140,4 +148,58 @@ fun ViewPagerScreen() {
             }
         )
     }
+}
+
+@ExperimentalPagerApi
+fun Modifier.scrollableTabIndicatorOffset(pagerState: PagerState, tabPositions: List<TabPosition>): Modifier = composed {
+    // If there are no pages, nothing to show
+    if (pagerState.pageCount == 0) return@composed this
+
+    val targetIndicatorOffset: Dp
+    val indicatorWidth: Dp
+
+    val currentPage = pagerState.currentPage
+    val targetPage = pagerState.targetPage
+
+    val currentTab = tabPositions[currentPage]
+    val targetTab = tabPositions.getOrNull(targetPage)
+    val scrollingToLeft = targetPage == currentPage
+
+    if (targetTab != null) {
+        // The distance between the target and current page. If the pager is animating over many
+        // items this could be > 1
+        val targetDistance = (targetPage - currentPage).absoluteValue
+        // Our normalized fraction over the target distance
+        val fraction = (pagerState.currentPageOffset / max(targetDistance, 1)).absoluteValue
+
+        if (!pagerState.isScrollInProgress || !scrollingToLeft) {
+            targetIndicatorOffset = lerp(
+                tabPositions[currentPage].left,
+                tabPositions[targetPage].left,
+                fraction
+            )
+        } else {
+            val endPage = fraction.toInt()
+            targetIndicatorOffset = lerp(
+                start = tabPositions[currentPage - endPage - if (currentPage - endPage > 0) 1 else 0].left,
+                stop = tabPositions[currentPage - endPage].left,
+                fraction = 1 - fraction + endPage
+            )
+        }
+
+        indicatorWidth = lerp(
+            tabPositions[currentPage].width,
+            tabPositions[targetPage].width,
+            fraction
+        ).value.absoluteValue.dp
+    } else {
+        // Otherwise we just use the current tab/page
+        targetIndicatorOffset = currentTab.left
+        indicatorWidth = currentTab.width
+    }
+
+    fillMaxWidth()
+        .wrapContentSize(Alignment.BottomStart)
+        .offset(x = targetIndicatorOffset)
+        .width(indicatorWidth)
 }

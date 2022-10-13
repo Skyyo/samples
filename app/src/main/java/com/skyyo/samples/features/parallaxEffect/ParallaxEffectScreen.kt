@@ -10,16 +10,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberAsyncImagePainter
 import kotlin.math.min
 
 const val IMAGE_HEIGHT = 256
 
+@OptIn(ExperimentalCoilApi::class)
+@Suppress("MagicNumber")
 @Composable
 fun ParallaxEffectScreen() {
-
     val scrollState = rememberScrollState()
-    val imageAlpha = min(1f, 1 - (scrollState.value / 600f))
+    val imageAlpha = min(1f, 1 - scrollState.value / 600f)
     val imageOffsetY = scrollState.value * 0.1f
     val imageHeight = (IMAGE_HEIGHT.dp - imageOffsetY.dp).coerceAtLeast(0.dp)
 
@@ -36,9 +38,7 @@ fun ParallaxEffectScreen() {
             )
         }
         Image(
-            painter = rememberImagePainter(
-                data = "https://placekitten.com/g/200/300",
-            ),
+            painter = rememberAsyncImagePainter("https://placekitten.com/g/200/300"),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()

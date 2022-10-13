@@ -1,21 +1,18 @@
 package com.skyyo.samples.features.bottomSheets
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
-
 
 /**
  * can be used both as modal & persistent sheet,
@@ -41,7 +38,7 @@ fun BottomSheetScaffoldScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.8f)
+                    .fillMaxHeight(fraction = 0.8f)
                     .statusBarsPadding()
                     .background(MaterialTheme.colors.primary)
                     .graphicsLayer(alpha = currentFraction),
@@ -65,9 +62,9 @@ fun BottomSheetScaffoldScreen() {
                 }
             }
         },
-        sheetPeekHeight = 56.dp
+        sheetPeekHeight = 86.dp
     ) {
-
+        Box(modifier = Modifier.fillMaxSize().background(color = Color.Gray))
     }
 }
 
@@ -85,5 +82,3 @@ val BottomSheetScaffoldState.currentFraction: Float
             else -> 1f - fraction
         }
     }
-
-

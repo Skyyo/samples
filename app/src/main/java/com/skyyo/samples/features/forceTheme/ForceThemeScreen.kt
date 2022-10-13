@@ -15,7 +15,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.insets.statusBarsPadding
 import com.skyyo.samples.application.activity.MainActivity
-import kotlinx.coroutines.flow.collect
 
 const val THEME_LIGHT = "light"
 const val THEME_DARK = "dark"
@@ -41,7 +40,8 @@ fun ForceThemeScreen(viewModel: ForceThemeViewModel = hiltViewModel()) {
     Column(
         Modifier
             .fillMaxSize()
-            .statusBarsPadding()) {
+            .statusBarsPadding()
+    ) {
         Text(text = "Force Theme")
         Button(onClick = { viewModel.setAppTheme(THEME_LIGHT) }) {
             Text(text = "light")
@@ -54,5 +54,3 @@ fun ForceThemeScreen(viewModel: ForceThemeViewModel = hiltViewModel()) {
         }
     }
 }
-
-

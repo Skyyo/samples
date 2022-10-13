@@ -11,13 +11,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.PlayerView
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import com.skyyo.samples.R
 
 @Composable
 fun VideoPlayer(
-    exoPlayer: SimpleExoPlayer,
+    exoPlayer: ExoPlayer,
     onControllerVisibilityChanged: (uiVisible: Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -25,7 +25,12 @@ fun VideoPlayer(
         val layout = LayoutInflater.from(context).inflate(R.layout.video_player, null, false)
         val playerView = layout.findViewById(R.id.playerView) as PlayerView
         playerView.apply {
-            setControllerVisibilityListener { onControllerVisibilityChanged(it == View.VISIBLE) }
+            setControllerVisibilityListener(
+                PlayerView.ControllerVisibilityListener { visibility ->
+                    onControllerVisibilityChanged(visibility == View.VISIBLE)
+                }
+            )
+
             player = exoPlayer
         }
     }
@@ -36,8 +41,10 @@ fun VideoPlayer(
     //        onDispose { onDisposed() }
     //    }
 
-    AndroidView({ playerView },
+    AndroidView(
+        { playerView },
         Modifier
             .height(256.dp)
-            .background(Color.Black))
+            .background(Color.Black)
+    )
 }

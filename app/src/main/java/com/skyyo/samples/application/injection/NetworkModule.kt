@@ -45,5 +45,4 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideCatsCalls(retrofit: Retrofit): CatCalls = retrofit.create(CatCalls::class.java)
-
 }

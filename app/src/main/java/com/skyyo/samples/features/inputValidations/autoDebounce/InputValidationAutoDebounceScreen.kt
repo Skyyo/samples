@@ -27,11 +27,12 @@ import com.skyyo.samples.features.inputValidations.CustomTextField
 import com.skyyo.samples.features.inputValidations.FocusedTextFieldKey
 import com.skyyo.samples.features.inputValidations.ScreenEvent
 import com.skyyo.samples.utils.creditCardFilter
-import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputValidationAutoDebounceScreen(viewModel: InputValidationAutoDebounceViewModel = hiltViewModel()) {
+fun InputValidationAutoDebounceScreen(
+    viewModel: InputValidationAutoDebounceViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val focusManager = LocalFocusManager.current
@@ -63,6 +64,7 @@ fun InputValidationAutoDebounceScreen(viewModel: InputValidationAutoDebounceView
                     when (event.textFieldKey) {
                         FocusedTextFieldKey.NAME -> nameFocusRequester.requestFocus()
                         FocusedTextFieldKey.CREDIT_CARD_NUMBER -> creditCardNumberFocusRequester.requestFocus()
+                        else -> {}
                     }
                 }
                 is ScreenEvent.MoveFocus -> focusManager.moveFocus(event.direction)
@@ -118,5 +120,4 @@ fun InputValidationAutoDebounceScreen(viewModel: InputValidationAutoDebounceView
             Text(text = "Continue")
         }
     }
-
 }

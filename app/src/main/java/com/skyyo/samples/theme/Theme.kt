@@ -25,7 +25,6 @@ const val DARK_MAP_STYLES = "d5afddd010938b78" // TODO use with cloud based styl
 const val LIGHT_MAP_STYLES = "8d74d6ad37a6ca97"
 @RawRes var mapStyle: Int? = null
 
-
 @Composable
 fun IgdbBrowserTheme(
     savedTheme: String,

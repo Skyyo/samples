@@ -10,13 +10,12 @@ import javax.inject.Inject
 @HiltViewModel
 class DogDetailsViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
-    private val handle: SavedStateHandle,
+    handle: SavedStateHandle,
 ) : ViewModel() {
 
-    val dogId: String = requireNotNull(handle.get("dogId"))
+    val dogId: String = requireNotNull(handle["dogId"])
 
     fun goContacts() = navigationDispatcher.emit {
         it.navigate(Destination.DogContacts.createRoute("3333"))
     }
-
 }

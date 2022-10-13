@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
-
+import com.skyyo.samples.extensions.FixInAppLanguageSwitchLayoutDirection
 
 @Composable
-fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel()) {
+fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel()) = FixInAppLanguageSwitchLayoutDirection {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,8 +46,32 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnackbar) {
             Text(text = "snackbar")
         }
-        Button(modifier = Modifier.fillMaxWidth(),onClick = viewModel::goDominantColor) {
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goDominantColor) {
             Text(text = "dominant color")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goSnap) {
+            Text(text = "snapping")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goZoomable) {
+            Text(text = "zoomable")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goPdfViewer) {
+            Text(text = "pdf viewer")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goHealthConnect) {
+            Text(text = "health connect")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goImagePicker) {
+            Text(text = "image picker without permissions")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goLanguagePicker) {
+            Text(text = "language picker")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCardRecognition) {
+            Text(text = "card recognition")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGooglePay) {
+            Text(text = "google pay")
         }
     }
 }
@@ -97,6 +121,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
     ) { Text(text = "view pager") }
     Button(
         modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goInfiniteViewPager
+    ) { Text(text = "infinite view pager") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goStickyHeaders
     ) { Text(text = "sticky headers") }
     Button(
@@ -105,10 +133,11 @@ fun UIelements(viewModel: SampleContainerViewModel) {
     ) { Text(text = "table") }
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCustomView) {
         Text(
-            text = "custom view", style = LocalTextStyle.current.copy(
+            text = "custom view",
+            style = LocalTextStyle.current.copy(
                 shadow = Shadow(
                     color = Color.Red,
-                    offset = Offset(4f, 4f),
+                    offset = Offset(x = 4f, y = 4f),
                     blurRadius = 8f
                 )
             )
@@ -118,6 +147,22 @@ fun UIelements(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goSignatureView
     ) { Text(text = "signature view") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goMarqueeText
+    ) { Text(text = "marquee text") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goTextSpans
+    ) { Text(text = "text spans") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goAutofill
+    ) { Text(text = "autofill") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goImeAwareLazyColumn
+    ) { Text(text = "ime aware lazy column") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 
@@ -137,6 +182,12 @@ fun ScrollBasedAnimations(viewModel: SampleContainerViewModel) {
     }
     Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGradientScroll) {
         Text(text = "gradient change")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goNoticeableScrollableRow) {
+        Text(text = "noticeable scrollable row")
+    }
+    Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goDragAndDrop) {
+        Text(text = "drag and drop")
     }
     Spacer(modifier = Modifier.height(16.dp))
 }
@@ -172,6 +223,10 @@ fun Camera(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goQrScanning
     ) { Text(text = "scan qr code with ML kit") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goQrScanningWithoutPermissions
+    ) { Text(text = "scan qr code without permissions") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 
@@ -194,6 +249,10 @@ fun ExoPlayerSamples(viewModel: SampleContainerViewModel) {
         modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goExoPlayerColumnDynamicThumb
     ) { Text(text = "dynamic thumbnails") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goVerticalPagerWithFling
+    ) { Text(text = "vertical pager with fling") }
     Spacer(modifier = Modifier.height(16.dp))
 }
 

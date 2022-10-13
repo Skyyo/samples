@@ -1,6 +1,5 @@
 package com.skyyo.samples.features.pagination.paging
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,9 +39,8 @@ import com.skyyo.samples.features.pagination.common.FadingFab
 import com.skyyo.samples.features.pagination.common.PagingException
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.White
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CatsPagingScreen(viewModel: CatsPagingViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -57,7 +55,7 @@ fun CatsPagingScreen(viewModel: CatsPagingViewModel = hiltViewModel()) {
     val isListScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
 
     val events = remember(viewModel.events, lifecycleOwner) {
-        viewModel.events.flowWithLifecycle(
+        viewModel.events.receiveAsFlow().flowWithLifecycle(
             lifecycleOwner.lifecycle,
             Lifecycle.State.STARTED
         )
@@ -115,7 +113,6 @@ fun CatsPagingScreen(viewModel: CatsPagingViewModel = hiltViewModel()) {
             )
         }
     }
-
 }
 
 @Composable
@@ -192,6 +189,5 @@ fun CatsColumn(
 //            else -> null
 //        }
         // use this if we don't care if the error happened on 1 or X load
-
     }
 }

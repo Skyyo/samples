@@ -1,10 +1,7 @@
-# Project containing Jetpack Compose samples 
+# Project containing Jetpack Compose & Android samples 
 For pagination & network images it uses [CATAAS](https://cataas.com/#/).
 
 # Known issues
-
-Navigation-Compose
-- [Issue](https://issuetracker.google.com/issues/200817333) with fast tapping on destination
 
 Paging
 - Can't declare state listeners on the Flow<PagingData<Value>> or Pager or similar. We're forced to propagate important events from bottom to top instead of top to bottom. [issue](https://issuetracker.google.com/issues/200577793)
@@ -16,35 +13,36 @@ Modal Drawer
 Google Maps
 - [issue](https://github.com/googlemaps/android-maps-utils/issues/949)
 - [issue](https://issuetracker.google.com/issues/197880217)
+  
+Icons
+- [auto mirroring doesn't work](https://issuetracker.google.com/issues/193457331)
 
 Keyboard
-- [issue](https://issuetracker.google.com/issues/187746439) with changing focus on backpress ( affecting OTP sample )
-- [issue](https://issuetracker.google.com/issues/199297778) with adjustPan mode not pinning to the focused textField
-- [issue](https://issuetracker.google.com/issues/199561561) with keyboard being hidden when focus is shared between composables & views
+- [issue](https://issuetracker.google.com/issues/205751272), [issue](https://issuetracker.google.com/issues/192043120) with adjustPan/adjustResize mode not pinning to the focused textField. [Workaround](https://issuetracker.google.com/issues/205751272#comment3)
 
 Miscellaneous
-- We can't drop usage of liveData completely since we can't return stateFlow from the savedStateHandle, also it is still needed for scenarios which cover flow being observed with flatMapLatest ( as a typical scenario for searching by query ). Latter [issue](https://github.com/Kotlin/kotlinx.coroutines/issues/2223)
-- drag & drop feature. [possible workaround](https://stackoverflow.com/questions/64913067/reorder-lazycolumn-items-with-drag-drop), [library](https://github.com/aclassen/ComposeReorderable)
+- We can't drop usage of liveData completely since it is still needed for scenarios which cover flow being observed with flatMapLatest ( as a typical scenario for searching by query ). Latter [issue](https://github.com/Kotlin/kotlinx.coroutines/issues/2223)
+- Persistent Bottom Sheet sample doesn't work right now due to this [issue](https://issuetracker.google.com/issues/235588730)
 - there is no out of the box support for scroll bars as of August 19, 2021. [Sample for simple cases](https://stackoverflow.com/questions/66341823/jetpack-compose-scrollbars/68056586#68056586)
 - bottomSheet destination is not preserved by default when navigating to new destination and coming back. [Workaround](https://medium.com/@theapache64/saving-bottomsheets-state-%EF%B8%8F-d9426cafbcbb)
 - no way to create nested sticky headers. Workaround imo is changing design or making one lvl of the headers as a composable that animates text changes.
-- LazyVerticalGrid seems to be really imperformant and [not adviced](https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary#LazyVerticalGrid(androidx.compose.foundation.lazy.GridCells,androidx.compose.ui.Modifier,androidx.compose.foundation.lazy.LazyListState,androidx.compose.foundation.layout.PaddingValues,androidx.compose.foundation.layout.Arrangement.Vertical,androidx.compose.foundation.layout.Arrangement.Horizontal,kotlin.Function1)) to use. Instead use combinations of Column + Rows
 - Fling breaks on skipped frames. [issue](https://issuetracker.google.com/issues/190788866)
 - Need to find an alternative to onboarding guides from the view system like these libraries provided: [onboardingFlow](https://github.com/MrIceman/onboardingflow),[TapTargetView](https://github.com/KeepSafe/TapTargetView),[Spotlight](https://github.com/TakuSemba/Spotlight)
+- Health connect permission resolving [issue](https://issuetracker.google.com/issues/233239418)
+- Language picker has issue on Android 12 [issue](https://issuetracker.google.com/issues/236538894)
+- We can handle "save to wallet" result only from activity (https://issuetracker.google.com/issues/239603300)
+- Autocomplete [issue](https://issuetracker.google.com/u/1/issues/242575301)
+- Custom text spans need additional API for proper RTL & BiDi support [issue](https://issuetracker.google.com/u/1/issues/237289433)
+- Use ImeAwareLazyColumn until compose LazyColumn ime overlap issue not fixed (https://issuetracker.google.com/issues/192043120#comment78) 
 
 # Limitations
-- We're forced to use [ProvideWindowInsets](https://google.github.io/accompanist/insets/#usage) composable as a wrapper for composables in fragment based projects
 - There is no way to navigate from composable to fragment & share a navigation graph between them. (not an issue)
 - Deep links might require lot of additional work if we need to open them in a specific bottom bar / drawer tab.
-- Navigating with parcelable object might be causing issues due it's [hacky logic](https://github.com/Skyyo/IGDB-Browser/blob/e4279d7cecb50aca32aacdc712f9ed2fdd11aade/app/src/main/java/com/skyyo/igdbbrowser/extensions/NavControllerExtensions.kt#L48-L57)
 - We need to use [setViewCompositionStrategy](https://developer.android.com/jetpack/compose/interop/interop-apis) when working with fragments
 - Surface composable has [issue](https://issuetracker.google.com/issues/198313901) with elevation overlapping. This is considered a proper behaviour and one of the workarounds would be using Scaffold.
   
 # TODO
   
-CameraX
-- investigate crashe on orientation change
-
 Paging ( all cases should be tested with both PagingSource & RemoteMediator versions ).
 - add sample of how to use maxSize 
 - scroll to top feature with maxSize (page dropping) enabled.
@@ -54,45 +52,42 @@ Paging ( all cases should be tested with both PagingSource & RemoteMediator vers
 - check out if it's a bug or misconfiguration inside paging+room sample. Upon entering the screen we're fetching twice.
 
 Pager
-- check & fix bad performance on viewPager sample.
-- check & fix/file issue with scroll indicator going only to the right side upon swiping. [video](https://photos.app.goo.gl/ejzGBMT4TvVv3nSu8)
 - add tab indicator animation like on google weather application.
+- update ViewPager sample since they've removed scroll limit. Need to see when would we really want to use it now instead of directly using LazyColumn/Row.
 
-Snap behaviour ( seems there is already [WIP](https://twitter.com/chrisbanes/status/1442909344597635072) on it and it might be available on accompanist soon
-- simple snap like in pager (for lazyColumns/rows)
-- snap to X items, eg. snap to 3 visible items
-- grid snapping
+Google Maps
+- try out the [compose maps version](https://github.com/googlemaps/android-maps-compose), and check all issues related to the maps we have right now. Especially regarding dynamic styling. 
   
-Uncategorized
-- spinners with a lot of items like country flags etc.
-- Container transformations. eg. small circle from bottom end of the screen floats to the center of the screen and changes it's size. Both back& forward animations should be flawless and tested across PD.
-- Hide bottomBar on scroll
+Animations
 - Animations typical for iOS. can be found in [olx](https://play.google.com/store/apps/details?id=ua.slando&hl=en&gl=US), [monobank](https://play.google.com/store/apps/details?id=com.ftband.mono&hl=en&gl=US). When we scroll something, toolbar changes content relatively to some text/icon being scrolled behind the toolbar
-- Draw / hide something using coordinates. Look into ```onGloballyPositioned``` modifier
-- How to do custom shapes ripples
-- Complex motion layout example ( currently it supports only 2 states so might be left for later )
-- Staggered grid example
-- circular reveal upon changing theme
-- cool transformation animations in google owl sample
-- https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
-- compose with ad mob
-- enhance parallax sample, show how to add snapping behaviour
 - add more animate on scroll animations
 - add on scroll animation using animatable DP
-- App bar auto elevation for dark theme sample
-- draggable sample like [here](https://proandroiddev.com/jetpack-compose-calculator-ui-4dfa2ab9048e). Sample which allows to drag elements in 1 screen from top, right & bottom for example.
-- exoplayer sample with gestures like [here](https://github.com/nihk/exo-viewpager-fun)
-- check if exoplyaer sample with indexes is reliable when used with paging library
-- memory leaks in compose section 
-- add flexible autocomplete & auto-fill sample/samples
-- add reselect bottomBar tab listener and dispatch this event to the composable.
-- try out [media3](https://android-developers.googleblog.com/2021/10/jetpack-media3.html?m=1) and think whether it makes sense, and what are its strong sides
-- signature view, it should also persist the signature after PD 
-- marquee text
+- enhance parallax sample, show how to add snapping behaviour
+- AppBar auto elevation for dark theme sample
+- Container transformations. eg. small circle from bottom end of the screen floats to the center of the screen and changes it's size. Both back& forward animations should be flawless and tested across PD.
+- Spolier animation on text, like in Telegram Android
+- add snowflakes as modifier like [here](https://youtu.be/FgZvs1BsAxE), but snowflakes that actually look like snow.Relate to my gist [here](https://gist.github.com/Skyyo/adbc9f30f1f4a50bc587958ccd442dff), it's a working solution for view system inspired by Telegram Android hidden winter feature, circa 2019. Modifier should handle being added to different view types ( please use common sense in case there are blockers )
+- Circular reveal animation. Ensure it can be used with Fragment based project, or show 2 different samples. Info: [1](https://pspdfkit.com/blog/2020/change-android-themes-with-circular-reveal-animation/), [2](https://dev.to/bmonjoie/jetpack-compose-reveal-effect-1fao), [3](https://proandroiddev.com/change-theme-dynamically-with-circular-reveal-animation-on-android-8cd574f5f0d8), [4](https://github.com/frogermcs/InstaMaterial/blob/Post-8/app/src/main/java/io/github/froger/instamaterial/ui/view/RevealBackgroundView.java#L71-L98).
+There is a [library](https://github.com/canopas/Intro-showcase-view) which needs to be tried out, maybe that's exactly what is needed
+- circular reveal upon changing theme
+- cool transformation animations in google owl sample
+- complex motion layout example ( currently it supports only 2 states so might be left for later )
 - animate shape form, eg from circle to star
 
+
+Uncategorized
+- Draw / hide something using coordinates. Look into ```onGloballyPositioned``` modifier
+- How to do custom shaped ripples
+- Staggered grid example
+- https://github.com/Skyyo/drawing-floating-objects-inside-view in compose
+- draggable sample like [here](https://proandroiddev.com/jetpack-compose-calculator-ui-4dfa2ab9048e). Sample which allows to drag elements in 1 screen from top, right & bottom for example.
+- add reselect bottomBar tab listener and dispatch this event to the composable.
+- sample of how to handle exclusion of back gesture areas. Sample should contain a LazyRow, which has it's sides excluded from the system gesture invocation.
+- DownloadManager sample. Should cover all cases (internet connection loss, fresh boot etc, cancellation) Compare with WorkManager, and describe pros & cons.
+- [Baseline Profile](https://developer.android.com/studio/profile/baselineprofiles#creating-profile-rules). Measure the impact on dummy flows
+- check the issue with compose & svg's. Icons don't mirror?
   
-  # License
+# License
 ```
 MIT License
 

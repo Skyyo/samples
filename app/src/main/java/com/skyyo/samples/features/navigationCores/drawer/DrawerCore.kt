@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.navigationCores.drawer
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -23,9 +24,9 @@ import com.skyyo.samples.features.navigationCores.tab2.Tab2Screen
 import com.skyyo.samples.features.navigationCores.tab3.Tab3Screen
 import kotlinx.coroutines.launch
 
-
 @OptIn(ExperimentalAnimationApi::class)
 @ExperimentalMaterialApi
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DrawerCore(
     drawerScreens: List<Destination>,
@@ -40,7 +41,7 @@ fun DrawerCore(
     val animationSpec = remember { tween<Float>(500) }
 
     DisposableEffect(Unit) {
-        val callback = NavController.OnDestinationChangedListener { _, destination, args ->
+        val callback = NavController.OnDestinationChangedListener { _, destination, _ ->
             when (destination.route) {
 //                Destination.Tab3.route -> {
 //                    systemUiController.statusBarDarkContentEnabled = false
@@ -60,7 +61,7 @@ fun DrawerCore(
 
     Scaffold(
         scaffoldState = scaffoldState,
-        //this allows to dismiss the drawer if its open by tapping on dimmed area
+        // this allows to dismiss the drawer if its open by tapping on dimmed area
         drawerGesturesEnabled = scaffoldState.drawerState.let { it.isOpen && !it.isAnimationRunning },
         floatingActionButton = {
             if (isDrawerVisible.value) {
@@ -82,12 +83,12 @@ fun DrawerCore(
                     screens = drawerScreens,
                     selectedTab = selectedTab.value
                 ) { index, route ->
-                    //this means we're already on the selected tab
+                    // this means we're already on the selected tab
                     if (index != selectedTab.value) {
                         selectedTab.value = index
                         navController.navigateToRootDestination(route)
                     }
-                    //Skip closing drawer if it's not opened completely
+                    // Skip closing drawer if it's not opened completely
                     if (scaffoldState.drawerState.let { it.isClosed && it.isAnimationRunning }) return@Drawer
                     scope.launch {
                         scaffoldState.drawerState.animateTo(
@@ -98,15 +99,14 @@ fun DrawerCore(
                 }
             }
         },
-        content = { innerPadding ->
+        content = {
             AnimatedNavHost(
                 navController = navController,
                 startDestination = startDestination,
-                enterTransition = { fadeIn(animationSpec = tween(350)) },
-                exitTransition = { fadeOut(animationSpec = tween(350)) },
+                enterTransition = { fadeIn(animationSpec = tween(durationMillis = 350)) },
+                exitTransition = { fadeOut(animationSpec = tween(durationMillis = 350)) },
                 modifier = Modifier.padding(0.dp)
             ) {
-
                 composable(Destination.Tab1.route) { Tab1Screen() }
                 composable(Destination.Tab2.route) {
                     BackHandler(onBack = {
@@ -122,10 +122,7 @@ fun DrawerCore(
                     })
                     Tab3Screen()
                 }
-
             }
         }
     )
 }
-
-

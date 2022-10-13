@@ -20,9 +20,6 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.skyyo.samples.theme.Shapes
 
-
-data class ChatMessage(val message: String)
-
 private val topColorArgb = Color(0xFF106CCF).toArgb()
 private val bottomColorArgb = Color(0xFFE7D21A).toArgb()
 
@@ -92,7 +89,6 @@ fun GradientMessage(
             .padding(vertical = 8.dp, horizontal = 16.dp),
     )
 }
-
 
 fun calculateGradient(progress: Float, evaluator: ArgbEvaluator): Color {
     return Color(evaluator.evaluate(progress, topColorArgb, bottomColorArgb) as Int)

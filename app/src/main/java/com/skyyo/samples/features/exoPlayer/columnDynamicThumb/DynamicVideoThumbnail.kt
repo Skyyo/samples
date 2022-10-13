@@ -6,28 +6,29 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import coil.request.videoFrameMillis
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun DynamicVideoThumbnail(
     imageLoader: ImageLoader,
     mediaUrl: String,
     lastPlayedPosition: Long
 ) {
-    val painter = rememberImagePainter(
-        data = mediaUrl,
-        imageLoader = imageLoader,
-        builder = {
-            videoFrameMillis(lastPlayedPosition)
-            crossfade(true)
-            size(512, 512)
-            placeholder(android.R.drawable.ic_delete)
-        },
+    val context = LocalContext.current
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(mediaUrl)
+            .videoFrameMillis(lastPlayedPosition)
+            .crossfade(true)
+            .size(512)
+            .placeholder(android.R.drawable.ic_delete)
+            .build(),
+        imageLoader = imageLoader
     )
     Image(
         painter = painter,

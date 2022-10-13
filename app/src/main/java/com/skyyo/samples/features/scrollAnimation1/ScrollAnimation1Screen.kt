@@ -80,6 +80,4 @@ fun ScrollAnimation1Screen(viewModel: ScrollAnimation1ViewModel = hiltViewModel(
             toolbarOffsetHeightPx = toolbarOffsetHeightPx.value
         )
     }
-
 }
-

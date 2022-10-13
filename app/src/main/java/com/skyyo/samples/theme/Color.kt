@@ -8,3 +8,4 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 val DarkGray = Color(0xFF464646)
 val White = Color(0xFFFFFFFF)
+val Error = Color.Red

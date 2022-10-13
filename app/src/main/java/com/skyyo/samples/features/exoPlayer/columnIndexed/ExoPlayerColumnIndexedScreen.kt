@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -16,31 +15,29 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
-import kotlinx.coroutines.flow.collect
-
 
 @Composable
 fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val exoPlayer = remember(context) { SimpleExoPlayer.Builder(context).build() }
+    val exoPlayer = remember(context) { ExoPlayer.Builder(context).build() }
     val listState = rememberLazyListState()
 
-    val videos by viewModel.videos.observeAsState(listOf())
-    val playingItemIndex by viewModel.currentlyPlayingIndex.observeAsState()
-    val isCurrentItemVisible = remember { mutableStateOf(false) }
+    val videos by viewModel.videos.collectAsState()
+    val playingItemIndex by viewModel.currentlyPlayingIndex.collectAsState()
+    var isCurrentItemVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         snapshotFlow {
             listState.visibleAreaContainsItem(playingItemIndex, videos)
         }.collect { isVisible ->
-            isCurrentItemVisible.value = isVisible
+            isCurrentItemVisible = isVisible
         }
     }
 
@@ -55,8 +52,8 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
         }
     }
 
-    LaunchedEffect(isCurrentItemVisible.value) {
-        if (!isCurrentItemVisible.value && playingItemIndex != null) {
+    LaunchedEffect(isCurrentItemVisible) {
+        if (!isCurrentItemVisible && playingItemIndex != null) {
             viewModel.onPlayVideoClick(exoPlayer.currentPosition, playingItemIndex!!)
         }
     }
@@ -67,6 +64,7 @@ fun ExoPlayerColumnIndexedScreen(viewModel: ExoPlayerColumnIndexedViewModel = hi
             when (event) {
                 Lifecycle.Event.ON_START -> exoPlayer.play()
                 Lifecycle.Event.ON_STOP -> exoPlayer.pause()
+                else -> {}
             }
         }
 
@@ -114,5 +112,3 @@ private fun LazyListState.visibleAreaContainsItem(
             .contains(videos[currentlyPlayedIndex])
     }
 }
-
-

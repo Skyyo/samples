@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Samples</string>
+    <string name="map">Карта</string>
+    <string name="profile">Профіль</string>
+    <string name="edit_profile">Зміна профіля</string>
+    <string name="profile_confirmation">Підтвердження профіля</string>
+    <string name="samples">Samples</string>
+    <string name="upcoming_launches">Майбутні запуски</string>
+    <string name="validation_error">Помилка валідації</string>
+    <string name="network_error">Мережева помилка</string>
+    <string name="success">Успіх</string>
+    <string name="credit_card_number">Номер кредитної карти</string>
+    <string name="name">ім\'я</string>
+    <string name="name_too_short">ім\'я надто коротке</string>
+    <string name="card_number_too_short">номер картки надто короткий</string>
+    <string name="please_grant_camera_permission_qr">Будь-ласка\n надайте доступ до камери для сканування\nQR коду</string>
+    <string name="please_grant_camera_permission_from_settings">Будь-ласка надайте доступ до камери з налаштувань аплікації</string>
+    <string name="please_grant_storage_permission">Будь-ласка\n надайте доступ до сховища для відкриття PDF файлів</string>
+    <string name="please_grant_storage_permission_from_settings">Будь-ласка надайте доступ до сховища з налаштувань аплікації</string>
+    <string name="error_otp_wrong">Otp код неправильний</string>
+    <string name="ok">Добре</string>
+    <string name="cancel">Відмінити</string>
+    <string name="menu_first_tab">Перша</string>
+    <string name="menu_second_tab">Друга</string>
+    <string name="change_language">Змінити мову</string>
+</resources>

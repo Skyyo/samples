@@ -1,11 +1,11 @@
 package com.skyyo.samples.features.pagination.common
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -16,9 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
+import coil.compose.rememberAsyncImagePainter
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.Purple500
 import com.skyyo.samples.theme.Shapes
@@ -40,22 +40,21 @@ fun CustomCard(catId: String) {
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 56.dp)
         ) {
-            Image(painter = rememberImagePainter(
-                data = "https://placekitten.com/g/200/300",
-                builder = {
-                    transformations(CircleCropTransformation())
-                }
-            ),
+            Image(
+                painter = rememberAsyncImagePainter("https://placekitten.com/g/200/300"),
                 contentDescription = null,
                 modifier = Modifier
                     .size(56.dp)
-                    .padding(horizontal = 8.dp))
+                    .padding(horizontal = 8.dp)
+                    .aspectRatio(1f)
+                    .clip(CircleShape),
+                contentScale = ContentScale.FillWidth
+            )
             Text(catId, modifier = Modifier.align(Alignment.CenterVertically))
         }
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun FadingFab(
     modifier: Modifier = Modifier,

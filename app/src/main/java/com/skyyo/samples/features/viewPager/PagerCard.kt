@@ -44,11 +44,11 @@ fun PagerCard(
                 }
                 // We animate the alpha, between 50% and 100%
                 alpha = lerp(start = 0.5f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f))
-                //offset for snapping
+                // offset for snapping
                 translationX = offset
             }
             .background(backgroundColor, shape = Shapes.large)
-            .fillMaxSize(0.3f)
+            .fillMaxSize(fraction = 0.3f)
             .height(256.dp)
     ) {
         Button(onClick = { onClick() }) {

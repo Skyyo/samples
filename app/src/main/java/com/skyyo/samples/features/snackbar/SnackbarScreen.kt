@@ -31,7 +31,7 @@ fun SnackbarScreen() {
             Text(text = "show snack")
         }
         SnackbarHost(
-            //this allows to customize the snackbar appearance
+            // this allows to customize the snackbar appearance
             snackbar = {
                 Box(
                     Modifier
@@ -49,7 +49,6 @@ fun SnackbarScreen() {
                 .navigationBarsPadding()
         )
     }
-
 }
 
 suspend fun showSnackbar(snackbarHostState: SnackbarHostState) {

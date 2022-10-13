@@ -16,7 +16,7 @@ private const val PAGE_LIMIT = 30
 @ViewModelScoped
 class CatsRepositoryPagingWithDatabase @Inject constructor(
     private val catsCalls: CatCalls,
-    //TODO need this only for transactions for unrelated DAO's. If needed - use single DAO
+    // TODO need this only for transactions for unrelated DAO's. If needed - use single DAO
     // with @Transaction annotations inside to reduce 3 arguments to 1
     private val db: AppDatabase,
     private val catsDao: CatsDao,
@@ -33,5 +33,4 @@ class CatsRepositoryPagingWithDatabase @Inject constructor(
         remoteMediator = CatsRemoteMediator(db, catsCalls, catsDao, catsKeysDao, query),
         pagingSourceFactory = catsDao::pagingSource
     ).flow
-
 }

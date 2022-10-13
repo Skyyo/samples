@@ -1,42 +1,48 @@
 package com.skyyo.samples.features.pagination.simpleWithDatabase
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyyo.samples.R
+import com.skyyo.samples.application.STATE_FLOW_SUB_TIME
 import com.skyyo.samples.features.pagination.common.CatsScreenEvent
-import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 private const val PAGE_LIMIT = 20
 
 @HiltViewModel
 class CatsRoomViewModel @Inject constructor(
-    private val navigationDispatcher: NavigationDispatcher,
-    private val handle: SavedStateHandle,
     private val catsRepository: CatsRepositoryWithDatabase
 ) : ViewModel() {
 
+    val events = Channel<CatsScreenEvent>()
     val cats = catsRepository.observeCats()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), listOf())
-
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
-
-    private val _events = Channel<CatsScreenEvent>()
-    val events = _events.receiveAsFlow()
-
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STATE_FLOW_SUB_TIME), listOf())
+    val isRefreshing = MutableStateFlow(false)
+    val isLastPageReached = MutableStateFlow(false)
     private var isFetchingAllowed = true
     private var itemOffset = 0
-    var isLastPageReached = false
 
     init {
+        getCats(true)
+    }
+
+    fun onScrollToTopClick() {
+        viewModelScope.launch {
+            events.send(CatsScreenEvent.ScrollToTop)
+        }
+    }
+
+    fun onSwipeToRefresh() {
+        isLastPageReached.update { false }
+        itemOffset = 0
         getCats(true)
     }
 
@@ -44,31 +50,19 @@ class CatsRoomViewModel @Inject constructor(
         if (!isFetchingAllowed) return
         isFetchingAllowed = false
         viewModelScope.launch(Dispatchers.IO) {
-            if (isFirstPage) _isRefreshing.value = true
+            if (isFirstPage) isRefreshing.update { true }
             when (val result = catsRepository.getCats(PAGE_LIMIT, itemOffset)) {
                 is CatsRoomResult.NetworkError -> {
                     isFetchingAllowed = true
-                    _events.send(CatsScreenEvent.ShowToast(R.string.network_error))
+                    events.send(CatsScreenEvent.ShowToast(R.string.network_error))
                 }
                 is CatsRoomResult.Success -> {
                     itemOffset += PAGE_LIMIT
                     isFetchingAllowed = !result.lastPageReached
-                    isLastPageReached = result.lastPageReached
+                    isLastPageReached.update { result.lastPageReached }
                 }
             }
-            if (isFirstPage) _isRefreshing.value = false
+            if (isFirstPage) isRefreshing.update { false }
         }
-    }
-
-    fun onScrollToTopClick() {
-        viewModelScope.launch(Dispatchers.Default) {
-            _events.send(CatsScreenEvent.ScrollToTop)
-        }
-    }
-
-    fun onSwipeToRefresh() {
-        isLastPageReached = false
-        itemOffset = 0
-        getCats(true)
     }
 }

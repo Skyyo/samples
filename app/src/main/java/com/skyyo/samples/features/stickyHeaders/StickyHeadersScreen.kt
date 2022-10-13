@@ -22,6 +22,9 @@ import com.skyyo.samples.extensions.addVerticalScrollbar
 import com.skyyo.samples.theme.DarkGray
 import com.skyyo.samples.theme.Teal200
 
+private const val SIZE_TRANSFORM_DURATION = 1300
+private const val KEY_FRAME = 1500
+
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun ListsScreen() {
@@ -45,7 +48,7 @@ fun ListsScreen() {
                 )
             }
         }
-        items(50) {
+        items(count = 50) {
             val transitionState = remember {
                 MutableTransitionState(true).apply {
                     targetState = false
@@ -55,8 +58,8 @@ fun ListsScreen() {
             val offsetX by transition.animateDp({
                 tween(durationMillis = 500)
             }, label = "offsetXTransition") {
-                if (it) (-88).dp else 24.dp
-            }
+            if (it) (-88).dp else 24.dp
+        }
             Card(
                 backgroundColor = DarkGray,
                 modifier = Modifier.absoluteOffset(x = offsetX)
@@ -70,29 +73,29 @@ fun ListsScreen() {
                 Text("sticky header 2", modifier = Modifier.statusBarsPadding())
             }
         }
-        items(50) {
+        items(count = 50) {
             var initialBoolean by remember { mutableStateOf(false) }
             SideEffect {
                 initialBoolean = true
             }
             AnimatedContent(targetState = initialBoolean, transitionSpec = {
-                fadeIn(animationSpec = tween(500, 500)) with
-                        fadeOut(animationSpec = tween(500)) using
-                        SizeTransform { initialSize, targetSize ->
-                            if (targetState) {
-                                keyframes {
-                                    // Expand horizontally first.
-                                    IntSize(targetSize.width, initialSize.height) at 1500
-                                    durationMillis = 1300
-                                }
-                            } else {
-                                keyframes {
-                                    // Shrink vertically first.
-                                    IntSize(initialSize.width, targetSize.height) at 1500
-                                    durationMillis = 1300
-                                }
+                fadeIn(animationSpec = tween(durationMillis = 500, delayMillis = 500)) with
+                    fadeOut(animationSpec = tween(durationMillis = 500)) using
+                    SizeTransform { initialSize, targetSize ->
+                        if (targetState) {
+                            keyframes {
+                                // Expand horizontally first.
+                                IntSize(targetSize.width, initialSize.height) at KEY_FRAME
+                                durationMillis = SIZE_TRANSFORM_DURATION
+                            }
+                        } else {
+                            keyframes {
+                                // Shrink vertically first.
+                                IntSize(initialSize.width, targetSize.height) at KEY_FRAME
+                                durationMillis = SIZE_TRANSFORM_DURATION
                             }
                         }
+                    }
             }) { targetExpanded ->
                 if (targetExpanded) {
                     Card(backgroundColor = DarkGray) {
@@ -108,6 +111,4 @@ fun ListsScreen() {
             }
         }
     }
-
 }
-

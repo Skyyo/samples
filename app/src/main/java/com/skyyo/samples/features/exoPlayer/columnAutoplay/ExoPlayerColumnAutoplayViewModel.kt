@@ -1,16 +1,15 @@
 package com.skyyo.samples.features.exoPlayer.columnAutoplay
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
-
 
 @HiltViewModel
 class ExoPlayerColumnAutoplayViewModel @Inject constructor() : ViewModel() {
 
-    val videos = MutableLiveData<List<VideoItem>>()
+    val videos = MutableStateFlow<List<VideoItem>>(listOf())
 
     init {
         populateListWithFakeData()
@@ -69,7 +68,6 @@ class ExoPlayerColumnAutoplayViewModel @Inject constructor() : ViewModel() {
                 "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg"
             ),
         )
-        videos.postValue(testVideos)
+        videos.value = testVideos
     }
-
 }

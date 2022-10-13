@@ -6,18 +6,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 
-@OptIn(ExperimentalCoilApi::class)
+private const val IMAGE_SIZE = 512
+
 @Composable
 fun VideoThumbnail(url: String) {
+    val context = LocalContext.current
     Image(
-        painter = rememberImagePainter(data = url, builder = {
-            crossfade(true)
-            size(512, 512)
-        }),
+        painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(context)
+                .data(url)
+                .crossfade(true)
+                .size(IMAGE_SIZE)
+                .build()
+        ),
         contentDescription = null,
         modifier = Modifier
             // this can be optimized to prevent overdraw. Should be shown only

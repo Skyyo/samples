@@ -7,7 +7,6 @@ import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
 class SampleContainerViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher
@@ -55,6 +54,10 @@ class SampleContainerViewModel @Inject constructor(
 
     fun goViewPager() = navigationDispatcher.emit {
         it.navigate(Destination.ViewPager.route)
+    }
+
+    fun goInfiniteViewPager() = navigationDispatcher.emit {
+        it.navigate(Destination.InfiniteViewPager.route)
     }
 
     fun goNavigationWithValuesSimple() = navigationDispatcher.emit {
@@ -109,6 +112,14 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.SignatureView.route)
     }
 
+    fun goMarqueeText() = navigationDispatcher.emit {
+        it.navigate(Destination.MarqueeText.route)
+    }
+
+    fun goAutofill() = navigationDispatcher.emit {
+        it.navigate(Destination.Autofill.route)
+    }
+
     fun goHiltComposeSharedViewModel() = navigationDispatcher.emit {
         it.navigate(ProfileGraph.Profile.route)
     }
@@ -117,12 +128,20 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.QrCodeScanning.route)
     }
 
+    fun goQrScanningWithoutPermissions() = navigationDispatcher.emit {
+        it.navigate(Destination.QrNoPermissions.route)
+    }
+
     fun goScrollAnimation1() = navigationDispatcher.emit {
         it.navigate(Destination.ScrollAnimation1.route)
     }
 
     fun goSnackbar() = navigationDispatcher.emit {
         it.navigate(Destination.Snackbar.route)
+    }
+
+    fun goSnap() = navigationDispatcher.emit {
+        it.navigate(Destination.Snap.route)
     }
 
     fun goBottomBar() = navigationDispatcher.emit {
@@ -135,6 +154,10 @@ class SampleContainerViewModel @Inject constructor(
 
     fun goGradientScroll() = navigationDispatcher.emit {
         it.navigate(Destination.GradientScroll.route)
+    }
+
+    fun goNoticeableScrollableRow() = navigationDispatcher.emit {
+        it.navigate(Destination.NoticeableScrollableRow.route)
     }
 
     fun goExoPlayerColumnReference() = navigationDispatcher.emit {
@@ -153,7 +176,51 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.ExoPlayerColumnDynamicThumb.route)
     }
 
+    fun goVerticalPagerWithFling() = navigationDispatcher.emit {
+        it.navigate(Destination.VerticalPagerWithFling.route)
+    }
+
     fun goDominantColor() = navigationDispatcher.emit {
         it.navigate(Destination.DominantColor.route)
+    }
+
+    fun goZoomable() = navigationDispatcher.emit {
+        it.navigate(Destination.Zoomable.route)
+    }
+
+    fun goPdfViewer() = navigationDispatcher.emit {
+        it.navigate(Destination.PdfViewer.route)
+    }
+
+    fun goDragAndDrop() = navigationDispatcher.emit {
+        it.navigate(Destination.DragAndDrop.route)
+    }
+
+    fun goHealthConnect() = navigationDispatcher.emit {
+        it.navigate(Destination.HealthConnect.route)
+    }
+
+    fun goImagePicker() = navigationDispatcher.emit {
+        it.navigate(Destination.ImagePicker.route)
+    }
+
+    fun goLanguagePicker() = navigationDispatcher.emit {
+        it.navigate(Destination.LanguagePicker.route)
+    }
+
+    fun goCardRecognition() = navigationDispatcher.emit {
+        it.navigate(Destination.CardRecognition.route)
+    }
+
+    fun goGooglePay() = navigationDispatcher.emit {
+        it.navigate(Destination.GooglePay.route)
+    }
+
+    fun goTextSpans() = navigationDispatcher.emit {
+        it.navigate(Destination.TextSpans.route)
+    }
+
+    fun goImeAwareLazyColumn() = navigationDispatcher.emit {
+        it.navigate(Destination.ImeAwareLazyColumn.route)
     }
 }

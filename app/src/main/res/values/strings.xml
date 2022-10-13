@@ -1,20 +1,26 @@
 <resources>
     <string name="app_name">Samples</string>
-    <string name="map">Map</string>
-    <string name="dog_feed">Dog feed</string>
-    <string name="profile">Profile</string>
-    <string name="edit_profile">Edit Profile</string>
-    <string name="profile_confirmation">Profile Confirmation</string>
-    <string name="samples">Samples</string>
-    <string name="upcoming_launches">Upcoming launches</string>
-    <string name="validation_error">Validation Error</string>
-    <string name="network_error">Network Error</string>
-    <string name="success">Success</string>
-    <string name="credit_card_number">Credit Card Number</string>
-    <string name="name">name</string>
-    <string name="name_too_short">name too short</string>
-    <string name="card_number_too_short">card number too short</string>
-    <string name="please_grant_camera_permission_qr">Please\ngrant camera permission to scan\nQR code and preview glasses</string>
-    <string name="please_grant_camera_permission_from_settings">Please grant camera permission from application settings</string>
-
+    <string name="map" translatable="false">Map</string>
+    <string name="profile" translatable="false">Profile</string>
+    <string name="edit_profile" translatable="false">Edit Profile</string>
+    <string name="profile_confirmation" translatable="false">Profile Confirmation</string>
+    <string name="samples" translatable="false">Samples</string>
+    <string name="upcoming_launches" translatable="false">Upcoming launches</string>
+    <string name="validation_error" translatable="false">Validation Error</string>
+    <string name="network_error" translatable="false">Network Error</string>
+    <string name="success" translatable="false">Success</string>
+    <string name="credit_card_number" translatable="false">Credit Card Number</string>
+    <string name="name" translatable="false">name</string>
+    <string name="name_too_short" translatable="false">name too short</string>
+    <string name="card_number_too_short" translatable="false">card number too short</string>
+    <string name="please_grant_camera_permission_qr" translatable="false">Please\ngrant camera permission to scan\nQR code and preview glasses</string>
+    <string name="please_grant_camera_permission_from_settings" translatable="false">Please grant camera permission from application settings</string>
+    <string name="please_grant_storage_permission" translatable="false">Please\ngrant storage permission to open PDF file</string>
+    <string name="please_grant_storage_permission_from_settings" translatable="false">Please grant storage permission from application settings</string>
+    <string name="error_otp_wrong" translatable="false">Otp is wrong</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="cancel" translatable="false">Cancel</string>
+    <string name="menu_first_tab">First tab</string>
+    <string name="menu_second_tab">Second tab</string>
+    <string name="change_language">Change language</string>
 </resources>

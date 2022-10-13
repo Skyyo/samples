@@ -5,6 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.skyyo.samples.application.CODE_200
 import com.skyyo.samples.application.models.Cat
 import com.skyyo.samples.application.network.calls.CatCalls
 import com.skyyo.samples.application.persistance.room.AppDatabase
@@ -60,11 +61,11 @@ class CatsRemoteMediator(
         }
         val limit = if (page == START_PAGE) state.config.initialLoadSize else state.config.pageSize
         val offset = if (page == START_PAGE) 0 else PAGE_INITIAL_LIMIT + (page - 1) * limit
-        //offset = page * limit  use when PAGE_INITIAL_LIMIT == PAGE_LIMIT
+        // offset = page * limit  use when PAGE_INITIAL_LIMIT == PAGE_LIMIT
         val response = tryOrNull { catCalls.getCats(offset, limit) }
 
         return when {
-            response?.code() == 200 -> {
+            response?.code() == CODE_200 -> {
                 val cats = response.body()!!
                 val isLastPageReached = cats.size != limit
                 appDatabase.withTransaction {
@@ -92,7 +93,7 @@ class CatsRemoteMediator(
         }
     }
 
-    //LoadType.REFRESH
+    // LoadType.REFRESH
     private suspend fun getRemoteKeyClosestToCurrentPosition(
         state: PagingState<Int, Cat>
     ): CatsRemoteKeys? {
@@ -105,7 +106,7 @@ class CatsRemoteMediator(
         }
     }
 
-    //LoadType.APPEND
+    // LoadType.APPEND
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Cat>): CatsRemoteKeys? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
@@ -115,7 +116,7 @@ class CatsRemoteMediator(
         }
     }
 
-    //LoadType.PREPEND
+    // LoadType.PREPEND
     private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Cat>): CatsRemoteKeys? {
         // Get the first page that was retrieved, that contained items.
         // From that first page, get the first item

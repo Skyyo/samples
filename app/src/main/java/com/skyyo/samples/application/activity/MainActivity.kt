@@ -1,13 +1,17 @@
 package com.skyyo.samples.application.activity
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
@@ -24,12 +28,11 @@ import com.skyyo.samples.application.persistance.DataStoreManager
 import com.skyyo.samples.theme.IgdbBrowserTheme
 import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var dataStoreManager: DataStoreManager
@@ -41,8 +44,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyEdgeToEdge()
-
-        //TODO can be optimized. Shouldn't be used if we don't allow for manual theme switching,
+        // TODO can be optimized. Shouldn't be used if we don't allow for manual theme switching,
         // unless we force light theme
         val savedTheme = runBlocking { dataStoreManager.getAppTheme() }
 
@@ -60,7 +62,7 @@ class MainActivity : ComponentActivity() {
             }
 
             DisposableEffect(navController) {
-                val callback = NavController.OnDestinationChangedListener { _, destination, args ->
+                val callback = NavController.OnDestinationChangedListener { _, destination, _ ->
                     when (destination.route) {
                         Destination.SampleContainer.route -> {
                         }
@@ -78,10 +80,12 @@ class MainActivity : ComponentActivity() {
             }
 
             IgdbBrowserTheme(savedTheme) {
+                // accompanist window insets not working well with in-app language change library
+                // shouldn't be an issue, as we already adopted native insets, and this works fine
                 ProvideWindowInsets {
                     // used only for the bottom sheet destinations
                     ModalBottomSheetLayout(bottomSheetNavigator) {
-                        Scaffold {
+                        Surface(modifier = Modifier.fillMaxSize()) {
                             PopulatedNavHost(
                                 startDestination = Destination.SampleContainer.route,
                                 navController = navController
@@ -93,9 +97,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     private fun applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 }
-

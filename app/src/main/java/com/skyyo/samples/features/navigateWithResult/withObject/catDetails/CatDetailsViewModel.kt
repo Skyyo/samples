@@ -16,7 +16,7 @@ class CatDetailsViewModel @Inject constructor(
     private val handle: SavedStateHandle,
 ) : ViewModel() {
 
-    val cat: Dog = requireNotNull(handle.get("cat"))
+    val cat: Dog = requireNotNull(handle["cat"])
 
     fun goCatContacts() = navigationDispatcher.emit {
         it.navigateWithObject(
@@ -24,5 +24,4 @@ class CatDetailsViewModel @Inject constructor(
             arguments = bundleOf("cat" to cat)
         )
     }
-
 }

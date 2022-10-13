@@ -1,17 +1,17 @@
 package com.skyyo.samples.features.exoPlayer.columnIndexed
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyyo.samples.features.exoPlayer.common.VideoItemImmutable
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
-
 
 @HiltViewModel
 class ExoPlayerColumnIndexedViewModel @Inject constructor() : ViewModel() {
 
-    val videos = MutableLiveData<List<VideoItemImmutable>>()
-    val currentlyPlayingIndex = MutableLiveData<Int?>()
+    val videos = MutableStateFlow<List<VideoItemImmutable>>(listOf())
+    val currentlyPlayingIndex = MutableStateFlow<Int?>(null)
 
     init {
         populateListWithFakeData()
@@ -70,27 +70,27 @@ class ExoPlayerColumnIndexedViewModel @Inject constructor() : ViewModel() {
                 "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg"
             ),
         )
-        videos.postValue(testVideos)
+        videos.value = testVideos
     }
 
     fun onPlayVideoClick(playbackPosition: Long, videoIndex: Int) {
         when (currentlyPlayingIndex.value) {
             // video is not playing at the moment
-            null -> currentlyPlayingIndex.postValue(videoIndex)
+            null -> currentlyPlayingIndex.update { videoIndex }
             // this video is already playing
             videoIndex -> {
-                currentlyPlayingIndex.postValue(null)
-                videos.value = videos.value!!.toMutableList().also { list ->
+                currentlyPlayingIndex.update { null }
+                videos.value = videos.value.toMutableList().also { list ->
                     list[videoIndex] = list[videoIndex].copy(lastPlayedPosition = playbackPosition)
                 }
             }
             // video is playing, and we're requesting new video to play
             else -> {
-                videos.value = videos.value!!.toMutableList().also { list ->
+                videos.value = videos.value.toMutableList().also { list ->
                     list[currentlyPlayingIndex.value!!] =
                         list[currentlyPlayingIndex.value!!].copy(lastPlayedPosition = playbackPosition)
                 }
-                currentlyPlayingIndex.postValue(videoIndex)
+                currentlyPlayingIndex.update { videoIndex }
             }
         }
     }

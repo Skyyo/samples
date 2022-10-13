@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.skyyo.samples.features.exoPlayer.common.VideoItem
+import androidx.media3.exoplayer.ExoPlayer
 import com.skyyo.samples.features.exoPlayer.VideoPlayerWithControls
+import com.skyyo.samples.features.exoPlayer.common.VideoItem
 import com.skyyo.samples.features.exoPlayer.common.VideoThumbnail
 import com.skyyo.samples.theme.Shapes
 
@@ -22,7 +22,7 @@ import com.skyyo.samples.theme.Shapes
 fun AutoPlayVideoCard(
     videoItem: VideoItem,
     isPlaying: Boolean,
-    exoPlayer: SimpleExoPlayer,
+    exoPlayer: ExoPlayer,
 ) {
     Box(
         modifier = Modifier

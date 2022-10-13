@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class GoogleMapViewModel @Inject constructor() : ViewModel() {
 
@@ -35,7 +34,7 @@ class GoogleMapViewModel @Inject constructor() : ViewModel() {
 
     private fun getFakeLocations() = viewModelScope.launch(Dispatchers.Default) {
         val pointsList = mutableListOf<Cluster>()
-        repeat(100) {
+        repeat(times = 100) {
             val lat = it * 0.4
             val lng = it * 0.4
             pointsList.add(Cluster(lat, lng))

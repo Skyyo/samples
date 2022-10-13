@@ -14,7 +14,8 @@ fun EditProfileScreen(profileSharedViewModel: ProfileSharedViewModel) {
     Column(
         Modifier
             .fillMaxSize()
-            .statusBarsPadding()) {
+            .statusBarsPadding()
+    ) {
         Text(text = "Edit Profile Screen")
         Button(onClick = profileSharedViewModel::goProfileConfirmation) {
             Text(text = "go Confirm Profile Screen")

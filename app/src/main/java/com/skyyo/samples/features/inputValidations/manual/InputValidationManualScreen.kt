@@ -25,11 +25,11 @@ import com.skyyo.samples.R
 import com.skyyo.samples.extensions.toast
 import com.skyyo.samples.features.inputValidations.*
 import com.skyyo.samples.utils.creditCardFilter
-import kotlinx.coroutines.flow.collect
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputValidationManualScreen(viewModel: FormValidationManualViewModel = hiltViewModel()) {
+fun InputValidationManualScreen(viewModel: InputValidationManualViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val focusManager = LocalFocusManager.current
@@ -63,6 +63,7 @@ fun InputValidationManualScreen(viewModel: FormValidationManualViewModel = hiltV
                     when (event.textFieldKey) {
                         FocusedTextFieldKey.NAME -> nameFocusRequester.requestFocus()
                         FocusedTextFieldKey.CREDIT_CARD_NUMBER -> creditCardNumberFocusRequester.requestFocus()
+                        else -> {}
                     }
                 }
                 is ScreenEvent.MoveFocus -> focusManager.moveFocus(event.direction)
