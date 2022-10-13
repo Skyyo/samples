@@ -14,7 +14,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -30,7 +29,6 @@ import java.io.OutputStream
 
 enum class SignatureViewEvent { Save, Reset }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignatureViewScreen() {
     val lifecycleOwner = LocalLifecycleOwner.current

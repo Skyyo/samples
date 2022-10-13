@@ -1,9 +1,14 @@
 package com.skyyo.samples.features.signatureView
 
 import android.graphics.Bitmap
+import android.os.Parcelable
 import android.view.MotionEvent
 import androidx.compose.foundation.Canvas
-import androidx.compose.runtime.*
+import androidx.compose.foundation.background
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -16,9 +21,11 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.parcelize.Parcelize
 import kotlin.math.roundToInt
 
-data class MotionEventValue(val eventType: Int, val x: Float, val y: Float)
+@Parcelize
+data class MotionEventValue(val eventType: Int, val x: Float, val y: Float) : Parcelable
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -26,6 +33,7 @@ fun SignatureView(
     modifier: Modifier = Modifier,
     stroke: Stroke = Stroke(10f),
     paintColor: Color = Color.Black,
+    canvasColor: Color = Color.Transparent,
     events: Flow<SignatureViewEvent>,
     onBitmapSaved: (bitmap: Bitmap) -> Unit
 ) {
@@ -46,7 +54,9 @@ fun SignatureView(
             bounds.width.roundToInt(), bounds.height.roundToInt(),
             Bitmap.Config.ARGB_8888
         )
-        val canvasForSnapshot = Canvas(bitmap.asImageBitmap())
+        val canvasForSnapshot = Canvas(bitmap.asImageBitmap()).apply {
+            nativeCanvas.drawColor(canvasColor.toArgb())
+        }
         canvasForSnapshot.drawPath(savedList.toPath(), paint)
 
         return bitmap
@@ -71,6 +81,7 @@ fun SignatureView(
         modifier = modifier
             .onGloballyPositioned { viewBounds.value = it.boundsInRoot() }
             .clipToBounds()
+            .background(canvasColor)
             .pointerInteropFilter {
                 val x = it.x
                 val y = it.y
@@ -89,14 +100,11 @@ fun SignatureView(
             },
     ) {
         motionEventValue.value.run {
-            this?.let {
-                savedList.add(it)
-            }
+            if (this != null) savedList.add(this)
             drawPath(
                 path = savedList.toPath(),
                 color = paintColor,
-                alpha = 1f,
-                style = Stroke(4f)
+                style = stroke
             )
         }
     }
