@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -23,6 +27,7 @@ import kotlin.math.absoluteValue
 private const val INFINITE_PAGER_MAX_PAGE_COUNT = 100000
 const val INFINITE_PAGER_INITIAL_PAGE = INFINITE_PAGER_MAX_PAGE_COUNT / 2
 
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalPagerApi
 @Composable
 fun InfiniteViewPagerScreen() {
@@ -51,10 +56,15 @@ fun InfiniteViewPagerScreen() {
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .semantics { testTagsAsResourceId = true }
+    ) {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+            modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("horizontalPager")
         ) { page ->
             key(page) {
                 val currentPage = (page - INFINITE_PAGER_INITIAL_PAGE).floorMod(pages.size)

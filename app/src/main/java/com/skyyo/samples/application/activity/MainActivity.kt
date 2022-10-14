@@ -1,5 +1,6 @@
 package com.skyyo.samples.application.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +22,9 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
+import com.skyyo.samples.application.INTENT_ACTION_OPEN_FEATURE
 import com.skyyo.samples.application.Destination
+import com.skyyo.samples.application.INTENT_EXTRA_FEATURE_ROUTE
 import com.skyyo.samples.application.persistance.DataStoreManager
 import com.skyyo.samples.extensions.log
 import com.skyyo.samples.features.userInteractionTrackingResult.IdlingSessionEvent
@@ -89,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                 ModalBottomSheetLayout(bottomSheetNavigator) {
                     Surface(modifier = Modifier.fillMaxSize()) {
                         PopulatedNavHost(
-                            startDestination = Destination.SampleContainer.route,
+                            startDestination = provideStartDestination(intent),
                             navController = navController
                         )
                     }
@@ -104,6 +107,13 @@ class MainActivity : AppCompatActivity() {
     override fun onUserInteraction() {
         super.onUserInteraction()
         idlingSessionManager.startSession()
+    }
+
+    private fun provideStartDestination(intent: Intent): String = when (intent.action) {
+        INTENT_ACTION_OPEN_FEATURE -> {
+            intent.extras?.getString(INTENT_EXTRA_FEATURE_ROUTE) ?: Destination.SampleContainer.route
+        }
+        else -> Destination.SampleContainer.route
     }
 
     private fun applyEdgeToEdge() {

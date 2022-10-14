@@ -10,9 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
@@ -22,6 +26,7 @@ private const val BOTTOM_SHEET_HEIGHT_FRACTION = .96f
  * can be used both as modal & persistent sheet,
  * just not fit for destinations
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun BottomSheetScaffoldScreen() {
@@ -36,6 +41,7 @@ fun BottomSheetScaffoldScreen() {
     val currentValue = scaffoldState.bottomSheetState.currentValue
 
     BottomSheetScaffold(
+        modifier = Modifier.semantics { testTagsAsResourceId = true },
         scaffoldState = scaffoldState,
         sheetShape = remember(cornerRadius) {
             RoundedCornerShape(
@@ -54,7 +60,7 @@ fun BottomSheetScaffoldScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().testTag("switchButton"),
                     onClick = {
                         coroutineScope.launch {
                             if (scaffoldState.bottomSheetState.isCollapsed) {
