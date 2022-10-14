@@ -20,6 +20,7 @@ Keyboard
 - [issue](https://issuetracker.google.com/issues/205751272), [issue](https://issuetracker.google.com/issues/192043120) with adjustPan/adjustResize mode not pinning to the focused textField. [Workaround](https://issuetracker.google.com/issues/205751272#comment3)
 
 Miscellaneous
+- Need to remember lambdas which capture outside scope when not not used as a reference [issue](https://issuetracker.google.com/issues/246929971)
 - We can't drop usage of liveData completely since it is still needed for scenarios which cover flow being observed with flatMapLatest ( as a typical scenario for searching by query ). Latter [issue](https://github.com/Kotlin/kotlinx.coroutines/issues/2223)
 - Persistent Bottom Sheet sample doesn't work right now due to this [issue](https://issuetracker.google.com/issues/235588730)
 - there is no out of the box support for scroll bars as of August 19, 2021. [Sample for simple cases](https://stackoverflow.com/questions/66341823/jetpack-compose-scrollbars/68056586#68056586)
