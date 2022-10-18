@@ -10,6 +10,9 @@ import com.skyyo.samples.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+const val START_ANIMATION_RECT_KEY = "startAnimationRect"
+const val END_ANIMATION_RECT_KEY = "endAnimationRect"
+
 @HiltViewModel
 class DogDetailsViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,

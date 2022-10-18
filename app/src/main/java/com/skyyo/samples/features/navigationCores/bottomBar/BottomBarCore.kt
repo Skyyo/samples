@@ -1,5 +1,6 @@
 package com.skyyo.samples.features.navigationCores.bottomBar
 
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -25,7 +27,7 @@ import com.skyyo.samples.application.Destination
 import com.skyyo.samples.extensions.navigateToRootDestination
 import com.skyyo.samples.extensions.navigateWithObject
 import com.skyyo.samples.features.navigateWithResult.simple.dogContacts.DogContactsScreen
-import com.skyyo.samples.features.navigateWithResult.simple.dogDetails.DogDetailsScreen
+import com.skyyo.samples.features.navigateWithResult.simple.dogDetails.*
 import com.skyyo.samples.features.navigateWithResult.simple.dogFeed.DogFeedScreen
 import com.skyyo.samples.features.navigateWithResult.withObject.catContacts.CatContactsScreen
 import com.skyyo.samples.features.navigateWithResult.withObject.catDetails.CatDetailsScreen
@@ -97,8 +99,8 @@ fun BottomBarCore(
             composable(Destination.Tab1.route) { Tab1Screen() }
             composable(Destination.Tab2.route) { Tab2Screen(withBottomBar = true) }
             composable(Destination.Tab3.route) { Tab3Screen(withBottomBar = true) }
-            composable(Destination.DogFeed.route) { DogFeedScreen() }
-            composable(Destination.DogDetails.route) { DogDetailsScreen() }
+            dogFeedComposable()
+            dogDetailsComposable()
             composable(Destination.DogContacts.route) { DogContactsScreen() }
             composable(Destination.CatFeed.route) { CatFeedScreen() }
             composable(Destination.CatDetails.route) { CatDetailsScreen() }
@@ -136,6 +138,57 @@ fun BottomBarCore(
         }
 
         if (!isVerificationServerReady) CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private fun NavGraphBuilder.dogFeedComposable() {
+    composable(
+        route = Destination.DogFeed.route,
+        popEnterTransition = { dogDetailsPreviousDestinationPopEnterTransition() }
+    ) {
+        DogFeedScreen()
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private fun NavGraphBuilder.dogDetailsComposable() {
+    composable(
+        route = Destination.DogDetails.route,
+        enterTransition = {
+            val startAnimationRect = initialState.savedStateHandle.get<String>(START_ANIMATION_RECT_KEY)
+            val endAnimationRect = initialState.savedStateHandle.get<String>(END_ANIMATION_RECT_KEY)
+            when {
+                startAnimationRect == null || endAnimationRect == null -> {
+                    fadeIn(animationSpec = tween(durationMillis = 350))
+                }
+                else -> {
+                    dogDetailsEnterTransition(
+                        startAnimationRect = Rect.unflattenFromString(startAnimationRect)!!.toComposeRect(),
+                        endAnimationRect = Rect.unflattenFromString(endAnimationRect)!!.toComposeRect(),
+                    )
+                }
+            }
+        },
+        exitTransition = { fadeOut(animationSpec = tween(durationMillis = 350)) },
+        popExitTransition = {
+            val startAnimationRect = targetState.savedStateHandle.get<String>(START_ANIMATION_RECT_KEY)
+            val endAnimationRect = targetState.savedStateHandle.get<String>(END_ANIMATION_RECT_KEY)
+            when {
+                startAnimationRect == null || endAnimationRect == null -> {
+                    fadeOut(animationSpec = tween(durationMillis = 350))
+                }
+                else -> {
+                    dogDetailsExitTransition(
+                        startAnimationRect = Rect.unflattenFromString(endAnimationRect)!!.toComposeRect(),
+                        endAnimationRect = Rect.unflattenFromString(startAnimationRect)!!.toComposeRect()
+                    )
+                }
+            }
+        },
+        popEnterTransition = { fadeIn(animationSpec = tween(durationMillis = 350)) }
+    ) {
+        DogDetailsScreen()
     }
 }
 
