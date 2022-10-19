@@ -87,6 +87,7 @@ fun BottomBarCore(
             isVerificationServerReady = true
         }
     }
+    val dogDetailsTransitionProvider = remember { DogDetailsTransitionsProvider() }
 
     Box {
         AnimatedNavHost(
@@ -99,8 +100,8 @@ fun BottomBarCore(
             composable(Destination.Tab1.route) { Tab1Screen() }
             composable(Destination.Tab2.route) { Tab2Screen(withBottomBar = true) }
             composable(Destination.Tab3.route) { Tab3Screen(withBottomBar = true) }
-            dogFeedComposable()
-            dogDetailsComposable()
+            dogFeedComposable(dogDetailsTransitionProvider)
+            dogDetailsComposable(dogDetailsTransitionProvider)
             composable(Destination.DogContacts.route) { DogContactsScreen() }
             composable(Destination.CatFeed.route) { CatFeedScreen() }
             composable(Destination.CatDetails.route) { CatDetailsScreen() }
@@ -142,17 +143,23 @@ fun BottomBarCore(
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-private fun NavGraphBuilder.dogFeedComposable() {
+private fun NavGraphBuilder.dogFeedComposable(
+    dogDetailsTransitionsProvider: DogDetailsTransitionsProvider
+) {
     composable(
         route = Destination.DogFeed.route,
-        popEnterTransition = { dogDetailsPreviousDestinationPopEnterTransition() }
+        popEnterTransition = {
+            dogDetailsTransitionsProvider.getPreviousDestinationPopEnterTransition()
+        }
     ) {
         DogFeedScreen()
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-private fun NavGraphBuilder.dogDetailsComposable() {
+private fun NavGraphBuilder.dogDetailsComposable(
+    dogDetailsTransitionsProvider: DogDetailsTransitionsProvider
+) {
     composable(
         route = Destination.DogDetails.route,
         enterTransition = {
@@ -163,7 +170,7 @@ private fun NavGraphBuilder.dogDetailsComposable() {
                     fadeIn(animationSpec = tween(durationMillis = 350))
                 }
                 else -> {
-                    dogDetailsEnterTransition(
+                    dogDetailsTransitionsProvider.getEnterTransition(
                         startAnimationRect = Rect.unflattenFromString(startAnimationRect)!!.toComposeRect(),
                         endAnimationRect = Rect.unflattenFromString(endAnimationRect)!!.toComposeRect(),
                     )
@@ -179,9 +186,9 @@ private fun NavGraphBuilder.dogDetailsComposable() {
                     fadeOut(animationSpec = tween(durationMillis = 350))
                 }
                 else -> {
-                    dogDetailsExitTransition(
+                    dogDetailsTransitionsProvider.getExitTransition(
                         startAnimationRect = Rect.unflattenFromString(endAnimationRect)!!.toComposeRect(),
-                        endAnimationRect = Rect.unflattenFromString(startAnimationRect)!!.toComposeRect()
+                        endAnimationRect = Rect.unflattenFromString(startAnimationRect)!!.toComposeRect(),
                     )
                 }
             }
