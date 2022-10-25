@@ -19,7 +19,6 @@ import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import kotlinx.coroutines.flow.Flow
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -29,7 +28,7 @@ fun SignatureView(
     paintColor: Color = Color.Black,
     canvasColor: Color = Color.Transparent,
     events: Flow<SignatureViewEvent>,
-    onBitmapSaved: (bitmap: Bitmap) -> Unit,
+    onSaveBitmap: (bitmap: Bitmap) -> Unit,
 ) {
     val viewBounds = remember { mutableStateOf(Rect.Zero) }
     val paint = remember {
@@ -42,20 +41,6 @@ fun SignatureView(
     val savedList = rememberSaveable { mutableListOf<MotionEventValue>() }
     val motionEventValue = remember { mutableStateOf<MotionEventValue?>(null) }
 
-    fun getBitmap(): Bitmap {
-        val bounds = viewBounds.value
-        val bitmap = Bitmap.createBitmap(
-            bounds.width.roundToInt(), bounds.height.roundToInt(),
-            Bitmap.Config.ARGB_8888
-        )
-        val canvasForSnapshot = Canvas(bitmap.asImageBitmap()).apply {
-            nativeCanvas.drawColor(canvasColor.toArgb())
-        }
-        canvasForSnapshot.drawPath(savedList.toPath(), paint)
-
-        return bitmap
-    }
-
     LaunchedEffect(Unit) {
         events.collect { event ->
             when (event) {
@@ -64,8 +49,13 @@ fun SignatureView(
                     motionEventValue.value = MotionEventValue(MotionEvent.ACTION_DOWN, 0.0f, 0.0f)
                 }
                 SignatureViewEvent.Save -> {
-                    val bitmap = getBitmap()
-                    onBitmapSaved(bitmap)
+                    val bitmap = SignatureViewUtils.getBitmap(
+                        viewBounds.value,
+                        canvasColor.toArgb(),
+                        savedList.toPath(),
+                        paint
+                    )
+                    onSaveBitmap(bitmap)
                 }
             }
         }
