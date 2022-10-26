@@ -18,12 +18,11 @@ class DogDetailsTransitionsProvider {
     private var startPlayingTime = 0L
 
     fun getEnterTransition(startAnimationRect: Rect, endAnimationRect: Rect): EnterTransition {
-        startPlayingTime = 0L
+        startPlayingTime = SystemClock.uptimeMillis()
         val expandTransition = expandIn(
             expandFrom = Alignment.TopStart,
             animationSpec = tween(durationMillis = ANIMATION_DURATION),
             initialSize = {
-                if (startPlayingTime == 0L) startPlayingTime = SystemClock.uptimeMillis()
                 IntSize(startAnimationRect.width.toInt(), startAnimationRect.height.toInt())
             }
         )
