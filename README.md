@@ -86,6 +86,7 @@ Uncategorized
 - sample of how to handle exclusion of back gesture areas. Sample should contain a LazyRow, which has it's sides excluded from the system gesture invocation.
 - DownloadManager sample. Should cover all cases (internet connection loss, fresh boot etc, cancellation) Compare with WorkManager, and describe pros & cons.
 - check the issue with compose & svg's. Icons don't mirror?
+- SignatureView sample. Check if there is any way to optimize code (initial comment https://github.com/Skyyo/samples/pull/16#discussion_r795047275). Check out another sample (https://github.com/SmartToolFactory/Jetpack-Compose-Tutorials/tree/master/Tutorial1-1Basics/src/main/java/com/smarttoolfactory/tutorial1_1basics/chapter6_graphics)
   
 # License
 ```

@@ -149,6 +149,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
     }
     Button(
         modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goSignatureView
+    ) { Text(text = "signature view") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goMarqueeText
     ) { Text(text = "marquee text") }
     Button(

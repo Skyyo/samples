@@ -108,6 +108,10 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.CustomView.route)
     }
 
+    fun goSignatureView() = navigationDispatcher.emit {
+        it.navigate(Destination.SignatureView.route)
+    }
+
     fun goMarqueeText() = navigationDispatcher.emit {
         it.navigate(Destination.MarqueeText.route)
     }

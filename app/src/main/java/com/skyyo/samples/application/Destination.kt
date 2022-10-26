@@ -25,6 +25,7 @@ sealed class Destination(val route: String) {
     object Otp : Destination("otp")
     object Table : Destination("table")
     object CustomView : Destination("customViewScreen")
+    object SignatureView : Destination("signatureViewScreen")
     object MarqueeText : Destination("marqueeText")
     object Autofill : Destination("autofill")
     object DogFeed : Destination("dogFeed")
