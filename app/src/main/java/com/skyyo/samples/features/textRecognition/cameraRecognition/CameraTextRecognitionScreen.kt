@@ -1,7 +1,6 @@
 package com.skyyo.samples.features.textRecognition.cameraRecognition
 
 import android.Manifest
-import android.util.Size
 import android.view.View
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -95,7 +94,6 @@ fun CameraTextRecognitionScreen(viewModel: CameraTextRecognitionViewModel = hilt
                     lifecycleOwner,
                     CameraSelector.DEFAULT_BACK_CAMERA,
                     Preview.Builder()
-                        .setTargetResolution(Size(cameraPreview.width, cameraPreview.height))
                         .build().also { preview ->
                             preview.setSurfaceProvider(cameraPreview.surfaceProvider)
                         },
