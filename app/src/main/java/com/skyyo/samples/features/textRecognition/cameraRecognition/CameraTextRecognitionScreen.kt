@@ -1,6 +1,7 @@
 package com.skyyo.samples.features.textRecognition.cameraRecognition
 
 import android.Manifest
+import android.util.Size
 import android.view.View
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -36,26 +37,6 @@ fun CameraTextRecognitionScreen(viewModel: CameraTextRecognitionViewModel = hilt
     val lifecycleOwner = LocalLifecycleOwner.current
     val recognizedSurfaceData by viewModel.recognizedSurfaceData.collectAsStateWithLifecycle()
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
-    val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
-    val imageCapture = remember {
-        ImageCapture.Builder()
-            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-            .build()
-    }
-    val imageAnalyzer by lazy {
-        ImageAnalysis.Builder()
-            .build()
-            .also {
-                it.setAnalyzer(
-                    cameraExecutor,
-                    TextImageAnalyzer(viewModel::onSurfaceAnalyzed)
-                )
-            }
-    }
-
-    DisposableEffect(Unit) {
-        onDispose { cameraExecutor.shutdown() }
-    }
 
     PermissionRequired(
         permissionState = cameraPermissionState,
@@ -73,6 +54,22 @@ fun CameraTextRecognitionScreen(viewModel: CameraTextRecognitionViewModel = hilt
         }
         }
     ) {
+        val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
+        val imageCapture = remember {
+            ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                .build()
+        }
+        val imageAnalyzer = remember {
+            ImageAnalysis.Builder()
+                .build()
+                .also {
+                    it.setAnalyzer(
+                        cameraExecutor,
+                        TextImageAnalyzer(viewModel::onSurfaceAnalyzed)
+                    )
+                }
+        }
         val cameraPreview = remember {
             PreviewView(context).apply {
                 id = View.generateViewId()
@@ -84,13 +81,21 @@ fun CameraTextRecognitionScreen(viewModel: CameraTextRecognitionViewModel = hilt
             value = tryOrNull { ProcessCameraProvider.getInstance(context).get() }
         }
 
+        DisposableEffect(Unit) {
+            onDispose {
+                cameraProvider?.unbindAll()
+                cameraExecutor.shutdown()
+            }
+        }
+
         remember(cameraProvider) {
-            cameraProvider?.let { camProvider ->
-                camProvider.unbindAll()
-                camProvider.bindToLifecycle(
+            cameraProvider?.apply {
+                unbindAll()
+                bindToLifecycle(
                     lifecycleOwner,
                     CameraSelector.DEFAULT_BACK_CAMERA,
                     Preview.Builder()
+                        .setTargetResolution(Size(cameraPreview.width, cameraPreview.height))
                         .build().also { preview ->
                             preview.setSurfaceProvider(cameraPreview.surfaceProvider)
                         },
@@ -99,11 +104,6 @@ fun CameraTextRecognitionScreen(viewModel: CameraTextRecognitionViewModel = hilt
                 )
             }
         }
-
-        DisposableEffect(Unit) {
-            onDispose { cameraProvider?.unbindAll() }
-        }
-
         CameraTextRecognition(cameraPreview, recognizedSurfaceData)
     }
 }
