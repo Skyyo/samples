@@ -6,7 +6,7 @@ fun Int.floorMod(other: Int): Int = when (other) {
 }
 
 /**
- * Scales value from old bounds [oldMin; oldMax] to new bounds [newMin; newMax]
+ * Scales value from old bounds `[oldMin; oldMax]` to new bounds `[newMin; newMax]`
  * maintaining the correlation.
  *
  * Useful for drawing charts/progress

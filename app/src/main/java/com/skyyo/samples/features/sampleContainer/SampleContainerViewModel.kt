@@ -228,6 +228,14 @@ class SampleContainerViewModel @Inject constructor(
         it.navigate(Destination.ImeAwareLazyColumn.route)
     }
 
+    fun goImageTextRecognition() = navigationDispatcher.emit {
+        it.navigate(Destination.ImageTextRecognition.route)
+    }
+
+    fun goCameraTextRecognition() = navigationDispatcher.emit {
+        it.navigate(Destination.CameraTextRecognition.route)
+    }
+
     fun goInteractionTracking() {
         navigationDispatcher.emit { it.navigate(Destination.SessionTimeExpired.route) }
     }

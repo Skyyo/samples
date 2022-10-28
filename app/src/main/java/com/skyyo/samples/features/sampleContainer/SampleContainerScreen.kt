@@ -71,6 +71,12 @@ fun SampleContainerScreen(viewModel: SampleContainerViewModel = hiltViewModel())
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCardRecognition) {
             Text(text = "card recognition")
         }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goImageTextRecognition) {
+            Text(text = "static image text recognition")
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goCameraTextRecognition) {
+            Text(text = "camera text recognition")
+        }
         Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::goGooglePay) {
             Text(text = "google pay")
         }
