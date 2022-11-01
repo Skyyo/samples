@@ -22,6 +22,7 @@ import com.skyyo.samples.utils.OnValueChange
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
+// DEPRECATED, use AutoCompleteDropdown instead
 fun AutocompleteDropdownWithOutsideFiltering(
     modifier: Modifier = Modifier,
     onExpandedChange: (Boolean) -> Unit,

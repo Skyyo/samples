@@ -56,6 +56,7 @@ private const val OUT_TRANSITION_DURATION = 75
 private val MENU_ELEVATION = 8.dp
 private val DROPDOWN_MENU_VERTICAL_PADDING = 8.dp
 
+// DEPRECATED, use AutoCompleteDropdown instead
 @Composable
 fun CustomDropdownMenuContent(
     modifier: Modifier = Modifier,
