@@ -185,6 +185,10 @@ fun UIelements(viewModel: SampleContainerViewModel) {
     ) { Text(text = "autofill") }
     Button(
         modifier = Modifier.fillMaxWidth(),
+        onClick = viewModel::goAutoComplete
+    ) { Text(text = "autoComplete") }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
         onClick = viewModel::goImeAwareLazyColumn
     ) { Text(text = "ime aware lazy column") }
     Button(
