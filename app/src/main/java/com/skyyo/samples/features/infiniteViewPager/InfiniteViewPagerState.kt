@@ -14,7 +14,6 @@ private const val INDEX_OF_CURRENT_PAGE_IN_LAYOUT_PAGES = 1
 class InfiniteViewPagerState<T>(
     private val circularListIterable: CircularListIterable<T>
 ) : ScrollableState {
-    private val pageCount = circularListIterable.pageCount
     var currentLayoutPageOffset by mutableStateOf(0f)
     val layoutPages = mutableStateListOf(peekByIndex(0), peekByIndex(1), peekByIndex(2))
 
@@ -137,5 +136,5 @@ class InfiniteViewPagerState<T>(
         scrollableState.scroll(scrollPriority, block)
     }
 
-    override fun toString(): String = "PagerState(pageCount=$pageCount, offset=$currentLayoutPageOffset)"
+    override fun toString(): String = "PagerState(offset=$currentLayoutPageOffset)"
 }
