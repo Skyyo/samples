@@ -3,15 +3,10 @@ package com.skyyo.samples.features.infiniteViewPager
 import androidx.compose.runtime.Immutable
 
 @Immutable
-class CircularList<T>(
-    items: List<T>,
-    currentIndex: Int = 0
-) : CircularListIterable<T>, Iterable<T>, AbstractList<T>() {
-    private var currentNode: Node<T>
+class CircularList<T>(items: List<T>) : AbstractList<T>() {
     private var firstNode: Node<T>
 
     override val size: Int
-
     override fun get(index: Int): T {
         var node = firstNode
         repeat(index) {
@@ -22,31 +17,16 @@ class CircularList<T>(
 
     init {
         require(items.size > 1)
-        require(currentIndex in items.indices)
-        val zeroBasedItems = items.subList(currentIndex, items.size) + items.subList(0, currentIndex)
-        size = zeroBasedItems.size
-        firstNode = Node(current = zeroBasedItems[0])
-        currentNode = firstNode
+        size = items.size
+        firstNode = Node(current = items[0])
         var node = firstNode
-        for (i in 1 until zeroBasedItems.size) {
-            val newNode = Node(previous = node, current = zeroBasedItems[i])
+        for (i in 1 until items.size) {
+            val newNode = Node(previous = node, current = items[i])
             node.next = newNode
             node = newNode
         }
         node.next = firstNode
         firstNode.previous = node
-    }
-
-    override fun peekPrevious(): T = currentNode.previous!!.current
-    override fun peekNext(): T = currentNode.next!!.current
-    override fun peekCurrent(): T = currentNode.current
-
-    override fun moveNext() {
-        currentNode = currentNode.next!!
-    }
-
-    override fun movePrevious() {
-        currentNode = currentNode.previous!!
     }
 
     override fun iterator(): Iterator<T> = object : Iterator<T> {
@@ -60,6 +40,22 @@ class CircularList<T>(
             if (index == size + 1) throw NoSuchElementException()
             node = node.next!!
             return node.current
+        }
+    }
+
+    fun circularListIterator(): CircularListIterator<T> = object : CircularListIterator<T> {
+        private var currentNode: Node<T> = firstNode
+
+        override fun peekPrevious(): T = currentNode.previous!!.current
+        override fun peekNext(): T = currentNode.next!!.current
+        override fun peekCurrent(): T = currentNode.current
+
+        override fun moveNext() {
+            currentNode = currentNode.next!!
+        }
+
+        override fun movePrevious() {
+            currentNode = currentNode.previous!!
         }
     }
 

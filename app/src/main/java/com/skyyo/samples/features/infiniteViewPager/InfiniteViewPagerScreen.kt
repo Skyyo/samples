@@ -104,9 +104,9 @@ fun InfiniteViewPagerScreen() {
             actualPageCount = pages.size
         )
 
-        InfiniteViewPager(
+        InfinitePager(
             modifier = Modifier.padding(top = 10.dp),
-            state = remember { InfiniteViewPagerState(infinitePages) }
+            state = remember { InfinitePagerState(infinitePages.circularListIterator()) }
         ) { item ->
             val color = remember(item) {
                 when (item) {

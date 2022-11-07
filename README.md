@@ -1,5 +1,6 @@
 # Project containing Jetpack Compose & Android samples 
 For pagination & network images it uses [CATAAS](https://cataas.com/#/).
+Use fastForEach instead of forEach for lists optimised for random access, don't use fastForEach if you're not sure about it's internal implementation. (Example of such list - com.skyyo.samples.features.infiniteViewPager.CircularList) 
 
 # Known issues
 

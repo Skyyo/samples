@@ -11,16 +11,16 @@ import androidx.compose.runtime.*
 private const val INDEX_OF_CURRENT_PAGE_IN_LAYOUT_PAGES = 1
 
 @Stable
-class InfiniteViewPagerState<T>(
-    private val circularListIterable: CircularListIterable<T>
+class InfinitePagerState<T>(
+    private val circularListIterator: CircularListIterator<T>
 ) : ScrollableState {
     var currentLayoutPageOffset by mutableStateOf(0f)
     val layoutPages = mutableStateListOf(peekByIndex(0), peekByIndex(1), peekByIndex(2))
 
     private fun peekByIndex(index: Int) = when (index) {
-        0 -> circularListIterable.peekPrevious()
-        1 -> circularListIterable.peekCurrent()
-        else -> circularListIterable.peekNext()
+        0 -> circularListIterator.peekPrevious()
+        1 -> circularListIterator.peekCurrent()
+        else -> circularListIterator.peekNext()
     }
 
     var layoutSize: Int by mutableStateOf(0)
@@ -59,7 +59,7 @@ class InfiniteViewPagerState<T>(
     }
 
     private fun setCurrentPage(next: Boolean) {
-        if (next) circularListIterable.moveNext() else circularListIterable.movePrevious()
+        if (next) circularListIterator.moveNext() else circularListIterator.movePrevious()
         for (i in layoutPages.indices) {
             layoutPages[i] = peekByIndex(i)
         }
@@ -102,6 +102,7 @@ class InfiniteViewPagerState<T>(
         snapAnimationSpec: AnimationSpec<Float> = spring(),
         scrollBy: (Float) -> Float,
     ): Float {
+        if (currentLayoutPageOffset == 0f) return initialVelocity
         var lastVelocity: Float = initialVelocity
         val next = currentLayoutPageOffset > 0
         val targetValue = when {
@@ -134,6 +135,10 @@ class InfiniteViewPagerState<T>(
         block: suspend ScrollScope.() -> Unit
     ) {
         scrollableState.scroll(scrollPriority, block)
+        when (currentLayoutPageOffset) {
+            1f -> snapToPage(next = true)
+            -1f -> snapToPage(next = false)
+        }
     }
 
     override fun toString(): String = "PagerState(offset=$currentLayoutPageOffset)"

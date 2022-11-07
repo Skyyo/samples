@@ -22,8 +22,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-fun <T> InfiniteViewPager(
-    state: InfiniteViewPagerState<T>,
+fun <T> InfinitePager(
+    state: InfinitePagerState<T>,
     modifier: Modifier = Modifier,
     reverseLayout: Boolean = false,
     itemSpacing: Dp = 0.dp,
@@ -146,7 +146,7 @@ private const val SNAP_SPRING_STIFFNESS = 2750f
 
 @Composable
 fun <T> rememberPagerFlingConfig(
-    state: InfiniteViewPagerState<T>,
+    state: InfinitePagerState<T>,
     snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = SNAP_SPRING_STIFFNESS),
 ): FlingBehavior = remember(state, snapAnimationSpec) {
     object : FlingBehavior {
@@ -188,7 +188,7 @@ interface InfinitePagerScope<T> : BoxScope {
 
 private class InfinitePagerScopeImpl<T>(
     private val boxScope: BoxScope,
-    private val state: InfiniteViewPagerState<T>,
+    private val state: InfinitePagerState<T>,
 ) : InfinitePagerScope<T>, BoxScope by boxScope {
     override val currentPageOffset: Float get() = state.currentLayoutPageOffset
 }

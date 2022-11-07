@@ -1,6 +1,6 @@
 package com.skyyo.samples.features.infiniteViewPager
 
-interface CircularListIterable<T> {
+interface CircularListIterator<T> {
     fun peekPrevious(): T
     fun peekNext(): T
     fun peekCurrent(): T
