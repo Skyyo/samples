@@ -1,0 +1,18 @@
+name: 'lines-of_code-counter'
+description: 'Github Action that counts lines of code'
+author: 'Vasyl Prokudin'
+inputs:
+  fileOrFolderToProcess:
+    required: false
+    description: 'The file or folder to process'
+    default: '.'
+  filesAndFoldersToIgnore:
+    required: false
+    description: 'A list of directories to ignore. Supports glob patterns.'
+    default: '["node_modules", ".git", "dist", ".github"]'
+outputs:
+  locs:
+    description: 'The amount of LOC of your project without comments and empty lines'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
