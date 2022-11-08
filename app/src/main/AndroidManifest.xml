@@ -23,7 +23,8 @@
         android:theme="@style/Theme.SamplesTheme"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/full_backup_content"
-        tools:targetApi="32">
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="33">
         <activity
             android:name="com.skyyo.samples.application.activity.MainActivity"
             android:exported="true"
