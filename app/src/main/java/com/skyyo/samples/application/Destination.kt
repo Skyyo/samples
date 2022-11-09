@@ -28,6 +28,7 @@ sealed class Destination(val route: String) {
     object SignatureView : Destination("signatureViewScreen")
     object MarqueeText : Destination("marqueeText")
     object Autofill : Destination("autofill")
+    object AutoComplete : Destination("autoComplete")
     object DogFeed : Destination("dogFeed")
     object DogDetails : Destination("dogDetails/{dogId}") {
         fun createRoute(dogId: String) = "dogDetails/$dogId"

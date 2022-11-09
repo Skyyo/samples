@@ -21,6 +21,7 @@ import com.skyyo.samples.application.Destination
 import com.skyyo.samples.application.ProfileGraph
 import com.skyyo.samples.extensions.rememberBackStackEntry
 import com.skyyo.samples.features.appBarElevation.AppBarElevation
+import com.skyyo.samples.features.autoComplete.AutoCompleteScreen
 import com.skyyo.samples.features.autofill.AutofillScreen
 import com.skyyo.samples.features.autoscroll.AutoScrollScreen
 import com.skyyo.samples.features.bottomSheets.BottomSheetScaffoldScreen
@@ -166,6 +167,7 @@ fun PopulatedNavHost(
     composable(Destination.SignatureView.route) { SignatureViewScreen() }
     composable(Destination.MarqueeText.route) { MarqueeTextScreen() }
     composable(Destination.Autofill.route) { AutofillScreen() }
+    composable(Destination.AutoComplete.route) { AutoCompleteScreen() }
     navigation(
         route = ProfileGraph.route,
         startDestination = ProfileGraph.Profile.route
